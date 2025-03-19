@@ -17,6 +17,20 @@ const GetStatusBadge: React.FC<{ status: string }> = ({ status }) => {
           <Text className="ms-2 font-medium text-green-dark">{status}</Text>
         </div>
       );
+    case 'no':
+      return (
+        <div className="flex items-center">
+          <Badge color="warning" renderAsDot />
+          <Text className="ms-2 font-medium text-orange-dark">{status}</Text>
+        </div>
+      );
+    case 'yes':
+      return (
+        <div className="flex items-center">
+          <Badge color="success" renderAsDot />
+          <Text className="ms-2 font-medium text-green-dark">{status}</Text>
+        </div>
+      );
     default:
       return (
         <div className="flex items-center">

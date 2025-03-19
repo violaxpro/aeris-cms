@@ -1,43 +1,43 @@
 'use client';
 
-import { useEffect, useState, useTransition } from 'react';
+import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
 import { Text } from 'rizzui';
-import { defaultValues } from '@/app/shared/ecommerce/product/create-edit/form-utils';
-import SimpleBar from 'simplebar-react';
-import TabPricing from './tab-seo';
-import TabGeneral from './tab-general';
+
 import FormFooter from '@/core/components/form-footer';
 import cn from '@/core/utils/class-names';
-import {
-  CategoryFormInput,
-  categoryFormSchema,
-} from '@/validators/create-category.schema';
 import { useRouter } from 'next/navigation';
 import { routes } from '@/config/routes';
+import BrandGeneral from './brand-general';
+import BrandImages from './brand-images';
+import BrandSeo from './brand-seo';
+import {
+  BrandFormInput,
+  brandFormSchema,
+} from '@/validators/create-brand.schema';
 
 interface IndexProps {
   slug?: string;
   className?: string;
-  product?: CategoryFormInput;
+  brand?: BrandFormInput;
 }
 
 export default function CreateEditBrands({
   slug,
-  product,
+  brand,
   className,
 }: IndexProps) {
   const router = useRouter();
   const [isLoading, setLoading] = useState(false);
 
-  const methods = useForm<CategoryFormInput>({
-    resolver: zodResolver(categoryFormSchema),
-    // defaultValues: defaultValues(product),
+  const methods = useForm<BrandFormInput>({
+    resolver: zodResolver(brandFormSchema),
+    // defaultValues: defaultValues(brand),
   });
 
-  const onSubmit: SubmitHandler<CategoryFormInput> = (data) => {
+  const onSubmit: SubmitHandler<BrandFormInput> = (data) => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
@@ -54,16 +54,20 @@ export default function CreateEditBrands({
     <div className="@container">
       <FormProvider {...methods}>
         <form
+          onSubmit={methods.handleSubmit(onSubmit)}
           className={cn(
             'relative z-[19] [&_label.block>span]:font-medium',
             className
           )}
         >
-          <div className="mb-10 grid gap-7 divide-y divide-dashed divide-gray-200 @2xl:gap-9 @3xl:gap-11"></div>
+          <div className="mb-10 grid gap-7 divide-y divide-dashed divide-gray-200 @2xl:gap-9 @3xl:gap-11">
+            <BrandGeneral />
+            <BrandImages />
+            <BrandSeo />
+          </div>
 
           <FormFooter
             isLoading={isLoading}
-            showExportBtn
             submitBtnText={slug ? 'Update Brand' : 'Create Brand'}
           />
         </form>

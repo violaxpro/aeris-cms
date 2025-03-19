@@ -1,20 +1,20 @@
 import { metaObject } from '@/config/site.config';
 import PageHeader from '@/app/shared/page-header';
 import { routes } from '@/config/routes';
-import CreateEditBrands from '@/app/shared/ecommerce/brands/create-edit';
+import CreateEditAttributes from '@/app/shared/ecommerce/attributes/create-edit';
 
 export const metadata = {
-  ...metaObject('Create Product'),
+  ...metaObject('Create Attributes'),
 };
 
 const pageHeader = {
-  title: 'Create Product',
+  title: 'Create Attribute',
   breadcrumb: [
     {
       name: 'Catalogue',
     },
     {
-      href: routes.eCommerce.products,
+      href: routes.eCommerce.attributes,
       name: 'Products',
     },
     {
@@ -23,7 +23,7 @@ const pageHeader = {
   ],
 };
 
-export default function CreateProductPage() {
+export default function CreatePage() {
   return (
     <>
       <PageHeader
@@ -31,7 +31,7 @@ export default function CreateProductPage() {
         breadcrumb={pageHeader.breadcrumb}
       ></PageHeader>
 
-      <CreateEditBrands />
+      <CreateEditAttributes />
     </>
   );
 }

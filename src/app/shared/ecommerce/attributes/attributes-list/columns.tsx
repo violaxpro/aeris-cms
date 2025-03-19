@@ -2,20 +2,17 @@
 
 import Link from 'next/link';
 import { HeaderCell } from '@/app/shared/table';
-import { Text, Checkbox, Tooltip, ActionIcon, Accordion } from 'rizzui';
+import { Text, Checkbox, Tooltip, ActionIcon } from 'rizzui';
 import { routes } from '@/config/routes';
 import PencilIcon from '@/core/components/icons/pencil';
 import DeletePopover from '@/app/shared/delete-popover';
-import ThumbnailCard from '@/core/ui/thumbnail';
-import { FaChevronUp } from 'react-icons/fa';
 
-import cn from '@/core/utils/class-names';
 import GetStatusBadge from '@/core/ui/get-status-badge';
-import { BrandsType } from '@/data/brands-data';
 import DateCell from '@/core/ui/date-cell';
+import { AttributesType } from '@/data/attributes-data';
 
 type Columns = {
-  data: BrandsType[];
+  data: AttributesType[];
   sortConfig?: any;
   handleSelectAll: any;
   checkedItems: string[];
@@ -65,34 +62,34 @@ export const getColumns = ({
     render: (value: string) => <Text className="text-sm">{value}</Text>,
   },
   {
-    title: <HeaderCell title="Thumbnail" />,
-    dataIndex: 'logo',
-    key: 'logo',
+    title: <HeaderCell title="Name" />,
+    dataIndex: 'attributeName',
+    key: 'attributeName',
     width: 100,
-    render: (value: string) => <ThumbnailCard src={value} name={''} />,
+    render: (value: string) => <Text className="text-sm">{value}</Text>,
   },
   {
     title: (
       <HeaderCell
-        title="Brand Name"
+        title="Attribute Set"
         sortable
         ascending={
-          sortConfig?.direction === 'asc' && sortConfig?.key === 'brandsName'
+          sortConfig?.direction === 'asc' && sortConfig?.key === 'attributeSet'
         }
       />
     ),
-    onHeaderCell: () => onHeaderCellClick('brandsName'),
-    dataIndex: 'brandsName',
-    key: 'brandsName',
+    onHeaderCell: () => onHeaderCellClick('attributeSet'),
+    dataIndex: 'attributeSet',
+    key: 'attributeSet',
     width: 150,
     render: (value: string) => (
       <Text className="font-medium text-gray-700">{value}</Text>
     ),
   },
   {
-    title: <HeaderCell title="Status" />,
-    dataIndex: 'status',
-    key: 'status',
+    title: <HeaderCell title="Filterable" />,
+    dataIndex: 'filterable',
+    key: 'filterable',
     width: 120,
     render: (value: string) => <GetStatusBadge status={value} />,
   },
@@ -109,23 +106,27 @@ export const getColumns = ({
     dataIndex: 'action',
     key: 'action',
     width: 120,
-    render: (_: string, row: BrandsType) => (
+    render: (_: string, row: AttributesType) => (
       <div className="flex items-center justify-end gap-3 pe-4">
         <Tooltip
           size="sm"
-          content={'Edit Brands'}
+          content={'Edit Attributes'}
           placement="top"
           color="invert"
         >
-          <Link href={routes.eCommerce.editBrands(row.id)}>
-            <ActionIcon size="sm" variant="outline" aria-label={'Edit Brands'}>
+          <Link href={routes.eCommerce.editAttributes(row.id)}>
+            <ActionIcon
+              size="sm"
+              variant="outline"
+              aria-label={'Edit Attributes'}
+            >
               <PencilIcon className="h-4 w-4" />
             </ActionIcon>
           </Link>
         </Tooltip>
         <DeletePopover
-          title={`Delete the brands`}
-          description={`Are you sure you want to delete this #${row.id} brands?`}
+          title={`Delete the attribute`}
+          description={`Are you sure you want to delete this #${row.id} attribute?`}
           onDelete={() => onDeleteItem(row.id)}
         />
       </div>

@@ -48,16 +48,16 @@ export default function CreateEditProduct({
   const [tab, setTab] = useState('basic');
   const [isPending, startTransition] = useTransition();
 
+  const methods = useForm<CreateProductInput>({
+    resolver: zodResolver(productFormSchema),
+    defaultValues: defaultValues(product),
+  });
+
   function selectTab(nextTab: string) {
     startTransition(() => {
       setTab(nextTab);
     });
   }
-
-  const methods = useForm<CreateProductInput>({
-    resolver: zodResolver(productFormSchema),
-    defaultValues: defaultValues(product),
-  });
 
   const onSubmit: SubmitHandler<CreateProductInput> = (data) => {
     setLoading(true);

@@ -16,7 +16,11 @@ export const routes = {
 
     brands: '/ecommerce/brands',
     createBrands: '/ecommerce/brands/create',
-    editBrands: (slug: string) => `ecommerce/brands/${slug}/edit`,
+    editBrands: (slug: string) => `/ecommerce/brands/${slug}/edit`,
+
+    attributes: '/ecommerce/attributes',
+    createAttributes: '/ecommerce/attributes/create',
+    editAttributes: (slug: string) => `/ecommerce/attributes/${slug}/edit`,
 
     reviews: '/ecommerce/reviews',
   },

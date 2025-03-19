@@ -37,7 +37,7 @@ export const menuItems = [
       },
       {
         name: 'Attributes',
-        href: routes.eCommerce.categories,
+        href: routes.eCommerce.attributes,
       },
       {
         name: 'Options',

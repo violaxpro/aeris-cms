@@ -6,6 +6,7 @@ interface CNumberInputProps {
   label: string;
   placeholder?: string;
   prefix?: string;
+  suffix?: string;
   type?: 'text' | 'tel' | 'password' | undefined;
   formatType?: 'pattern' | 'numeric' | 'custom';
   value: 'string' | number | 'null';
@@ -18,6 +19,7 @@ export default function CNumberInput({
   label,
   placeholder,
   prefix,
+  suffix,
   type,
   onChange,
   formatType = 'numeric',
@@ -27,12 +29,11 @@ export default function CNumberInput({
   return (
     <NumberInput
       {...rest}
-      {...{ label, placeholder, prefix, type, error, helperText }}
+      {...{ label, placeholder, prefix, type, error, helperText, suffix }}
       formatType={formatType}
       thousandSeparator=","
       onValueChange={(value) => onChange(value.floatValue ?? null)}
       customInput={Input as React.ComponentType<unknown>}
-      prefix={prefix}
     />
   );
 }
