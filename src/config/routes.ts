@@ -22,6 +22,10 @@ export const routes = {
     createAttributes: '/ecommerce/attributes/create',
     editAttributes: (slug: string) => `/ecommerce/attributes/${slug}/edit`,
 
+    options: '/ecommerce/options',
+    createOptions: '/ecommerce/options/create',
+    editOptions: (slug: string) => `/ecommerce/options/${slug}/edit`,
+
     reviews: '/ecommerce/reviews',
   },
   profile: '/profile',

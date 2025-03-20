@@ -90,5 +90,6 @@ export const messages = {
   emailSentSuccessfully: 'Your email has been sent successfully.',
   brandNameIsRequired: 'Brand name is required',
   attributeSetIsRequired: 'Attribute Set is required',
-  valueIsRequired: 'Attribute Set is required',
+  valueIsRequired: 'Value Set is required',
+  optionIsRequired: 'Option Set is required',
 };

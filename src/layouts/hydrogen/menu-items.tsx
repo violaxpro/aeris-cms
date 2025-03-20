@@ -41,7 +41,7 @@ export const menuItems = [
       },
       {
         name: 'Options',
-        href: routes.eCommerce.createCategory,
+        href: routes.eCommerce.options,
       },
       {
         name: 'Tags',
