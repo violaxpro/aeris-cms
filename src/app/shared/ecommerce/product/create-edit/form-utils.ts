@@ -35,7 +35,7 @@ export function defaultValues(product?: CreateProductInput) {
   };
 }
 
-export const productData: CreateProductInput = {
+export const productData = {
   name: 'test',
   brand: 'digital product',
   categories: ['fruits'],

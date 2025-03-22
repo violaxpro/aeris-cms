@@ -24,7 +24,7 @@ export const invoiceFormSchema = z.object({
     .number()
     .min(1, { message: messages.shippingPriceIsRequired }),
   discount: z.coerce.number().min(1, { message: messages.discountIsRequired }),
-  taxes: z.coerce.number().min(1, { message: messages.taxIsRequired }),
+  taxes: z.coerce.number(),
   items: z.array(
     z.object({
       item: z.string().min(1, { message: messages.itemNameIsRequired }),

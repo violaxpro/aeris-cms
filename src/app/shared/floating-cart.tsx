@@ -34,11 +34,7 @@ export default function FloatingCart({ className }: FloatingCartProps) {
   const isECom = pathname.includes('ecommerce');
 
   // list of excluded pages
-  const excludedPaths = [
-    routes.eCommerce.cart,
-    routes.eCommerce.checkout,
-    routes.eCommerce.orderDetails(DUMMY_ID),
-  ];
+  const excludedPaths = [routes.eCommerce.options];
 
   // check if current page is cart or checkout
   const isPathExcluded = excludedPaths.includes(pathname);

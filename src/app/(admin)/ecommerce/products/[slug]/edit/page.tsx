@@ -58,7 +58,7 @@ export default function EditProductPage({
         </Link>
       </PageHeader>
 
-      <CreateEditProduct slug={params.slug} product={productData} />
+      <CreateEditProduct slug={params.slug} />
     </>
   );
 }

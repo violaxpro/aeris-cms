@@ -95,11 +95,11 @@ function CartCalculations() {
           Total
           <span className="font-medium text-gray-1000">{totalPrice}</span>
         </div>
-        <Link href={routes.eCommerce.checkout}>
+        <Link href={routes.eCommerce.options}>
           <Button
             size="xl"
             rounded="pill"
-            onClick={() => router.push(routes.eCommerce.checkout)}
+            onClick={() => router.push(routes.eCommerce.options)}
             className="w-full"
           >
             Proceed To Checkout

@@ -33,7 +33,7 @@ const pageHeader = {
       name: 'E-Commerce',
     },
     {
-      href: routes.eCommerce.orders,
+      href: routes.eCommerce.options,
       name: 'Orders',
     },
     {
@@ -47,7 +47,7 @@ export default function EditOrderPage({ params }: any) {
     <>
       <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb}>
         <Link
-          href={routes.eCommerce.orders}
+          href={routes.eCommerce.options}
           className="mt-4 w-full @lg:mt-0 @lg:w-auto"
         >
           <Button as="span" className="w-full @lg:w-auto" variant="outline">

@@ -1,7 +1,6 @@
 import { Metadata } from 'next';
 import logoImg from '@public/logo/Alarm Expert Logo.webp';
 import { LAYOUT_OPTIONS } from '@/config/enums';
-import logoIconImg from '@public/logo/Alarm Expert Logo.webp';
 import { OpenGraph } from 'next/dist/lib/metadata/types/opengraph-types';
 
 enum MODE {
@@ -13,7 +12,7 @@ export const siteConfig = {
   title: 'Alarm Expert',
   description: `Alarm Expert`,
   logo: logoImg,
-  icon: logoIconImg,
+  icon: logoImg,
   mode: MODE.LIGHT,
   layout: LAYOUT_OPTIONS.HYDROGEN,
   // TODO: favicon

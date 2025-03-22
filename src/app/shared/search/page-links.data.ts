@@ -14,35 +14,27 @@ export const pageLinks = [
   },
   {
     name: 'Support',
-    href: routes.support.dashboard,
   },
   {
     name: 'Logistics',
-    href: routes.logistics.dashboard,
   },
   {
     name: 'Analytics',
-    href: routes.analytics,
   },
   {
     name: 'File Manager',
-    href: routes.file.dashboard,
   },
   {
     name: 'Appointment',
-    href: routes.appointment.dashboard,
   },
   {
     name: 'Executive',
-    href: routes.executive.dashboard,
   },
   {
     name: 'Job Board',
-    href: routes.jobBoard.dashboard,
   },
   {
     name: 'Financial',
-    href: routes.financial.dashboard,
   },
   // label start
   {
@@ -79,19 +71,18 @@ export const pageLinks = [
   },
   {
     name: 'Orders',
-    href: routes.eCommerce.orders,
+    href: routes.eCommerce.options,
   },
   {
     name: 'Order Details',
-    href: routes.eCommerce.orderDetails(DUMMY_ID),
   },
   {
     name: 'Create Order',
-    href: routes.eCommerce.createOrder,
+    href: routes.eCommerce.createBrands,
   },
   {
     name: 'Edit Order',
-    href: routes.eCommerce.editOrder(DUMMY_ID),
+    href: routes.eCommerce.ediProduct(DUMMY_ID),
   },
   {
     name: 'Reviews',
@@ -99,59 +90,58 @@ export const pageLinks = [
   },
   {
     name: 'Shop',
-    href: routes.eCommerce.shop,
+    href: routes.eCommerce.options,
   },
   {
     name: 'Cart',
-    href: routes.eCommerce.cart,
+    href: routes.eCommerce.attributes,
   },
   {
     name: 'Checkout & Payment',
-    href: routes.eCommerce.checkout,
+    href: routes.eCommerce.attributes,
   },
   {
     name: 'Support Inbox',
-    href: routes.support.inbox,
+    href: routes.eCommerce.attributes,
   },
   {
     name: 'Support Snippets',
-    href: routes.support.snippets,
+    href: routes.eCommerce.attributes,
   },
   {
     name: 'Support Templates',
-    href: routes.support.templates,
+    href: routes.eCommerce.attributes,
   },
   {
     name: 'Invoice List',
-    href: routes.invoice.home,
+    href: routes.eCommerce.attributes,
   },
   {
     name: 'Invoice Details',
-    href: routes.invoice.details(DUMMY_ID),
+    href: routes.eCommerce.attributes,
   },
   {
     name: 'Create Invoice',
-    href: routes.invoice.create,
+    href: routes.eCommerce.attributes,
   },
   {
     name: 'Edit Invoice',
-    href: routes.invoice.edit(DUMMY_ID),
+    href: routes.eCommerce.attributes,
   },
   {
     name: 'Shipment List',
-    href: routes.logistics.shipmentList,
+    href: routes.eCommerce.attributes,
   },
   {
     name: 'Shipment Details',
-    href: routes.logistics.shipmentDetails(DUMMY_ID),
+    href: routes.eCommerce.attributes,
   },
   {
     name: 'Tracking',
-    href: routes.logistics.tracking(DUMMY_ID),
+    href: routes.eCommerce.attributes,
   },
   {
     name: 'File Manager',
-    href: routes.file.manager,
   },
   // label start
   {
@@ -160,15 +150,12 @@ export const pageLinks = [
   // label end
   {
     name: 'Cards',
-    href: routes.widgets.cards,
   },
   {
     name: 'Icons',
-    href: routes.widgets.icons,
   },
   {
     name: 'Charts',
-    href: routes.widgets.charts,
   },
   // {
   //   name: 'Banners',
@@ -176,7 +163,6 @@ export const pageLinks = [
   // },
   {
     name: 'Maps',
-    href: routes.widgets.maps,
   },
   // label start
   {
@@ -185,19 +171,15 @@ export const pageLinks = [
   // label end
   {
     name: 'Profile Settings',
-    href: routes.forms.profileSettings,
   },
   {
     name: 'Notification Preference',
-    href: routes.forms.notificationPreference,
   },
   {
     name: 'Personal Information',
-    href: routes.forms.personalInformation,
   },
   {
     name: 'Newsletter',
-    href: routes.forms.newsletter,
   },
   // {
   //   name: 'Multi Step',
@@ -205,7 +187,6 @@ export const pageLinks = [
   // },
   {
     name: 'Payment checkout',
-    href: routes.eCommerce.checkout,
   },
   // label start
   {
@@ -214,27 +195,21 @@ export const pageLinks = [
   // label end
   {
     name: 'Basic',
-    href: routes.tables.basic,
   },
   {
     name: 'Collapsible',
-    href: routes.tables.collapsible,
   },
   {
     name: 'Enhanced',
-    href: routes.tables.enhanced,
   },
   {
     name: 'Sticky Header',
-    href: routes.tables.stickyHeader,
   },
   {
     name: 'Pagination',
-    href: routes.tables.pagination,
   },
   {
     name: 'Search',
-    href: routes.tables.search,
   },
   // label start
   {

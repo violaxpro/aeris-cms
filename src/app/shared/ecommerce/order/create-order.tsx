@@ -72,7 +72,6 @@ export default function CreateOrder({
     setTimeout(() => {
       setLoading(false);
       console.log('createOrder data ->', data);
-      router.push(routes.eCommerce.orderDetails(DUMMY_ID));
       toast.success(
         <Text as="b">Order {id ? 'Updated' : 'placed'} successfully!</Text>
       );

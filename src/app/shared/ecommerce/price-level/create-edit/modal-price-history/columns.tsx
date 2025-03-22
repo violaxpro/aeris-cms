@@ -1,21 +1,4 @@
-import { PiWarning } from 'react-icons/pi';
-import {
-  Button,
-  Popover,
-  Title,
-  Text,
-  Checkbox,
-  Tooltip,
-  ActionIcon,
-} from 'rizzui';
 import { HeaderCell } from '@/app/shared/table';
-import TrashIcon from '@/core/components/icons/trash';
-import PencilIcon from '@/core/components/icons/pencil';
-import { useModal } from '@/app/shared/modal-views/use-modal';
-import CreateSnippetTemplateForm from '@/app/shared/support/create-snippet-template-from';
-import { SnippetOrTemplate, SnippetType } from '@/data/snippets-and-templates';
-import FolderIcon from '@/core/components/icons/folder-solid';
-import AvatarCard from '@/core/ui/avatar-card';
 import DateCell from '@/core/ui/date-cell';
 
 type Columns = {

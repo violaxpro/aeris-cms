@@ -1,7 +1,7 @@
 import { routes } from '@/config/routes';
 import PageHeader from '@/app/shared/page-header';
-import ProductDetails from '@/app/shared/ecommerce/product/product-details';
 import { metaObject } from '@/config/site.config';
+import NotFound from '@/app/not-found';
 
 export const metadata = {
   ...metaObject('Product Details'),
@@ -16,7 +16,7 @@ export default function ProductDetailsPage({ params }: any) {
         name: 'E-Commerce',
       },
       {
-        href: routes.eCommerce.shop,
+        href: routes.eCommerce.priceLevel,
         name: 'Shop',
       },
       {
@@ -24,10 +24,5 @@ export default function ProductDetailsPage({ params }: any) {
       },
     ],
   };
-  return (
-    <>
-      <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb} />
-      <ProductDetails />
-    </>
-  );
+  return <NotFound />;
 }
