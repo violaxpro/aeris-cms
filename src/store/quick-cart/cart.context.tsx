@@ -14,7 +14,7 @@ import { useLocalStorage } from '@/core/hooks/use-local-storage';
 import { getItem, inStock } from '@/store/quick-cart/cart.utils';
 import { verifiedResponseAtom } from '@/store/checkout';
 import { CART_KEY } from '@/config/constants';
-import { CartItem as Item } from '@/types';
+import { CartItem as Item } from '@/plugins/interfaces';
 
 interface CartProviderState extends State {
   addItemsToCart: (items: Item[]) => void;

@@ -8,7 +8,7 @@ import { PiArrowRightBold } from 'react-icons/pi';
 import { Checkbox, Password, Button, Input, Text } from 'rizzui';
 import { Form } from '@/core/ui/form';
 import { routes } from '@/config/routes';
-import { loginSchema, LoginSchema } from '@/validators/login.schema';
+import { loginSchema, LoginSchema } from '@/plugins/validators/login.schema';
 
 const initialValues: LoginSchema = {
   email: 'admin@admin.com',

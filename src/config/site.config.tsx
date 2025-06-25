@@ -1,3 +1,4 @@
+
 import { Metadata } from 'next';
 import logoImg from '@public/logo/Alarm Expert Logo.webp';
 import { LAYOUT_OPTIONS } from '@/config/enums';

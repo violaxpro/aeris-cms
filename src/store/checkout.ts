@@ -2,7 +2,7 @@ import { atom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 import { PaymentGateway } from '@/config/enums';
 import { CHECKOUT } from '@/config/constants';
-import { Address, Coupon } from '@/types';
+import { Address, Coupon } from '@/plugins/interfaces';
 
 interface DeliveryTime {
   id: string;

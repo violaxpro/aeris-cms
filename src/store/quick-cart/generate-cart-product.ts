@@ -1,4 +1,4 @@
-import { CartItem, Product, ProductColor } from '@/types';
+import { CartItem, Product, ProductColor } from '@/plugins/interfaces';
 import { generateSlug } from '@/core/utils/generate-slug';
 
 interface CartProduct extends Omit<Product, 'colors' | 'sizes'> {

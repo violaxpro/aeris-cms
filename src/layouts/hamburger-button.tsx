@@ -3,7 +3,7 @@
 import {
   DrawerPlacements,
   useDrawer,
-} from '@/app/shared/drawer-views/use-drawer';
+} from '@/app_old/shared/drawer-views/use-drawer';
 import { ActionIcon } from 'rizzui';
 import cn from '@/core/utils/class-names';
 

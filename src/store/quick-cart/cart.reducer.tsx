@@ -1,4 +1,4 @@
-import { CartItem as Item } from '@/types';
+import { CartItem as Item } from '@/plugins/interfaces';
 import {
   UpdateItemInput,
   addItemWithQuantity,
