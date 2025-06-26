@@ -1,13 +1,12 @@
 import React from 'react'
 import ProductForm from '@/pages/product/formProduct/formProduct'
 
-const createProductUrl = () => {
+const EditProductUrl = () => {
     return (
         <div>
-            <ProductForm mode='create' />
-
+            <ProductForm mode="edit" />
         </div>
     )
 }
 
-export default createProductUrl
+export default EditProductUrl

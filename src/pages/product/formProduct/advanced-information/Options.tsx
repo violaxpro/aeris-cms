@@ -3,6 +3,12 @@ import FormGroup from '@/components/form'
 import DynamicInputList from '@/components/button-input'
 import Button from "@/components/button"
 
+type ListOption = {
+    name: string;
+    type: string;
+    optRequired: boolean;
+    globalOptions: []
+};
 const OptionsInformation = ({ className }: { className?: string }) => {
     const [formData, setFormData] = useState({
         globalOptions: [],
@@ -15,6 +21,8 @@ const OptionsInformation = ({ className }: { className?: string }) => {
         console.log('Updated List:', values);
     };
 
+    const [items, setItems] = useState<ListOption[]>([]);
+
     return (
         <div>
             <FormGroup
@@ -22,7 +30,7 @@ const OptionsInformation = ({ className }: { className?: string }) => {
                 description="Options information about the product"
             >
                 <DynamicInputList
-                    label="Options"
+                    label="Options Type"
                     fieldType="select"
                     btnLabel="Add Options"
                     selectOptions={[
