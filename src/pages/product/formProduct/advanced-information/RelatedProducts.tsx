@@ -1,27 +1,23 @@
-import React from 'react'
+import React, { useState } from 'react'
+import FormGroup from '@/components/form'
+import Button from "@/components/button"
 import TableProduct from "@/components/table"
 import type { TableColumnsType } from 'antd'
 import { productsData, ProductType } from '@/data/products-data'
 import Image from 'next/image'
 import { Rate } from 'antd';
-import { EditOutlined, DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons'
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import { routes } from '@/config/routes'
 import Link from 'next/link'
-import Breadcrumb from "@/components/breadcrumb"
-import { Content } from 'antd/es/layout/layout'
-import Button from "@/components/button"
 import SearchInput from '@/components/search';
 
-const index = () => {
 
-    const breadcrumb = [
-        {
-            label: 'Catalogue',
-        },
-        {
-            label: 'Products',
-        },
-    ]
+const RelatedProductInformation = ({ className }: { className?: string }) => {
+    const [formData, setFormData] = useState({
+        name: '',
+        value: ''
+    });
+
     const columnProducts: TableColumnsType<ProductType> = [
         {
             title: 'ID',
@@ -99,33 +95,22 @@ const index = () => {
 
     ]
 
+    const handleChange = (values: { name: string; price: string }[]) => {
+        console.log('Updated List:', values);
+    };
+
     const handleSearch = (query: string) => {
         console.log('User mencari:', query);
     };
     return (
-        <>
-            <div className="mt-6 mx-4 mb-0">
-                <Breadcrumb
-                    items={breadcrumb}
-                />
-            </div>
-            <Content className="mt-6 mx-4 mb-0">
-                <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
-                    <div className='flex justify-between mb-4'>
-                        <h1 className='text-xl font-bold'>
-                            Product
-                        </h1>
-
-                        <div className='flex items-center gap-2'>
-                            <SearchInput onSearch={handleSearch} />
-                            <Button
-                                btnClassname="!bg-[#86A788] !text-white hover:!bg-white hover:!text-[#86A788] hover:!border-[#86A788]"
-                                icon={<PlusCircleOutlined />}
-                                label='Add Product'
-                                link='/ecommerce/products/create'
-                            />
-                        </div>
-
+        <div>
+            <FormGroup
+                title="Related Product"
+                description="Related Product information about the product"
+            >
+                <div className="overflow-x-auto col-span-full">
+                    <div className='flex justify-end mb-2'>
+                        <SearchInput onSearch={handleSearch} />
                     </div>
                     <TableProduct
                         columns={columnProducts}
@@ -133,9 +118,17 @@ const index = () => {
                         withSelectableRows
                     />
                 </div>
-            </Content>
-        </>
+            </FormGroup>
+            <div className='flex justify-end gap-3 mt-2'>
+                <Button
+                    label='Save'
+                    btnClassname="!bg-[#86A788] !text-white hover:!bg-white hover:!text-[#86A788] hover:!border-[#86A788]"
+                />
+            </div>
+            <hr style={{ borderColor: '#E5E7EB', marginTop: '1rem', marginBottom: '1rem' }} />
+
+        </div>
     )
 }
 
-export default index
+export default RelatedProductInformation
