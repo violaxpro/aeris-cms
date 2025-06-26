@@ -1,30 +1,96 @@
-import React, { useState } from 'react'
-import FormGroup from '@/components/form'
-import DynamicInputList from '@/components/button-input'
+import React, { useState } from 'react';
+import FormGroup from '@/components/form';
+import { Button } from 'antd';
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import SelectInput from '@/components/select';
+
+type ListItem = {
+    name: string[];
+    value: string;
+};
 
 const KitPriceInformation = ({ className }: { className?: string }) => {
-    const [formData, setFormData] = useState({
-        kitprice_name: '',
-        kitprice_price: ''
+    const [items, setItems] = useState<ListItem[]>([]);
 
-    });
-
-    const handleChange = (values: { name: string; price: string }[]) => {
-        console.log('Updated List:', values);
+    const handleChange = (updatedItems: ListItem[]) => {
+        setItems(updatedItems);
+        console.log('Updated List:', updatedItems);
     };
+
+    const updateItem = (index: number, key: keyof ListItem, value: any) => {
+        const updated = [...items];
+        updated[index][key] = value;
+        handleChange(updated);
+    };
+
+    const addItem = () => {
+        const updated = [{ name: [], value: '' }, ...items];
+        handleChange(updated);
+    };
+
+    const removeItem = (index: number) => {
+        const updated = items.filter((_, i) => i !== index);
+        handleChange(updated);
+    };
+
+    const options = [
+        { value: '1', label: 'Product A' },
+        { value: '2', label: 'Product B' },
+        { value: '3', label: 'Product C' },
+    ];
 
     return (
         <div>
-            <FormGroup
-                title="Kit Price"
-                description="Kit Price information"
-            >
-                <DynamicInputList label="Kit Price" onChange={(val) => console.log(val)} minItems={1} btnLabel='Add Kit Price' />
+            <FormGroup title="Kit Price" description="Kit Price information">
+                <div className="space-y-4 col-span-full">
+                    {items.map((item, index) => (
+                        <div key={index} className="flex items-center gap-2 mb-3 w-full">
+                            <div className="w-full">
+                                <SelectInput
+                                    id={`productName-${index}`}
+                                    label="Product Name"
+                                    placeholder="Select Product(s)"
+                                    modeType="multiple"
+                                    onChange={(selectedOptions) =>
+                                        updateItem(index, 'name', Array.isArray(selectedOptions)
+                                            ? selectedOptions.map((opt: any) => opt.label)
+                                            : [])
+                                    }
+                                    options={options}
+                                />
+                            </div>
+
+                            <div className="pt-6">
+                                <MinusCircleOutlined
+                                    onClick={() => removeItem(index)}
+                                    style={{ color: 'red', fontSize: '18px', cursor: 'pointer' }}
+                                />
+                            </div>
+                        </div>
+                    ))}
+
+                    <div className="flex justify-end">
+                        <Button
+                            type="dashed"
+                            onClick={addItem}
+                            icon={<PlusOutlined />}
+                            style={{ marginTop: 12 }}
+                        >
+                            Add Kit Price Product
+                        </Button>
+                    </div>
+                </div>
             </FormGroup>
-            <hr style={{ borderColor: '#E5E7EB', marginTop: '1rem', marginBottom: '1rem' }} />
 
+            <hr
+                style={{
+                    borderColor: '#E5E7EB',
+                    marginTop: '1rem',
+                    marginBottom: '1rem',
+                }}
+            />
         </div>
-    )
-}
+    );
+};
 
-export default KitPriceInformation
+export default KitPriceInformation;
