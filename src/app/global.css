@@ -28,3 +28,19 @@
     outline: none !important;
     border: none !important;
 }
+
+/* Buat wrapper node content flex */
+:where(.ant-tree-node-content-wrapper) {
+    display: inline-flex !important;
+    /* biar inline tapi flex */
+    align-items: center;
+    /* vertikal align */
+    width: 100%;
+    /* ambil full */
+}
+
+/* Buat title flex child expand penuh */
+:where(.ant-tree-title) {
+    width: 100% !important;
+    /* biar justify-between jalan */
+}

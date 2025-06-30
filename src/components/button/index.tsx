@@ -9,10 +9,16 @@ type buttonProps = {
     label: string
     link?: string
     type?: ButtonProps['type'];
+    onClick?: () => void
 }
-const index = ({ btnClassname, icon, label, link, type }: buttonProps) => {
+const index = ({ btnClassname, icon, label, link, type, onClick }: buttonProps) => {
     const button = (
-        <Button className={btnClassname}  {...(type ? { type } : {})}>
+        <Button
+            className={btnClassname}
+            {...(type ? { type } : {})}
+            {...(onClick ? { onClick } : {})}
+
+        >
             {icon ?? icon}
             <span>
                 {label}

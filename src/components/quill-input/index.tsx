@@ -10,6 +10,7 @@ interface QuillEditorProps extends ReactQuillProps {
     labelClassName?: string;
     errorClassName?: string;
     toolbarPosition?: 'top' | 'bottom';
+    notes?: string
 }
 
 export default function QuillEditor({
@@ -20,6 +21,7 @@ export default function QuillEditor({
     labelClassName,
     errorClassName,
     toolbarPosition = 'top',
+    notes,
     ...props
 }: QuillEditorProps) {
     const quillModules = {
@@ -61,6 +63,11 @@ export default function QuillEditor({
             {error && (
                 <FieldError size="md" error={error} className={errorClassName} />
             )}
+            {
+                notes && (
+                    <span>{notes}</span>
+                )
+            }
         </div>
     );
 }

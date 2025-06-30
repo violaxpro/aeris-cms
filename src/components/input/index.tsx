@@ -6,13 +6,14 @@ type inputProps = {
     placeholder?: string
     id: string
     value: string
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
     notes?: string
     type: string
     style?: any
+    readOnly?: boolean;
 }
 
-const index = ({ label, placeholder, id, value, onChange, notes, type, style }: inputProps) => {
+const index = ({ label, placeholder, id, value, onChange, notes, type, style, readOnly = false }: inputProps) => {
 
     return (
         <div>
@@ -30,6 +31,7 @@ const index = ({ label, placeholder, id, value, onChange, notes, type, style }: 
                     ...style,
                     borderColor: '#E5E7EB',
                 }}
+                readOnly={readOnly}
             />
             {
                 notes && (

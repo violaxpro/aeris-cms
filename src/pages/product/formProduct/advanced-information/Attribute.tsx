@@ -41,7 +41,7 @@ const AttributeInformation = ({ className }: { className?: string }) => {
 
     return (
         <div>
-            <FormGroup title="Kit Price" description="Kit Price information">
+            <FormGroup title="Attribute" description="Attribute information about the product.">
                 <div className="space-y-4 col-span-full">
                     {items.map((item, index) => (
                         <div key={index} className="flex items-center gap-2 mb-3 w-full">

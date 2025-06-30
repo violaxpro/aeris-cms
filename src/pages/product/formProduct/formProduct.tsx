@@ -26,7 +26,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ mode, initialValues }) => {
 
             {/* Tabs di bawah breadcrumb */}
             <div className="mx-4 mt-4 mb-0 bg-white px-4 py-3 rounded shadow">
-                <div className="flex border-b border-gray-200">
+                <div className="flex border-b border-gray-200" style={{ borderColor: '#E5E7EB' }}>
                     {['basic', 'price', 'advanced'].map((tab) => (
                         <button
                             key={tab}

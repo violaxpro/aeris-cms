@@ -1,5 +1,5 @@
 import React from 'react'
-import ProductForm from '@/pages/product/formProduct/formProduct'
+import ProductForm from '@/pages/product/formProduct/FormProduct'
 
 const createProductUrl = () => {
     return (
