@@ -1,12 +1,12 @@
 import React from 'react'
-import PriceLevelForm from '@/pages/price-level/FromPriceLevel'
+import FormPriceLevel from '@/features/pages/price-level/FormPriceLevel'
 
-const EditPriceLevelUrl = () => {
+
+export default function EditPriceLevelPage() {
     return (
         <div>
-            <PriceLevelForm mode="edit" />
+            <FormPriceLevel mode="edit" />
         </div>
     )
 }
 
-export default EditPriceLevelUrl

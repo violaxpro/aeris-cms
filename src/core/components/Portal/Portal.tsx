@@ -1,7 +1,7 @@
 import { useIsomorphicEffect } from '../../hooks/use-event-listener';
 import React, { forwardRef, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { assignRef } from '../../ui/carbon-menu/popover/use-merged-ref';
+// import { assignRef } from '../../ui/carbon-menu/popover/use-merged-ref';
 
 function createPortalNode(props: React.ComponentPropsWithoutRef<'div'>) {
   const node = document.createElement('div');
@@ -34,7 +34,7 @@ export const Portal = forwardRef<HTMLDivElement, PortalProps>(
           ? document.querySelector(target)
           : target;
 
-      assignRef(ref, nodeRef.current);
+      // assignRef(ref, nodeRef.current);
 
       if (!target && nodeRef.current) {
         document.body.appendChild(nodeRef.current);

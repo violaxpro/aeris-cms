@@ -1,17 +1,17 @@
-'use server';
+// 'use server';
 
-import { render } from '@react-email/components';
-import { sendEmail } from '@/email-templates/email';
-import AccountConfirmationEmail from '@/email-templates/account-confirmation';
+// import { render } from '@react-email/components';
+// import { sendEmail } from '@/email-templates/email';
+// import AccountConfirmationEmail from '@/email-templates/account-confirmation';
 
-export const sendAccountConfirmationEmail = async (data: { email: string }) => {
-  const to = `John Doe<${data.email}>`;
+// export const sendAccountConfirmationEmail = async (data: { email: string }) => {
+//   const to = `John Doe<${data.email}>`;
 
-  await sendEmail({
-    to: to,
-    subject: 'Your Account is Created!',
-    html: render(AccountConfirmationEmail(data.email)) as unknown as string,
-  });
+//   await sendEmail({
+//     to: to,
+//     subject: 'Your Account is Created!',
+//     html: render(AccountConfirmationEmail(data.email)) as unknown as string,
+//   });
 
-  return true;
-};
+//   return true;
+// };

@@ -1,5 +1,5 @@
 import React from 'react'
-import PriceLevelPage from "@/pages/price-level"
+import PriceLevelPage from "@/features/pages/price-level"
 
 const PriceLevelUrl = () => {
   return (

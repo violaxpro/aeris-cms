@@ -1,6 +1,6 @@
 'use client'
 import React from 'react'
-import ProductPage from "@/pages/product"
+import ProductPage from "@/features/pages/product"
 
 const productUrl = () => {
     return (

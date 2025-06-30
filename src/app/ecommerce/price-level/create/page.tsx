@@ -1,12 +1,11 @@
 import React from 'react'
-import PriceLevelForm from '@/pages/price-level/FromPriceLevel'
+import FormPriceLevel from '@/features/pages/price-level/FormPriceLevel'
 
-const CreatePriceLevelUrl = () => {
+export default function CreatePriceLevelPage() {
     return (
         <div>
-            <PriceLevelForm mode='create' />
+            <FormPriceLevel mode='create' />
         </div>
     )
 }
 
-export default CreatePriceLevelUrl
