@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button } from 'antd'
 import { ButtonProps } from 'antd';
+import Link from 'next/link';
 
 type buttonProps = {
     btnClassname?: string
@@ -25,9 +26,9 @@ const index = ({ btnClassname, icon, label, link, type, onClick }: buttonProps) 
         </Button>
     )
     return link ? (
-        <a href={link}>
+        <Link href={link}>
             {button}
-        </a>
+        </Link>
     ) : (button)
 }
 
