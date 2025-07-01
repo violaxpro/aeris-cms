@@ -111,8 +111,8 @@ const OptionsInformation = ({ className }: { className?: string }) => {
                             {/* Baris 3 dst: Global Option dropdown */}
                             <div className="flex flex-col w-full">
                                 {item.globalOption?.map((optValue, gIdx) => (
-                                    <div>
-                                        <div key={gIdx} className="flex gap-2">
+                                    <div key={gIdx}>
+                                        <div className="flex gap-2">
                                             <SelectInput
                                                 id={`globalOption-${index}-${gIdx}`}
                                                 label={`Product Name ${gIdx + 1}`}
