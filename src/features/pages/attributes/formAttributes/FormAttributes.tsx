@@ -2,33 +2,32 @@
 import React, { useState } from 'react';
 import Breadcrumb from "@/components/breadcrumb";
 import { Content } from 'antd/es/layout/layout';
-import BasicInformationProduct from './basic-information';
-import ProductPrice from './price';
-import AdvancedInformation from './advanced-information';
 import Button from '@/components/button'
 import { FormProps } from '@/plugins/interfaces/product-interface';
+import GeneralForm from './GeneralForm';
+import ValuesForm from './ValuesForm';
 import { routes } from '@/config/routes';
 
-const ProductForm: React.FC<FormProps> = ({ mode, initialValues }) => {
-    const [activeTab, setActiveTab] = useState<'basic' | 'price' | 'advanced'>('basic');
+const FormAttributes: React.FC<FormProps> = ({ mode, initialValues }) => {
+    const [activeTab, setActiveTab] = useState<'general' | 'values'>('general');
 
     const breadcrumb = [
         { title: 'Catalogue' },
-        { title: 'Products', url: routes.eCommerce.products },
-        { title: mode === 'create' ? 'Create Product' : 'Edit Product' },
+        { title: 'Attributes', url: routes.eCommerce.attributes },
+        { title: mode === 'create' ? 'Create Attributes' : 'Edit Attributes' },
     ];
 
     return (
         <>
             <div className="mt-6 mx-4 mb-0">
-                <h1 className="text-xl font-bold mb-4">{mode === 'create' ? 'Create Product' : 'Edit Product'}</h1>
+                <h1 className="text-xl font-bold mb-4">{mode === 'create' ? 'Create Attributes' : 'Edit Attributes'}</h1>
                 <Breadcrumb items={breadcrumb} />
             </div>
 
             {/* Tabs di bawah breadcrumb */}
             <div className="mx-4 mt-4 mb-0 bg-white px-4 py-3 rounded shadow">
                 <div className="flex border-b border-gray-200" style={{ borderColor: '#E5E7EB' }}>
-                    {['basic', 'price', 'advanced'].map((tab) => (
+                    {['general', 'values'].map((tab) => (
                         <button
                             key={tab}
                             className={`capitalize px-4 py-2 -mb-px border-b-2 transition-colors duration-300 ${activeTab === tab
@@ -37,11 +36,9 @@ const ProductForm: React.FC<FormProps> = ({ mode, initialValues }) => {
                                 }`}
                             onClick={() => setActiveTab(tab as any)}
                         >
-                            {tab === 'basic'
-                                ? 'Basic Information'
-                                : tab === 'price'
-                                    ? 'Price'
-                                    : 'Advanced Information'}
+                            {tab === 'general'
+                                ? 'General Information'
+                                : 'Values'}
                         </button>
                     ))}
                 </div>
@@ -52,31 +49,27 @@ const ProductForm: React.FC<FormProps> = ({ mode, initialValues }) => {
 
                     {/* Tab Content */}
                     <div>
-                        {activeTab === 'basic' && (
+                        {activeTab === 'general' && (
                             <div className="space-y-8">
-                                <BasicInformationProduct />
+                                <GeneralForm />
                             </div>
                         )}
 
 
-                        {activeTab === 'price' && (
+                        {activeTab === 'values' && (
                             <div>
-                                <ProductPrice />
+                                <ValuesForm />
                             </div>
                         )}
 
-                        {activeTab === 'advanced' && (
-                            <div>
-                                <AdvancedInformation />
-                            </div>
-                        )}
+
                     </div>
 
                     {/* Submit */}
                     <div className="mt-6 flex justify-end">
                         <Button
                             btnClassname="!bg-[#86A788] !text-white hover:!bg-white hover:!text-[#86A788] hover:!border-[#86A788]"
-                            label={mode === 'create' ? 'Create Product' : 'Edit Product'}
+                            label={mode === 'create' ? 'Create Attributes' : 'Edit Attributes'}
                         />
                     </div>
                 </div>
@@ -85,4 +78,4 @@ const ProductForm: React.FC<FormProps> = ({ mode, initialValues }) => {
     );
 };
 
-export default ProductForm;
+export default FormAttributes;

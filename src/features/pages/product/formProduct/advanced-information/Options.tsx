@@ -83,6 +83,7 @@ const OptionsInformation = ({ className }: { className?: string }) => {
                                             : []
                                         )
                                     }
+                                    value={item.type}
                                     options={options}
                                 />
                             </div>
@@ -108,27 +109,35 @@ const OptionsInformation = ({ className }: { className?: string }) => {
                             </div>
 
                             {/* Baris 3 dst: Global Option dropdown */}
-                            <div className="flex flex-col gap-3">
+                            <div className="flex flex-col w-full">
                                 {item.globalOption?.map((optValue, gIdx) => (
-                                    <div key={gIdx} className="flex items-center gap-2">
-                                        <SelectInput
-                                            id={`globalOption-${index}-${gIdx}`}
-                                            label={`Product Name ${gIdx + 1}`}
-                                            placeholder="Select Product Name"
-                                            onChange={(selectedOptions) =>
-                                                updateItem(index, 'globalOption', Array.isArray(selectedOptions)
-                                                    ? selectedOptions.map((opt: any) => opt.label)
-                                                    : []
-                                                )
-                                            }
+                                    <div>
+                                        <div key={gIdx} className="flex gap-2">
+                                            <SelectInput
+                                                id={`globalOption-${index}-${gIdx}`}
+                                                label={`Product Name ${gIdx + 1}`}
+                                                placeholder="Select Product Name"
+                                                onChange={(selectedOptions) =>
+                                                    updateItem(index, 'globalOption', Array.isArray(selectedOptions)
+                                                        ? selectedOptions.map((opt: any) => opt.label)
+                                                        : []
+                                                    )
+                                                }
+                                                value={optValue}
+                                                options={options}
+                                                className='w-full'
+                                            />
+                                            <div className='pt-6'>
+                                                <MinusCircleOutlined
+                                                    onClick={() => removeGlobalOption(index, gIdx)}
+                                                    style={{ color: 'red', fontSize: '18px', cursor: 'pointer' }}
+                                                />
+                                            </div>
 
-                                            options={options}
-                                        />
-                                        <MinusCircleOutlined
-                                            onClick={() => removeGlobalOption(index, gIdx)}
-                                            style={{ color: 'red', fontSize: '18px', cursor: 'pointer' }}
-                                        />
+                                        </div>
+
                                     </div>
+
                                 ))}
                             </div>
                         </div>

@@ -1,14 +1,21 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Breadcrumb from "@/components/breadcrumb";
 import { Content } from 'antd/es/layout/layout';
 import Button from '@/components/button'
 import { FormProps } from '@/plugins/interfaces/form-interface';
 import FormGroup from '@/components/form';
 import Input from "@/components/input"
+import SelectInput from '@/components/select';
+import { routes } from '@/config/routes';
+import { useParams } from 'next/navigation'
+import { getPriceLevel } from '@/services/price-level-service';
 
 const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues }) => {
+    const { slug }: any = useParams()
     const [formData, setFormData] = useState({
+        brands: '',
+        categories: '',
         buying_price: '',
         rrp: '',
         trade: '',
@@ -21,9 +28,17 @@ const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues }) => {
 
     });
 
+    useEffect(() => {
+        if (slug) {
+            getPriceLevel(slug).then((res) =>{
+                setFormData(res.data)
+            }).catch((error) => console.log(error))
+        }
+    }, [slug])
+
     const breadcrumb = [
         { title: 'Catalogue' },
-        { title: 'Price Level', url: '/ecommerce/price-level' },
+        { title: 'Price Level', url: routes.eCommerce.priceLevel },
         { title: mode === 'create' ? 'Create Price Level' : 'Edit Price Level' },
     ];
 
@@ -35,12 +50,23 @@ const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues }) => {
         }));
     };
 
-    const handleChangeSelect = (id: string, value: string) => {
+    const handleChangeSelect = (id: string, value: string | string[]) => {
         setFormData((prev) => ({
             ...prev,
             [id]: value,
         }));
     };
+
+    const optionBrands = [
+        { label: 'Brands A', value: 'Brands A' },
+        { label: 'Brands B', value: 'Brands B' }
+
+    ]
+
+    const optionsCategories = [
+        { value: '1', label: 'Category A' },
+        { value: '2', label: 'Category B' },
+    ]
 
     return (
         <>
@@ -58,6 +84,23 @@ const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues }) => {
                             title="Price"
                             description="Price information"
                         >
+                            <SelectInput
+                                id='brands'
+                                label="Brands"
+                                placeholder="Select Brands"
+                                value={formData.brands}
+                                onChange={(e) => handleChangeSelect('brands', e)}
+                                options={optionBrands}
+                            />
+                            <SelectInput
+                                id="categories"
+                                modeType='multiple'
+                                label="Categories"
+                                placeholder="Select Categories"
+                                value={formData.categories || undefined}
+                                onChange={(val) => handleChangeSelect("categories", val)}
+                                options={optionsCategories}
+                            />
                             <Input
                                 id='buyingPrice'
                                 label='Buying Price'

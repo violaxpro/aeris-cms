@@ -54,3 +54,8 @@ export const validateConfirmPassword = z
     message: messages.passwordOneLowercase,
   })
   .regex(new RegExp('.*\\d.*'), { message: messages.passwordOneNumeric });
+
+export const stripHTML = (html: string) => {
+  return html.replace(/<[^>]+>/g, '');
+};
+

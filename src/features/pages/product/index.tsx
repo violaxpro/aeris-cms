@@ -122,7 +122,7 @@ const index = () => {
                                 btnClassname="!bg-[#86A788] !text-white hover:!bg-white hover:!text-[#86A788] hover:!border-[#86A788]"
                                 icon={<PlusCircleOutlined />}
                                 label='Add Product'
-                                link='/ecommerce/products/create'
+                                link={routes.eCommerce.createProduct}
                             />
                         </div>
 

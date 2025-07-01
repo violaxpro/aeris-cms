@@ -1,10 +1,10 @@
 import { Tree } from 'antd';
 import type { GetProps, TreeDataNode } from 'antd';
 
-export type FlatNode = {
+export type FlatNode = categoriesType & {
     id: number | string;
     parent: number | string;
-    text: string;
+    name: string;
     data?: any;
 };
 
@@ -13,24 +13,29 @@ export type TreeNode = {
     title: string;
     text: string;
     children?: TreeNode[];
-    categoriesData?: categoriesType[]
+    categoriesData?: categoriesType
 };
 
 export interface categoriesType {
     id: number;
-    parent_id: number | null;   // nullable kalau root
+    // parent_id: number | null;   
     // slug: string;
-    position: number;
-    is_searchable: boolean;
-    show_on_page: number;
-    is_active: boolean;
+    // position: number;
     // created_at: string;
     // updated_at: string;
     name: string;
     // files: FileNode[];    // bisa juga type FileNode
-    meta: MetaNode;       // bisa nested object
+    // meta: MetaNode;       // bisa nested object
+    meta_description: string
+    meta_title: string
+    page_decsription: string
+    show_in_page: boolean
+    show_in_search: boolean
+    enabled: boolean
     // logo: FileNode | null;
     // banner: FileNode | null;
+
+
 }
 
 export interface FileNode {

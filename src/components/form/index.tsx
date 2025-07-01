@@ -4,6 +4,7 @@ interface FormGroupProps {
     className?: string;
     description?: string;
     children?: React.ReactNode;
+    column? : number
 }
 
 export default function FormGroup({
@@ -11,6 +12,7 @@ export default function FormGroup({
     className,
     description,
     children,
+    column
 }: FormGroupProps) {
     return (
         <div className={`grid grid-cols-12 gap-4`}>
@@ -19,7 +21,7 @@ export default function FormGroup({
                 {description && <p className="mt-2">{description}</p>}
             </div>
             {children && (
-                <div className="col-span-12 md:col-span-8 grid grid-cols-2 gap-4">
+                <div className={`col-span-12 md:col-span-8 grid ${column ? '' : 'grid-cols-2'} gap-4`}>
                     {children}
                 </div>
             )}

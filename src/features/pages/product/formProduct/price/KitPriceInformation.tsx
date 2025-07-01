@@ -56,10 +56,10 @@ const KitPriceInformation = ({ className }: { className?: string }) => {
                                             ? selectedOptions.map((opt: any) => opt.label)
                                             : [])
                                     }
+                                    value={item.name}
                                     options={options}
                                 />
                             </div>
-
                             <div className="pt-6">
                                 <MinusCircleOutlined
                                     onClick={() => removeItem(index)}

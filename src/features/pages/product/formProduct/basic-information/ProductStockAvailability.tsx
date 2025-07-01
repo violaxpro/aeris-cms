@@ -12,7 +12,7 @@ const ProductStockAvailability = ({ className }: { className?: string }) => {
 
     });
 
-    const handleChangeSelect = (id: string, value: string) => {
+    const handleChangeSelect = (id: string, value: string | string[]) => {
         setFormData((prev) => ({
             ...prev,
             [id]: value,
@@ -38,7 +38,7 @@ const ProductStockAvailability = ({ className }: { className?: string }) => {
                     id="stock"
                     label="Stock Availability"
                     placeholder="Select Stock Availability"
-                    // value={formData.brand}
+                    value={formData.stock}
                     onChange={(val) => handleChangeSelect("stock", val)}
                     options={options}
                 />

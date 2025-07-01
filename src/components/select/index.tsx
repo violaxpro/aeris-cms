@@ -10,22 +10,24 @@ type SelectInputProps = {
     id: string;
     label: string;
     placeholder?: string;
-    // defaultValue: string[];
-    onChange: (value: string) => void; // pakai string karena antd Select return-nya bukan event
+    value: string | string[] | undefined;
+    onChange: (value: string | string[]) => void;
     options: Option[];
     className?: string;
     modeType?: 'multiple' | 'tags' | undefined;
+    allowClear?: boolean
 };
 
 const SelectInput: React.FC<SelectInputProps> = ({
     id,
     label,
     placeholder = '',
-    // defaultValue,
+    value,
     onChange,
     options,
     className,
-    modeType
+    modeType,
+    allowClear = false
 }) => {
     return (
         <div className={className}>
@@ -37,8 +39,9 @@ const SelectInput: React.FC<SelectInputProps> = ({
                 showSearch
                 style={{ width: '100%' }}
                 placeholder={placeholder}
-                // defaultValue={defaultValue}
+                allowClear={allowClear}
                 optionFilterProp="label"
+                value={value}
                 onChange={onChange}
                 options={options}
                 filterSort={(a, b) =>

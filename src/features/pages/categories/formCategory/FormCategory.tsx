@@ -8,7 +8,6 @@ import { formCategoryProps } from '@/plugins/types/treeTypes';
 
 const FormCategory = ({ parentId, data }: formCategoryProps) => {
     const [activeTab, setActiveTab] = useState<'General' | 'SEO'>('General');
-    console.log(parentId)
     return (
         <>
             <div className="mx-4 mb-0 bg-white px-4">
@@ -36,14 +35,14 @@ const FormCategory = ({ parentId, data }: formCategoryProps) => {
                         <div>
                             {activeTab === 'General' && (
                                 <div className="space-y-8">
-                                    <GeneralForm data={data}/>
+                                    <GeneralForm data={data} parentId={parentId}/>
                                 </div>
                             )}
 
 
                             {activeTab === 'SEO' && (
                                 <div>
-                                    <SEOForm />
+                                    <SEOForm data={data} parentId={parentId}/>
                                 </div>
                             )}
 

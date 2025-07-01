@@ -55,6 +55,7 @@ const AttributeInformation = ({ className }: { className?: string }) => {
                                             ? selectedOptions.map((opt: any) => opt.label)
                                             : [])
                                     }
+                                    value={item.name}
                                     options={options}
                                 />
                             </div>
@@ -69,6 +70,7 @@ const AttributeInformation = ({ className }: { className?: string }) => {
                                             ? selectedOptions.map((opt: any) => opt.label)
                                             : [])
                                     }
+                                    value={item.value}
                                     options={options}
                                 />
                             </div>

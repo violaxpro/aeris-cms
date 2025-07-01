@@ -1,11 +1,10 @@
 'use client'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import TableProduct from "@/components/table"
 import type { TableColumnsType } from 'antd'
 import { priceLevelsData, PriceLevelType } from '@/data/price-level-data'
-import Image from 'next/image'
-import { Rate } from 'antd';
-import { EditOutlined, DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons'
+import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons'
 import DeletePopover from '@/components/popover'
 import { routes } from '@/config/routes'
 import Link from 'next/link'
@@ -13,8 +12,19 @@ import Breadcrumb from "@/components/breadcrumb"
 import { Content } from 'antd/es/layout/layout'
 import Button from "@/components/button"
 import SearchInput from '@/components/search';
+import { getPriceLevel } from '@/services/price-level-service'
 
 const index = () => {
+    const [priceLevelData, setPriceLevelData] = useState([])
+
+    useEffect(() => {
+        getPriceLevel().then((res) => {
+            setPriceLevelData(res.data)
+        }).catch(error => console.error(error))
+
+    }, [])
+
+    console.log(priceLevelData)
 
     const handleDelete = (id: any) => {
         console.log('delete', id)
@@ -28,7 +38,7 @@ const index = () => {
             title: 'Price Level',
         },
     ]
-    const columnProducts: TableColumnsType<PriceLevelType> = [
+    const columns: TableColumnsType<PriceLevelType> = [
         {
             title: 'ID',
             dataIndex: 'id',
@@ -38,16 +48,12 @@ const index = () => {
             dataIndex: 'name',
         },
         {
+            title: 'Brand',
+            dataIndex: 'brandId',
+        },
+        {
             title: 'Category',
-            dataIndex: 'categories',
-        },
-        {
-            title: 'Sub Category',
-            dataIndex: 'subcategories',
-        },
-        {
-            title: 'Warranty',
-            dataIndex: 'warranty',
+            dataIndex: 'categoryId',
         },
         {
             // Need to avoid this issue -> <td> elements in a large <table> do not have table headers.
@@ -95,14 +101,14 @@ const index = () => {
                                 btnClassname="!bg-[#86A788] !text-white hover:!bg-white hover:!text-[#86A788] hover:!border-[#86A788]"
                                 icon={<PlusCircleOutlined />}
                                 label='Add Price Level'
-                                link='/ecommerce/price-level/create'
+                                link={routes.eCommerce.createPriceLevel}
                             />
                         </div>
 
                     </div>
                     <TableProduct
-                        columns={columnProducts}
-                        dataSource={priceLevelsData}
+                        columns={columns}
+                        dataSource={priceLevelData}
                         withSelectableRows
                     />
                 </div>

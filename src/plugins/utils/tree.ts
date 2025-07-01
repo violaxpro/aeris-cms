@@ -1,4 +1,4 @@
-import { FlatNode, TreeNode } from "../types/treeTypes";
+import { FlatNode, TreeNode, categoriesType } from "../types/treeTypes";
 
 export default function buildTree(flatData: FlatNode[]): TreeNode[] {
     const idMapping: Record<string | number, TreeNode> = {};
@@ -6,11 +6,13 @@ export default function buildTree(flatData: FlatNode[]): TreeNode[] {
 
     // Buat map id ➜ node
     flatData.forEach(item => {
+        console.log(item)
         idMapping[item.id] = {
             key: item.id,
-            text: item.text,
-            title: item.text,
-            children: []
+            text: item.name,
+            title: item.name,
+            children: [],
+            categoriesData : item as categoriesType
         };
     });
 
@@ -22,6 +24,8 @@ export default function buildTree(flatData: FlatNode[]): TreeNode[] {
             if (parentNode) {
                 parentNode.children = parentNode.children || [];
                 parentNode.children.push(idMapping[item.id]);
+            } else {
+                tree.push(idMapping[item.id]);
             }
         }
     });

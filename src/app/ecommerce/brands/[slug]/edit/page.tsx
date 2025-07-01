@@ -1,11 +1,13 @@
 import React from 'react'
+import FormBrands from '@/features/pages/brands/formBrands/FormBrands'
 
-const EditBrandsUrl = () => {
+const EditBrandsPage = () => {
     return (
         <div>
+            <FormBrands mode='edit' />
 
         </div>
     )
 }
 
-export default EditBrandsUrl
+export default EditBrandsPage

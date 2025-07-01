@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Tree } from 'antd';
 import { DirectoryTreeProps } from '@/plugins/types/treeTypes';
 import Breadcrumb from "@/components/breadcrumb";
@@ -11,6 +11,9 @@ import buildTree from '@/plugins/utils/tree';
 import FormCategory from './formCategory/FormCategory';
 import { RenderMenu } from './formCategory/RenderMenu';
 import { TreeNode } from '@/plugins/types/treeTypes';
+import baseService from '@/services/base-service';
+import { getCategories } from '@/services/category-service';
+import { env } from '@/env.mjs';
 
 const { Search } = Input
 const { DirectoryTree } = Tree;
@@ -78,11 +81,19 @@ const CategoriesPage: React.FC = () => {
     const [autoExpandParent, setAutoExpandParent] = useState(true);
     const [addForm, setAddForm] = useState(false)
     const [selectedParent, setSelectedParent] = useState<TreeNode | null>(null);
+    const [parentId, setParentId] = useState<string | number | null>()
+    const [dataCategory, setDataCategory] = useState([])
 
+    useEffect(() => {
+        getCategories().then((res) => {
+            setDataCategory(res.data)
+        }).catch(error => console.error(error))
+
+    }, [])
     // const treeData = buildTree(dummyTreeData)
-    const handleCreateSubcategory = () => {
+    const handleCreateSubcategory = (node: TreeNode) => {
         // console.log('Create subcategory for:', node);
-        // setSelectedParent(node);
+        setParentId(node.key);
         setAddForm(true);
     };
 
@@ -112,14 +123,13 @@ const CategoriesPage: React.FC = () => {
             ),
             text: item.text,
             children: item.children ? mapTreeData(item.children) : [],
+            categoriesData: item
         }));
     };
     const treeData = useMemo(() => {
-        const built = buildTree(dummyTreeData);
-        console.log(built)
+        const built = buildTree(dataCategory);
         return mapTreeData(built);
-    }, []);
-    console.log('treeData', treeData);
+    }, [dataCategory]);
 
     const searchCategory = (
         categories: TreeNode[],
@@ -132,7 +142,6 @@ const CategoriesPage: React.FC = () => {
                 : []
             console.log(category)
             if (category.text?.toString().toLowerCase().includes(search.toLowerCase())) {
-                // if (dataChildren.length > 0) expandKeys.push(category.key)
                 expandKeys.push(category.key)
                 return {
                     ...category,
@@ -161,6 +170,7 @@ const CategoriesPage: React.FC = () => {
         () => searchValue ? filter(treeData, searchValue) : treeData, [searchValue, treeData]
     )
 
+
     const onSelect: DirectoryTreeProps['onSelect'] = (keys, info) => {
         console.log('Trigger Select', keys, info);
     };
@@ -178,6 +188,10 @@ const CategoriesPage: React.FC = () => {
     const handleAdd = () => {
         setAddForm(!addForm)
     }
+
+
+
+    console.log('data category', dataCategory)
 
     return (
         <>
@@ -221,7 +235,7 @@ const CategoriesPage: React.FC = () => {
                         <div>
                             {
                                 addForm == true && <FormCategory
-                                    parentId={selectedParent?.key ?? null}
+                                    parentId={parentId ?? null}
                                     data={selectedParent ?? null}
                                 />
                             }

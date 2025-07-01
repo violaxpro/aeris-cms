@@ -1,12 +1,8 @@
 import React, { useState } from 'react'
 import FormGroup from '@/components/form'
-import cn from '@/core/utils/class-names'
 import Input from "@/components/input"
 import Select from "@/components/select"
-import QuillInput from "@/components/quill-input"
-import TextArea from "@/components/textarea"
-import CheckboxInput from '@/components/checkbox'
-import Button from "@/components/button"
+
 
 const ProductInventory = ({ className }: { className?: string }) => {
     const [formData, setFormData] = useState({
@@ -27,7 +23,7 @@ const ProductInventory = ({ className }: { className?: string }) => {
     };
 
 
-    const handleChangeSelect = (id: string, value: string) => {
+    const handleChangeSelect = (id: string, value: string | string[]) => {
         setFormData((prev) => ({
             ...prev,
             [id]: value,
@@ -75,7 +71,7 @@ const ProductInventory = ({ className }: { className?: string }) => {
                     id="inventoryManagement"
                     label="Inventory Management"
                     placeholder="Select Inventory Management"
-                    // value={formData.brand}
+                    value={formData.inventory_management}
                     onChange={(val) => handleChangeSelect("inventory_management", val)}
                     options={optionsInventoryManagement}
                 />

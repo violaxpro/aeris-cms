@@ -13,7 +13,7 @@ const Sidebar = () => {
             icon: item.icon ? <item.icon /> : null,
             label: (
                 item?.href ?
-                    <Link href={item.href}>
+                    <Link href={item.href} className="!text-inherit">
                         {item.name}
                     </Link> : <span>{item.name}</span>
             ),

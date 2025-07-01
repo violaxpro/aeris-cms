@@ -2,8 +2,10 @@ import React, { useState } from 'react'
 import Input from "@/components/input"
 import Textarea from "@/components/textarea"
 import QuillInput from '@/components/quill-input'
+import { formProps } from './GeneralForm'
+import { stripHTML } from '@/plugins/validators/common-rules'
 
-const SEOForm = () => {
+const SEOForm = ({ data, parentId }: formProps) => {
     const [formData, setFormData] = useState({
         url: '',
         metaTitle: '',
@@ -11,6 +13,8 @@ const SEOForm = () => {
         pageDesc: '',
 
     })
+
+    console.log(parentId)
 
     const handleQuillChange = (value: string) => {
         setFormData({ ...formData, metaDescription: value });
@@ -36,18 +40,18 @@ const SEOForm = () => {
                 id='metaTitle'
                 label='Meta Title'
                 type='text'
-                value={formData.metaTitle}
+                value={parentId ? '' : data && data.categoriesData ? data.categoriesData.meta_title : formData.metaTitle}
                 onChange={handleChange}
                 notes='Character Count : 0'
             />
             <Textarea
                 label='Meta Description'
-                value={formData.metaDescription}
+                value={parentId ? '' : data && data.categoriesData ? stripHTML(data.categoriesData.meta_description) : formData.metaDescription}
                 onChange={handleChange}
                 notes='Character Count : 0'
             />
             <QuillInput
-                value={formData.pageDesc}
+                value={parentId ? '' : data && data.categoriesData ? data.categoriesData.page_description : formData.pageDesc}
                 onChange={handleQuillChange}
                 label="Page Description"
                 className="col-span-full [&_.ql-editor]:min-h-[100px]"

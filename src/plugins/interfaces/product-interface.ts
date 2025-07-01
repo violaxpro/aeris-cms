@@ -1,5 +1,5 @@
 type Mode = 'create' | 'edit'
-export interface ProductFormProps {
+export interface FormProps {
     mode: Mode;
     initialValues?: any;
 }

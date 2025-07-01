@@ -1,9 +1,8 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import TableProduct from "@/components/table"
+import Table from "@/components/table"
 import type { TableColumnsType } from 'antd'
-import { BrandsType } from '@/data/brands-data'
-import Image from 'next/image'
+import { AttributesType, attributesData } from '@/data/attributes-data'
 import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons'
 import DeletePopover from '@/components/popover'
 import { routes } from '@/config/routes'
@@ -13,19 +12,16 @@ import { Content } from 'antd/es/layout/layout'
 import Button from "@/components/button"
 import SearchInput from '@/components/search';
 import dayjs from 'dayjs'
-import { getBrands } from '@/services/brands-service'
+import { getAttributes } from '@/services/attributes-service'
 
 const index = () => {
-    const [brandsData, setBrandsData] = useState([])
-    console.log(brandsData)
+    const [attributeData, setAttributeData] = useState([])
 
     useEffect(() => {
-        getBrands()
+        getAttributes()
             .then((res) => {
-                setBrandsData(res.data)
-            }).catch((error) => {
-                console.error(error)
-            })
+                setAttributeData(res.data)
+            }).catch((error) => console.error(error))
 
     }, [])
 
@@ -38,35 +34,25 @@ const index = () => {
             title: 'Catalogue',
         },
         {
-            title: 'Brands',
+            title: 'Attribute',
         },
     ]
-    const columns: TableColumnsType<BrandsType> = [
+    const columns: TableColumnsType<AttributesType> = [
         {
             title: 'ID',
             dataIndex: 'id',
         },
         {
-            title: 'Thumbnail',
-            dataIndex: 'logo',
-            render: (url: string) => (
-                <Image
-                    src={url}
-                    alt="product-img"
-                    width={50}
-                    height={50}
-                    className='object-cover rounded-xl'
-                />
-
-            ),
+            title: 'Attribute Name',
+            dataIndex: 'attributeName',
         },
         {
-            title: 'Brand Name',
-            dataIndex: 'name',
+            title: 'Attribute Set',
+            dataIndex: 'attributeSet',
         },
         {
-            title: 'Status',
-            dataIndex: 'status',
+            title: 'Filterable',
+            dataIndex: 'filterable',
         },
         {
             title: 'Created At',
@@ -77,22 +63,22 @@ const index = () => {
             }
         },
         {
-            // Need to avoid this issue -> <td> elements in a large <table> do not have table headers.
             title: 'Action',
             dataIndex: 'action',
             key: 'action',
             width: 120,
-            render: (_: string, row: BrandsType) => (
+            render: (_: string, row: AttributesType) => (
 
                 <div className="flex items-center justify-end gap-3 pe-4">
-                    <Link href={routes.eCommerce.editBrands(row.id)}>
+                    <Link href={routes.eCommerce.editAttributes(row.id)}>
                         <EditOutlined />
                     </Link>
                     <DeletePopover
-                        title='Delete Price Level'
+                        title='Delete Attribute'
                         description='Are you sure to delete this data?'
                         onDelete={() => handleDelete(row.id)}
                     />
+
                 </div >
             ),
         },
@@ -106,7 +92,7 @@ const index = () => {
         <>
             <div className="mt-6 mx-4 mb-0">
                 <h1 className='text-xl font-bold'>
-                    Brands
+                    Attributes
                 </h1>
                 <Breadcrumb
                     items={breadcrumb}
@@ -120,15 +106,15 @@ const index = () => {
                             <Button
                                 btnClassname="!bg-[#86A788] !text-white hover:!bg-white hover:!text-[#86A788] hover:!border-[#86A788]"
                                 icon={<PlusCircleOutlined />}
-                                label='Add Brands'
-                                link={routes.eCommerce.createBrands}
+                                label='Add Attributes'
+                                link={routes.eCommerce.createAttributes}
                             />
                         </div>
 
                     </div>
-                    <TableProduct
+                    <Table
                         columns={columns}
-                        dataSource={brandsData}
+                        dataSource={attributeData}
                         withSelectableRows
                     />
                 </div>

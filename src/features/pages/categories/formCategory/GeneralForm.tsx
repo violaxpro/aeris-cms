@@ -2,10 +2,11 @@ import React, { useState } from 'react'
 import Input from "@/components/input"
 import Checkbox from "@/components/checkbox"
 
-type formProps = {
+export type formProps = {
     data?: any
+    parentId?: string | number | null
 }
-const GeneralForm = ({ data }: formProps) => {
+const GeneralForm = ({ data, parentId }: formProps) => {
     console.log(data)
     const [formData, setFormData] = useState({
         id: '',
@@ -25,11 +26,11 @@ const GeneralForm = ({ data }: formProps) => {
     return (
         <div className='flex flex-col gap-2'>
             {
-                data && <Input
+                data && data.categoriesData && <Input
                     id='id'
                     label='ID'
                     type='text'
-                    value={data.key}
+                    value={data.categoriesData.id}
                     readOnly={true}
                 />
             }
@@ -37,26 +38,30 @@ const GeneralForm = ({ data }: formProps) => {
                 id='name'
                 label='Name'
                 type='text'
-                value={data ? data.text : formData.name}
+                value={parentId
+                    ? ''
+                    : data && data.categoriesData
+                        ? data.categoriesData.name
+                        : formData.name}
                 onChange={handleChange}
             />
             <Checkbox
                 label='Searchable'
                 text='Show this category in search box category list'
                 onChange={(val) => setFormData({ ...formData, isSearch: val })}
-                checked={formData.isSearch}
+                checked={parentId ? '' : data && data.categoriesData ? data.categoriesData.show_in_search : formData.isSearch}
             />
             <Checkbox
                 label='Show on Category Page'
                 text='Show on Category Page'
                 onChange={(val) => setFormData({ ...formData, isShow: val })}
-                checked={formData.isShow}
+                checked={parentId ? '' : data && data.categoriesData ? data.categoriesData.show_in_page : formData.isShow}
             />
             <Checkbox
                 label='Status'
                 text='Enable the category'
                 onChange={(val) => setFormData({ ...formData, isStatus: val })}
-                checked={formData.isStatus}
+                checked={parentId ? '' : data && data.categoriesData ? data.categoriesData.enabled : formData.isStatus}
             />
 
         </div>

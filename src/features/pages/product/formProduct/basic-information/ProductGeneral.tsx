@@ -34,7 +34,7 @@ const ProductGeneral = ({ className }: { className?: string }) => {
     };
 
 
-    const handleChangeSelect = (id: string, value: string) => {
+    const handleChangeSelect = (id: string, value: string | string[]) => {
         setFormData((prev) => ({
             ...prev,
             [id]: value,
@@ -77,7 +77,7 @@ const ProductGeneral = ({ className }: { className?: string }) => {
                     id="brand"
                     label="Brand"
                     placeholder="Select Brand"
-                    // value={formData.brand}
+                    value={formData.brand}
                     onChange={(val) => handleChangeSelect("brand", val)}
                     options={optionsBrand}
                 />
@@ -86,7 +86,7 @@ const ProductGeneral = ({ className }: { className?: string }) => {
                     modeType='multiple'
                     label="Categories"
                     placeholder="Select Categories"
-                    // defaultValue={formData.categories}
+                    value={formData.categories || undefined}
                     onChange={(val) => handleChangeSelect("categories", val)}
                     options={optionsCategories}
                 />
@@ -123,6 +123,7 @@ const ProductGeneral = ({ className }: { className?: string }) => {
                     id="taxClass"
                     label="Tax Class"
                     placeholder="Select Tax Class"
+                    value={formData.taxClass}
                     onChange={(val) => handleChangeSelect("taxClass", val)}
                     options={optionsTaxClass}
                 />
@@ -132,6 +133,7 @@ const ProductGeneral = ({ className }: { className?: string }) => {
                     label="Tags"
                     placeholder="Select Tags"
                     onChange={(val) => handleChangeSelect("tags", val)}
+                    value={formData.tags}
                     options={optionsCategories}
                 />
                 <Input
