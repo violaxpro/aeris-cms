@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import Table from "@/components/table"
 import type { TableColumnsType } from 'antd'
-import { AttributesType, attributesData } from '@/data/attributes-data'
+import { AttributesType } from '@/data/attributes-data'
 import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons'
 import DeletePopover from '@/components/popover'
 import { routes } from '@/config/routes'

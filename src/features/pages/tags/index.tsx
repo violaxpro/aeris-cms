@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from 'react'
 import TableProduct from "@/components/table"
 import type { TableColumnsType } from 'antd'
-import { BrandsType } from '@/data/brands-data'
 import Image from 'next/image'
+import { tagsType } from '@/plugins/types/tags-type'
 import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons'
 import DeletePopover from '@/components/popover'
 import { routes } from '@/config/routes'
@@ -13,16 +13,16 @@ import { Content } from 'antd/es/layout/layout'
 import Button from "@/components/button"
 import SearchInput from '@/components/search';
 import dayjs from 'dayjs'
-import { getBrands } from '@/services/brands-service'
+import { getTags } from '@/services/tags-service'
 
 const index = () => {
-    const [brandsData, setBrandsData] = useState([])
-    console.log(brandsData)
+    const [tagsData, setTagsData] = useState([])
+    console.log(tagsData)
 
     useEffect(() => {
-        getBrands()
+        getTags()
             .then((res) => {
-                setBrandsData(res.data)
+                setTagsData(res.data)
             }).catch((error) => {
                 console.error(error)
             })
@@ -38,30 +38,16 @@ const index = () => {
             title: 'Catalogue',
         },
         {
-            title: 'Brands',
+            title: 'Tags',
         },
     ]
-    const columns: TableColumnsType<BrandsType> = [
+    const columns: TableColumnsType<tagsType> = [
         {
             title: 'ID',
             dataIndex: 'id',
         },
         {
-            title: 'Thumbnail',
-            dataIndex: 'logo',
-            render: (url: string) => (
-                <Image
-                    src={url}
-                    alt="product-img"
-                    width={50}
-                    height={50}
-                    className='object-cover rounded-xl'
-                />
-
-            ),
-        },
-        {
-            title: 'Brand Name',
+            title: 'Name',
             dataIndex: 'name',
         },
         {
@@ -70,26 +56,25 @@ const index = () => {
         },
         {
             title: 'Created At',
-            dataIndex: 'createdAt',
+            dataIndex: 'created_at',
             render: (created_at: string) => {
                 const date = dayjs(created_at).format('DD MMMM, YYYY')
                 return date
             }
         },
         {
-            // Need to avoid this issue -> <td> elements in a large <table> do not have table headers.
             title: 'Action',
             dataIndex: 'action',
             key: 'action',
             width: 120,
-            render: (_: string, row: BrandsType) => (
+            render: (_: string, row: tagsType) => (
 
                 <div className="flex items-center justify-end gap-3 pe-4">
-                    <Link href={routes.eCommerce.editBrands(row.id)}>
+                    <Link href={routes.eCommerce.editTags(row.id)}>
                         <EditOutlined />
                     </Link>
                     <DeletePopover
-                        title='Delete Brands'
+                        title='Delete Tags'
                         description='Are you sure to delete this data?'
                         onDelete={() => handleDelete(row.id)}
                     />
@@ -106,7 +91,7 @@ const index = () => {
         <>
             <div className="mt-6 mx-4 mb-0">
                 <h1 className='text-xl font-bold'>
-                    Brands
+                    Tags
                 </h1>
                 <Breadcrumb
                     items={breadcrumb}
@@ -120,15 +105,15 @@ const index = () => {
                             <Button
                                 btnClassname="!bg-[#86A788] !text-white hover:!bg-white hover:!text-[#86A788] hover:!border-[#86A788]"
                                 icon={<PlusCircleOutlined />}
-                                label='Add Brands'
-                                link={routes.eCommerce.createBrands}
+                                label='Add Tags'
+                                link={routes.eCommerce.createTags}
                             />
                         </div>
 
                     </div>
                     <TableProduct
                         columns={columns}
-                        dataSource={brandsData}
+                        dataSource={tagsData}
                         withSelectableRows
                     />
                 </div>

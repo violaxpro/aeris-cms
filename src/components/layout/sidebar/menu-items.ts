@@ -54,7 +54,7 @@ export const menuItems = [
             {
                 key: 'tags',
                 name: 'Tags',
-                href: routes.eCommerce.editCategory(DUMMY_ID),
+                href: routes.eCommerce.tags,
             },
             {
                 key: 'reviews',

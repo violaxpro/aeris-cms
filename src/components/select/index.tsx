@@ -2,9 +2,11 @@ import React from 'react';
 import { Select } from 'antd';
 
 type Option = {
-    value: string;
     label: string;
+    value?: string; 
+    options?: Option[];
 };
+
 
 type SelectInputProps = {
     id: string;
@@ -12,10 +14,11 @@ type SelectInputProps = {
     placeholder?: string;
     value: string | string[] | undefined;
     onChange: (value: string | string[]) => void;
-    options: Option[];
+    options?: Option[];
     className?: string;
     modeType?: 'multiple' | 'tags' | undefined;
     allowClear?: boolean
+    popupRender?: any
 };
 
 const SelectInput: React.FC<SelectInputProps> = ({
@@ -27,7 +30,8 @@ const SelectInput: React.FC<SelectInputProps> = ({
     options,
     className,
     modeType,
-    allowClear = false
+    allowClear = false,
+    popupRender,
 }) => {
     return (
         <div className={className}>
@@ -51,6 +55,8 @@ const SelectInput: React.FC<SelectInputProps> = ({
                     mode: modeType,
 
                 } : {})}
+                popupRender={popupRender}
+
             />
         </div>
     );
