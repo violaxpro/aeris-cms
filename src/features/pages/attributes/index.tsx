@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import Table from "@/components/table"
 import type { TableColumnsType } from 'antd'
 import { AttributesType } from '@/data/attributes-data'
@@ -12,19 +12,8 @@ import { Content } from 'antd/es/layout/layout'
 import Button from "@/components/button"
 import SearchInput from '@/components/search';
 import dayjs from 'dayjs'
-import { getAttributes } from '@/services/attributes-service'
 
-const index = () => {
-    const [attributeData, setAttributeData] = useState([])
-
-    useEffect(() => {
-        getAttributes()
-            .then((res) => {
-                setAttributeData(res.data)
-            }).catch((error) => console.error(error))
-
-    }, [])
-
+const index = ({ attributesData }: { attributesData?: any }) => {
     const handleDelete = (id: any) => {
         console.log('delete', id)
     }
@@ -114,7 +103,7 @@ const index = () => {
                     </div>
                     <Table
                         columns={columns}
-                        dataSource={attributeData}
+                        dataSource={attributesData}
                         withSelectableRows
                     />
                 </div>

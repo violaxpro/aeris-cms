@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react'
+'use client'
+import React from 'react'
 import TableProduct from "@/components/table"
 import type { TableColumnsType } from 'antd'
 import { ProductType } from '@/data/products-data'
-import Image from 'next/image'
-import { Rate } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons'
 import { routes } from '@/config/routes'
 import Link from 'next/link'
@@ -12,58 +11,8 @@ import { Content } from 'antd/es/layout/layout'
 import Button from "@/components/button"
 import SearchInput from '@/components/search';
 import StatusBadge from '@/components/badge/badge-status'
-import { getProduct } from '@/services/products-service'
-import { getCategories } from '@/services/category-service'
-import { getBrands } from '@/services/brands-service'
 
-const index = () => {
-    const [productsData, setProductsData] = useState([])
-    console.log(productsData)
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const resProduct = await getProduct();
-                if (resProduct.data) {
-                    const categoriesId = resProduct.data.map((item: any) => item.categoriesId)
-                    const categoriesIdArray = Array.from(new Set(categoriesId))
-                    const resCategories = await Promise.all(
-                        categoriesIdArray.map((id: any) =>
-                            getCategories(id)
-                        )
-                    );
-                    const categories = resCategories.map((res: any) => res.data);
-                    const brandsId = resProduct.data.map((item: any) => item.brandId)
-                    const brandsidArray = Array.from(new Set(brandsId))
-                    const resBrands = await Promise.all(
-                        brandsidArray.map((id: any) => getBrands(id))
-                    )
-                    const brands = resBrands.map((res: any) => res.data)
-
-
-                    const products = resProduct.data.map((product: any) => {
-                        const matchedCategory = categories.find(cat => cat.id === product.categoriesId);
-                        const matchedBrand = brands.find((brand) => {
-                            return brand.id === product.brandId
-                        })
-                        return {
-                            ...product,
-                            category: matchedCategory || null,
-                            brand: matchedBrand || null
-                        };
-                    });
-
-                    setProductsData(products)
-                }
-            } catch (error) {
-                console.error('Error Message : ', error)
-            }
-        }
-
-        fetchData()
-
-    }, [])
-
+const index = ({ products }: { products?: any }) => {
     const breadcrumb = [
         {
             title: 'Catalogue',
@@ -186,7 +135,7 @@ const index = () => {
                     </div>
                     <TableProduct
                         columns={columnProducts}
-                        dataSource={productsData}
+                        dataSource={products}
                         withSelectableRows
                     />
                 </div>

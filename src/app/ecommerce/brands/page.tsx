@@ -1,13 +1,19 @@
 import React from 'react'
-import BrandSPage from "@/features/pages/brands"
+import BrandsPage from "@/features/pages/brands"
+import { getBrands } from '@/services/brands-service'
 
-const BrandUrl = () => {
+export default async function BrandUrl() {
+    let brands = []
+    try {
+        const res = await getBrands()
+        brands = res.data
+    } catch (error) {
+        console.error('Fetch error:', error);
+    }
     return (
         <div>
-            <BrandSPage />
-
+            <BrandsPage brandsData={brands} />
         </div>
     )
 }
 
-export default BrandUrl

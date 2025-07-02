@@ -1,13 +1,21 @@
 import React from 'react'
 import ReviewList from '@/features/pages/reviews'
+import { getReviews } from '@/services/review-service'
 
-const ReviewsPageUrl = () => {
+export default async function ReviewsPageUrl() {
+    let reviews = []
+    try {
+        const res = await getReviews()
+        reviews = res.data
+
+    } catch (error) {
+        console.error('Fetch error:', error);
+    }
     return (
         <div>
-            <ReviewList />
+            <ReviewList reviewsData={reviews} />
 
         </div>
     )
 }
 
-export default ReviewsPageUrl

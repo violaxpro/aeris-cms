@@ -1,9 +1,8 @@
 'use client'
-import React, { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import React from 'react'
 import TableProduct from "@/components/table"
 import type { TableColumnsType } from 'antd'
-import { priceLevelsData, PriceLevelType } from '@/data/price-level-data'
+import { PriceLevelType } from '@/data/price-level-data'
 import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons'
 import DeletePopover from '@/components/popover'
 import { routes } from '@/config/routes'
@@ -12,63 +11,8 @@ import Breadcrumb from "@/components/breadcrumb"
 import { Content } from 'antd/es/layout/layout'
 import Button from "@/components/button"
 import SearchInput from '@/components/search';
-import { getPriceLevel } from '@/services/price-level-service'
-import { getCategories } from '@/services/category-service'
-import { getBrands } from '@/services/brands-service'
 
-const index = () => {
-    const [priceLevelData, setPriceLevelData] = useState([])
-
-    console.log(priceLevelData)
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const resPriceLevel = await getPriceLevel();
-                if (resPriceLevel.data) {
-                    const categoriesId = resPriceLevel.data.map((item: any) => item.categoriesId)
-                    const categoriesIdArray = Array.from(new Set(categoriesId))
-                    const resCategories = await Promise.all(
-                        categoriesIdArray.map((id: any) =>
-                            getCategories(id)
-                        )
-                    );
-                    const categories = resCategories.map((res: any) => {
-                        return res.data
-                    });
-
-                    const brandsId = resPriceLevel.data.map((item: any) => item.brandId)
-                    const brandsidArray = Array.from(new Set(brandsId))
-                    const resBrands = await Promise.all(
-                        brandsidArray.map((id: any) => getBrands(id))
-                    )
-                    const brands = resBrands.map((res: any) => res.data)
-
-                    const priceLevels = resPriceLevel.data.map((price: any) => {
-                        const matchedCategory = categories.flat().find(cat => {
-                            return cat.id === price.categoryId
-                        });
-                        const matchedBrand = brands.find((brand) => {
-                            return brand.id === price.brandId
-                        })
-                        return {
-                            ...price,
-                            category: matchedCategory || null,
-                            brand: matchedBrand || null
-                        };
-                    });
-
-                    setPriceLevelData(priceLevels)
-                }
-            } catch (error) {
-                console.error('Error Message : ', error)
-            }
-        }
-
-        fetchData()
-
-    }, [])
-
+const index = ({ priceLevels }: { priceLevels?: any }) => {
     const handleDelete = (id: any) => {
         console.log('delete', id)
     }
@@ -157,7 +101,7 @@ const index = () => {
                     </div>
                     <TableProduct
                         columns={columns}
-                        dataSource={priceLevelData}
+                        dataSource={priceLevels}
                         withSelectableRows
                     />
                 </div>

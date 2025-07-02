@@ -13,7 +13,7 @@ import Button from "@/components/button"
 import SearchInput from '@/components/search';
 import dayjs from 'dayjs'
 
-const index = () => {
+const index = ({ optionsData }: { optionsData?: any }) => {
 
     const handleDelete = (id: any) => {
         console.log('delete', id)

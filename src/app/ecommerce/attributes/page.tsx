@@ -1,13 +1,21 @@
 import React from 'react'
-import AttributesIndex from "@/features/pages/attributes"
+import AttributesList from "@/features/pages/attributes"
+import { getAttributes } from '@/services/attributes-service'
 
-const AttributesPage = () => {
+export default async function AttributesPage() {
+    let attributes = []
+    try {
+        const res = await getAttributes()
+        attributes = res.data
+    } catch (error) {
+        console.error('Fetch error:', error);
+    }
     return (
         <div>
-            <AttributesIndex />
+            <AttributesList attributesData={attributes} />
 
         </div>
     )
 }
 
-export default AttributesPage
+

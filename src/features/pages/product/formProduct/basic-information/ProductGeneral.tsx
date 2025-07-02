@@ -7,10 +7,15 @@ import TextArea from "@/components/textarea"
 import CheckboxInput from '@/components/checkbox'
 import Button from "@/components/button"
 import dynamic from 'next/dynamic';
+import { getBrands } from '@/services/brands-service'
+import { getCategories } from '@/services/category-service'
 
 const QuillInput = dynamic(() => import('@/components/quill-input'), { ssr: false, loading: () => <p>Loading editor...</p>, });
 
 const ProductGeneral = ({ className }: { className?: string }) => {
+    const [optionBrands, setOptionBrands] = useState([])
+    const [optionCategories, setOptionCategories] = useState([])
+
     const [formData, setFormData] = useState({
         productName: '',
         brand: '',
@@ -44,6 +49,8 @@ const ProductGeneral = ({ className }: { className?: string }) => {
     const handleQuillChange = (value: string) => {
         setFormData({ ...formData, description: value });
     };
+
+    
     const optionsBrand = [
         { value: '1', label: 'Brand A' },
         { value: '2', label: 'Brand B' },

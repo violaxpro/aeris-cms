@@ -1,36 +1,23 @@
 'use client'
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import TableProduct from "@/components/table"
 import type { TableColumnsType } from 'antd'
 import { reviewsType } from '@/plugins/types/reviews-type'
-import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons'
+import { EditOutlined } from '@ant-design/icons'
 import DeletePopover from '@/components/popover'
 import { routes } from '@/config/routes'
 import Link from 'next/link'
 import Breadcrumb from "@/components/breadcrumb"
 import { Content } from 'antd/es/layout/layout'
-import Button from "@/components/button"
 import SearchInput from '@/components/search';
 import dayjs from 'dayjs'
-import { getReviews } from '@/services/review-service'
 
-const index = () => {
-    const [reviewsData, setReviewsData] = useState([])
-
-    useEffect(() => {
-        getReviews()
-            .then((res) => {
-                setReviewsData(res.data)
-            }).catch((error) => {
-                console.error(error)
-            })
-
-    }, [])
-
+const index = ({ reviewsData }: { reviewsData?: any }) => {
     const handleDelete = (id: any) => {
         console.log('delete', id)
     }
 
+    console.log(reviewsData)
     const breadcrumb = [
         {
             title: 'Catalogue',

@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import TableProduct from "@/components/table"
 import type { TableColumnsType } from 'antd'
 import { BrandsType } from '@/data/brands-data'
@@ -13,21 +13,8 @@ import { Content } from 'antd/es/layout/layout'
 import Button from "@/components/button"
 import SearchInput from '@/components/search';
 import dayjs from 'dayjs'
-import { getBrands } from '@/services/brands-service'
 
-const index = () => {
-    const [brandsData, setBrandsData] = useState([])
-    console.log(brandsData)
-
-    useEffect(() => {
-        getBrands()
-            .then((res) => {
-                setBrandsData(res.data)
-            }).catch((error) => {
-                console.error(error)
-            })
-
-    }, [])
+const index = ({ brandsData }: { brandsData?: any }) => {
 
     const handleDelete = (id: any) => {
         console.log('delete', id)
