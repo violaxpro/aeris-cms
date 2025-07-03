@@ -1,4 +1,15 @@
-export type BrandsType = {
+export type BrandType = {
+  id?: number | string | undefined
+  name: string;
+  status?: boolean
+  discount_percent?: number
+  meta_title?: string;
+  meta_description?: string;
+  url_banner?: string;
+  url_logo: string
+};
+
+export type BrandsProps = {
   id: string;
   logo: string;
   brandsName: string;
@@ -6,7 +17,7 @@ export type BrandsType = {
   createdAt: string;
 };
 
-export const brandsData: BrandsType[] = [
+export const brandsData: BrandsProps[] = [
   {
     id: '1',
     logo: 'https://picsum.photos/200/300?random=1',

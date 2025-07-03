@@ -21,10 +21,20 @@ const Sidebar = () => {
                 return {
                     key: itemChildren.key,
                     label: (
-                        <Link href={itemChildren.href}>
+                        <Link href={itemChildren.href} className="!text-inherit">
                             {itemChildren.name}
                         </Link>
                     ),
+                    children: itemChildren?.dropdownItems && itemChildren?.dropdownItems.map((item, index) => {
+                        return {
+                            key: item.key,
+                            label: (
+                                <Link href={item.href}>
+                                    {item.name}
+                                </Link>
+                            )
+                        }
+                    })
                 };
             }),
         }
@@ -35,6 +45,7 @@ const Sidebar = () => {
             className='!bg-white'
             breakpoint="lg"
             collapsedWidth="0"
+            width={250}
             onBreakpoint={(broken) => {
                 console.log(broken);
             }}
@@ -50,7 +61,7 @@ const Sidebar = () => {
                     height={50}
                 />
             </div>
-            <Menu theme="light" mode="inline" defaultSelectedKeys={['1']} items={items} />
+            <Menu theme="light" mode="inline" defaultSelectedKeys={['1']} items={items} style={{ width: 250 }} />
         </Sider>
     )
 }

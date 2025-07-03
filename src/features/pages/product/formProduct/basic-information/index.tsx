@@ -1,3 +1,4 @@
+
 import React from 'react'
 import ProductGeneral from './ProductGeneral'
 import ProductInventory from './ProductInventory'
@@ -8,9 +9,9 @@ const BasicInformationProduct = () => {
     return (
         <div>
             <ProductGeneral />
-            <ProductInventory />
-            <ProductStockAvailability />
-            <ProductImages />
+            {/* <ProductInventory /> */}
+            {/* <ProductStockAvailability /> */}
+            {/* <ProductImages /> */}
         </div>
     )
 }

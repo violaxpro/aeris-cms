@@ -9,6 +9,7 @@ export const routes = {
     priceLevel: '/ecommerce/price-level',
     createPriceLevel: '/ecommerce/price-level/create',
     editPriceLevel: (slug: string) => `/ecommerce/price-level/${slug}/edit`,
+    detailPriceLevel: (slug: string) => `/ecommerce/price-level/${slug}/detail`,
 
     categories: '/ecommerce/categories',
     createCategory: '/ecommerce/categories/create',
@@ -17,6 +18,7 @@ export const routes = {
     brands: '/ecommerce/brands',
     createBrands: '/ecommerce/brands/create',
     editBrands: (slug: string) => `/ecommerce/brands/${slug}/edit`,
+    detailBrands: (slug: string) => `/ecommerce/brands/${slug}/detail`,
 
     attributes: '/ecommerce/attributes',
     createAttributes: '/ecommerce/attributes/create',

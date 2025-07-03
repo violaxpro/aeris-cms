@@ -1,25 +1,25 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import FormGroup from '@/components/form'
-import cn from '@/core/utils/class-names'
 import Input from "@/components/input"
 import Select from "@/components/select"
 import TextArea from "@/components/textarea"
 import CheckboxInput from '@/components/checkbox'
 import Button from "@/components/button"
+import FileUploader from '@/components/input-file'
 import dynamic from 'next/dynamic';
-import { getBrands } from '@/services/brands-service'
-import { getCategories } from '@/services/category-service'
+import { useAtom } from 'jotai'
+import { brandsAtom, categoriesAtom } from '@/store/DropdownItemStore'
 
 const QuillInput = dynamic(() => import('@/components/quill-input'), { ssr: false, loading: () => <p>Loading editor...</p>, });
 
 const ProductGeneral = ({ className }: { className?: string }) => {
-    const [optionBrands, setOptionBrands] = useState([])
-    const [optionCategories, setOptionCategories] = useState([])
+    const [optionBrands] = useAtom(brandsAtom)
+    const [optionCategories] = useAtom(categoriesAtom)
 
     const [formData, setFormData] = useState({
         productName: '',
         brand: '',
-        categories: [],
+        categories: '',
         description: '',
         metaTitle: '',
         metaDescription: '',
@@ -27,8 +27,22 @@ const ProductGeneral = ({ className }: { className?: string }) => {
         tags: [],
         manualUrl: '',
         warranty: '',
-        status: false
+        status: false,
+        sku: '',
+        sku2: '',
+        mpn: '',
+        inventory_management: '',
+        qty: '',
+        stock: '',
+        isBestSeller: false,
+        isBackOrder: false,
+        base_images: '',
+        additional_images: '',
     });
+
+    console.log(formData)
+
+    console.log(optionBrands, optionCategories)
 
     const handleChange = (e: any) => {
         const { id, value } = e.target;
@@ -50,21 +64,35 @@ const ProductGeneral = ({ className }: { className?: string }) => {
         setFormData({ ...formData, description: value });
     };
 
-    
-    const optionsBrand = [
-        { value: '1', label: 'Brand A' },
-        { value: '2', label: 'Brand B' },
-    ]
-    const optionsCategories = [
-        { value: '1', label: 'Category A' },
-        { value: '2', label: 'Category B' },
-    ]
+    const handleSuccess = (file: any) => {
+        console.log('Uploaded:', file);
+    };
+
+    const handleError = (file: any) => {
+        console.error('Failed to upload:', file);
+    };
 
     const optionsTaxClass = [
         { value: '1', label: 'GST' },
         { value: '2', label: 'GSB' },
     ]
 
+    const optionsTagClass = [
+        { value: 'baju', label: 'Baju' },
+        { value: 'winter', label: 'Winter' },
+    ]
+
+    const optionsInventoryManagement = [
+        { value: '1', label: "Don't Track Inventory" },
+        { value: '2', label: 'Track Inventory' },
+    ]
+
+    const options = [
+        { value: '1', label: "End of Life" },
+        { value: '2', label: 'Call Us' },
+        { value: '3', label: 'In Stock' },
+        { value: '4', label: 'Out of Stock' },
+    ]
 
     return (
         <div>
@@ -86,16 +114,15 @@ const ProductGeneral = ({ className }: { className?: string }) => {
                     placeholder="Select Brand"
                     value={formData.brand}
                     onChange={(val) => handleChangeSelect("brand", val)}
-                    options={optionsBrand}
+                    options={optionBrands}
                 />
                 <Select
                     id="categories"
-                    modeType='multiple'
                     label="Categories"
                     placeholder="Select Categories"
-                    value={formData.categories || undefined}
+                    value={formData.categories}
                     onChange={(val) => handleChangeSelect("categories", val)}
-                    options={optionsCategories}
+                    options={optionCategories}
                 />
                 <div className='col-span-full w-full'>
                     <QuillInput
@@ -119,6 +146,7 @@ const ProductGeneral = ({ className }: { className?: string }) => {
                 </div>
                 <div className='col-span-full w-full'>
                     <TextArea
+                        id='metaDescription'
                         label='Meta Description'
                         placeholder='Input Meta Description'
                         onChange={handleChange}
@@ -141,7 +169,7 @@ const ProductGeneral = ({ className }: { className?: string }) => {
                     placeholder="Select Tags"
                     onChange={(val) => handleChangeSelect("tags", val)}
                     value={formData.tags}
-                    options={optionsCategories}
+                    options={optionsTagClass}
                 />
                 <Input
                     id='manualUrl'
@@ -174,6 +202,105 @@ const ProductGeneral = ({ className }: { className?: string }) => {
                 />
             </div>
             <hr style={{ borderColor: '#E5E7EB', marginTop: '1rem', marginBottom: '1rem' }} />
+            <FormGroup
+                title="Inventory"
+                description="Add your product inventory info here for the product."
+            >
+                <Input
+                    id='sku'
+                    label='SKU'
+                    type='text'
+                    placeholder='Input SKU'
+                    onChange={handleChange}
+                    value={formData.sku}
+                />
+                <Input
+                    id='sku2'
+                    label='SKU2'
+                    type='text'
+                    placeholder='Input SKU2'
+                    onChange={handleChange}
+                    value={formData.sku2}
+                />
+                <Input
+                    id='mpn'
+                    label='MPN'
+                    type='text'
+                    placeholder='Input MPN'
+                    onChange={handleChange}
+                    value={formData.mpn}
+                />
+                <Select
+                    id="inventoryManagement"
+                    label="Inventory Management"
+                    placeholder="Select Inventory Management"
+                    value={formData.inventory_management}
+                    onChange={(val) => handleChangeSelect("inventory_management", val)}
+                    options={optionsInventoryManagement}
+                />
+                {
+                    formData.inventory_management == '2' &&
+                    <Input
+                        id='qty'
+                        label='Qty'
+                        type='number'
+                        placeholder='qty'
+                        onChange={handleChange}
+                        value={formData.qty}
+                    />
+                }
+            </FormGroup>
+            <hr style={{ borderColor: '#E5E7EB', marginTop: '1rem', marginBottom: '1rem' }} />
+
+            <FormGroup
+                title="Stock Availability"
+                description="Add your stock info here"
+            >
+                <Select
+                    id="stock"
+                    label="Stock Availability"
+                    placeholder="Select Stock Availability"
+                    value={formData.stock}
+                    onChange={(val) => handleChangeSelect("stock", val)}
+                    options={options}
+                />
+                <div className='flex col-span-full w-full gap-2'>
+                    <CheckboxInput
+                        text="Best Seller"
+                        checked={formData.isBestSeller}
+                        onChange={(val) => setFormData({ ...formData, isBestSeller: val })}
+                    />
+                    <CheckboxInput
+                        text="Back Order"
+                        checked={formData.isBackOrder}
+                        onChange={(val) => setFormData({ ...formData, isBackOrder: val })}
+                    />
+                </div>
+            </FormGroup>
+            <hr style={{ borderColor: '#E5E7EB', marginTop: '1rem', marginBottom: '1rem' }} />
+
+            <FormGroup
+                title="Images"
+                description="Add your product images here"
+            >
+                <div className='flex col-span-full gap-4'>
+                    <FileUploader
+                        label='Base Images'
+                        action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
+                        multiple={true}
+                        onSuccess={handleSuccess}
+                        onError={handleError}
+                    />
+                    <FileUploader
+                        label='Additional Images'
+                        action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
+                        multiple={true}
+                        onSuccess={handleSuccess}
+                        onError={handleError}
+                    />
+                </div>
+
+            </FormGroup>
 
         </div>
     )

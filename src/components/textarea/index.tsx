@@ -3,6 +3,7 @@ import { Input } from 'antd';
 
 const { TextArea } = Input;
 type inputProps = {
+    id?: string
     label: string
     placeholder?: string
     value: string
@@ -13,6 +14,7 @@ type inputProps = {
 }
 
 const index = ({
+    id,
     label,
     placeholder,
     value,
@@ -27,6 +29,7 @@ const index = ({
                 {label}
             </label>
             <TextArea
+                id={id}
                 rows={rows}
                 placeholder={placeholder}
                 maxLength={maxLength}

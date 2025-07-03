@@ -97,6 +97,52 @@ export const menuItems = [
         ],
     },
     {
+        key: 'management',
+        name: 'Management',
+        href: '#',
+        icon: AppstoreOutlined,
+        dropdownItems: [
+            {
+                key: 'time-attendance',
+                name: 'Time & Attendance',
+                href: routes.eCommerce.products,
+                dropdownItems: [
+                    {
+                        key: 'attendance',
+                        name: 'Attendance',
+                        href: routes.eCommerce.products,
+                    }
+                ]
+            },
+            {
+                key: 'employee',
+                name: 'Employee',
+                href: routes.eCommerce.products,
+            },
+            {
+                key: 'performance',
+                name: 'Performance',
+                href: routes.eCommerce.products,
+            },
+            {
+                key: 'report',
+                name: 'Report',
+                href: routes.eCommerce.categories,
+            },
+            {
+                key: 'benefit',
+                name: 'Benefit',
+                href: routes.eCommerce.brands,
+            },
+            {
+                key: 'organizational',
+                name: 'Organizational',
+                href: routes.eCommerce.attributes,
+            },
+
+        ],
+    },
+    {
         key: 'users',
         name: 'Users',
         href: '#',

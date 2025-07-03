@@ -10,3 +10,5 @@ export type BreadcrumbItemsProps = {
 export type BreadcrumbProps = {
     items: BreadcrumbItemsProps[]
 }
+
+export type Params = Promise<{ slug: string }>

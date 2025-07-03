@@ -1,4 +1,20 @@
 export type PriceLevelType = {
+  id?: number | string | undefined
+  name?: string
+  brandId: string;
+  categoryId: string;
+  subcategoryId?: string;
+  rrp_price: number | string;
+  trade_price: number | string;
+  silver_price: number | string;
+  gold_price: number | string;
+  platinum_price: number | string;
+  diamond_price: number | string;
+  kitPrice?: string;
+  priceNotes?: string;
+};
+
+export type PriceLevelProps = {
   id: string;
   name: string;
   brand: string;
@@ -8,7 +24,7 @@ export type PriceLevelType = {
   warranty: string;
 };
 
-export const priceLevelsData: PriceLevelType[] = [
+export const priceLevelsData: PriceLevelProps[] = [
   {
     id: '1',
     name: 'Price Level 1',

@@ -1,9 +1,9 @@
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import TableProduct from "@/components/table"
 import type { TableColumnsType } from 'antd'
 import { PriceLevelType } from '@/data/price-level-data'
-import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons'
+import { EditOutlined, PlusCircleOutlined, InfoCircleOutlined } from '@ant-design/icons'
 import DeletePopover from '@/components/popover'
 import { routes } from '@/config/routes'
 import Link from 'next/link'
@@ -11,11 +11,29 @@ import Breadcrumb from "@/components/breadcrumb"
 import { Content } from 'antd/es/layout/layout'
 import Button from "@/components/button"
 import SearchInput from '@/components/search';
+import { useNotificationAntd } from '@/components/toast'
+import { deletePriceLevel } from '@/services/price-level-service'
+import { priceLevelsAtom } from '@/store/PriceLevelAtomStore'
+import { useAtom } from 'jotai'
 
 const index = ({ priceLevels }: { priceLevels?: any }) => {
-    const handleDelete = (id: any) => {
-        console.log('delete', id)
+    const { contextHolder, notifySuccess } = useNotificationAntd()
+    const [data, setData] = useAtom(priceLevelsAtom)
+    const handleDelete = async (id: any) => {
+        try {
+            const res = await deletePriceLevel(id)
+            if (res.success == true) {
+                notifySuccess(res.message)
+                setData(prev => prev.filter(item => item.id !== id))
+            }
+        } catch (error) {
+            console.error(error)
+        }
     }
+
+    useEffect(() => {
+        setData(priceLevels)
+    }, [priceLevels])
 
     const breadcrumb = [
         {
@@ -30,10 +48,10 @@ const index = ({ priceLevels }: { priceLevels?: any }) => {
             title: 'ID',
             dataIndex: 'id',
         },
-        // {
-        //     title: 'Name',
-        //     dataIndex: 'name',
-        // },
+        {
+            title: 'Name',
+            dataIndex: 'name',
+        },
         {
             title: 'Brand',
             dataIndex: 'brand',
@@ -54,7 +72,7 @@ const index = ({ priceLevels }: { priceLevels?: any }) => {
             dataIndex: 'action',
             key: 'action',
             width: 120,
-            render: (_: string, row: PriceLevelType) => (
+            render: (_: string, row: any) => (
 
                 <div className="flex items-center justify-end gap-3 pe-4">
                     <Link href={routes.eCommerce.editPriceLevel(row.id)}>
@@ -65,7 +83,9 @@ const index = ({ priceLevels }: { priceLevels?: any }) => {
                         description='Are you sure to delete this data?'
                         onDelete={() => handleDelete(row.id)}
                     />
-
+                    <Link href={routes.eCommerce.detailPriceLevel(row.id)}>
+                        <InfoCircleOutlined />
+                    </Link>
                 </div >
             ),
         },
@@ -77,6 +97,7 @@ const index = ({ priceLevels }: { priceLevels?: any }) => {
     };
     return (
         <>
+            {contextHolder}
             <div className="mt-6 mx-4 mb-0">
                 <h1 className='text-xl font-bold'>
                     Price Level
@@ -101,7 +122,7 @@ const index = ({ priceLevels }: { priceLevels?: any }) => {
                     </div>
                     <TableProduct
                         columns={columns}
-                        dataSource={priceLevels}
+                        dataSource={data}
                         withSelectableRows
                     />
                 </div>

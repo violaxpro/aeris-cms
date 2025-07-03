@@ -24,6 +24,10 @@ const nextConfig = {
         hostname: 'picsum.photos',
       },
       {
+        protocol: 'http',
+        hostname: 'url.logo2',
+      },
+      {
         protocol: 'https',
         hostname: 'flagcdn.com',
       },

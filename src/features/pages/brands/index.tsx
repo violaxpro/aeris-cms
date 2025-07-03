@@ -1,10 +1,10 @@
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import TableProduct from "@/components/table"
 import type { TableColumnsType } from 'antd'
-import { BrandsType } from '@/data/brands-data'
+import { BrandType } from '@/data/brands-data'
 import Image from 'next/image'
-import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons'
+import { EditOutlined, PlusCircleOutlined, InfoCircleOutlined } from '@ant-design/icons'
 import DeletePopover from '@/components/popover'
 import { routes } from '@/config/routes'
 import Link from 'next/link'
@@ -13,11 +13,26 @@ import { Content } from 'antd/es/layout/layout'
 import Button from "@/components/button"
 import SearchInput from '@/components/search';
 import dayjs from 'dayjs'
+import { deleteBrand } from '@/services/brands-service'
+import { useNotificationAntd } from '@/components/toast'
+import { useAtom } from 'jotai'
+import { brandAtom } from '@/store/BrandAtomStore'
 
 const index = ({ brandsData }: { brandsData?: any }) => {
+    const { contextHolder, notifySuccess } = useNotificationAntd()
+    const [data, setData] = useAtom(brandAtom)
 
-    const handleDelete = (id: any) => {
-        console.log('delete', id)
+
+    const handleDelete = async (id: any) => {
+        try {
+            const res = await deleteBrand(id)
+            if (res.success == true) {
+                notifySuccess(res.message)
+                setData(prev => prev.filter(item => item.id !== id))
+            }
+        } catch (error) {
+            console.error(error)
+        }
     }
 
     const breadcrumb = [
@@ -28,14 +43,14 @@ const index = ({ brandsData }: { brandsData?: any }) => {
             title: 'Brands',
         },
     ]
-    const columns: TableColumnsType<BrandsType> = [
+    const columns: TableColumnsType<BrandType> = [
         {
             title: 'ID',
             dataIndex: 'id',
         },
         {
-            title: 'Thumbnail',
-            dataIndex: 'logo',
+            title: 'Logo',
+            dataIndex: 'url_logo',
             render: (url: string) => (
                 <Image
                     src={url}
@@ -69,7 +84,7 @@ const index = ({ brandsData }: { brandsData?: any }) => {
             dataIndex: 'action',
             key: 'action',
             width: 120,
-            render: (_: string, row: BrandsType) => (
+            render: (_: string, row: any) => (
 
                 <div className="flex items-center justify-end gap-3 pe-4">
                     <Link href={routes.eCommerce.editBrands(row.id)}>
@@ -80,6 +95,9 @@ const index = ({ brandsData }: { brandsData?: any }) => {
                         description='Are you sure to delete this data?'
                         onDelete={() => handleDelete(row.id)}
                     />
+                    <Link href={routes.eCommerce.detailBrands(row.id)}>
+                        <InfoCircleOutlined />
+                    </Link>
                 </div >
             ),
         },
@@ -89,8 +107,13 @@ const index = ({ brandsData }: { brandsData?: any }) => {
     const handleSearch = (query: string) => {
         console.log('User mencari:', query);
     };
+
+    useEffect(() => {
+        setData(brandsData)
+    }, [brandsData])
     return (
         <>
+            {contextHolder}
             <div className="mt-6 mx-4 mb-0">
                 <h1 className='text-xl font-bold'>
                     Brands
@@ -115,7 +138,7 @@ const index = ({ brandsData }: { brandsData?: any }) => {
                     </div>
                     <TableProduct
                         columns={columns}
-                        dataSource={brandsData}
+                        dataSource={data}
                         withSelectableRows
                     />
                 </div>
