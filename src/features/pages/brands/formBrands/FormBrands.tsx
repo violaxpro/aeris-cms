@@ -99,8 +99,11 @@ const FormBrands: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
             console.log(response)
             if (response.success == true) {
-                await notifySuccess(response.message)
-                router.push(routes.eCommerce.brands)
+                notifySuccess(response.message)
+                // router.push(routes.eCommerce.brands)
+                setTimeout(() => {
+                    router.push(routes.eCommerce.brands)
+                }, 2000);
             }
         } catch (error) {
             console.error(error)
