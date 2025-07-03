@@ -8,7 +8,7 @@ export default async function EditPriceLevelPage(props: { params: Params }) {
     const params = await props.params;
     const slug = params.slug;
     try {
-        const res = await getPriceLevel(params.slug)
+        const res = await getPriceLevel(slug)
         if (res?.data) {
             dataForm = res.data
         }
