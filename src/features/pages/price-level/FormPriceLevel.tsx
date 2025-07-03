@@ -22,7 +22,7 @@ const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
     const [optionsCategories] = useAtom(categoriesAtom)
     const [formData, setFormData] = useState({
-        name : initialValues ? initialValues.name : '',
+        name: initialValues ? initialValues.name : '',
         brands: initialValues ? initialValues.brandId : '',
         categories: initialValues ? initialValues.categoryId : '',
         subcategories: initialValues ? initialValues.subCategoryId : '',
@@ -79,7 +79,7 @@ const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
             }
 
             if (response.success == true) {
-                notifySuccess(response.message)
+                await notifySuccess(response.message)
                 router.push(routes.eCommerce.priceLevel)
             }
         } catch (error) {

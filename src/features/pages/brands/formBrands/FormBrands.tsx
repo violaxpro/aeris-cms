@@ -99,7 +99,7 @@ const FormBrands: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
             console.log(response)
             if (response.success == true) {
-                notifySuccess(response.message)
+                await notifySuccess(response.message)
                 router.push(routes.eCommerce.brands)
             }
         } catch (error) {
