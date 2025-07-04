@@ -1,10 +1,9 @@
 import React from 'react'
-import FormAttributes from '@/features/pages/attributes/formAttributes/FormAttributes'
 import { Params } from '@/plugins/types'
 import { getAttributebyId } from '@/services/attributes-service';
-import { getCategories } from '@/services/category-service';
+import DetailAttribute from '@/features/pages/attributes/formAttributes/DetailAttribute';
 
-export default async function EditAttributePage(props: { params: Params }) {
+export default async function DetailAttributePage(props: { params: Params }) {
     const params = await props.params;
     const slug = params.slug;
     let dataForm = []
@@ -18,7 +17,7 @@ export default async function EditAttributePage(props: { params: Params }) {
     }
     return (
         <div>
-            <FormAttributes mode='edit' slug={slug} initialValues={dataForm} />
+            <DetailAttribute data={dataForm} />
 
         </div>
     )

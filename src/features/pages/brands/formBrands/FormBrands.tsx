@@ -100,7 +100,6 @@ const FormBrands: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
             console.log(response)
             if (response.success == true) {
                 notifySuccess(response.message)
-                // router.push(routes.eCommerce.brands)
                 setTimeout(() => {
                     router.push(routes.eCommerce.brands)
                 }, 2000);

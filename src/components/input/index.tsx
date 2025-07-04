@@ -5,7 +5,7 @@ type inputProps = {
     label: string
     placeholder?: string
     id: string
-    value: string | number
+    value: string | number | string[]
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
     notes?: string
     type: string
@@ -42,7 +42,7 @@ const index = ({ label,
                 type={type}
                 style={{
                     ...style,
-                    borderColor: error ? '#f5222d' : '#E5E7EB', 
+                    borderColor: error ? '#f5222d' : '#E5E7EB',
                 }}
                 readOnly={readOnly}
             />

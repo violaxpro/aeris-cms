@@ -4,3 +4,8 @@ export interface FormProps {
     initialValues?: any;
     slug?: string | number
 }
+
+export interface ChildFormProps {
+    onChange: (params: any) => void
+    dataChild: any
+}

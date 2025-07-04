@@ -1,9 +1,9 @@
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import Table from "@/components/table"
 import type { TableColumnsType } from 'antd'
 import { AttributesType } from '@/data/attributes-data'
-import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons'
+import { EditOutlined, PlusCircleOutlined, InfoCircleOutlined } from '@ant-design/icons'
 import DeletePopover from '@/components/popover'
 import { routes } from '@/config/routes'
 import Link from 'next/link'
@@ -12,10 +12,24 @@ import { Content } from 'antd/es/layout/layout'
 import Button from "@/components/button"
 import SearchInput from '@/components/search';
 import dayjs from 'dayjs'
+import { useAtom } from 'jotai'
+import { deleteAttribute } from '@/services/attributes-service'
+import { useNotificationAntd } from '@/components/toast'
+import { attributeAtom } from '@/store/AttributeAtom'
 
 const index = ({ attributesData }: { attributesData?: any }) => {
-    const handleDelete = (id: any) => {
-        console.log('delete', id)
+    const { contextHolder, notifySuccess } = useNotificationAntd()
+    const [data, setData] = useAtom(attributeAtom)
+    const handleDelete = async (id: any) => {
+        try {
+            const res = await deleteAttribute(id)
+            if (res.success == true) {
+                notifySuccess(res.message)
+                setData(prev => prev.filter(item => item.id !== id))
+            }
+        } catch (error) {
+            console.error(error)
+        }
     }
 
     const breadcrumb = [
@@ -33,11 +47,11 @@ const index = ({ attributesData }: { attributesData?: any }) => {
         },
         {
             title: 'Attribute Name',
-            dataIndex: 'attributeName',
+            dataIndex: 'name',
         },
         {
             title: 'Attribute Set',
-            dataIndex: 'attributeSet',
+            dataIndex: 'attribute_set',
         },
         {
             title: 'Filterable',
@@ -56,7 +70,7 @@ const index = ({ attributesData }: { attributesData?: any }) => {
             dataIndex: 'action',
             key: 'action',
             width: 120,
-            render: (_: string, row: AttributesType) => (
+            render: (_: string, row: any) => (
 
                 <div className="flex items-center justify-end gap-3 pe-4">
                     <Link href={routes.eCommerce.editAttributes(row.id)}>
@@ -67,6 +81,9 @@ const index = ({ attributesData }: { attributesData?: any }) => {
                         description='Are you sure to delete this data?'
                         onDelete={() => handleDelete(row.id)}
                     />
+                    <Link href={routes.eCommerce.detailAttributes(row.id)}>
+                        <InfoCircleOutlined />
+                    </Link>
 
                 </div >
             ),
@@ -77,8 +94,13 @@ const index = ({ attributesData }: { attributesData?: any }) => {
     const handleSearch = (query: string) => {
         console.log('User mencari:', query);
     };
+
+    useEffect(() => {
+        setData(attributesData)
+    }, [attributesData])
     return (
         <>
+            {contextHolder}
             <div className="mt-6 mx-4 mb-0">
                 <h1 className='text-xl font-bold'>
                     Attributes
@@ -103,7 +125,7 @@ const index = ({ attributesData }: { attributesData?: any }) => {
                     </div>
                     <Table
                         columns={columns}
-                        dataSource={attributesData}
+                        dataSource={data}
                         withSelectableRows
                     />
                 </div>

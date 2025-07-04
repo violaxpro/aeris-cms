@@ -79,8 +79,10 @@ const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
             }
 
             if (response.success == true) {
-                await notifySuccess(response.message)
-                router.push(routes.eCommerce.priceLevel)
+                notifySuccess(response.message)
+                setTimeout(() => {
+                    router.push(routes.eCommerce.priceLevel)
+                }, 2000);
             }
         } catch (error) {
             console.error(error)

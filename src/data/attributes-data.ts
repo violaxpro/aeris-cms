@@ -1,4 +1,17 @@
 export type AttributesType = {
+  id?: number | string | undefined
+  name: string;
+  categories: string[]
+  attribute_set?: string;
+  filterable: boolean;
+  values: string[]
+};
+
+export type AttributeSetType = {
+  name: string
+}
+
+export type AttributesProps = {
   id: string;
   attributeName: string;
   attributeSet: string;
@@ -6,7 +19,7 @@ export type AttributesType = {
   createdAt: string;
 };
 
-export const attributesData: AttributesType[] = [
+export const attributesData: AttributesProps[] = [
   {
     id: '1',
     attributeName: 'Color',
