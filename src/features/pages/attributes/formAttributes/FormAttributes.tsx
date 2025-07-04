@@ -97,10 +97,6 @@ const FormAttributes: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
             console.error(error)
         }
     }
-
-
-
-
     return (
         <>
             {contextHolder}

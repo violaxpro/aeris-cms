@@ -9,13 +9,13 @@ import Link from 'next/link';
 const Sidebar = () => {
     const items = menuItems.map((item, index) => {
         return {
-            key: item.key,
-            icon: item.icon ? <item.icon /> : null,
+            key: item?.key ?? `item-${index}`,
+            icon: item?.icon ? <item.icon /> : null,
             label: (
                 item?.href ?
-                    <Link href={item.href} className="!text-inherit">
+                    <Link href={item?.href} className="!text-inherit">
                         {item.name}
-                    </Link> : <span>{item.name}</span>
+                    </Link> : <span>{item?.name}</span>
             ),
             children: item?.dropdownItems && item?.dropdownItems.map((itemChildren, indexChildren) => {
                 return {

@@ -8,4 +8,5 @@ export interface FormProps {
 export interface ChildFormProps {
     onChange: (params: any) => void
     dataChild: any
+    parentId?: string | number | null
 }

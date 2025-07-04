@@ -1,57 +1,81 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Input from "@/components/input"
 import Textarea from "@/components/textarea"
 import QuillInput from '@/components/quill-input'
-import { formProps } from './GeneralForm'
+import { generalCategoriesForm } from './GeneralForm'
 import { stripHTML } from '@/plugins/validators/common-rules'
 
-const SEOForm = ({ data, parentId }: formProps) => {
+const SEOForm = ({ data, parentId, onChange }: generalCategoriesForm) => {
     const [formData, setFormData] = useState({
-        url: '',
+        url_logo: '',
+        url_banner: '',
         metaTitle: '',
         metaDescription: '',
         pageDesc: '',
-
     })
 
-    console.log(parentId)
+    useEffect(() => {
+        setFormData({
+            url_logo: data && data.categoriesData ? data.categoriesData.url_logo : '',
+            url_banner: data && data.categoriesData ? data.categoriesData.url_banner : '',
+            metaTitle: data && data.categoriesData ? data.categoriesData.meta_title : '',
+            metaDescription: data && data.categoriesData ? stripHTML(data.categoriesData.meta_description) : '',
+            pageDesc: data && data.categoriesData ? data.categoriesData.page_description : '',
+        })
+    }, [data])
+
+    console.log(parentId, data, 'forn seo')
 
     const handleQuillChange = (value: string) => {
-        setFormData({ ...formData, metaDescription: value });
+        setFormData(prev => {
+            const updated = { ...prev, pageDesc: value }
+            onChange(updated);
+            return updated;
+        })
     };
 
     const handleChange = (e: any) => {
         const { id, value } = e.target;
-        setFormData((prev) => ({
-            ...prev,
-            [id]: value,
-        }));
+        setFormData(prev => {
+            const updated = { ...prev, [id]: value }
+            onChange(updated);
+            return updated;
+        });
     };
+
     return (
         <div className='flex flex-col gap-2'>
             <Input
-                id='url'
-                label='URL'
+                id='url_logo'
+                label='URL Logo'
                 type='text'
-                value={formData.url}
+                value={formData.url_logo}
+                onChange={handleChange}
+            />
+            <Input
+                id='url_banner'
+                label='URL Banner'
+                type='text'
+                value={formData.url_banner}
                 onChange={handleChange}
             />
             <Input
                 id='metaTitle'
                 label='Meta Title'
                 type='text'
-                value={parentId ? '' : data && data.categoriesData ? data.categoriesData.meta_title : formData.metaTitle}
+                value={formData.metaTitle}
                 onChange={handleChange}
                 notes='Character Count : 0'
             />
             <Textarea
+                id='metaDescription'
                 label='Meta Description'
-                value={parentId ? '' : data && data.categoriesData ? stripHTML(data.categoriesData.meta_description) : formData.metaDescription}
+                value={formData.metaDescription}
                 onChange={handleChange}
                 notes='Character Count : 0'
             />
             <QuillInput
-                value={parentId ? '' : data && data.categoriesData ? data.categoriesData.page_description : formData.pageDesc}
+                value={formData.pageDesc}
                 onChange={handleQuillChange}
                 label="Page Description"
                 className="col-span-full [&_.ql-editor]:min-h-[100px]"

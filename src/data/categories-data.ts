@@ -1,4 +1,20 @@
-export type CategoriesType = {
+export type CategoryType = {
+
+  name: string
+  slug?: string
+  meta_title: string,
+  meta_description: string,
+  page_description: string,
+  url_logo: string
+  url_banner: string
+  show_in_search: boolean
+  show_in_page: boolean
+  enabled: boolean
+  status?: boolean
+}
+
+
+export type CategoriesProps = {
   subCategories: {
     id: string;
     images: string;
@@ -13,7 +29,7 @@ export type CategoriesType = {
   status: string;
 };
 
-export const categoriesData: CategoriesType[] = [
+export const categoriesData: CategoriesProps[] = [
   {
     id: '1',
     images: 'https://example.com/image1.jpg',

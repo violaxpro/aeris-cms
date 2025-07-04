@@ -12,6 +12,11 @@ import FormCategory from './formCategory/FormCategory';
 import { RenderMenu } from './formCategory/RenderMenu';
 import { TreeNode } from '@/plugins/types/treeTypes';
 import { getCategories } from '@/services/category-service';
+import { useAtom } from 'jotai';
+import { categoryDataFetch } from '@/store/CategoriesAtom';
+import { deleteCategory } from '@/services/category-service';
+import { useNotificationAntd } from '@/components/toast';
+import { useRouter } from 'next/navigation';
 
 const { Search } = Input
 const { DirectoryTree } = Tree;
@@ -80,6 +85,8 @@ const CategoriesPage = ({ categories }: { categories?: any }) => {
     const [addForm, setAddForm] = useState(false)
     const [selectedParent, setSelectedParent] = useState<TreeNode | null>(null);
     const [parentId, setParentId] = useState<string | number | null>()
+    const [categoryData, setCategoryData] = useAtom(categoryDataFetch)
+    const { contextHolder, notifySuccess } = useNotificationAntd()
 
     // const treeData = buildTree(dummyTreeData)
     const handleCreateSubcategory = (node: TreeNode) => {
@@ -94,9 +101,16 @@ const CategoriesPage = ({ categories }: { categories?: any }) => {
         setAddForm(true);
     };
 
-    const handleDeleteCategory = (node: TreeNode) => {
-        console.log('Delete category:', node);
-        // TODO: konfirmasi & hapus di treeData
+    const handleDeleteCategory = async (node: TreeNode) => {
+        try {
+            const res = await deleteCategory(node.key)
+            if (res.success == true) {
+                notifySuccess(res.message)
+                setCategoryData(prev => prev.filter(item => item.id !== node.key))
+            }
+        } catch (error) {
+            console.error(error)
+        }
     };
 
     const mapTreeData = (data: any[]): TreeNode[] => {
@@ -118,9 +132,9 @@ const CategoriesPage = ({ categories }: { categories?: any }) => {
         }));
     };
     const treeData = useMemo(() => {
-        const built = buildTree(categories);
+        const built = buildTree(categoryData);
         return mapTreeData(built);
-    }, [categories]);
+    }, [categoryData]);
 
     const searchCategory = (
         categories: TreeNode[],
@@ -180,8 +194,15 @@ const CategoriesPage = ({ categories }: { categories?: any }) => {
         setAddForm(!addForm)
     }
 
+    useEffect(() => {
+        setCategoryData(categories)
+    }, [categories])
+
+    console.log('ini sesuai node yg diklik', selectedParent?.categoriesData)
+
     return (
         <>
+            {contextHolder}
             <div className="mt-6 mx-4 mb-0">
                 <h1 className="text-xl font-bold mb-4">Categories</h1>
                 <Breadcrumb items={breadcrumb} />
