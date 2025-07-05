@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Input from "@/components/input"
 import Checkbox from "@/components/checkbox"
-import { ChildFormProps } from '@/plugins/interfaces/form-interface'
+import { ChildFormProps } from '@/plugins/types/form-type'
 import { formCategoryProps } from '@/plugins/types/treeTypes'
 
 export type generalCategoriesForm = {

@@ -1,12 +1,13 @@
 type Mode = 'create' | 'edit'
-export interface FormProps {
+export type FormProps = {
     mode: Mode;
     initialValues?: any;
     slug?: string | number
 }
 
-export interface ChildFormProps {
+export type ChildFormProps = {
+    formDataCreate? : any
     onChange: (params: any) => void
-    dataChild: any
+    dataById: any
     parentId?: string | number | null
 }

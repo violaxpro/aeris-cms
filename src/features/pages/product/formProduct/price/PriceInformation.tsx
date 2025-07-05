@@ -2,29 +2,23 @@ import React, { useState } from 'react'
 import FormGroup from '@/components/form'
 import Input from "@/components/input"
 import Button from "@/components/button"
+import { ChildFormProps } from '@/plugins/types/form-type'
 
-const PriceInformation = ({ className }: { className?: string }) => {
-    const [formData, setFormData] = useState({
-        buying_price: '',
-        rrp: '',
-        trade: '',
-        silver: '',
-        gold: '',
-        platinum: '',
-        diamond: '',
-        kit_price: '',
-        price_notes: ''
-
-    });
-
+const PriceInformation = ({
+    dataById,
+    onChange,
+    formDataCreate
+}: ChildFormProps) => {
     const handleChange = (e: any) => {
         const { id, value } = e.target;
-        setFormData((prev) => ({
-            ...prev,
-            [id]: value,
-        }));
+        const updated = { ...formDataCreate.tab_price, [id]: value }
+        onChange(updated)
+        // setFormData(prev => {
+        //     const updated = { ...prev, [id]: value }
+        //     onChange(updated)
+        //     return updated
+        // });
     };
-
 
     return (
         <div>
@@ -33,12 +27,12 @@ const PriceInformation = ({ className }: { className?: string }) => {
                 description="Price information"
             >
                 <Input
-                    id='buyingPrice'
+                    id='buying_price'
                     label='Buying Price'
                     type='text'
                     placeholder='Input Buying Price'
                     onChange={handleChange}
-                    value={formData.buying_price}
+                    value={formDataCreate?.tab_price?.buying_price}
                 />
                 <Input
                     id='rrp'
@@ -46,7 +40,7 @@ const PriceInformation = ({ className }: { className?: string }) => {
                     type='text'
                     placeholder='Input RRP'
                     onChange={handleChange}
-                    value={formData.rrp}
+                    value={formDataCreate?.tab_price?.rrp}
                 />
                 <Input
                     id='trade'
@@ -54,7 +48,7 @@ const PriceInformation = ({ className }: { className?: string }) => {
                     type='text'
                     placeholder='Input Trade'
                     onChange={handleChange}
-                    value={formData.trade}
+                    value={formDataCreate?.tab_price?.trade}
                 />
                 <Input
                     id='silver'
@@ -62,7 +56,7 @@ const PriceInformation = ({ className }: { className?: string }) => {
                     type='text'
                     placeholder='Input Silver'
                     onChange={handleChange}
-                    value={formData.silver}
+                    value={formDataCreate?.tab_price?.silver}
                 />
                 <Input
                     id='gold'
@@ -70,7 +64,7 @@ const PriceInformation = ({ className }: { className?: string }) => {
                     type='text'
                     placeholder='Input Gold'
                     onChange={handleChange}
-                    value={formData.gold}
+                    value={formDataCreate?.tab_price?.gold}
                 />
                 <Input
                     id='platinum'
@@ -78,7 +72,7 @@ const PriceInformation = ({ className }: { className?: string }) => {
                     type='text'
                     placeholder='Input Platinum'
                     onChange={handleChange}
-                    value={formData.platinum}
+                    value={formDataCreate?.tab_price?.platinum}
                 />
                 <Input
                     id='diamond'
@@ -86,15 +80,15 @@ const PriceInformation = ({ className }: { className?: string }) => {
                     type='text'
                     placeholder='Input Diamond'
                     onChange={handleChange}
-                    value={formData.diamond}
+                    value={formDataCreate?.tab_price?.diamond}
                 />
-                <Input
+                {/* <Input
                     id='kitPrice'
                     label='Kit Price'
                     type='text'
                     placeholder='Input Kit Price'
                     onChange={handleChange}
-                    value={formData.kit_price}
+                    value={formDataCreate?.tab_price?.kit_price}
                 />
                 <Input
                     id='notes'
@@ -102,8 +96,8 @@ const PriceInformation = ({ className }: { className?: string }) => {
                     type='text'
                     placeholder='Input Price Notes'
                     onChange={handleChange}
-                    value={formData.price_notes}
-                />
+                    value={formDataCreate?.tab_price?.price_notes}
+                /> */}
 
 
             </FormGroup>

@@ -1,22 +1,27 @@
 import React, { useState } from 'react'
 import FormGroup from '@/components/form'
 import Input from "@/components/input"
+import { ChildFormProps } from '@/plugins/types/form-type'
 
-const AdditionalShippingCost = ({ className }: { className?: string }) => {
-    const [formData, setFormData] = useState({
-        add_ship_cost: ''
-
-    });
-
+const AdditionalShippingCost = ({ dataById, onChange }: ChildFormProps) => {
+    const [shipCost, setShipCost] = useState('')
     const handleChange = (e: any) => {
-        const { id, value } = e.target;
-        setFormData((prev) => ({
-            ...prev,
-            [id]: value,
-        }));
-    };
+        const value = e.target.value
+        setShipCost(value)
+        onChange?.({ add_shipping_cost: value })
+    }
+    // const [formData, setFormData] = useState({
+    //     add_ship_cost: ''
 
+    // });
 
+    // const handleChange = (e: any) => {
+    //     const { id, value } = e.target;
+    //     setFormData((prev) => ({
+    //         ...prev,
+    //         [id]: value,
+    //     }));
+    // };
 
     return (
         <div>
@@ -30,7 +35,7 @@ const AdditionalShippingCost = ({ className }: { className?: string }) => {
                     type='text'
                     placeholder='Input Additional Shipping Cost'
                     onChange={handleChange}
-                    value={formData.add_ship_cost}
+                    value={shipCost}
                 />
             </FormGroup>
 

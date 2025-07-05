@@ -3,7 +3,7 @@
 import React from 'react';
 import { InboxOutlined } from '@ant-design/icons';
 import type { UploadFile, UploadProps } from 'antd';
-import { Upload, message } from 'antd';
+import { Upload, message, Spin } from 'antd';
 
 const { Dragger } = Upload;
 
@@ -16,6 +16,7 @@ type FileUploaderProps = {
     label: string
     error?: boolean
     errorMessage?: string
+    isUpload?: boolean
 
 };
 
@@ -27,7 +28,8 @@ const FileUploader: React.FC<FileUploaderProps> = ({
     className = '',
     label,
     error = false,
-    errorMessage
+    errorMessage,
+    isUpload = false
 }) => {
     const props: UploadProps = {
         name: 'file',
@@ -67,12 +69,14 @@ const FileUploader: React.FC<FileUploaderProps> = ({
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                     {label}
                 </label>
-                <Dragger {...props} className={className}>
-                    <p className="ant-upload-drag-icon">
-                        <InboxOutlined />
-                    </p>
-                    <p className="ant-upload-text">Click or drag file to this area to upload</p>
-                </Dragger>
+                <Spin spinning={isUpload}>
+                    <Dragger {...props} className={className}>
+                        <p className="ant-upload-drag-icon">
+                            <InboxOutlined />
+                        </p>
+                        <p className="ant-upload-text">Click or drag file to this area to upload</p>
+                    </Dragger>
+                </Spin>
                 {errorMessage && (
                     <p className="text-red-500 text-xs mt-1">{errorMessage}</p>
                 )}

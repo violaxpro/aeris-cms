@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import Breadcrumb from "@/components/breadcrumb";
 import { Content } from 'antd/es/layout/layout';
 import Button from '@/components/button'
-import { FormProps } from '@/plugins/interfaces/form-interface';
+import { FormProps } from '@/plugins/types/form-type';
 import GeneralForm from './GeneralForm';
 import ValuesForm from './ValuesForm';
 import { routes } from '@/config/routes';
@@ -133,7 +133,7 @@ const FormAttributes: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                         {activeTab === 'general' && (
                             <div className="space-y-8">
                                 <GeneralForm
-                                    dataChild={formData.general}
+                                    dataById={formData.general}
                                     onChange={handleGeneralChange}
                                 />
                             </div>
@@ -143,7 +143,7 @@ const FormAttributes: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                         {activeTab === 'values' && (
                             <div>
                                 <ValuesForm
-                                    dataChild={formData.values}
+                                    dataById={formData.values}
                                     onChange={handleValuesChange}
                                 />
                             </div>

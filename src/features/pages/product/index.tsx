@@ -1,9 +1,9 @@
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import TableProduct from "@/components/table"
 import type { TableColumnsType } from 'antd'
-import { ProductType } from '@/data/products-data'
-import { EditOutlined, DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons'
+import { ProductDataType } from '@/data/products-data'
+import { EditOutlined, PlusCircleOutlined, InfoCircleOutlined } from '@ant-design/icons'
 import { routes } from '@/config/routes'
 import Link from 'next/link'
 import Breadcrumb from "@/components/breadcrumb"
@@ -11,8 +11,30 @@ import { Content } from 'antd/es/layout/layout'
 import Button from "@/components/button"
 import SearchInput from '@/components/search';
 import StatusBadge from '@/components/badge/badge-status'
+import DeletePopover from '@/components/popover'
+import { deleteProduct } from '@/services/products-service'
+import { useNotificationAntd } from '@/components/toast'
+import { useAtom } from 'jotai'
+import { productAtom } from '@/store/ProductAtom'
+import dayjs from 'dayjs'
+import Image from 'next/image'
 
 const index = ({ products }: { products?: any }) => {
+    const { contextHolder, notifySuccess } = useNotificationAntd()
+    const [data, setData] = useAtom(productAtom)
+
+
+    const handleDelete = async (id: any) => {
+        try {
+            const res = await deleteProduct(id)
+            if (res.success == true) {
+                notifySuccess(res.message)
+                setData(prev => prev.filter(item => item.id !== id))
+            }
+        } catch (error) {
+            console.error(error)
+        }
+    }
     const breadcrumb = [
         {
             title: 'Catalogue',
@@ -21,7 +43,7 @@ const index = ({ products }: { products?: any }) => {
             title: 'Products',
         },
     ]
-    const columnProducts: TableColumnsType<ProductType> = [
+    const columnProducts: TableColumnsType<ProductDataType> = [
         {
             title: 'ID',
             dataIndex: 'id',
@@ -30,35 +52,27 @@ const index = ({ products }: { products?: any }) => {
             title: 'SKU',
             dataIndex: 'sku',
         },
-        // {
-        //     title: 'Thumbnail',
-        //     dataIndex: 'image',
-        //     render: (url: string) => (
-        //         <Image
-        //             src={url}
-        //             alt="product-img"
-        //             width={50}
-        //             height={50}
-        //             className='object-cover rounded-xl'
-        //         />
-
-        //     ),
-        // },
+        {
+            title: 'Thumbnail',
+            dataIndex: 'images',
+            render: (url: string) => {
+                return <Image
+                    src={url}
+                    alt="product-img"
+                    width={50}
+                    height={50}
+                    className='object-cover rounded-xl'
+                />
+            }
+        },
         {
             title: 'Name',
             dataIndex: 'name',
         },
         {
-            title: 'Category',
-            dataIndex: 'category',
-            render: (category: { id: number; name: string } | null) => {
-                return category?.name || '-';
-            },
+            title: 'Qty',
+            dataIndex: 'stock',
         },
-        // {
-        //     title: 'Qty',
-        //     dataIndex: 'stock',
-        // },
         {
             title: 'Price',
             dataIndex: 'price',
@@ -68,6 +82,22 @@ const index = ({ products }: { products?: any }) => {
             dataIndex: 'status',
             render: (value: any) => {
                 return <StatusBadge status={value} />;
+            }
+        },
+        {
+            title: 'Created At',
+            dataIndex: 'createdAt',
+            render: (created_at: string) => {
+                const date = dayjs(created_at).format('DD MMMM, YYYY')
+                return date
+            }
+        },
+        {
+            title: 'Updated At',
+            dataIndex: 'updatedAt',
+            render: (updated_at: string) => {
+                const date = dayjs(updated_at).format('DD MMMM, YYYY')
+                return date
             }
         },
         // {
@@ -92,12 +122,19 @@ const index = ({ products }: { products?: any }) => {
             dataIndex: 'action',
             key: 'action',
             width: 120,
-            render: (_: string, row: ProductType) => (
+            render: (_: string, row: any) => (
                 <div className="flex items-center justify-end gap-3 pe-4">
-                    <Link href={routes.eCommerce.ediProduct(row.id)}>
+                    <Link href={routes.eCommerce.editProduct(row.id)}>
                         <EditOutlined />
                     </Link>
-                    <DeleteOutlined />
+                    <DeletePopover
+                        title='Delete Product'
+                        description='Are you sure to delete this data?'
+                        onDelete={() => handleDelete(row.id)}
+                    />
+                    <Link href={routes.eCommerce.detailProduct(row.id)}>
+                        <InfoCircleOutlined />
+                    </Link>
 
                 </div >
             ),
@@ -108,8 +145,13 @@ const index = ({ products }: { products?: any }) => {
     const handleSearch = (query: string) => {
         console.log('User mencari:', query);
     };
+
+    useEffect(() => {
+        setData(products)
+    }, [products])
     return (
         <>
+            {contextHolder}
             <div className="mt-6 mx-4 mb-0">
                 <h1 className='text-xl font-bold'>
                     Product
@@ -135,7 +177,7 @@ const index = ({ products }: { products?: any }) => {
                     </div>
                     <TableProduct
                         columns={columnProducts}
-                        dataSource={products}
+                        dataSource={data}
                         withSelectableRows
                     />
                 </div>

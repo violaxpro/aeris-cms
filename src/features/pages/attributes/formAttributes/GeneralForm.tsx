@@ -9,25 +9,25 @@ import Modal from '@/components/modal'
 import { useAtom } from 'jotai'
 import { categoriesAtom, attributeSetAtom } from '@/store/DropdownItemStore'
 import { addAttributeSet, getAttributeSet } from '@/services/attribute-set-service'
-import { ChildFormProps } from '@/plugins/interfaces/form-interface'
+import { ChildFormProps } from '@/plugins/types/form-type'
 
 type formProps = {
     data?: any
 }
-const GeneralForm = ({ dataChild, onChange }: ChildFormProps) => {
+const GeneralForm = ({ dataById, onChange }: ChildFormProps) => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [optionAttributeSet, setOptionAttributeSet] = useAtom(attributeSetAtom)
     const [optionCategories] = useAtom(categoriesAtom)
     const [formData, setFormData] = useState({
-        name: dataChild ? dataChild.name : '',
-        attributeSet: dataChild ? dataChild.attribute_set : '',
-        categories: dataChild && dataChild.categories
-            ? typeof dataChild.categories === 'string'
-                ? JSON.parse(dataChild.categories)
-                : dataChild.categories
+        name: dataById ? dataById.name : '',
+        attributeSet: dataById ? dataById.attribute_set : '',
+        categories: dataById && dataById.categories
+            ? typeof dataById.categories === 'string'
+                ? JSON.parse(dataById.categories)
+                : dataById.categories
             : [],
 
-        filterable: dataChild ? dataChild.filterable :false
+        filterable: dataById ? dataById.filterable : false
     })
 
     const [attributeSet, setAttributeSet] = useState({
@@ -39,11 +39,8 @@ const GeneralForm = ({ dataChild, onChange }: ChildFormProps) => {
     }
 
     const handleCancel = () => {
-        console.log('hi')
         setIsModalOpen(false)
     }
-
-    console.log(formData, dataChild)
 
     const handleChange = (e: any) => {
         const { id, value } = e.target;

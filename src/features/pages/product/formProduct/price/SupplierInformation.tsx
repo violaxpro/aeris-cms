@@ -3,28 +3,39 @@ import FormGroup from '@/components/form';
 import { Button } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import Input from "@/components/input"
+import { ChildFormProps } from '@/plugins/types/form-type';
 
 type ListItem = {
-    name: string;
-    value: string;
+    supplierName: string;
+    bestPrice: string;
 };
 
-const SupplierInformation = ({ className }: { className?: string }) => {
+const SupplierInformation = ({ onChange, dataById }: ChildFormProps) => {
     const [items, setItems] = useState<ListItem[]>([]);
 
     const handleChange = (updatedItems: ListItem[]) => {
         setItems(updatedItems);
-        console.log('Updated List:', updatedItems);
+        onChange?.(updatedItems)
     };
 
     const updateItem = (index: number, key: keyof ListItem, value: string) => {
-        const updated = [...items];
-        updated[index][key] = value;
-        handleChange(updated);
+        // const updated = [...items];
+        // updated[index][key] = value;
+        // handleChange(updated);
+        setItems(prev => {
+            const updated = [...prev];
+            if (typeof updated[index] === 'string') {
+                (updated[index] as any) = value; // untuk string langsung ganti
+            } else {
+                (updated[index] as any)[key] = value;
+            }
+            handleChange(updated);
+            return updated;
+        });
     };
 
     const addItem = () => {
-        const updated = [{ name: '', value: '' }, ...items]; // ← tambahkan ke awal
+        const updated = [{ supplierName: '', bestPrice: '' }, ...items]; // ← tambahkan ke awal
         handleChange(updated);
     };
 
@@ -44,8 +55,8 @@ const SupplierInformation = ({ className }: { className?: string }) => {
                                     id='supplierName'
                                     label='Supplier Name'
                                     type='text'
-                                    value={item.name}
-                                    onChange={(e) => updateItem(index, 'name', e.target.value)}
+                                    value={item.supplierName}
+                                    onChange={(e) => updateItem(index, 'supplierName', e.target.value)}
                                     style={{ width: '100%', borderColor: '#E5E7EB' }}
                                 />
                             </div>
@@ -55,8 +66,8 @@ const SupplierInformation = ({ className }: { className?: string }) => {
                                     id='bestPrice'
                                     label='Best Price'
                                     type='text'
-                                    value={item.value}
-                                    onChange={(e) => updateItem(index, 'value', e.target.value)}
+                                    value={item.bestPrice}
+                                    onChange={(e) => updateItem(index, 'bestPrice', e.target.value)}
                                     style={{ width: '100%', borderColor: '#E5E7EB' }}
                                 />
                             </div>

@@ -3,28 +3,42 @@ import FormGroup from '@/components/form';
 import { Button } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import SelectInput from '@/components/select';
+import { ChildFormProps } from '@/plugins/types/form-type';
+import { useAtom } from 'jotai';
+import { productSetAtom } from '@/store/DropdownItemStore';
 
 type ListItem = {
-    name: string[];
+    productName: string[];
     value: string;
 };
 
-const KitPriceInformation = ({ className }: { className?: string }) => {
+const KitPriceInformation = ({ dataById, onChange }: ChildFormProps) => {
+    const [optionsProduct] = useAtom(productSetAtom)
     const [items, setItems] = useState<ListItem[]>([]);
 
     const handleChange = (updatedItems: ListItem[]) => {
         setItems(updatedItems);
-        console.log('Updated List:', updatedItems);
+        onChange?.(updatedItems)
     };
 
     const updateItem = (index: number, key: keyof ListItem, value: any) => {
-        const updated = [...items];
-        updated[index][key] = value;
-        handleChange(updated);
+        // const updated = [...items];
+        // updated[index][key] = value;
+        // handleChange(updated);
+        setItems(prev => {
+            const updated = [...prev];
+            if (typeof updated[index] === 'string') {
+                (updated[index] as any) = value; // untuk string langsung ganti
+            } else {
+                (updated[index] as any)[key] = value;
+            }
+            handleChange(updated);
+            return updated;
+        });
     };
 
     const addItem = () => {
-        const updated = [{ name: [], value: '' }, ...items];
+        const updated = [{ productName: [], value: '' }, ...items];
         handleChange(updated);
     };
 
@@ -32,12 +46,6 @@ const KitPriceInformation = ({ className }: { className?: string }) => {
         const updated = items.filter((_, i) => i !== index);
         handleChange(updated);
     };
-
-    const options = [
-        { value: '1', label: 'Product A' },
-        { value: '2', label: 'Product B' },
-        { value: '3', label: 'Product C' },
-    ];
 
     return (
         <div>
@@ -52,12 +60,12 @@ const KitPriceInformation = ({ className }: { className?: string }) => {
                                     placeholder="Select Product(s)"
                                     modeType="multiple"
                                     onChange={(selectedOptions) =>
-                                        updateItem(index, 'name', Array.isArray(selectedOptions)
-                                            ? selectedOptions.map((opt: any) => opt.label)
+                                        updateItem(index, 'productName', Array.isArray(selectedOptions)
+                                            ? selectedOptions.map((opt: any) => opt)
                                             : [])
                                     }
-                                    value={item.name}
-                                    options={options}
+                                    value={item.productName}
+                                    options={optionsProduct}
                                 />
                             </div>
                             <div className="pt-6">

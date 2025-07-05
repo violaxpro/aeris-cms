@@ -3,7 +3,7 @@ import Input from "@/components/input"
 import FormGroup from '@/components/form'
 import { PlusOutlined, MinusCircleOutlined } from '@ant-design/icons'
 import { Button } from 'antd'
-import { ChildFormProps } from '@/plugins/interfaces/form-interface'
+import { ChildFormProps } from '@/plugins/types/form-type'
 
 type formProps = {
     data?: any
@@ -12,7 +12,7 @@ type formProps = {
 type itemInputType = {
     value: string[]
 };
-const ValuesForm = ({ dataChild, onChange }: ChildFormProps) => {
+const ValuesForm = ({ dataById, onChange }: ChildFormProps) => {
     const [items, setItems] = useState<itemInputType[]>([])
 
     const handleChange = (updateItem: itemInputType[]) => {
@@ -46,11 +46,11 @@ const ValuesForm = ({ dataChild, onChange }: ChildFormProps) => {
     };
 
     useEffect(() => {
-        if (dataChild.length > 0 && items.length === 0) {
-            const parseData = JSON.parse(dataChild)
+        if (dataById.length > 0 && items.length === 0) {
+            const parseData = JSON.parse(dataById)
             setItems(parseData);
         }
-    }, [dataChild]);
+    }, [dataById]);
 
     return (
         <div className='flex flex-col gap-2'>

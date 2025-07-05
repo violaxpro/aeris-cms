@@ -12,7 +12,7 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
         Publish: { color: 'success', text: 'Published' },
         Yes: { color: 'success', text: 'Yes' },
         No: { color: 'error', text: 'No' },
-        1: { color: 'success', text: '' },
+        1: { color: 'success', text: 'Enabled' },
     };
 
     const config = statusMap[status] || { color: 'default', text: status };

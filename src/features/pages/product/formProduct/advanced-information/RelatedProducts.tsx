@@ -84,7 +84,7 @@ const RelatedProductInformation = ({ className }: { className?: string }) => {
             width: 120,
             render: (_: string, row: ProductType) => (
                 <div className="flex items-center justify-end gap-3 pe-4">
-                    <Link href={routes.eCommerce.ediProduct(row.id)}>
+                    <Link href={routes.eCommerce.editProduct(row.id)}>
                         <EditOutlined />
                     </Link>
                     <DeleteOutlined />

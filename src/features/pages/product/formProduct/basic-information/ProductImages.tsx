@@ -17,8 +17,6 @@ const ProductStockAvailability = ({ className }: { className?: string }) => {
         console.error('Failed to upload:', file);
     };
 
-    console.log(formData)
-
     return (
         <div>
             <FormGroup

@@ -12,14 +12,16 @@ import { brandsAtom, categoriesAtom } from '@/store/DropdownItemStore'
 
 const QuillInput = dynamic(() => import('@/components/quill-input'), { ssr: false, loading: () => <p>Loading editor...</p>, });
 
-const ProductGeneral = ({ className }: { className?: string }) => {
+const ProductGeneral = ({ className, onChange }: { className?: string, onChange: (params: any) => void }) => {
     const [optionBrands] = useAtom(brandsAtom)
     const [optionCategories] = useAtom(categoriesAtom)
 
     const [formData, setFormData] = useState({
         productName: '',
         brand: '',
+        slug: '',
         categories: '',
+        subCategoriesId: '',
         description: '',
         metaTitle: '',
         metaDescription: '',
@@ -40,16 +42,13 @@ const ProductGeneral = ({ className }: { className?: string }) => {
         additional_images: '',
     });
 
-    console.log(formData)
-
-    console.log(optionBrands, optionCategories)
-
     const handleChange = (e: any) => {
         const { id, value } = e.target;
-        setFormData((prev) => ({
-            ...prev,
-            [id]: value,
-        }));
+        setFormData(prev => {
+            const updated = { ...prev, [id]: value }
+            onChange(updated)
+            return updated
+        });
     };
 
 
@@ -107,6 +106,14 @@ const ProductGeneral = ({ className }: { className?: string }) => {
                     placeholder='Product Name'
                     onChange={handleChange}
                     value={formData.productName}
+                />
+                <Input
+                    id='slug'
+                    label='Slug'
+                    type='text'
+                    placeholder='Slug'
+                    onChange={handleChange}
+                    value={formData.slug}
                 />
                 <Select
                     id="brand"

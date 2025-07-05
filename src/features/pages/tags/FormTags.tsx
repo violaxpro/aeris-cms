@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Breadcrumb from "@/components/breadcrumb";
 import { Content } from 'antd/es/layout/layout';
 import Button from '@/components/button'
-import { FormProps } from '@/plugins/interfaces/form-interface';
+import { FormProps } from '@/plugins/types/form-type';
 import FormGroup from '@/components/form';
 import Input from "@/components/input"
 import SelectInput from '@/components/select';

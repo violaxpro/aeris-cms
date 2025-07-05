@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import GeneralForm from "./GeneralForm";
 import SEOForm from "./SEOForm";
 import Breadcrumb from "@/components/breadcrumb";
-import { FormProps } from '@/plugins/interfaces/form-interface';
+import { FormProps } from '@/plugins/types/form-type';
 import { Content } from 'antd/es/layout/layout';
 import Button from '@/components/button'
 import { routes } from '@/config/routes';

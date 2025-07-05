@@ -1,3 +1,40 @@
+
+export type ProductDataType = {
+  id?: string | number | undefined;
+  name: string;
+  sku: string;
+  qty?: number;
+  stock?: number
+  status?: number
+  rating?: number[];
+  short_description?: string
+  description?: string
+  slug?: string
+  sku2?: string
+  brandId?: number
+  categoriesId?: number
+  subCategoriesId?: number
+  tags?: string[]
+  price_buy?: number
+  rrp_price?: number
+  trade_price?: number
+  silver_price?: number
+  gold_price?: number
+  platinum_price?: number
+  diamond_price?: number
+  meta_title?: string
+  meta_description?: string
+  images?: imageProduct[]
+}
+
+export type imageProduct = {
+  name: string
+  url: string
+  default: boolean
+  alt_image: string
+}
+
+
 export type ProductType = {
   id: string;
   name: string;
