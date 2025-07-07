@@ -1,5 +1,5 @@
 import React from 'react'
-import FormOptions from '@/features/pages/options/formOptions/FormOptions'
+import FormOptions from '@/features/pages/catalogue/options/formOptions/FormOptions'
 
 const CrateOptionsPage = () => {
     return (

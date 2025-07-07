@@ -1,9 +1,8 @@
 'use client'
 import React, { useEffect } from 'react'
-import TableProduct from "@/components/table"
+import Table from "@/components/table"
 import type { TableColumnsType } from 'antd'
-import { PriceLevelType } from '@/data/price-level-data'
-import { EditOutlined, PlusCircleOutlined, InfoCircleOutlined } from '@ant-design/icons'
+import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons'
 import DeletePopover from '@/components/popover'
 import { routes } from '@/config/routes'
 import Link from 'next/link'
@@ -11,17 +10,21 @@ import Breadcrumb from "@/components/breadcrumb"
 import { Content } from 'antd/es/layout/layout'
 import Button from "@/components/button"
 import SearchInput from '@/components/search';
+import { deleteReturnSupplier } from '@/services/return-supplier'
 import { useNotificationAntd } from '@/components/toast'
-import { deletePriceLevel } from '@/services/price-level-service'
-import { priceLevelsAtom } from '@/store/PriceLevelAtomStore'
 import { useAtom } from 'jotai'
+import { returnSupplierAtom } from '@/store/SuppliersAtom'
+import { returnData, ReturnSupplierType } from '@/plugins/types/suppliers-type'
+import { stripHTML } from '@/plugins/validators/common-rules'
+import dayjs from 'dayjs'
 
-const index = ({ priceLevels }: { priceLevels?: any }) => {
+const index = ({ returnSupplierData }: { returnSupplierData?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
-    const [data, setData] = useAtom(priceLevelsAtom)
+    const [data, setData] = useAtom(returnSupplierAtom)
+
     const handleDelete = async (id: any) => {
         try {
-            const res = await deletePriceLevel(id)
+            const res = await deleteReturnSupplier(id)
             if (res.success == true) {
                 notifySuccess(res.message)
                 setData(prev => prev.filter(item => item.id !== id))
@@ -31,43 +34,48 @@ const index = ({ priceLevels }: { priceLevels?: any }) => {
         }
     }
 
-    useEffect(() => {
-        setData(priceLevels)
-    }, [priceLevels])
-
     const breadcrumb = [
         {
-            title: 'Catalogue',
+            title: 'Suppliers',
         },
         {
-            title: 'Price Level',
+            title: 'Return Suppliers',
         },
     ]
-    const columns: TableColumnsType<PriceLevelType> = [
+    const columns: TableColumnsType<ReturnSupplierType> = [
         {
             title: 'ID',
             dataIndex: 'id',
         },
         {
-            title: 'Name',
-            dataIndex: 'name',
+            title: 'Purchase Id',
+            dataIndex: 'purchase_id',
         },
         {
-            title: 'Brand',
-            dataIndex: 'brand',
-            render: (brand: { id: number; name: string } | null) => {
-                return brand?.name || '-';
-            },
+            title: 'Supplier',
+            dataIndex: 'supplier_name',
         },
         {
-            title: 'Category',
-            dataIndex: 'category',
-            render: (category: { id: number; name: string } | null) => {
-                return category?.name || '-';
-            },
+            title: 'Total',
+            dataIndex: 'total',
         },
         {
-            // Need to avoid this issue -> <td> elements in a large <table> do not have table headers.
+            title: 'Status',
+            dataIndex: 'status',
+            render: (val) => {
+                const status = stripHTML(val);
+                return status
+            }
+        },
+        {
+            title: 'Created At',
+            dataIndex: 'createdAt',
+            render: (created_at: string) => {
+                const date = dayjs(created_at).format('DD MMMM, YYYY')
+                return date
+            }
+        },
+        {
             title: 'Action',
             dataIndex: 'action',
             key: 'action',
@@ -75,17 +83,14 @@ const index = ({ priceLevels }: { priceLevels?: any }) => {
             render: (_: string, row: any) => (
 
                 <div className="flex items-center justify-end gap-3 pe-4">
-                    <Link href={routes.eCommerce.editPriceLevel(row.id)}>
+                    <Link href={routes.eCommerce.editReturnSupplier(row.id)}>
                         <EditOutlined />
                     </Link>
                     <DeletePopover
-                        title='Delete Price Level'
+                        title='Delete Return Supplier'
                         description='Are you sure to delete this data?'
                         onDelete={() => handleDelete(row.id)}
                     />
-                    <Link href={routes.eCommerce.detailPriceLevel(row.id)}>
-                        <InfoCircleOutlined />
-                    </Link>
                 </div >
             ),
         },
@@ -95,12 +100,16 @@ const index = ({ priceLevels }: { priceLevels?: any }) => {
     const handleSearch = (query: string) => {
         console.log('User mencari:', query);
     };
+
+    useEffect(() => {
+        setData(returnData)
+    }, [returnData])
     return (
         <>
             {contextHolder}
             <div className="mt-6 mx-4 mb-0">
                 <h1 className='text-xl font-bold'>
-                    Price Level
+                    Return Suppliers
                 </h1>
                 <Breadcrumb
                     items={breadcrumb}
@@ -114,13 +123,13 @@ const index = ({ priceLevels }: { priceLevels?: any }) => {
                             <Button
                                 btnClassname="!bg-[#86A788] !text-white hover:!bg-white hover:!text-[#86A788] hover:!border-[#86A788]"
                                 icon={<PlusCircleOutlined />}
-                                label='Add Price Level'
-                                link={routes.eCommerce.createPriceLevel}
+                                label='Add Return Supplier'
+                                link={routes.eCommerce.createReturnSupplier}
                             />
                         </div>
 
                     </div>
-                    <TableProduct
+                    <Table
                         columns={columns}
                         dataSource={data}
                         withSelectableRows

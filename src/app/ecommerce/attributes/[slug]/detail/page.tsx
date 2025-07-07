@@ -1,7 +1,7 @@
 import React from 'react'
 import { Params } from '@/plugins/types'
 import { getAttributebyId } from '@/services/attributes-service';
-import DetailAttribute from '@/features/pages/attributes/formAttributes/DetailAttribute';
+import DetailAttribute from '@/features/pages/catalogue/attributes/formAttributes/DetailAttribute';
 
 export default async function DetailAttributePage(props: { params: Params }) {
     const params = await props.params;

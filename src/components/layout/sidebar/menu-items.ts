@@ -183,22 +183,22 @@ export const menuItems = [
             {
                 key: 'purchase',
                 name: 'Purchase',
-                href: routes.eCommerce.products,
+                href: routes.eCommerce.purchases,
             },
             {
                 key: 'rma-supplier',
                 name: 'RMA Supplier',
-                href: routes.eCommerce.priceLevel,
+                href: routes.eCommerce.returnSupplier,
             },
             {
                 key: 'credit-supplier',
                 name: 'Credit Supplier',
-                href: routes.eCommerce.categories,
+                href: routes.eCommerce.creditSupplierList,
             },
             {
                 key: 'supplier-list',
                 name: 'Supplier List',
-                href: routes.eCommerce.categories,
+                href: routes.eCommerce.supplierList,
             },
         ],
     },
@@ -211,7 +211,7 @@ export const menuItems = [
             {
                 key: 'inventory-list',
                 name: 'Inventory List',
-                href: routes.eCommerce.products,
+                href: routes.eCommerce.inventoryList,
             },
         ],
     },

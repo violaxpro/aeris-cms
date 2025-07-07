@@ -1,4 +1,4 @@
-import DetailPriceLevel from "@/features/pages/price-level/DetailPriceLevel";
+import DetailPriceLevel from "@/features/pages/catalogue/price-level/DetailPriceLevel";
 import { getPriceLevel } from "@/services/price-level-service";
 import { getBrands } from "@/services/brands-service";
 import { getCategories } from "@/services/category-service";

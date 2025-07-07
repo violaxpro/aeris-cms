@@ -1,5 +1,5 @@
 import React from 'react'
-import OptionsList from '@/features/pages/options'
+import OptionsList from '@/features/pages/catalogue/options'
 
 const OptionsPage = () => {
     return (

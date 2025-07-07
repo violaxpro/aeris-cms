@@ -1,5 +1,5 @@
 import React from 'react'
-import CategoriesPage from '@/features/pages/categories'
+import CategoriesPage from '@/features/pages/catalogue/categories'
 import { getCategories } from '@/services/category-service'
 
 export default async function CategoriesUrl() {

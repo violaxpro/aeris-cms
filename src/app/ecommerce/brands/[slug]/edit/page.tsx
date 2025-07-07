@@ -1,5 +1,5 @@
 import React from 'react'
-import FormBrands from '@/features/pages/brands/formBrands/FormBrands'
+import FormBrands from '@/features/pages/catalogue/brands/formBrands/FormBrands'
 import { getBrands } from '@/services/brands-service'
 import { Params } from '@/plugins/types'
 

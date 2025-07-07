@@ -1,5 +1,5 @@
 import React from 'react'
-import ReviewList from '@/features/pages/reviews'
+import ReviewList from '@/features/pages/catalogue/reviews'
 import { getReviews } from '@/services/review-service'
 
 export default async function ReviewsPageUrl() {

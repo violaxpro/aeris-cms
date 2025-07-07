@@ -7,6 +7,7 @@ export type BrandType = {
   meta_description?: string;
   url_banner?: string;
   url_logo: string
+  createdAt?: string | undefined
 };
 
 export type BrandsProps = {

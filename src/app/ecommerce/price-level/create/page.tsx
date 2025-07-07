@@ -1,5 +1,5 @@
 import React from 'react'
-import FormPriceLevel from '@/features/pages/price-level/FormPriceLevel'
+import FormPriceLevel from '@/features/pages/catalogue/price-level/FormPriceLevel'
 
 export default function CreatePriceLevelPage() {
     return (

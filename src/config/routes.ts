@@ -35,6 +35,28 @@ export const routes = {
     editTags: (slug: string) => `/ecommerce/tags/${slug}/edit`,
 
     reviews: '/ecommerce/reviews',
+
+    supplierList: '/ecommerce/suppliers',
+    createSupplierList: '/ecommerce/suppliers/create',
+    editSupplierList: (slug: string) => `/ecommerce/suppliers/${slug}/edit`,
+
+    creditSupplierList: '/ecommerce/credit-suppliers',
+    // createCreditSupplierList: '/ecommerce/credit-suppliers/create',
+    // editCreditSupplierList: (slug: string) => `/ecommerce/credit-suppliers/${slug}/edit`,
+
+    returnSupplier: '/ecommerce/return-suppliers',
+    createReturnSupplier: '/ecommerce/return-suppliers/create',
+    editReturnSupplier: (slug: string) => `/ecommerce/return-suppliers/${slug}/edit`,
+
+    purchases: '/ecommerce/purchases',
+    createPurchases: '/ecommerce/purchases/create',
+    editPurchases: (slug: string) => `/ecommerce/purchases/${slug}/edit`,
+    createSerialNumber: (slug: string) => `/ecommerce/purchases/${slug}/serial-number`,
+    sendEmail: (slug: string) => `/ecommerce/purchases/${slug}/send-email`,
+    print: (slug: string) => `/ecommerce/purchases/${slug}/print`,
+
+    inventoryList: '/ecommerce/inventory-list',
+    warehouses: (slug: string) => `'/ecommerce/warehouse/${slug}/edit`,
   },
   profile: '/profile',
   welcome: '/welcome',

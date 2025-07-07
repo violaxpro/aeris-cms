@@ -28,6 +28,10 @@ const nextConfig = {
         hostname: 'url.logo2',
       },
       {
+        protocol: 'http',
+        hostname: 'url.bnanner2'
+      },
+      {
         protocol: 'https',
         hostname: 'flagcdn.com',
       },

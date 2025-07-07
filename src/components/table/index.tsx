@@ -61,6 +61,7 @@ const index = <data extends object>({ columns, dataSource, withSelectableRows = 
         rowSelection={withSelectableRows ? rowSelection : undefined}
         columns={columns}
         dataSource={dataSource}
+        scroll={{ x: 'max-content' }}
     />;
 };
 

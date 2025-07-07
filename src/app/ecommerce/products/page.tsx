@@ -1,4 +1,4 @@
-import ProductPage from "@/features/pages/product"
+import ProductPage from "@/features/pages/catalogue/product"
 import { getProduct } from '@/services/products-service'
 import { getBrands } from "@/services/brands-service";
 import { getCategories } from "@/services/category-service";

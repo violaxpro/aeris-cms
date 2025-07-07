@@ -3,6 +3,7 @@ export type FormProps = {
     mode: Mode;
     initialValues?: any;
     slug?: string | number
+    dataTable? : any;
 }
 
 export type ChildFormProps = {

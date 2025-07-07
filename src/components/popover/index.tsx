@@ -6,9 +6,10 @@ type DeletePopoverProps = {
   title: string;
   description: string;
   onDelete: () => void;
+  label?: string
 };
 
-const DeletePopover = ({ title, description, onDelete }: DeletePopoverProps) => {
+const DeletePopover = ({ title, description, onDelete, label }: DeletePopoverProps) => {
   const [open, setOpen] = useState(false);
 
   const handleDelete = () => {
@@ -42,7 +43,11 @@ const DeletePopover = ({ title, description, onDelete }: DeletePopoverProps) => 
       open={open}
       onOpenChange={(visible) => setOpen(visible)}
     >
-      <Button danger size="small" icon={<DeleteOutlined />} />
+      {
+        label ? <span>{label}</span>
+          : <Button danger size="small" icon={<DeleteOutlined />} />
+      }
+
     </Popover>
   );
 };

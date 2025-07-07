@@ -1,5 +1,5 @@
 import React from 'react'
-import PriceLevelPage from "@/features/pages/price-level"
+import PriceLevelPage from "@/features/pages/catalogue/price-level"
 import { getPriceLevel } from '@/services/price-level-service';
 import { getCategories } from '@/services/category-service';
 import { getBrands } from '@/services/brands-service';

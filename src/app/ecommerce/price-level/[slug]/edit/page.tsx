@@ -1,6 +1,6 @@
 import React from 'react'
 import { getPriceLevel } from '@/services/price-level-service'
-import FormPriceLevel from '@/features/pages/price-level/FormPriceLevel'
+import FormPriceLevel from '@/features/pages/catalogue/price-level/FormPriceLevel'
 import { Params } from '@/plugins/types'
 
 export default async function EditPriceLevelPage(props: { params: Params }) {

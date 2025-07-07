@@ -1,5 +1,5 @@
 import React from 'react'
-import AttributesList from "@/features/pages/attributes"
+import AttributesList from "@/features/pages/catalogue/attributes"
 import { getAttributes } from '@/services/attributes-service'
 
 export default async function AttributesPage() {

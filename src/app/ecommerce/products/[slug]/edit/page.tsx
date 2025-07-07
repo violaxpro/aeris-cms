@@ -1,5 +1,5 @@
 import React from 'react'
-import ProductForm from '@/features/pages/product/formProduct/FormProduct'
+import ProductForm from '@/features/pages/catalogue/product/formProduct/FormProduct'
 import { getProduct } from '@/services/products-service'
 import { Params } from '@/plugins/types'
 

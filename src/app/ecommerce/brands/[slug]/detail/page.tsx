@@ -1,4 +1,4 @@
-import DetailBrand from "@/features/pages/brands/formBrands/DetailBrands";
+import DetailBrand from "@/features/pages/catalogue/brands/formBrands/DetailBrands";
 import { getBrands } from "@/services/brands-service";
 import { Params } from "@/plugins/types";
 

@@ -1,8 +1,9 @@
 'use client'
-import React, { useEffect } from 'react'
-import Table from "@/components/table"
+import React, { useState, useEffect } from 'react'
+import TableProduct from "@/components/table"
 import type { TableColumnsType } from 'antd'
-import { AttributesType } from '@/data/attributes-data'
+import { BrandType } from '@/data/brands-data'
+import Image from 'next/image'
 import { EditOutlined, PlusCircleOutlined, InfoCircleOutlined } from '@ant-design/icons'
 import DeletePopover from '@/components/popover'
 import { routes } from '@/config/routes'
@@ -12,20 +13,28 @@ import { Content } from 'antd/es/layout/layout'
 import Button from "@/components/button"
 import SearchInput from '@/components/search';
 import dayjs from 'dayjs'
-import { useAtom } from 'jotai'
-import { deleteAttribute } from '@/services/attributes-service'
+import { deleteBrand } from '@/services/brands-service'
 import { useNotificationAntd } from '@/components/toast'
-import { attributeAtom } from '@/store/AttributeAtom'
+import { useAtom } from 'jotai'
+import { brandAtom } from '@/store/BrandAtomStore'
 
-const index = ({ attributesData }: { attributesData?: any }) => {
+const index = ({ brandsData }: { brandsData?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
-    const [data, setData] = useAtom(attributeAtom)
+    const [data, setData] = useAtom(brandAtom)
+    const [filteredData, setFilteredData] = useState<BrandType[]>([]);
+    const [search, setSearch] = useState('')
+
     const handleDelete = async (id: any) => {
         try {
-            const res = await deleteAttribute(id)
+            const res = await deleteBrand(id)
             if (res.success == true) {
                 notifySuccess(res.message)
-                setData(prev => prev.filter(item => item.id !== id))
+                const updatedData = data.filter(item => item.id !== id);
+                setData(updatedData);
+
+                setFilteredData(updatedData.filter(item =>
+                    item.name.toLowerCase().includes(search.toLowerCase())
+                ));
             }
         } catch (error) {
             console.error(error)
@@ -37,35 +46,51 @@ const index = ({ attributesData }: { attributesData?: any }) => {
             title: 'Catalogue',
         },
         {
-            title: 'Attribute',
+            title: 'Brands',
         },
     ]
-    const columns: TableColumnsType<AttributesType> = [
+    const columns: TableColumnsType<BrandType> = [
         {
             title: 'ID',
             dataIndex: 'id',
+            sorter: (a: any, b: any) => a.id - b.id,
         },
         {
-            title: 'Attribute Name',
+            title: 'Logo',
+            dataIndex: 'url_logo',
+            render: (url: string) => {
+                if (!url) return null;
+                return (
+                    <Image
+                        src={url}
+                        alt="product-img"
+                        width={50}
+                        height={50}
+                        className='object-cover rounded-xl'
+                    />
+                )
+            },
+        },
+        {
+            title: 'Brand Name',
             dataIndex: 'name',
+            sorter: (a, b) => a.name.localeCompare(b.name)
         },
         {
-            title: 'Attribute Set',
-            dataIndex: 'attribute_set',
-        },
-        {
-            title: 'Filterable',
-            dataIndex: 'filterable',
+            title: 'Status',
+            dataIndex: 'status',
         },
         {
             title: 'Created At',
             dataIndex: 'createdAt',
+            sorter: (a: any, b: any) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
             render: (created_at: string) => {
                 const date = dayjs(created_at).format('DD MMMM, YYYY')
                 return date
             }
         },
         {
+            // Need to avoid this issue -> <td> elements in a large <table> do not have table headers.
             title: 'Action',
             dataIndex: 'action',
             key: 'action',
@@ -73,37 +98,43 @@ const index = ({ attributesData }: { attributesData?: any }) => {
             render: (_: string, row: any) => (
 
                 <div className="flex items-center justify-end gap-3 pe-4">
-                    <Link href={routes.eCommerce.editAttributes(row.id)}>
+                    <Link href={routes.eCommerce.editBrands(row.id)}>
                         <EditOutlined />
                     </Link>
                     <DeletePopover
-                        title='Delete Attribute'
+                        title='Delete Brands'
                         description='Are you sure to delete this data?'
                         onDelete={() => handleDelete(row.id)}
                     />
-                    <Link href={routes.eCommerce.detailAttributes(row.id)}>
-                        <InfoCircleOutlined />
-                    </Link>
-
                 </div >
             ),
         },
 
     ]
 
-    const handleSearch = (query: string) => {
-        console.log('User mencari:', query);
+    const handleSearch = (value: string) => {
+        const search = value.toLowerCase();
+        setSearch(search)
+        const result = data.filter((item: any) => {
+            const formattedDate = dayjs(item?.createdAt).format('DD MMMM, YYYY').toLowerCase();
+            return item?.name.toLowerCase().includes(search) ||
+                formattedDate.includes(search);
+        });
+        setFilteredData(result);
     };
 
     useEffect(() => {
-        setData(attributesData)
-    }, [attributesData])
+        setData(brandsData)
+        if (!search) {
+            setFilteredData(brandsData)
+        }
+    }, [brandsData, search])
     return (
         <>
             {contextHolder}
             <div className="mt-6 mx-4 mb-0">
                 <h1 className='text-xl font-bold'>
-                    Attributes
+                    Brands
                 </h1>
                 <Breadcrumb
                     items={breadcrumb}
@@ -117,15 +148,15 @@ const index = ({ attributesData }: { attributesData?: any }) => {
                             <Button
                                 btnClassname="!bg-[#86A788] !text-white hover:!bg-white hover:!text-[#86A788] hover:!border-[#86A788]"
                                 icon={<PlusCircleOutlined />}
-                                label='Add Attributes'
-                                link={routes.eCommerce.createAttributes}
+                                label='Add Brands'
+                                link={routes.eCommerce.createBrands}
                             />
                         </div>
 
                     </div>
-                    <Table
+                    <TableProduct
                         columns={columns}
-                        dataSource={data}
+                        dataSource={filteredData}
                         withSelectableRows
                     />
                 </div>

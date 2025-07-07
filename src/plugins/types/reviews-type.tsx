@@ -1,5 +1,4 @@
 export type reviewsType = {
-
     id: string
     reviewerId: number
     productId: number

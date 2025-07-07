@@ -1,5 +1,5 @@
 import React from 'react'
-import FormTags from '@/features/pages/tags/FormTags'
+import FormTags from '@/features/pages/catalogue/tags/FormTags'
 
 const CreateTagsPage = () => {
     return (

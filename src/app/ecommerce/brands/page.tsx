@@ -1,5 +1,5 @@
 import React from 'react'
-import BrandsPage from "@/features/pages/brands"
+import BrandsPage from "@/features/pages/catalogue/brands"
 import { getBrands } from '@/services/brands-service'
 
 export default async function BrandUrl() {

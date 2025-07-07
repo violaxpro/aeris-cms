@@ -132,10 +132,6 @@ const index = ({ products }: { products?: any }) => {
                         description='Are you sure to delete this data?'
                         onDelete={() => handleDelete(row.id)}
                     />
-                    <Link href={routes.eCommerce.detailProduct(row.id)}>
-                        <InfoCircleOutlined />
-                    </Link>
-
                 </div >
             ),
         },
