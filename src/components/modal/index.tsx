@@ -7,9 +7,13 @@ type ModalProps = {
     open: boolean
     handleSubmit?: () => void
     handleCancel?: () => void
+    handleNo?: () => void
+    handleYes?: () => void
     isBtnSave?: boolean
     handleOk?: () => void,
     children: React.ReactNode
+    labelButton?: string
+    isBtnPopover?: boolean
 }
 
 const index = ({
@@ -17,9 +21,13 @@ const index = ({
     open = false,
     handleSubmit,
     handleCancel,
+    handleNo,
+    handleYes,
     handleOk,
     isBtnSave = false,
-    children
+    children,
+    labelButton,
+    isBtnPopover
 }: ModalProps) => {
 
     return (
@@ -32,14 +40,29 @@ const index = ({
                 footer={(_, { CancelBtn }) => (
                     <>
                         {
-                            isBtnSave == true &&
-                            <Button
-                                label='Save'
-                                onClick={handleSubmit}
-                                btnClassname="!bg-[#86A788] !text-white hover:!bg-white hover:!text-[#86A788] hover:!border-[#86A788]"
-                            />
+                            isBtnSave == true ?
+                                <Button
+                                    label={labelButton ? labelButton : 'Save'}
+                                    onClick={handleSubmit}
+                                    btnClassname="!bg-[#86A788] !text-white hover:!bg-white hover:!text-[#86A788] hover:!border-[#86A788]"
+                                /> :
+                                <Button
+                                    label='Yes'
+                                    onClick={handleYes}
+                                    btnClassname="!bg-[#86A788] !text-white hover:!bg-white hover:!text-[#86A788] hover:!border-[#86A788]"
+                                />
                         }
-                        <CancelBtn />
+                        {
+                            isBtnPopover == true ?
+                                <Button
+                                    label='No'
+                                    onClick={handleNo}
+                                    btnClassname="!bg-red-500 !text-white hover:!bg-white hover:!text-red-500 hover:!border-red-500"
+                                />
+
+                                : <CancelBtn />
+                        }
+
                     </>
                 )}
 

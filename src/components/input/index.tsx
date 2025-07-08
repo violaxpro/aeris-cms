@@ -13,7 +13,9 @@ type inputProps = {
     readOnly?: boolean;
     error?: boolean
     errorMessage?: string
-    className?: string
+    className?: string,
+    disabled?: boolean
+    divClassName?: string
 }
 
 const index = ({ label,
@@ -27,16 +29,19 @@ const index = ({ label,
     readOnly = false,
     error,
     errorMessage,
-    className
+    className,
+    disabled,
+    divClassName
 }: inputProps) => {
 
     return (
-        <div>
+        <div className={divClassName}>
             <label htmlFor={id} className={`block text-sm font-medium text-gray-700 ${className}`}>
                 {label}
             </label>
             <Input
                 id={id}
+                disabled={disabled}
                 placeholder={placeholder ?? ''}
                 onChange={onChange}
                 value={value}

@@ -48,6 +48,10 @@ export const routes = {
     createReturnSupplier: '/ecommerce/return-suppliers/create',
     editReturnSupplier: (slug: string) => `/ecommerce/return-suppliers/${slug}/edit`,
 
+    order: '/ecommerce/order',
+    createOrder: '/ecommerce/order/create',
+    editOrder: (slug: string) => `/ecommerce/order/${slug}/edit`,
+
     purchases: '/ecommerce/purchases',
     createPurchases: '/ecommerce/purchases/create',
     editPurchases: (slug: string) => `/ecommerce/purchases/${slug}/edit`,

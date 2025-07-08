@@ -84,7 +84,7 @@ export const menuItems = [
             {
                 key: 'order',
                 name: 'Order',
-                href: routes.eCommerce.products,
+                href: routes.eCommerce.order,
             },
             {
                 key: 'quote',
