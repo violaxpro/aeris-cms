@@ -4,6 +4,7 @@ export type Tab = {
     key: string;
     label: string;
     onClick?: () => void;
+    count: number
 };
 
 type TabsProps = {
@@ -15,7 +16,7 @@ type TabsProps = {
 const index = ({
     tabs,
     activeTab,
-    setActiveTab
+    setActiveTab,
 }: TabsProps) => {
     return (
         <div className="mx-4 mt-4 mb-0 bg-white px-4 py-3 rounded shadow">
@@ -33,6 +34,11 @@ const index = ({
                         }}
                     >
                         {tab.label}
+                        {typeof tab.count === 'number' && (
+                            <span>
+                                ({tab.count})
+                            </span>
+                        )}
                     </button>
                 ))}
             </div>

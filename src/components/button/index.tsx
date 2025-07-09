@@ -6,7 +6,7 @@ import Link from 'next/link';
 type buttonProps = {
     btnClassname?: string
     icon?: any
-    label: string
+    label?: string
     link?: string
     type?: ButtonProps['type'];
     onClick?: () => void

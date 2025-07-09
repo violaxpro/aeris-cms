@@ -8,19 +8,19 @@ type tableProps<data> = {
     columns: TableColumnsType<data>
     dataSource: data[]
     withSelectableRows?: boolean;
+    selectedRowKeys?: React.Key[]
+    onSelectChange?: (keys: React.Key[]) => void
 }
 
-const index = <data extends object>({ columns, dataSource, withSelectableRows = false }: tableProps<data>) => {
-    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+const index = <data extends object>({ columns, dataSource, withSelectableRows = false, selectedRowKeys, onSelectChange }: tableProps<data>) => {
+    const [selectRowKeys, setSelectRowKey] = useState<React.Key[]>([]);
 
-    const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
-        console.log('selectedRowKeys changed: ', newSelectedRowKeys);
-        setSelectedRowKeys(newSelectedRowKeys);
-    };
+    const keys = selectedRowKeys ?? selectRowKeys;
+    const onChange = onSelectChange ?? setSelectRowKey;
 
     const rowSelection: TableRowSelection<data> = {
-        selectedRowKeys,
-        onChange: onSelectChange,
+        selectedRowKeys: keys,
+        onChange: onChange,
         selections: [
             Table.SELECTION_ALL,
             Table.SELECTION_INVERT,
@@ -29,28 +29,16 @@ const index = <data extends object>({ columns, dataSource, withSelectableRows = 
                 key: 'odd',
                 text: 'Select Odd Row',
                 onSelect: (changeableRowKeys) => {
-                    let newSelectedRowKeys = [];
-                    newSelectedRowKeys = changeableRowKeys.filter((_, index) => {
-                        if (index % 2 !== 0) {
-                            return false;
-                        }
-                        return true;
-                    });
-                    setSelectedRowKeys(newSelectedRowKeys);
+                    const newSelectedRowKeys = changeableRowKeys.filter((_, index) => index % 2 === 0);
+                    onChange(newSelectedRowKeys);
                 },
             },
             {
                 key: 'even',
                 text: 'Select Even Row',
                 onSelect: (changeableRowKeys) => {
-                    let newSelectedRowKeys = [];
-                    newSelectedRowKeys = changeableRowKeys.filter((_, index) => {
-                        if (index % 2 !== 0) {
-                            return true;
-                        }
-                        return false;
-                    });
-                    setSelectedRowKeys(newSelectedRowKeys);
+                    const newSelectedRowKeys = changeableRowKeys.filter((_, index) => index % 2 !== 0);
+                    onChange(newSelectedRowKeys);
                 },
             },
         ],

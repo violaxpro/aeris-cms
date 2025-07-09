@@ -6,6 +6,7 @@ export type OrderType = {
     payment_method: string
     status: string
     payment_status: string
+    paid_amount: number
     total: number
     created_by: {
         date: string
@@ -84,6 +85,7 @@ export const orderDummyData = [
         payment_method: 'Bank Transfer',
         status: 'Approved',
         payment_status: 'Waiting for Payment',
+        paid_amount: 400,
         total: 400,
         created_by: {
             date: '2025-02-25T01:52:08.234Z',
@@ -427,6 +429,45 @@ export const orderDummyData = [
         status: 'Draft',
         payment_status: '',
         total: 400,
+        created_by: {
+            date: '2025-02-25T01:52:08.234Z',
+            name: 'User'
+        },
+        modified: {
+            date: '2025-02-25T01:52:08.234Z',
+            name: 'User'
+        },
+        user: 'User',
+        billing_address: 'Indonesia',
+        shipping_address: 'Indonesia',
+        order_reference: 'Order 1',
+        product: [
+            {
+                sku: '459834',
+                name: 'Product A',
+                price: 500,
+                buying_price: 600,
+                qty: 2,
+                total: 1200
+            }
+        ],
+        delivery_note: '',
+        internal_note: '',
+        subtotal: 1200,
+        discount: 0.5,
+        shipping_fee: 400,
+        gst: 10
+    },
+    {
+        id: 12,
+        po_number: '2568211',
+        email: 'user@gmail.com',
+        mobile_number: '628229019021203',
+        payment_method: 'Bank Transfer',
+        status: 'Approved',
+        payment_status: 'Waiting for Payment',
+        paid_amount: 200,
+        total: 1000,
         created_by: {
             date: '2025-02-25T01:52:08.234Z',
             name: 'User'
