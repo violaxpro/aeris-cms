@@ -392,7 +392,7 @@ const index = ({ quoteData }: { quoteData?: any }) => {
             </div>
             <Content className="mt-6 mx-4 mb-0">
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
-                    <div className='flex justify-end mb-4'>
+                    <div className='flex justify-between mb-4'>
                         <Button
                             label='Add Payment'
                             btnClassname='!bg-[#86A788] !text-white hover:!bg-white hover:!text-[#86A788] hover:!border-[#86A788]'
