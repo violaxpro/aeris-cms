@@ -52,6 +52,10 @@ export const routes = {
     createOrder: '/ecommerce/order/create',
     editOrder: (slug: string) => `/ecommerce/order/${slug}/edit`,
 
+    quote: '/ecommerce/quote',
+    createQuote: '/ecommerce/quote/create',
+    editQuote: (slug: string) => `/ecommerce/quote/${slug}/edit`,
+
     purchases: '/ecommerce/purchases',
     createPurchases: '/ecommerce/purchases/create',
     editPurchases: (slug: string) => `/ecommerce/purchases/${slug}/edit`,

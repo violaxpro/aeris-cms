@@ -10,7 +10,6 @@ import Link from 'next/link'
 import Breadcrumb from "@/components/breadcrumb"
 import Input from '@/components/input'
 import { Content } from 'antd/es/layout/layout'
-import Tabs, { Tab } from '@/components/tab'
 import Button from "@/components/button"
 import SelectInput from '@/components/select'
 import SearchInput from '@/components/search';
@@ -18,26 +17,24 @@ import Modal from '@/components/modal'
 import { deleteSupplierList } from '@/services/supplier-list-service'
 import { useNotificationAntd } from '@/components/toast'
 import { useAtom } from 'jotai'
-import { orderAtom } from '@/store/SalesAtom'
-import { OrderType } from '@/plugins/types/sales-type'
+import { quoteAtom } from '@/store/SalesAtom'
+import { QuoteType } from '@/plugins/types/sales-type'
 import dayjs from 'dayjs';
 import DatePickerInput from '@/components/date-picker';
 import StatusTag from '@/components/tag'
 
-const index = ({ orderData }: { orderData?: any }) => {
+const index = ({ quoteData }: { quoteData?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
-    const [data, setData] = useAtom(orderAtom)
+    const [data, setData] = useAtom(quoteAtom)
     const [activeTab, setActiveTab] = useState<string>('all');
     const [isOpenModal, setIsOpenModal] = useState(false)
     const [isOpenModalPaid, setisOpenModalPaid] = useState(false)
     const [isOpenModalFilter, setisOpenModalFilter] = useState(false)
-    const [filteredData, setFilteredData] = useState<OrderType[]>([])
+    const [filteredData, setFilteredData] = useState<QuoteType[]>([])
     const [valueStatus, setValueStatus] = useState('')
     const [filterStatus, setFilterStatus] = useState('')
     const [search, setSearch] = useState('')
-    const [isApproved, setIsApproved] = useState(false)
     const [paid, setPaid] = useState('')
-    const [payment, setPayment] = useState('')
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
     const [date, setDate] = useState<any | null>(null);
     const [currentOrder, setCurrentOrder] = useState<any>(null)
@@ -49,7 +46,7 @@ const index = ({ orderData }: { orderData?: any }) => {
 
     const dataByStatus = activeTab == 'all'
         ? data
-        : data.filter((order: OrderType) => {
+        : data.filter((order: QuoteType) => {
             return order.status.toLowerCase() === activeTab.toLowerCase();
         })
     const finalData = (!search ? dataByStatus : filteredData).filter(item => {
@@ -57,49 +54,24 @@ const index = ({ orderData }: { orderData?: any }) => {
         return item.status.toLowerCase() === filterStatus.toLowerCase();
     });
 
-    const tabs: Tab[] = [
-        { key: 'all', label: 'All', count: data.length },
-        // { key: 'draft', label: 'Draft', count: data.filter(o => o.status === 'Draft').length },
-        // { key: 'approved', label: 'Approved', count: data.filter(o => o.status === 'Approved').length },
-        // { key: 'processing', label: 'Processing', count: data.filter(o => o.status === 'Processing').length },
-        // { key: 'awaiting stock', label: 'Awaiting Stock', count: data.filter(o => o.status === 'Awaiting Stock').length },
-        // { key: 'packed', label: 'Packed', count: data.filter(o => o.status === 'Packed').length },
-        // { key: 'ready for pickup', label: 'Ready for Pickup', count: data.filter(o => o.status === 'Ready for Pickup').length },
-        // { key: 'shipped', label: 'Shipped', count: data.filter(o => o.status === 'Shipped').length },
-        // { key: 'in transit', label: 'In Transit', count: data.filter(o => o.status === 'In Transit').length },
-        // { key: 'out of delivery', label: 'Out of Delivery', count: data.filter(o => o.status === 'Out of Delivery').length },
-        // { key: 'delivered', label: 'Delivered', count: data.filter(o => o.status === 'Delivered').length },
-    ];
-
     const options = [
         { label: 'All', value: 'all' },
         { label: 'Draft', value: 'draft' },
         { label: 'Approved', value: 'approved' },
-        { label: 'Processing', value: 'processing' },
-        { label: 'Awaiting Stock', value: 'awaiting stock' },
-        { label: 'Packed', value: 'packed' },
-        { label: 'Ready for Pickup', value: 'ready for pickup' },
-        { label: 'Shipped', value: 'shipped', },
-        { label: 'In Transit', value: 'in transit' },
-        { label: 'Out of Delivery', value: 'out of delivery' },
-        { label: 'Delivered', value: 'delivered' },
+        { label: 'Invoiced', value: 'invoiced' },
     ]
-    // const dataFromLocalStorage = localStorage.getItem('products');
-    // const products = dataFromLocalStorage ? JSON.parse(localStorage.getItem('products') || '{}') : [];
-    // orderData.push(products)
-
-    // console.log(orderData);
 
     const handleDelete = async (id: any) => {
-        try {
-            const res = await deleteSupplierList(id)
-            if (res.success == true) {
-                notifySuccess(res.message)
-                setData(prev => prev.filter(item => item.id !== id))
-            }
-        } catch (error) {
-            console.error(error)
-        }
+        console.log('Yang mau dihapus:', selectedRowKeys);
+        // try {
+        //     const res = await deleteSupplierList(id)
+        //     if (res.success == true) {
+        //         notifySuccess(res.message)
+        //         setData(prev => prev.filter(item => item.id !== id))
+        //     }
+        // } catch (error) {
+        //     console.error(error)
+        // }
     }
 
     const handleClickModalApproved = () => {
@@ -140,8 +112,9 @@ const index = ({ orderData }: { orderData?: any }) => {
     }
 
     const handleApplyFilter = () => {
-        if (valueStatus === 'all') {
+        if (valueStatus === 'all' && !valueStatus) {
             setFilteredData(data);
+            setFilterStatus('')
         } else {
             setFilterStatus(valueStatus)
             const result = data.filter((item: any) => {
@@ -149,14 +122,9 @@ const index = ({ orderData }: { orderData?: any }) => {
             });
             setFilteredData(result);
         }
+        setValueStatus('')
         setisOpenModalFilter(false);
     };
-
-    const handleMultiDelete = () => {
-        console.log('Yang mau dihapus:', selectedRowKeys);
-        // filter data pakai selectedRowKeys
-    };
-
 
     const handleProcessOrder = () => {
         console.log('orderan di proses')
@@ -181,10 +149,10 @@ const index = ({ orderData }: { orderData?: any }) => {
             title: 'Sales',
         },
         {
-            title: 'Order',
+            title: 'Quote',
         },
     ]
-    const columns: TableColumnsType<OrderType> = [
+    const columns: TableColumnsType<QuoteType> = [
         {
             title: 'Order ID',
             dataIndex: 'id',
@@ -283,7 +251,6 @@ const index = ({ orderData }: { orderData?: any }) => {
         {
             title: 'Created',
             dataIndex: 'created_by',
-            defaultSortOrder: 'descend',
             sorter: (a: any, b: any) => {
                 return new Date(a.created_by).getTime() - new Date(b.created_by).getTime()
             },
@@ -344,7 +311,7 @@ const index = ({ orderData }: { orderData?: any }) => {
                             {row?.status}
                         </Menu.Item>
                         <Menu.Item key="edit">
-                            <Link href={routes.eCommerce.editPurchases(row.id)}>
+                            <Link href={routes.eCommerce.editQuote(row.id)}>
                                 Edit
                             </Link>
                         </Menu.Item>
@@ -358,16 +325,16 @@ const index = ({ orderData }: { orderData?: any }) => {
                                 Packing Slip
                             </Link>
                         </Menu.Item>
+                        <Menu.Item key="reverse">
+                            <Link href={routes.eCommerce.editQuote(row.id)}>
+                                Reverse
+                            </Link>
+                        </Menu.Item>
                         {/* <Menu.Item key="serialNumber">
                             <Link href={routes.eCommerce.createSerialNumber(row.id)}>
                                 Serial Number
                             </Link>
                         </Menu.Item> */}
-                        <Menu.Item key="reverse">
-                            <Link href={routes.eCommerce.editOrder(row.id)}>
-                                Reverse
-                            </Link>
-                        </Menu.Item>
                         <Menu.Item key="delete">
                             <Popover
                                 title='Delete Return Supplier'
@@ -390,30 +357,6 @@ const index = ({ orderData }: { orderData?: any }) => {
         },
     ]
 
-    // const paymentStatusColumn = {
-    //     title: 'Payment Status',
-    //     dataIndex: 'payment_status',
-    //     sorter: (a: any, b: any) => {
-    //         const order = ['Unpaid', 'Verification', 'Paid', 'Refunded'];
-    //         return order.indexOf(a.payment_status) - order.indexOf(b.payment_status);
-    //     },
-    //     render: (_: any, row: any) => {
-    //         let payment_status
-    //         if (row.paid_amount === 0) {
-    //             payment_status = 'Waiting for Payment'
-    //         } else if (row.paid_amount < row.total) {
-    //             payment_status = 'Partially Paid'
-    //         } else if (row.paid_amount >= row.total) {
-    //             payment_status = 'Paid'
-    //         }
-    //         return payment_status ?? '-'
-    //     },
-    // };
-
-    // const columns: TableColumnsType<OrderType> =
-    //     activeTab !== 'draft'
-    //         ? [...baseColumns.slice(0, 5), paymentStatusColumn, ...baseColumns.slice(5)]
-    //         : baseColumns;
 
     const handleSearch = (value: string) => {
         const search = value.toLowerCase()
@@ -427,11 +370,11 @@ const index = ({ orderData }: { orderData?: any }) => {
     };
 
     useEffect(() => {
-        setData(orderData)
+        setData(quoteData)
         if (!search) {
-            setFilteredData(orderData)
+            setFilteredData(quoteData)
         }
-    }, [orderData, search])
+    }, [quoteData, search])
 
     console.log(currentOrder)
 
@@ -441,7 +384,7 @@ const index = ({ orderData }: { orderData?: any }) => {
             {contextHolder}
             <div className="mt-6 mx-4 mb-0">
                 <h1 className='text-xl font-bold'>
-                    Order
+                    Quote
                 </h1>
                 <Breadcrumb
                     items={breadcrumb}
@@ -449,7 +392,7 @@ const index = ({ orderData }: { orderData?: any }) => {
             </div>
             <Content className="mt-6 mx-4 mb-0">
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
-                    <div className='flex justify-between mb-4'>
+                    <div className='flex justify-end mb-4'>
                         <Button
                             label='Add Payment'
                             btnClassname='!bg-[#86A788] !text-white hover:!bg-white hover:!text-[#86A788] hover:!border-[#86A788]'
@@ -465,8 +408,8 @@ const index = ({ orderData }: { orderData?: any }) => {
                             <Button
                                 btnClassname="!bg-[#86A788] !text-white hover:!bg-white hover:!text-[#86A788] hover:!border-[#86A788]"
                                 icon={<PlusCircleOutlined />}
-                                label='Add Order'
-                                link={routes.eCommerce.createOrder}
+                                label='Add Quote'
+                                link={routes.eCommerce.createQuote}
                             />
                         </div>
                     </div>
@@ -480,7 +423,7 @@ const index = ({ orderData }: { orderData?: any }) => {
                 </div>
             </Content>
             <Modal
-                title='Filter Order'
+                title='Filter Quote'
                 open={isOpenModalFilter}
                 handleCancel={() => setisOpenModalFilter(false)}
                 isBtnSave={true}
@@ -489,6 +432,7 @@ const index = ({ orderData }: { orderData?: any }) => {
                 <SelectInput
                     id='status'
                     label='Status'
+                    allowClear
                     value={valueStatus}
                     onChange={(e: any) => setValueStatus(e)}
                     options={options}
@@ -496,14 +440,14 @@ const index = ({ orderData }: { orderData?: any }) => {
 
             </Modal>
             <Modal
-                title='Approved Order'
+                title='Approved Quote'
                 open={isOpenModal}
                 handleYes={handleApproved}
                 handleNo={handleCancelApproved}
                 isBtnPopover={true}
                 handleCancel={handleCancelApproved}
             >
-                <span>Are you sure to approved this order?</span>
+                <span>Are you sure to approved this quote?</span>
             </Modal>
             <Modal
                 title='Add Payment'

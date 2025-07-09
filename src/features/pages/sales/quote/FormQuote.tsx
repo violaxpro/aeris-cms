@@ -15,7 +15,7 @@ import Table from '@/components/table'
 import { useNotificationAntd } from '@/components/toast';
 import ProductInput, { ProductForm } from '../ProductInput';
 
-const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
+const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const router = useRouter()
     const { contextHolder, notifySuccess } = useNotificationAntd();
     const [showAddProduct, setShowAddProduct] = useState(false)
@@ -35,8 +35,6 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         billing_address: initialValues ? initialValues.billing_address : '',
         shipping_address: initialValues ? initialValues.shipping_address : '',
         order_reference: initialValues ? initialValues.order_reference : '',
-        delivery_note: initialValues ? initialValues.delivery_note : '',
-        internal_note: initialValues ? initialValues.internal_note : '',
         subtotal: initialValues ? initialValues.subtotal : '',
         product: initialValues ? initialValues.product : [],
         discount: initialValues ? initialValues.discount : '',
@@ -48,9 +46,9 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const breadcrumb = [
         { title: 'Sales' },
         {
-            title: 'Order', url: routes.eCommerce.order
+            title: 'Quote', url: routes.eCommerce.quote
         },
-        { title: mode == 'create' ? 'Create Order' : 'Edit Order' },
+        { title: mode == 'create' ? 'Create Quote' : 'Edit Quote' },
     ];
 
     const columns: TableColumnsType<ProductForm> = [
@@ -142,8 +140,6 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                 shipping_address: formData.shipping_address,
                 order_reference: formData.order_reference,
                 product: productList,
-                delivery_note: formData.delivery_note,
-                internal_note: formData.internal_note,
                 subtotal: Number(formData.subtotal),
                 discount: Number(formData.discount),
                 shipping_fee: Number(formData.shipping_fee),
@@ -194,7 +190,7 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         <>
             {contextHolder}
             <div className="mt-6 mx-4 mb-0">
-                <h1 className="text-xl font-bold mb-4">{mode == 'create' ? 'Create Order' : 'Edit Order'}</h1>
+                <h1 className="text-xl font-bold mb-4">{mode == 'create' ? 'Create Quote' : 'Edit Quote'}</h1>
                 <Breadcrumb items={breadcrumb} />
             </div>
 
@@ -322,39 +318,13 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
                         </div>
 
-                        {
-                            mode == 'create' &&
-                            <div className='grid  gap-3 mt-2'>
-                                <h1 className='text-lg font-bold'>Notes</h1>
-                                <div className='grid md:grid-cols-2 gap-2'>
-                                    <div>
-                                        <Textarea
-                                            id='delivery_note'
-                                            label='Delivery Notes'
-                                            value={formData.delivery_note}
-                                            onChange={handleChange}
-                                        />
-                                    </div>
-                                    <div>
-                                        <Textarea
-                                            id='internal_note'
-                                            label='Internal Notes'
-                                            value={formData.internal_note}
-                                            onChange={handleChange}
-                                        />
-                                    </div>
-                                </div>
-
-                            </div>
-                        }
-
                     </div>
 
                     {/* Submit */}
                     <div className="mt-6 flex justify-end">
                         <Button
                             btnClassname="!bg-[#86A788] !text-white hover:!bg-white hover:!text-[#86A788] hover:!border-[#86A788]"
-                            label={mode == 'create' ? 'Create Order' : 'Edit Order'}
+                            label={mode == 'create' ? 'Create Quote' : 'Edit Quote'}
                             onClick={handleSubmit}
                         />
                     </div>
@@ -364,4 +334,4 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     );
 };
 
-export default FormOrder;
+export default FormQuote;

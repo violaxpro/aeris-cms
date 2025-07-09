@@ -89,7 +89,7 @@ export const menuItems = [
             {
                 key: 'quote',
                 name: 'Quote',
-                href: routes.eCommerce.priceLevel,
+                href: routes.eCommerce.quote,
             },
             {
                 key: 'transaction',

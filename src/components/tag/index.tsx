@@ -17,6 +17,7 @@ const StatusTag: React.FC<StatusTagProps> = ({ status }) => {
         'In Transit': '#0EA5E9',
         'Out of Delivery': '#10B981',
         Delivered: '#22C55E',
+        Invoiced: '#22C55E',
     };
 
     const color = colorMap[status] || 'gray';
