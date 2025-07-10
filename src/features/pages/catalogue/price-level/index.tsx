@@ -31,6 +31,8 @@ const index = ({ priceLevels }: { priceLevels?: any }) => {
         }
     }
 
+    console.log(priceLevels)
+
     useEffect(() => {
         setData(priceLevels)
     }, [priceLevels])

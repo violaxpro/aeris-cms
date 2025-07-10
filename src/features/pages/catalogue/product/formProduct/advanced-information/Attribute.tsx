@@ -50,10 +50,8 @@ const AttributeInformation = ({ className }: { className?: string }) => {
                                     id={`attribute-${index}`}
                                     label="Attribute"
                                     placeholder="Select Attribute"
-                                    onChange={(selectedOptions) =>
-                                        updateItem(index, 'name', Array.isArray(selectedOptions)
-                                            ? selectedOptions.map((opt: any) => opt.label)
-                                            : [])
+                                    onChange={(selectedOption) =>
+                                        updateItem(index, 'name', selectedOption)
                                     }
                                     value={item.name}
                                     options={options}
@@ -67,7 +65,7 @@ const AttributeInformation = ({ className }: { className?: string }) => {
                                     modeType="multiple"
                                     onChange={(selectedOptions) =>
                                         updateItem(index, 'value', Array.isArray(selectedOptions)
-                                            ? selectedOptions.map((opt: any) => opt.label)
+                                            ? selectedOptions.map((opt: any) => opt)
                                             : [])
                                     }
                                     value={item.value}

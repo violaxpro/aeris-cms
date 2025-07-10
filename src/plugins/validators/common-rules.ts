@@ -59,3 +59,18 @@ export const stripHTML = (html: string) => {
   return html.replace(/<[^>]+>/g, '');
 };
 
+export const roundNumber = (num: number) => Number(num.toFixed(2));
+export const mathFloor = (num: number) => Math.floor(num * 100) / 100;
+
+export const slugify = (text: string) => {
+  return text
+    .toLowerCase()             // lowercase semua
+    .trim()                    // hapus spasi depan belakang
+    .replace(/[^a-z0-9\s-]/g, '') // hapus karakter selain huruf, angka, spasi, dash
+    .replace(/\s+/g, '-')      // spasi → dash
+    .replace(/-+/g, '-');      // multi dash → 1 dash
+};
+
+
+
+

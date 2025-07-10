@@ -5,8 +5,15 @@ const apiBrand = '/admin/product/brand'
 
 export async function getBrands(param?: string | number) {
     const url = param ? `${apiBrand}/${param}` : apiBrand
-    const res = await baseService(url)
-    return res.data
+    try {
+        const res = await baseService(url)
+        return res.data
+    } catch (error: any) {
+        if (error.response?.status === 404) {
+            return null
+        }
+        throw error
+    }
 }
 
 export async function addBrand(params: BrandType) {

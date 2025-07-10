@@ -268,8 +268,9 @@ const index = ({ orderData }: { orderData?: any }) => {
                 )
             },
             render: (val: any) => {
+                const status = val.toUpperCase()
                 return (
-                    <StatusTag status={val} />
+                    <StatusTag status={status} />
                 );
                 // kalau dia sudah bayar full baru bisa di lanjut ke processing
                 // kalau processing sudah beres bisa di klik dan lanjut ke proses awaiting stock

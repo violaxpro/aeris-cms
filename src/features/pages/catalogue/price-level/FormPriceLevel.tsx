@@ -143,7 +143,7 @@ const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             /> */}
                             <Input
                                 id='rrp'
-                                label='RRP'
+                                label='RRP(%)'
                                 type='text'
                                 placeholder='Input RRP'
                                 onChange={handleChange}
@@ -151,7 +151,7 @@ const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             />
                             <Input
                                 id='trade'
-                                label='Trade'
+                                label='Trade(%)'
                                 type='text'
                                 placeholder='Input Trade'
                                 onChange={handleChange}
@@ -159,7 +159,7 @@ const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             />
                             <Input
                                 id='silver'
-                                label='Silver'
+                                label='Silver(%)'
                                 type='text'
                                 placeholder='Input Silver'
                                 onChange={handleChange}
@@ -167,7 +167,7 @@ const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             />
                             <Input
                                 id='gold'
-                                label='Gold'
+                                label='Gold(%)'
                                 type='text'
                                 placeholder='Input Gold'
                                 onChange={handleChange}
@@ -175,7 +175,7 @@ const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             />
                             <Input
                                 id='platinum'
-                                label='Platinum'
+                                label='Platinum(%)'
                                 type='text'
                                 placeholder='Input Platinum'
                                 onChange={handleChange}
@@ -183,7 +183,7 @@ const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             />
                             <Input
                                 id='diamond'
-                                label='Diamond'
+                                label='Diamond(%)'
                                 type='text'
                                 placeholder='Input Diamond'
                                 onChange={handleChange}

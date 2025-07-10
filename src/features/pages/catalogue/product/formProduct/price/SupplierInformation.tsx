@@ -1,24 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import FormGroup from '@/components/form';
 import { Button } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import Input from "@/components/input"
+import SelectInput from '@/components/select';
 import { ChildFormProps } from '@/plugins/types/form-type';
+import { getSupplier } from '@/services/supplier-list-service'
 
 type ListItem = {
     supplierName: string;
-    bestPrice: string;
+    buyPrice: string;
 };
 
 const SupplierInformation = ({ onChange, dataById }: ChildFormProps) => {
     const [items, setItems] = useState<ListItem[]>([]);
+    const [optionSupplier, setOptionSupplier] = useState([])
 
     const handleChange = (updatedItems: ListItem[]) => {
         setItems(updatedItems);
         onChange?.(updatedItems)
     };
 
-    const updateItem = (index: number, key: keyof ListItem, value: string) => {
+    const updateItem = (index: number, key: keyof ListItem, value: any) => {
         // const updated = [...items];
         // updated[index][key] = value;
         // handleChange(updated);
@@ -35,7 +38,7 @@ const SupplierInformation = ({ onChange, dataById }: ChildFormProps) => {
     };
 
     const addItem = () => {
-        const updated = [{ supplierName: '', bestPrice: '' }, ...items]; // ← tambahkan ke awal
+        const updated = [{ supplierName: '', buyPrice: '' }, ...items]; // ← tambahkan ke awal
         handleChange(updated);
     };
 
@@ -44,6 +47,24 @@ const SupplierInformation = ({ onChange, dataById }: ChildFormProps) => {
         handleChange(updated);
     };
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await getSupplier()
+
+                const suppliers = res.data.map((sup: any) => ({
+                    label: sup.name,
+                    value: sup.id
+                }))
+                setOptionSupplier(suppliers)
+            } catch (error) {
+                console.error(error)
+            }
+        }
+        fetchData()
+
+    }, [])
+
     return (
         <div>
             <FormGroup title="Supplier" description="Supplier information">
@@ -51,23 +72,25 @@ const SupplierInformation = ({ onChange, dataById }: ChildFormProps) => {
                     {items.map((item, index) => (
                         <div key={index} className="flex items-center gap-2 mb-3 w-full">
                             <div className="w-full">
-                                <Input
+                                <SelectInput
                                     id='supplierName'
                                     label='Supplier Name'
-                                    type='text'
+                                    placeholder="Select Supplier"
+                                    onChange={(selectedOption) =>
+                                        updateItem(index, 'supplierName', selectedOption)
+                                    }
                                     value={item.supplierName}
-                                    onChange={(e) => updateItem(index, 'supplierName', e.target.value)}
-                                    style={{ width: '100%', borderColor: '#E5E7EB' }}
+                                    options={optionSupplier}
                                 />
                             </div>
 
                             <div className="w-full">
                                 <Input
-                                    id='bestPrice'
-                                    label='Best Price'
+                                    id='buyPrice'
+                                    label='Buy Price'
                                     type='text'
-                                    value={item.bestPrice}
-                                    onChange={(e) => updateItem(index, 'bestPrice', e.target.value)}
+                                    value={item.buyPrice}
+                                    onChange={(e) => updateItem(index, 'buyPrice', e.target.value)}
                                     style={{ width: '100%', borderColor: '#E5E7EB' }}
                                 />
                             </div>

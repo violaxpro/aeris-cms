@@ -79,7 +79,7 @@ const OptionsInformation = ({ className }: { className?: string }) => {
                                     modeType="multiple"
                                     onChange={(selectedOptions) =>
                                         updateItem(index, 'type', Array.isArray(selectedOptions)
-                                            ? selectedOptions.map((opt: any) => opt.label)
+                                            ? selectedOptions.map((opt: any) => opt)
                                             : []
                                         )
                                     }
@@ -114,15 +114,14 @@ const OptionsInformation = ({ className }: { className?: string }) => {
                                     <div key={gIdx}>
                                         <div className="flex gap-2">
                                             <SelectInput
-                                                id={`globalOption-${index}-${gIdx}`}
+                                                id='globalOption'
                                                 label={`Product Name ${gIdx + 1}`}
                                                 placeholder="Select Product Name"
-                                                onChange={(selectedOptions) =>
-                                                    updateItem(index, 'globalOption', Array.isArray(selectedOptions)
-                                                        ? selectedOptions.map((opt: any) => opt.label)
-                                                        : []
-                                                    )
-                                                }
+                                                onChange={(selectedOption) => {
+                                                    const updated = [...items];
+                                                    (updated[index] as any).globalOption[gIdx] = selectedOption;
+                                                    handleChange(updated);
+                                                }}
                                                 value={optValue}
                                                 options={options}
                                                 className='w-full'

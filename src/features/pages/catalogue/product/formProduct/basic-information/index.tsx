@@ -11,6 +11,7 @@ import { useAtom } from 'jotai'
 import { brandsAtom, categoriesAtom } from '@/store/DropdownItemStore'
 import { ChildFormProps } from '@/plugins/types/form-type'
 import { uploadImages } from '@/services/upload-images'
+import { slugify } from '@/plugins/validators/common-rules'
 
 const QuillInput = dynamic(() => import('@/components/quill-input'), { ssr: false, loading: () => <p>Loading editor...</p>, });
 
@@ -21,6 +22,9 @@ const BasicInformationProduct = ({ dataById, onChange, formDataCreate }: ChildFo
     const handleChange = (e: any) => {
         const { id, value } = e.target;
         const updated = { ...formDataCreate, [id]: value };
+        if (id === 'productName') {
+            formDataCreate.tab_basic_information.slug = slugify(value)
+        }
         onChange(updated);
         // setFormData(prev => {
         //     const updated = { ...prev, [id]: value }
@@ -172,7 +176,7 @@ const BasicInformationProduct = ({ dataById, onChange, formDataCreate }: ChildFo
                         // onChange={handleChange}
                         // value={formData.metaTitle}
                         onChange={handleChange}
-                        value={formDataCreate.tab_basic_information.mteaTitle}
+                        value={formDataCreate.tab_basic_information.metaTitle}
                         notes='min.50 / max.65, Character 0'
                     />
                 </div>

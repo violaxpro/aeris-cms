@@ -36,11 +36,13 @@ export type PurchasesType = {
     id?: number | string | undefined
     order_id: number
     supplier_name: string
-    created_by: string
+    created: {
+        name: string
+        date: string
+    }
     total: number
     status: string
     email_status: string
-    created_at: string
 }
 
 export const creditSupplierData = [
@@ -110,12 +112,11 @@ export const purchases = [
         // supplier: 1,
         order_id: 3893,
         supplier_name: 'Company A',
-        created_by: 'User a',
         // subtotal: 1250.18,
         total: 1250.18,
         // "delivery_method": "Pick Up",
         // "payment_method": "COD",
-        status: "<span class=\"\">PENDING</span>",
+        status: "<span class=\"\">Draft</span>",
         email_status: "Not sent Yent",
         // "notes": null,
         // "date": "2023-12-14",
@@ -126,7 +127,94 @@ export const purchases = [
         // "phone": "0468561816",
         // "delivery_note": null,
         // "email_count": 0,
-        created_at: "2023-12-14T11:29:01.000000Z",
+        created: {
+            name: 'User',
+            date: "2023-12-14T11:29:01.000000Z"
+        },
+        // "updated_at": "2023-12-14T12:02:10.000000Z",
+        // "deleted_at": null,
+    },
+    {
+        id: 2287,
+        // user_id: 2,
+        // supplier: 1,
+        order_id: 3894,
+        supplier_name: 'Company B',
+        // subtotal: 1250.18,
+        total: 1250.18,
+        // "delivery_method": "Pick Up",
+        // "payment_method": "COD",
+        status: "<span class=\"\">Waiting for Approval</span>",
+        email_status: "Not sent Yent",
+        // "notes": null,
+        // "date": "2023-12-14",
+        // "delivery_date": "2023-12-21",
+        // "po_number": null,
+        // "address": "34 Osborne street, NSW, Wollongong, 2500, AU",
+        // "attention": null,
+        // "phone": "0468561816",
+        // "delivery_note": null,
+        // "email_count": 0,
+        created: {
+            name: 'User B',
+            date: "2023-12-16T11:29:01.000000Z"
+        },
+        // "updated_at": "2023-12-14T12:02:10.000000Z",
+        // "deleted_at": null,
+    },
+    {
+        id: 2288,
+        // user_id: 2,
+        // supplier: 1,
+        order_id: 3895,
+        supplier_name: 'Company C',
+        // subtotal: 1250.18,
+        total: 1250.18,
+        // "delivery_method": "Pick Up",
+        // "payment_method": "COD",
+        status: "<span class=\"\">Approved</span>",
+        email_status: "Not sent Yent",
+        // "notes": null,
+        // "date": "2023-12-14",
+        // "delivery_date": "2023-12-21",
+        // "po_number": null,
+        // "address": "34 Osborne street, NSW, Wollongong, 2500, AU",
+        // "attention": null,
+        // "phone": "0468561816",
+        // "delivery_note": null,
+        // "email_count": 0,
+        created: {
+            name: 'User C',
+            date: "2023-12-18T11:29:01.000000Z"
+        },
+        // "updated_at": "2023-12-14T12:02:10.000000Z",
+        // "deleted_at": null,
+    },
+    {
+        id: 2289,
+        // user_id: 2,
+        // supplier: 1,
+        order_id: 3896,
+        supplier_name: 'Company D',
+        // subtotal: 1250.18,
+        total: 1250.18,
+        // "delivery_method": "Pick Up",
+        // "payment_method": "COD",
+        status: "<span class=\"\">Billed</span>",
+        email_status: "Not sent Yent",
+        // "notes": null,
+        // "date": "2023-12-14",
+        // "delivery_date": "2023-12-21",
+        // "po_number": null,
+        // "address": "34 Osborne street, NSW, Wollongong, 2500, AU",
+        // "attention": null,
+        // "phone": "0468561816",
+        // "delivery_note": null,
+        // "email_count": 0,
+        created: {
+            name: 'User D',
+            date: "2023-12-19T11:29:01.000000Z"
+        },
         // "updated_at": "2023-12-14T12:02:10.000000Z",
         // "deleted_at": null,
     }

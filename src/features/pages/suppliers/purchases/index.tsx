@@ -17,6 +17,7 @@ import { useNotificationAntd } from '@/components/toast'
 import { useAtom } from 'jotai'
 import { purchaseSupplierAtom } from '@/store/SuppliersAtom'
 import { stripHTML } from '@/plugins/validators/common-rules'
+import StatusTag from '@/components/tag'
 import dayjs from 'dayjs'
 
 const index = ({ purchasesData }: { purchasesData?: any }) => {
@@ -35,6 +36,25 @@ const index = ({ purchasesData }: { purchasesData?: any }) => {
         }
     }
 
+    const handleStatusAction = (status: string, id: number) => {
+        switch (status) {
+            case 'Draft':
+                // aksi draft
+                break;
+            case 'Waiting for Approval':
+                // setIsOpenModal(true)
+                break;
+            case 'Approved':
+                // setIsOpenModal(true)
+                break;
+            case 'Billed':
+                // setIsOpenModal(true)
+                break;
+            default:
+                break;
+        }
+    };
+
     const breadcrumb = [
         {
             title: 'Suppliers',
@@ -45,20 +65,12 @@ const index = ({ purchasesData }: { purchasesData?: any }) => {
     ]
     const columns: TableColumnsType<PurchasesType> = [
         {
-            title: 'ID',
-            dataIndex: 'id',
-        },
-        {
             title: 'Order Id',
             dataIndex: 'order_id',
         },
         {
             title: 'Supplier',
             dataIndex: 'supplier_name',
-        },
-        {
-            title: 'Created By',
-            dataIndex: 'created_by',
         },
         {
             title: 'Total',
@@ -68,8 +80,8 @@ const index = ({ purchasesData }: { purchasesData?: any }) => {
             title: 'Status',
             dataIndex: 'status',
             render: (val) => {
-                const status = val ? stripHTML(val) : '';
-                return status
+                const status = val ? stripHTML(val.toUpperCase()) : '';
+                return <StatusTag status={status} />
             }
         },
         {
@@ -81,11 +93,23 @@ const index = ({ purchasesData }: { purchasesData?: any }) => {
             }
         },
         {
-            title: 'Created At',
-            dataIndex: 'createdAt',
-            render: (created_at: string) => {
-                const date = dayjs(created_at).format('DD MMMM, YYYY')
-                return date
+            title: 'Created',
+            dataIndex: 'created',
+            defaultSortOrder: 'descend',
+            sorter: (a: any, b: any) => {
+                return new Date(a.created).getTime() - new Date(b.created).getTime()
+            },
+            render: (val: any) => {
+                const date = dayjs(val.date).format("DD/MM/YYYY")
+                const user = val.name
+                return <div className="flex flex-col w-full">
+                    <div className="flex justify-start gap-1">
+                        <span>{date}</span>
+                    </div>
+                    <div className="flex justify-start gap-1">
+                        <span>by {user || '-'}</span>
+                    </div>
+                </div>
             }
         },
         {
@@ -94,8 +118,18 @@ const index = ({ purchasesData }: { purchasesData?: any }) => {
             key: 'action',
             width: 120,
             render: (_: string, row: any) => {
+                const status: Record<string, () => void> = {
+                    'Draft': () => handleStatusAction('Draft', row.id),
+                    'Waiting for Approval': () => handleStatusAction('Waiting for Approval', row.id),
+                    'Approved': () => handleStatusAction('Approved', row.id),
+                    'Billed': () => handleStatusAction('Billed', row.id),
+                }
+                const actionStatus = status[row.status] || ''
                 const menu = (
                     <Menu>
+                        <Menu.Item key="status" onClick={actionStatus}>
+                            {stripHTML(row?.status)}
+                        </Menu.Item>
                         <Menu.Item key="edit">
                             <Link href={routes.eCommerce.editPurchases(row.id)}>
                                 Edit

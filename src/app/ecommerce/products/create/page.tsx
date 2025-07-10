@@ -1,7 +1,7 @@
 import React from 'react'
 import ProductForm from '@/features/pages/catalogue/product/formProduct/FormProduct'
 
-const createProductUrl = () => {
+export default async function createProductUrl() {
     return (
         <div>
             <ProductForm mode='create' />
@@ -9,4 +9,3 @@ const createProductUrl = () => {
     )
 }
 
-export default createProductUrl

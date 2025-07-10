@@ -8,6 +8,9 @@ export const attributeSetAtom = atom([])
 
 export const productSetAtom = atom([])
 
+export const supplierSetAtom = atom([])
+
+
 // export const fetchAttributeSetAtom = atom(
 //     async () => await getAttributeSet()
 // )

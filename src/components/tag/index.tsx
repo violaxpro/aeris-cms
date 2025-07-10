@@ -7,17 +7,19 @@ type StatusTagProps = {
 
 const StatusTag: React.FC<StatusTagProps> = ({ status }) => {
     const colorMap: Record<string, string> = {
-        Draft: '#9CA3AF',
-        Approved: '#3B82F6',
-        Processing: '#6366F1',
-        'Awaiting Stock': '#F59E0B',
-        Packed: '#06B6D4',
-        'Ready for Pickup': '#14B8A6',
-        Shipped: '#8B5CF6',
-        'In Transit': '#0EA5E9',
-        'Out of Delivery': '#10B981',
-        Delivered: '#22C55E',
-        Invoiced: '#22C55E',
+        DRFAT: '#9CA3AF',
+        APPROVED: '#3B82F6',
+        PROCSESSING: '#6366F1',
+        'AWAITING STOCK': '#F59E0B',
+        PACKED: '#06B6D4',
+        'READY FOR PICKUP': '#14B8A6',
+        SHIPPED: '#8B5CF6',
+        'IN TRANSIT': '#0EA5E9',
+        'OUT OF DELIVERY': '#10B981',
+        DELIVERED: '#22C55E',
+        INVOICED: '#22C55E',
+        BILLED: '#22C55E',
+        'WAITING FOR APPROVAL': '#F59E0B'
     };
 
     const color = colorMap[status] || 'gray';

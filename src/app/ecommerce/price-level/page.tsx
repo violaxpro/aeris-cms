@@ -22,18 +22,20 @@ export default async function PriceLevelUrl() {
 
       const brandsId = resPriceLevel.data.map((item: any) => item.brandId)
       const brandsidArray = Array.from(new Set(brandsId))
+
       const resBrands = await Promise.all(
         brandsidArray.map((id: any) => getBrands(id))
       )
-      const brands = resBrands.map((res: any) => res.data)
+
+      const brands = resBrands ? resBrands.map((res: any) => res ? res.data : null) : null
 
       priceLevels = resPriceLevel.data.map((price: any) => {
         const matchedCategory = categories.flat().find(cat =>
           cat.id === price.categoryId
         );
-        const matchedBrand = brands.find((brand) =>
-          brand.id === price.brandId
-        )
+        const matchedBrand = brands ? brands.find((brand) =>
+          brand?.id === price.brandId
+        ) : null
         return {
           ...price,
           category: matchedCategory || null,
