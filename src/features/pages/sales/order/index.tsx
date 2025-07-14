@@ -345,7 +345,7 @@ const index = ({ orderData }: { orderData?: any }) => {
                             {row?.status}
                         </Menu.Item>
                         <Menu.Item key="edit">
-                            <Link href={routes.eCommerce.editPurchases(row.id)}>
+                            <Link href={routes.eCommerce.editOrder(row.id)}>
                                 Edit
                             </Link>
                         </Menu.Item>

@@ -11,18 +11,16 @@ import Breadcrumb from "@/components/breadcrumb"
 import { Content } from 'antd/es/layout/layout'
 import Button from "@/components/button"
 import SearchInput from '@/components/search';
-import { purchases, PurchasesType } from '@/plugins/types/suppliers-type'
+import { TransactionType } from '@/plugins/types/sales-type'
 import { deletePurchases } from '@/services/purchases-service'
 import { useNotificationAntd } from '@/components/toast'
 import { useAtom } from 'jotai'
-import { purchaseSupplierAtom } from '@/store/SuppliersAtom'
-import { stripHTML } from '@/plugins/validators/common-rules'
-import StatusTag from '@/components/tag'
+import { transactionAtom } from '@/store/SalesAtom'
 import dayjs from 'dayjs'
 
-const index = ({ purchasesData }: { purchasesData?: any }) => {
+const index = ({ transactionData }: { transactionData?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
-    const [data, setData] = useAtom(purchaseSupplierAtom)
+    const [data, setData] = useAtom(transactionAtom)
 
     const handleDelete = async (id: any) => {
         try {
@@ -57,39 +55,33 @@ const index = ({ purchasesData }: { purchasesData?: any }) => {
 
     const breadcrumb = [
         {
-            title: 'Suppliers',
+            title: 'Sales',
         },
         {
-            title: 'Purchases',
+            title: 'Transaction',
         },
     ]
-    const columns: TableColumnsType<PurchasesType> = [
+    const columns: TableColumnsType<TransactionType> = [
         {
             title: 'Order Id',
             dataIndex: 'order_id',
         },
         {
-            title: 'Supplier',
-            dataIndex: 'supplier_name',
-        },
-        {
-            title: 'Total',
-            dataIndex: 'total',
-        },
-        {
-            title: 'Status',
-            dataIndex: 'status',
-            render: (val) => {
-                const status = val ? stripHTML(val.toUpperCase()) : '';
-                return <StatusTag status={status} />
-            }
-        },
-        {
-            title: 'Email Status',
-            dataIndex: 'email_status',
-            render: (val) => {
-                const status = val ? stripHTML(val) : '';
-                return status
+            title: 'Transaction',
+            dataIndex: 'transaction_id',
+            render: (_: any, row: any) => {
+                return <div className="flex flex-col w-full">
+                    <div className="flex justify-start gap-1">
+                        <span>Transaction Id</span>
+                        <span>:</span>
+                        <span>{row.transaction_id}</span>
+                    </div>
+                    <div className="flex justify-start gap-1">
+                        <span> Payment Method</span>
+                        <span>:</span>
+                        <span>{row.payment_method}</span>
+                    </div>
+                </div>
             }
         },
         {
@@ -127,12 +119,14 @@ const index = ({ purchasesData }: { purchasesData?: any }) => {
                 const actionStatus = status[row.status] || ''
                 const menu = (
                     <Menu>
-                        <Menu.Item key="status" onClick={actionStatus}>
-                            {stripHTML(row?.status)}
-                        </Menu.Item>
                         <Menu.Item key="edit">
                             <Link href={routes.eCommerce.editPurchases(row.id)}>
                                 Edit
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item key="detail">
+                            <Link href={routes.eCommerce.editOrder(row.id)}>
+                                Detail
                             </Link>
                         </Menu.Item>
                         <Menu.Item key="sendEmail">
@@ -178,14 +172,14 @@ const index = ({ purchasesData }: { purchasesData?: any }) => {
     };
 
     useEffect(() => {
-        setData(purchases)
-    }, [purchases])
+        setData(transactionData)
+    }, [transactionData])
     return (
         <>
             {contextHolder}
             <div className="mt-6 mx-4 mb-0">
                 <h1 className='text-xl font-bold'>
-                    Purchases
+                    Transaction
                 </h1>
                 <Breadcrumb
                     items={breadcrumb}
@@ -196,12 +190,6 @@ const index = ({ purchasesData }: { purchasesData?: any }) => {
                     <div className='flex justify-end mb-4'>
                         <div className='flex items-center gap-2'>
                             <SearchInput onSearch={handleSearch} />
-                            <Button
-                                btnClassname="!bg-[#86A788] !text-white hover:!bg-white hover:!text-[#86A788] hover:!border-[#86A788]"
-                                icon={<PlusCircleOutlined />}
-                                label='Add Purchases Order'
-                                link={routes.eCommerce.createPurchases}
-                            />
                         </div>
 
                     </div>

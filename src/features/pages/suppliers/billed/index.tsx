@@ -11,18 +11,18 @@ import Breadcrumb from "@/components/breadcrumb"
 import { Content } from 'antd/es/layout/layout'
 import Button from "@/components/button"
 import SearchInput from '@/components/search';
-import { purchases, PurchasesType } from '@/plugins/types/suppliers-type'
+import { BillType } from '@/plugins/types/suppliers-type'
 import { deletePurchases } from '@/services/purchases-service'
 import { useNotificationAntd } from '@/components/toast'
 import { useAtom } from 'jotai'
-import { purchaseSupplierAtom } from '@/store/SuppliersAtom'
+import { billAtom } from '@/store/SuppliersAtom'
 import { stripHTML } from '@/plugins/validators/common-rules'
 import StatusTag from '@/components/tag'
 import dayjs from 'dayjs'
 
-const index = ({ purchasesData }: { purchasesData?: any }) => {
+const index = ({ billData }: { billData?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
-    const [data, setData] = useAtom(purchaseSupplierAtom)
+    const [data, setData] = useAtom(billAtom)
 
     const handleDelete = async (id: any) => {
         try {
@@ -60,10 +60,10 @@ const index = ({ purchasesData }: { purchasesData?: any }) => {
             title: 'Suppliers',
         },
         {
-            title: 'Purchases',
+            title: 'Billed',
         },
     ]
-    const columns: TableColumnsType<PurchasesType> = [
+    const columns: TableColumnsType<BillType> = [
         {
             title: 'Order Id',
             dataIndex: 'order_id',
@@ -178,14 +178,14 @@ const index = ({ purchasesData }: { purchasesData?: any }) => {
     };
 
     useEffect(() => {
-        setData(purchases)
-    }, [purchases])
+        setData(billData)
+    }, [billData])
     return (
         <>
             {contextHolder}
             <div className="mt-6 mx-4 mb-0">
                 <h1 className='text-xl font-bold'>
-                    Purchases
+                    Billed
                 </h1>
                 <Breadcrumb
                     items={breadcrumb}
@@ -199,8 +199,8 @@ const index = ({ purchasesData }: { purchasesData?: any }) => {
                             <Button
                                 btnClassname="!bg-[#86A788] !text-white hover:!bg-white hover:!text-[#86A788] hover:!border-[#86A788]"
                                 icon={<PlusCircleOutlined />}
-                                label='Add Purchases Order'
-                                link={routes.eCommerce.createPurchases}
+                                label='Add Bill'
+                                link={routes.eCommerce.createBill}
                             />
                         </div>
 

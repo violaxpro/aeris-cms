@@ -9,7 +9,7 @@ const StatusTag: React.FC<StatusTagProps> = ({ status }) => {
     const colorMap: Record<string, string> = {
         DRFAT: '#9CA3AF',
         APPROVED: '#3B82F6',
-        PROCSESSING: '#6366F1',
+        PROCESSING: '#6366F1',
         'AWAITING STOCK': '#F59E0B',
         PACKED: '#06B6D4',
         'READY FOR PICKUP': '#14B8A6',
@@ -19,7 +19,9 @@ const StatusTag: React.FC<StatusTagProps> = ({ status }) => {
         DELIVERED: '#22C55E',
         INVOICED: '#22C55E',
         BILLED: '#22C55E',
-        'WAITING FOR APPROVAL': '#F59E0B'
+        'WAITING FOR APPROVAL': '#F59E0B',
+        PAID: '#22C55E',
+        COMPLETED: '#22C55E'
     };
 
     const color = colorMap[status] || 'gray';

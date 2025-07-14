@@ -63,6 +63,22 @@ export const routes = {
     sendEmail: (slug: string) => `/ecommerce/purchases/${slug}/send-email`,
     print: (slug: string) => `/ecommerce/purchases/${slug}/print`,
 
+    bill: '/ecommerce/bill',
+    createBill: '/ecommerce/bill/create',
+    editBill: (slug: string) => `/ecommerce/bill/${slug}/edit`,
+
+    transaction: '/ecommerce/transaction',
+    createTransaction: '/ecommerce/transaction/create',
+    editTransaction: (slug: string) => `/ecommerce/transaction/${slug}/edit`,
+
+    returnSales: '/ecommerce/return-sales',
+    createReturnSales: '/ecommerce/return-sales/create',
+    editReturnSales: (slug: string) => `/ecommerce/return-sales/${slug}/edit`,
+
+    creditSalesList: '/ecommerce/credit-sales',
+    createCreditSalesList: '/ecommerce/credit-sales/create',
+    editCreditSalesList: (slug: string) => `/ecommerce/credit-sales/${slug}/edit`,
+
     inventoryList: '/ecommerce/inventory-list',
     warehouses: (slug: string) => `'/ecommerce/warehouse/${slug}/edit`,
   },

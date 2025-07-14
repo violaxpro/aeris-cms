@@ -13,45 +13,36 @@ import SelectInput from '@/components/select';
 import { routes } from '@/config/routes';
 import Table from '@/components/table'
 import { useNotificationAntd } from '@/components/toast';
-import ProductInput, { ProductForm } from './ProductInput';
+import ItemList, { ItemListProps } from './ItemList';
 import { getSupplier } from '@/services/supplier-list-service';
 import DatePickerInput from '@/components/date-picker';
 import dayjs from 'dayjs'
 
-const FormPurchases: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
+const FormBilled: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const router = useRouter()
     const { contextHolder, notifySuccess } = useNotificationAntd();
     const [optionSupplier, setOptionSupplier] = useState([])
-    const [showAddProduct, setShowAddProduct] = useState(false)
+    const [showAddItem, setShowAddItem] = useState(false)
     const [date, setDate] = useState<any | null>(null);
-    const [productList, setProductList] = useState<any[]>([]);
-    const [productForm, setProductForm] = useState({
-        sku: '',
-        name: '',
-        price: 0,
-        buying_price: 0,
+    const [itemList, setItemList] = useState<any[]>([]);
+    const [itemForm, setItemForm] = useState({
+        item: '',
+        description: '',
         qty: 0,
-        total: 0,
+        unit_price: 0,
+        account: '',
+        tax_rate: 0,
+        region: '',
+        amount: 0
     });
     const [editIndex, setEditIndex] = useState<number | null>(null)
     const [formData, setFormData] = useState({
-        purchaseId: initialValues ? initialValues.purchase_id : '',
-        user: initialValues ? initialValues.user : '',
+        from: initialValues ? initialValues.from : '',
         reference: initialValues ? initialValues.reference : '',
-        order_id: initialValues ? initialValues.order_id : '',
-        supplierName: initialValues ? initialValues.supplier_name : '',
-        deliveryMethod: initialValues ? initialValues.delivery_method : '',
-        paymentMethod: initialValues ? initialValues.payment_method : '',
         date: initialValues ? initialValues.date : '',
-        deliveryDate: initialValues ? initialValues.delivery_date : '',
-        po_number: initialValues ? initialValues.po_number : '',
-        billing_address: initialValues ? initialValues.billing_address : '',
-        shipping_address: initialValues ? initialValues.shipping_address : '',
-        order_reference: initialValues ? initialValues.order_reference : '',
-        delivery_note: initialValues ? initialValues.delivery_note : '',
-        internal_note: initialValues ? initialValues.internal_note : '',
+        dueDate: initialValues ? initialValues.due_date : '',
         subtotal: initialValues ? initialValues.subtotal : '',
-        product: initialValues ? initialValues.product : [],
+        item: initialValues ? initialValues.item : [],
         discount: initialValues ? initialValues.discount : '',
         shipping_fee: initialValues ? initialValues.shipping_fee : '',
         gst: initialValues ? initialValues.gst : '',
@@ -61,74 +52,83 @@ const FormPurchases: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const breadcrumb = [
         { title: 'Supplier' },
         {
-            title: 'Purchases', url: routes.eCommerce.purchases
+            title: 'Bill', url: routes.eCommerce.bill
         },
-        { title: mode == 'create' ? 'Create Purchases' : 'Edit Purchases' },
+        { title: mode == 'create' ? 'Create Bill' : 'Edit Bill' },
     ];
 
-    const columns: TableColumnsType<ProductForm> = [
+    const columns: TableColumnsType<ItemListProps> = [
         {
-            title: 'Product SKU',
-            dataIndex: 'sku',
+            title: 'Item',
+            dataIndex: 'item',
         },
         {
-            title: 'Product Name',
-            dataIndex: 'name',
-        },
-        {
-            title: 'Price',
-            dataIndex: 'price',
-        },
-        {
-            title: 'Buying Price',
-            dataIndex: 'buying_price',
+            title: 'Description',
+            dataIndex: 'description',
         },
         {
             title: 'QTY',
             dataIndex: 'qty',
         },
         {
-            title: 'Total',
-            dataIndex: 'total',
+            title: 'Unit Price',
+            dataIndex: 'unit_price',
+        },
+        {
+            title: 'Account',
+            dataIndex: 'account',
+        },
+        {
+            title: 'Tax Rate',
+            dataIndex: 'tax_rate',
+        },
+        {
+            title: 'Region',
+            dataIndex: 'region',
+        },
+        {
+            title: 'Amount',
+            dataIndex: 'amount',
         },
         {
             title: 'Edit',
             dataIndex: 'edit',
             render: (_: any, row: any, index: number) => {
-                console.log(row)
                 return <Button
                     label="Edit"
-                    onClick={() => handleEditProduct(index)}
+                    onClick={() => handleEditItem(index)}
                 />
             }
         },
 
     ]
 
-    const handleEditProduct = (index: number) => {
-        const productToEdit = productList[index];
-        setProductForm(productToEdit);
+    const handleEditItem = (index: number) => {
+        const itemToEdit = itemList[index];
+        setItemForm(itemToEdit);
         setEditIndex(index);
-        setShowAddProduct(true);
+        setShowAddItem(true);
     }
 
     const handleAddProduct = () => {
         if (editIndex !== null) {
-            const updatedList = [...productList];
-            updatedList[editIndex] = productForm;
-            setProductList(updatedList);
+            const updatedList = [...itemList];
+            updatedList[editIndex] = itemForm;
+            setItemList(updatedList);
             setEditIndex(null);
         } else {
-            setProductList([...productList, productForm]);
+            setItemList([...itemList, itemForm]);
 
         }
-        setProductForm({
-            sku: '',
-            name: '',
-            price: 0,
-            buying_price: 0,
+        setItemForm({
+            item: '',
+            description: '',
             qty: 0,
-            total: 0,
+            unit_price: 0,
+            account: '',
+            tax_rate: 0,
+            region: '',
+            amount: 0
         });
     };
     const handleChange = (e: any) => {
@@ -146,7 +146,7 @@ const FormPurchases: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         }));
     };
 
-    const handleDateChange = (field: 'date' | 'deliveryDate', value: any, dateString: string) => {
+    const handleDateChange = (field: 'date' | 'dueDate', value: any, dateString: string) => {
         setFormData(prev => ({
             ...prev,
             [field]: dateString,
@@ -157,14 +157,11 @@ const FormPurchases: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const handleSubmit = async () => {
         try {
             const submitData = {
-                user: formData.user,
-                po_number: formData.po_number,
-                billing_address: formData.billing_address,
-                shipping_address: formData.shipping_address,
-                order_reference: formData.order_reference,
-                product: productList,
-                delivery_note: formData.delivery_note,
-                internal_note: formData.internal_note,
+                from: formData.from,
+                order_reference: formData.reference,
+                item: itemList,
+                date: formData.date,
+                due_date: formData.dueDate,
                 subtotal: Number(formData.subtotal),
                 discount: Number(formData.discount),
                 shipping_fee: Number(formData.shipping_fee),
@@ -172,9 +169,8 @@ const FormPurchases: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                 total: Number(formData.total)
             }
 
-            console.log(submitData)
-            localStorage.setItem('products', JSON.stringify(submitData))
-            router.push(routes.eCommerce.order)
+            // localStorage.setItem('products', JSON.stringify(submitData))
+            // router.push(routes.eCommerce.order)
             // let response;
             // response = await updatePriceLevel(slug, submitData)
 
@@ -195,10 +191,10 @@ const FormPurchases: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         { label: 'RECEIVE', value: 'RECEIVE' }
     ]
 
-    console.log(formData, productForm)
+    console.log(formData)
 
     useEffect(() => {
-        const newSubtotal = productList.reduce((acc, item) => acc + Number(item.total || 0), 0);
+        const newSubtotal = itemList.reduce((acc, item) => acc + Number(item.amount || 0), 0);
         const discount = Number(formData.discount || 0)
         const shipping_fee = Number(formData.shipping_fee || 0)
         const tax = Number(formData.gst || 0)
@@ -208,7 +204,7 @@ const FormPurchases: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
             subtotal: newSubtotal.toString(),
             total: total.toString()
         }));
-    }, [productList, formData.discount, formData.shipping_fee, formData.gst]);
+    }, [itemList, formData.discount, formData.shipping_fee, formData.gst]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -233,7 +229,7 @@ const FormPurchases: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         <>
             {contextHolder}
             <div className="mt-6 mx-4 mb-0">
-                <h1 className="text-xl font-bold mb-4">{mode == 'create' ? 'Create Purchases' : 'Edit Purchases'}</h1>
+                <h1 className="text-xl font-bold mb-4">{mode == 'create' ? 'Create Bill' : 'Edit Bill'}</h1>
                 <Breadcrumb items={breadcrumb} />
             </div>
 
@@ -243,20 +239,12 @@ const FormPurchases: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                         <div className='grid grid-cols-2 gap-3'>
                             <div className='flex flex-col gap-2 mt-2'>
                                 <Input
-                                    id='purchaseId'
-                                    label='Purchase ID'
+                                    id='from'
+                                    label='From'
                                     type='text'
-                                    placeholder='Input Purchase Id'
+                                    placeholder='Input From'
                                     onChange={handleChange}
-                                    value={formData.purchaseId}
-                                />
-                                <Input
-                                    id='order_id'
-                                    label='Order ID'
-                                    type='text'
-                                    placeholder='Input Order ID'
-                                    onChange={handleChange}
-                                    value={formData.order_id}
+                                    value={formData.from}
                                 />
                                 <Input
                                     id='reference'
@@ -266,66 +254,43 @@ const FormPurchases: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     onChange={handleChange}
                                     value={formData.reference}
                                 />
-                                <SelectInput
-                                    id='supplierName'
-                                    label='Supplier Name'
-                                    placeholder="Select Supplier"
-                                    onChange={(val) => handleChangeSelect('supplierName', val)}
-                                    value={formData.supplierName}
-                                    options={optionSupplier}
-                                />
+
                             </div>
-                            <div>
-                                <SelectInput
-                                    id='paymentMethod'
-                                    label='Payment Method'
-                                    placeholder="Select Payment Method"
-                                    onChange={(val) => handleChangeSelect('paymentMethod', val)}
-                                    value={formData.paymentMethod}
-                                    options={optionSupplier}
-                                />
-                                <SelectInput
-                                    id='deliveryMethod'
-                                    label='Delivery Method'
-                                    placeholder="Select Delivery Method"
-                                    onChange={(val) => handleChangeSelect('deliveryMethod', val)}
-                                    value={formData.deliveryMethod}
-                                    options={optionSupplier}
-                                />
+                            <div className='flex flex-col gap-1 mt-1'>
                                 <DatePickerInput
                                     id='date'
                                     label='Date '
                                     value={formData.date ? dayjs(formData.date) : null}
-                                    onChange={(value : any, dateString: any) => handleDateChange('date', value, dateString)}
+                                    onChange={(value: any, dateString: any) => handleDateChange('date', value, dateString)}
                                 />
                                 <DatePickerInput
-                                    id='deliveryDate'
-                                    label='Delivery Date '
-                                    value={formData.deliveryDate ? dayjs(formData.deliveryDate) : null}
-                                    onChange={(value : any, dateString: any) => handleDateChange('deliveryDate', value, dateString)}
+                                    id='dueDate'
+                                    label='Due Date '
+                                    value={formData.dueDate ? dayjs(formData.dueDate) : null}
+                                    onChange={(value: any, dateString: any) => handleDateChange('dueDate', value, dateString)}
                                 />
                             </div>
                         </div>
 
                         <div className='mt-4'>
-                            <h1 className='text-lg font-bold'>Product List</h1>
+                            <h1 className='text-lg font-bold'>Item List</h1>
                             <Button
-                                label='Add Product'
+                                label='Add Item'
                                 btnClassname="!bg-[#86A788] !text-white hover:!bg-white hover:!text-[#86A788] hover:!border-[#86A788] mt-3"
-                                onClick={() => setShowAddProduct(!showAddProduct)}
+                                onClick={() => setShowAddItem(!showAddItem)}
                             />
                             {
-                                showAddProduct &&
-                                <ProductInput
-                                    productForm={productForm}
-                                    setProductForm={setProductForm}
-                                    onAddProduct={handleAddProduct}
+                                showAddItem &&
+                                <ItemList
+                                    itemForm={itemForm}
+                                    setItemForm={setItemForm}
+                                    onAddItem={handleAddProduct}
                                 />
                             }
                             <div className='mt-2'>
                                 <Table
                                     columns={columns}
-                                    dataSource={productList}
+                                    dataSource={itemList}
                                 />
                             </div>
 
@@ -385,66 +350,13 @@ const FormPurchases: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
                         </div>
 
-
-                        <div className='grid  gap-3 mt-2'>
-                            <div className='grid md:grid-cols-2 gap-2'>
-                                <div>
-                                    <Textarea
-                                        id='delivery_note'
-                                        label='Delivery Address'
-                                        value={formData.delivery_note}
-                                        onChange={handleChange}
-                                    />
-                                </div>
-                                <div>
-                                    <Textarea
-                                        id='internal_note'
-                                        label='Attention'
-                                        value={formData.internal_note}
-                                        onChange={handleChange}
-                                    />
-                                </div>
-                                <Input
-                                    id='reference'
-                                    label='Telephone'
-                                    type='text'
-                                    onChange={handleChange}
-                                    value={formData.reference}
-                                />
-                                <div>
-                                    <Textarea
-                                        id='internal_note'
-                                        label='Delivery Instruction'
-                                        value={formData.internal_note}
-                                        onChange={handleChange}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div className='grid  gap-3 mt-2'>
-                            <h1 className='text-lg font-bold'>Notes</h1>
-                            <div className='grid md:grid-cols-2 gap-2'>
-                                <div>
-                                    <Textarea
-                                        id='delivery_note'
-                                        label='Note'
-                                        value={formData.delivery_note}
-                                        onChange={handleChange}
-                                    />
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
                     </div>
 
                     {/* Submit */}
                     <div className="mt-6 flex justify-end">
                         <Button
                             btnClassname="!bg-[#86A788] !text-white hover:!bg-white hover:!text-[#86A788] hover:!border-[#86A788]"
-                            label={mode == 'create' ? 'Create Purchases' : 'Edit Purchases'}
+                            label={mode == 'create' ? 'Create Bill' : 'Edit Bill'}
                             onClick={handleSubmit}
                         />
                     </div>
@@ -454,4 +366,4 @@ const FormPurchases: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     );
 };
 
-export default FormPurchases;
+export default FormBilled;

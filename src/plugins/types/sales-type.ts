@@ -58,6 +58,16 @@ export type QuoteType = {
     gst: number
 }
 
+export type ReturnSalesType = {
+    id?: number | string | undefined
+    order_id: number
+    product?: string[]
+    supplier_name: string
+    total: string
+    status: string
+    created_at: string
+}
+
 export type ProductOrderType = {
     sku: string
     name: string
@@ -66,6 +76,27 @@ export type ProductOrderType = {
     qty: number
     total: number
 }
+
+export type TransactionType = {
+    id?: string | number | undefined
+    order_id: string
+    transaction_id: string
+    payment_method: number
+    sales_person: string
+    created: {
+        date: string
+        name: string
+    }
+}
+
+export type CreditSalesType = {
+    id?: number | string | undefined
+    purchase_id: number
+    customer_name: string
+    credit: string
+    status: string
+}
+
 
 export const orderDummyData = [
     {
@@ -646,5 +677,78 @@ export const quoteDummyData = [
         gst: 10
     },
 
+]
+
+export const transactionDUmmy = [
+    {
+        id: 1,
+        order_id: '287878',
+        transaction_id: '209903',
+        payment_method: 'Bank Transfer',
+        created: {
+            date: '2025-02-25T01:52:08.234Z',
+            name: 'User'
+        },
+    }
+]
+
+export const returnData = [
+    {
+        id: 8,
+        order_id: 12,
+        // user_id: 6,
+        // notes: null,
+        sales_person: 'Ola',
+        status: "<span class=\"\">Completed</span>",
+        // updated_at: "2024-01-04T08:56:38.000000Z",
+        // deleted_at: null,
+        total: "$45.45",
+        // checkbox: "<div class=\"checkbox\">\n    <input type=\"checkbox\" class=\"select-row\" value=\"8\" id=\"yXn96GJdaey8awd2\">\n    <label for=\"yXn96GJdaey8awd2\"></label>\n</div>\n",
+        supplier_name: "Alloys",
+        // created: "<span data-toggle=\"tooltip\" title=\"Jan 4, 2024\">\n    1 year ago\n</span>\n"
+    },
+    {
+        id: 7,
+        order_id: 12,
+        // user_id: 6,
+        // notes: null,
+        sales_person: 'Ola',
+        status: "<span class=\"\">Completed</span>",
+        // updated_at: "2023-12-27T09:32:26.000000Z",
+        // deleted_at: null,
+        total: "$45.45",
+        // checkbox: "<div class=\"checkbox\">\n    <input type=\"checkbox\" class=\"select-row\" value=\"7\" id=\"0rlNtGQWpEgubc3n\">\n    <label for=\"0rlNtGQWpEgubc3n\"></label>\n</div>\n",
+        supplier_name: "Alloys",
+        // created: "<span data-toggle=\"tooltip\" title=\"Dec 27, 2023\">\n    1 year ago\n</span>\n"
+    }
+]
+
+export const creditSalesData = [
+    {
+        id: 2,
+        order_id: 12,
+        supplier_id: 45,
+        credit: "$45.45",
+        status: "<span class=\"\">COMPLETED</span>",
+        created_at: "2024-01-04T08:55:44.000000Z",
+        updated_at: "2024-01-04T08:56:38.000000Z",
+        deleted_at: null,
+        checkbox: "<div class=\"checkbox\">\n    <input type=\"checkbox\" class=\"select-row\" value=\"2\" id=\"xuSwLril1ihDVinL\">\n    <label for=\"xuSwLril1ihDVinL\"></label>\n</div>\n",
+        customer_name: "Alloys",
+        created: "<span data-toggle=\"tooltip\" title=\"Jan 4, 2024\">\n    1 year ago\n</span>\n"
+    },
+    {
+        id: 1,
+        order_id: 12,
+        supplier_id: 45,
+        credit: "$45.45",
+        status: "<span class=\"\">COMPLETED</span>",
+        created_at: "2023-12-27T09:32:26.000000Z",
+        updated_at: "2024-01-04T08:56:38.000000Z",
+        deleted_at: null,
+        checkbox: "<div class=\"checkbox\">\n    <input type=\"checkbox\" class=\"select-row\" value=\"1\" id=\"iMNDboEYSUjjjKIm\">\n    <label for=\"iMNDboEYSUjjjKIm\"></label>\n</div>\n",
+        customer_name: "Alloys",
+        created: "<span data-toggle=\"tooltip\" title=\"Dec 27, 2023\">\n    1 year ago\n</span>\n"
+    }
 ]
 

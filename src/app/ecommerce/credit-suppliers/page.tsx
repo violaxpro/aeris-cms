@@ -2,7 +2,7 @@ import React from 'react'
 import CreditSupplierList from '@/features/pages/suppliers/credit-supplier'
 import { getCreditSupplier } from '@/services/credit-suppliers-service'
 
-export default async function ReviewsPageUrl() {
+export default async function CreditSupplierPage() {
     let creditSuppliers = []
     try {
         const res = await getCreditSupplier()

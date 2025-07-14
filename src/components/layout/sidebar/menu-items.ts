@@ -94,17 +94,17 @@ export const menuItems = [
             {
                 key: 'transaction',
                 name: 'Transaction',
-                href: routes.eCommerce.categories,
+                href: routes.eCommerce.transaction,
             },
             {
                 key: 'rma',
                 name: 'RMA',
-                href: routes.eCommerce.brands,
+                href: routes.eCommerce.returnSales,
             },
             {
                 key: 'credit',
                 name: 'Credit',
-                href: routes.eCommerce.categories,
+                href: routes.eCommerce.creditSalesList,
             },
         ],
     },
@@ -180,6 +180,11 @@ export const menuItems = [
         href: '#',
         icon: ShoppingOutlined,
         dropdownItems: [
+            {
+                key: 'billed',
+                name: 'Billed',
+                href: routes.eCommerce.bill,
+            },
             {
                 key: 'purchase',
                 name: 'Purchase',
