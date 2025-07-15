@@ -10,7 +10,8 @@ import {
     DropboxOutlined,
     TeamOutlined,
     IdcardOutlined,
-    ControlOutlined
+    ControlOutlined,
+    ShopOutlined
 } from '@ant-design/icons';
 
 // Note: do not add href in the label object, it is rendering as label
@@ -18,404 +19,507 @@ export const menuItems = [
     // label start
     {
         key: 'overview',
-        name: 'Overview',
-    }, ,
-
-    {
-        key: 'dashboard',
-        name: 'Dashboard',
-        href: routes.eCommerce.dashboard,
-        icon: DatabaseOutlined,
+        label: 'Overview',
     },
     {
-        key: 'catalogue',
-        name: 'Catalogue',
-        href: '#',
-        icon: AppstoreOutlined,
-        dropdownItems: [
+        key: 'group-dashboard',
+        label: 'Dashboard',
+        type: 'group',
+        children: [
             {
-                key: 'product',
-                name: 'Product',
-                href: routes.eCommerce.products,
-            },
-            {
-                key: 'price-level',
-                name: 'Price Level',
-                href: routes.eCommerce.priceLevel,
-            },
-            {
-                key: 'categories',
-                name: 'Categories',
-                href: routes.eCommerce.categories,
-            },
-            {
-                key: 'brand',
-                name: 'Brands',
-                href: routes.eCommerce.brands,
-            },
-            {
-                key: 'attributes',
-                name: 'Attributes',
-                href: routes.eCommerce.attributes,
-            },
-            {
-                key: 'options',
-                name: 'Options',
-                href: routes.eCommerce.options,
-            },
-            {
-                key: 'tags',
-                name: 'Tags',
-                href: routes.eCommerce.tags,
-            },
-            {
-                key: 'reviews',
-                name: 'Reviews',
-                href: routes.eCommerce.reviews,
-            },
-        ],
-    },
-    {
-        key: 'sales',
-        name: 'Sales',
-        href: '#',
-        icon: PieChartOutlined,
-        dropdownItems: [
-            {
-                key: 'order',
-                name: 'Order',
-                href: routes.eCommerce.order,
-            },
-            {
-                key: 'quote',
-                name: 'Quote',
-                href: routes.eCommerce.quote,
-            },
-            {
-                key: 'transaction',
-                name: 'Transaction',
-                href: routes.eCommerce.transaction,
-            },
-            {
-                key: 'rma',
-                name: 'RMA',
-                href: routes.eCommerce.returnSales,
-            },
-            {
-                key: 'credit',
-                name: 'Credit',
-                href: routes.eCommerce.creditSalesList,
-            },
-        ],
-    },
-    {
-        key: 'employee-management',
-        name: 'Employee Management',
-        href: '#',
-        icon: IdcardOutlined,
-        dropdownItems: [
-            {
-                key: 'time-attendance',
-                name: 'Time & Attendance',
-                href: routes.eCommerce.products,
-                dropdownItems: [
-                    {
-                        key: 'attendance',
-                        name: 'Attendance',
-                        href: routes.eCommerce.products,
-                    },
-                    {
-                        key: 'timesheet',
-                        name: 'Timesheet',
-                        href: routes.eCommerce.products,
-                    },
-                    {
-                        key: 'shift-management',
-                        name: 'Shif Management',
-                        href: routes.eCommerce.products,
-                    },
-                    {
-                        key: 'leave-permit',
-                        name: 'Leave & Permit',
-                        href: routes.eCommerce.products,
-                    },
-                    {
-                        key: 'overtime',
-                        name: 'Overtime',
-                        href: routes.eCommerce.products,
-                    }
-                ]
-            },
-            {
-                key: 'employee',
-                name: 'Employee',
-                href: routes.eCommerce.products,
-            },
-            {
-                key: 'performance',
-                name: 'Performance',
-                href: routes.eCommerce.products,
-            },
-            {
-                key: 'report',
-                name: 'Report',
-                href: routes.eCommerce.categories,
-            },
-            {
-                key: 'benefit',
-                name: 'Benefit',
-                href: routes.eCommerce.brands,
-            },
-            {
-                key: 'organizational',
-                name: 'Organizational',
-                href: routes.eCommerce.attributes,
-            },
-
-        ],
-    },
-    {
-        key: 'supplier',
-        name: 'Supplier',
-        href: '#',
-        icon: ShoppingOutlined,
-        dropdownItems: [
-            {
-                key: 'billed',
-                name: 'Billed',
-                href: routes.eCommerce.bill,
-            },
-            {
-                key: 'purchase',
-                name: 'Purchase',
-                href: routes.eCommerce.purchases,
-            },
-            {
-                key: 'rma-supplier',
-                name: 'RMA Supplier',
-                href: routes.eCommerce.returnSupplier,
-            },
-            {
-                key: 'credit-supplier',
-                name: 'Credit Supplier',
-                href: routes.eCommerce.creditSupplierList,
-            },
-            {
-                key: 'supplier-list',
-                name: 'Supplier List',
-                href: routes.eCommerce.supplierList,
-            },
-        ],
-    },
-    {
-        key: 'warehouse',
-        name: 'Warehouse',
-        href: '#',
-        icon: DropboxOutlined,
-        dropdownItems: [
-            {
-                key: 'inventory-list',
-                name: 'Inventory List',
-                href: routes.eCommerce.inventoryList,
-            },
-        ],
-    },
-
-    {
-        key: 'users',
-        name: 'Users',
-        href: '#',
-        icon: UserOutlined,
-        dropdownItems: [
-            {
-                key: 'users-product',
-                name: 'Users',
-                href: routes.eCommerce.products,
-            },
-            {
-                key: 'roles',
-                name: 'Roles',
-                href: routes.eCommerce.priceLevel,
-            },
-            {
-                key: 'subcribe',
-                name: 'Subscribe',
-                href: routes.eCommerce.categories,
-            },
-        ],
-    },
-    {
-        key: 'customer',
-        name: 'Customers',
-        href: '#',
-        icon: TeamOutlined,
-    },
-
-    {
-        key: 'management',
-        name: 'Management',
-        href: '#',
-        icon: ControlOutlined,
-        dropdownItems: [
-            {
-                key: 'stock-update',
-                name: 'Stock Update',
-                href: routes.eCommerce.products,
-                dropdownItems: [
-                    {
-                        key: 'leader-system',
-                        name: 'Leader System',
-                        href: routes.eCommerce.products,
-                    },
-                    {
-                        key: 'alloys',
-                        name: 'Alloys',
-                        href: routes.eCommerce.products,
-                    }
-                ]
-            },
-            {
-                key: 'tools',
-                name: 'Tools',
-                href: routes.eCommerce.products,
-                dropdownItems: [
-                    {
-                        key: 'importer',
-                        name: 'Importer',
-                        href: routes.eCommerce.products,
-                    },
-                    {
-                        key: 'scrape',
-                        name: 'Scrape',
-                        href: routes.eCommerce.products,
-                    },
-                    {
-                        key: 'scrape-url-list',
-                        name: 'Scrape URL List',
-                        href: routes.eCommerce.products,
-                    },
-                    {
-                        key: 'scrape-trade',
-                        name: 'Scrape Trade',
-                        href: routes.eCommerce.products,
-                    },
-                    {
-                        key: 'scrape-trade-url-list',
-                        name: 'Scrape Trade URL List',
-                        href: routes.eCommerce.products,
-                    },
-                    {
-                        key: 'scrape-buy-price',
-                        name: 'Scrape Buy Price',
-                        href: routes.eCommerce.products,
-                    },
-                    {
-                        key: 'scrape-buy-price-url-list',
-                        name: 'Scrape Buy URL List',
-                        href: routes.eCommerce.products,
-                    },
-                    {
-                        key: 'google-merchant',
-                        name: 'Google Merchant',
-                        href: routes.eCommerce.products,
-                    }
-                ]
-            },
-            {
-                key: 'report-management',
-                name: 'Report',
-                href: routes.eCommerce.products,
-            },
-            {
-                key: 'appearance',
-                name: 'Appearence',
-                href: routes.eCommerce.products,
-                dropdownItems: [
-                    {
-                        key: 'sliders',
-                        name: 'Sliders',
-                        href: routes.eCommerce.products,
-                    },
-                    {
-                        key: 'storefront',
-                        name: 'Storefront',
-                        href: routes.eCommerce.products,
-                    }
-                ]
-            },
-            {
-                key: 'blog',
-                name: 'Blog',
-                href: routes.eCommerce.products,
-                dropdownItems: [
-                    {
-                        key: 'blogs',
-                        name: 'Blogs',
-                        href: routes.eCommerce.products,
-                    },
-                    {
-                        key: 'blog-categories',
-                        name: 'Blog Categories',
-                        href: routes.eCommerce.products,
-                    }
-                ]
-            },
-            {
-                key: 'pages',
-                name: 'Pages',
-                href: routes.eCommerce.products,
-            },
-            {
-                key: 'media',
-                name: 'Media',
-                href: routes.eCommerce.products,
-            },
-            {
-                key: 'faq',
-                name: 'FAQ',
-                href: routes.eCommerce.products,
-                dropdownItems: [
-                    {
-                        key: 'faq-categories',
-                        name: 'FAQ Categories',
-                        href: routes.eCommerce.products,
-                    },
-                    {
-                        key: 'faq-child',
-                        name: 'FAQ',
-                        href: routes.eCommerce.products,
-                    }
-                ]
-
-            },
-        ],
-    },
-    {
-        key: 'setting',
-        name: 'Settings',
-        href: '#',
-        icon: SettingOutlined,
-        dropdownItems: [
-            {
-                key: 'general-settings',
-                name: 'General Settings',
-                href: routes.eCommerce.products,
-            },
-            {
-                key: 'social-logins',
-                name: 'Social Logins',
-                href: routes.eCommerce.products,
-            },
-            {
-                key: 'shipping-methods',
-                name: 'Shipping Methods',
-                href: routes.eCommerce.products,
-            },
-            {
-                key: 'payment-methods',
-                name: 'Payment Methods',
-                href: routes.eCommerce.products,
+                key: 'dashboard',
+                label: 'Dashboard',
+                href: routes.eCommerce.dashboard,
+                icon: DatabaseOutlined,
             },
         ]
     },
+    {
+        key: 'group-catalogue',
+        label: 'Catalogue',
+        type: 'group',
+        children: [
+            {
+                key: 'catalogue',
+                label: 'Catalogue',
+                href: '#',
+                icon: AppstoreOutlined,
+                children: [
+                    {
+                        key: 'product',
+                        label: 'Product',
+                        href: routes.eCommerce.products,
+                    },
+                    {
+                        key: 'price-level',
+                        label: 'Price Level',
+                        href: routes.eCommerce.priceLevel,
+                    },
+                    {
+                        key: 'categories',
+                        label: 'Categories',
+                        href: routes.eCommerce.categories,
+                    },
+                    {
+                        key: 'brand',
+                        label: 'Brands',
+                        href: routes.eCommerce.brands,
+                    },
+                    {
+                        key: 'attributes',
+                        label: 'Attributes',
+                        href: routes.eCommerce.attributes,
+                    },
+                    {
+                        key: 'options',
+                        label: 'Options',
+                        href: routes.eCommerce.options,
+                    },
+                    {
+                        key: 'tags',
+                        label: 'Tags',
+                        href: routes.eCommerce.tags,
+                    },
+                    {
+                        key: 'reviews',
+                        label: 'Reviews',
+                        href: routes.eCommerce.reviews,
+                    },
+                ],
+            },
+        ]
+    },
+    {
+        key: 'group-sales',
+        label: 'Sales',
+        type: 'group',
+        children: [
+            {
+                key: 'sales',
+                label: 'Sales',
+                href: '#',
+                icon: PieChartOutlined,
+                children: [
+                    {
+                        key: 'order',
+                        label: 'Order',
+                        href: routes.eCommerce.order,
+                    },
+                    {
+                        key: 'quote',
+                        label: 'Quote',
+                        href: routes.eCommerce.quote,
+                    },
+                    {
+                        key: 'transaction',
+                        label: 'Transaction',
+                        href: routes.eCommerce.transaction,
+                    },
+                    {
+                        key: 'rma',
+                        label: 'RMA',
+                        href: routes.eCommerce.returnSales,
+                    },
+                    {
+                        key: 'credit',
+                        label: 'Credit',
+                        href: routes.eCommerce.creditSalesList,
+                    },
+                ],
+            },
+        ]
+    },
+    {
+        key: 'group-employee-management',
+        label: 'Employee Management',
+        type: 'group',
+        children: [
+            {
+                key: 'employee-management',
+                label: 'Employee Management',
+                href: '#',
+                icon: IdcardOutlined,
+                children: [
+                    {
+                        key: 'time-attendance',
+                        label: 'Time & Attendance',
+                        href: routes.eCommerce.products,
+                        children: [
+                            {
+                                key: 'attendance',
+                                label: 'Attendance',
+                                href: routes.eCommerce.products,
+                            },
+                            {
+                                key: 'timesheet',
+                                label: 'Timesheet',
+                                href: routes.eCommerce.products,
+                            },
+                            {
+                                key: 'shift-management',
+                                label: 'Shif Management',
+                                href: routes.eCommerce.products,
+                            },
+                            {
+                                key: 'leave-permit',
+                                label: 'Leave & Permit',
+                                href: routes.eCommerce.products,
+                            },
+                            {
+                                key: 'overtime',
+                                label: 'Overtime',
+                                href: routes.eCommerce.products,
+                            }
+                        ]
+                    },
+                    {
+                        key: 'employee',
+                        label: 'Employee',
+                        href: routes.eCommerce.products,
+                    },
+                    {
+                        key: 'performance',
+                        label: 'Performance',
+                        href: routes.eCommerce.products,
+                    },
+                    {
+                        key: 'report',
+                        label: 'Report',
+                        href: routes.eCommerce.categories,
+                    },
+                    {
+                        key: 'benefit',
+                        label: 'Benefit',
+                        href: routes.eCommerce.brands,
+                    },
+                    {
+                        key: 'organizational',
+                        label: 'Organizational',
+                        href: routes.eCommerce.attributes,
+                    },
+
+                ],
+            },
+        ]
+    },
+    {
+        key: 'group-supplier',
+        label: 'Supplier',
+        type: 'group',
+        children: [
+            {
+                key: 'supplier',
+                label: 'Supplier',
+                href: '#',
+                icon: ShoppingOutlined,
+                children: [
+                    {
+                        key: 'billed',
+                        label: 'Billed',
+                        href: routes.eCommerce.bill,
+                    },
+                    {
+                        key: 'purchase',
+                        label: 'Purchase',
+                        href: routes.eCommerce.purchases,
+                    },
+                    {
+                        key: 'rma-supplier',
+                        label: 'RMA Supplier',
+                        href: routes.eCommerce.returnSupplier,
+                    },
+                    {
+                        key: 'credit-supplier',
+                        label: 'Credit Supplier',
+                        href: routes.eCommerce.creditSupplierList,
+                    },
+                    {
+                        key: 'supplier-list',
+                        label: 'Supplier List',
+                        href: routes.eCommerce.supplierList,
+                    },
+                ],
+            },
+        ]
+    },
+    {
+        key: 'group-warehouse',
+        label: 'Warehouse',
+        type: 'group',
+        children: [
+            {
+                key: 'warehouse',
+                label: 'Warehouse',
+                href: '#',
+                icon: DropboxOutlined,
+                children: [
+                    {
+                        key: 'inventory-list',
+                        label: 'Inventory List',
+                        href: routes.eCommerce.inventoryList,
+                    },
+                ],
+            }
+        ],
+    },
+    {
+        key: 'group-user',
+        label: 'User',
+        type: 'group',
+        children: [
+            {
+                key: 'users',
+                label: 'Users',
+                href: '#',
+                icon: UserOutlined,
+                children: [
+                    {
+                        key: 'users-product',
+                        label: 'Users',
+                        href: routes.eCommerce.products,
+                    },
+                    {
+                        key: 'roles',
+                        label: 'Roles',
+                        href: routes.eCommerce.priceLevel,
+                    },
+                    {
+                        key: 'subcribe',
+                        label: 'Subscribe',
+                        href: routes.eCommerce.categories,
+                    },
+                ],
+            },
+        ]
+    },
+    {
+        key: 'group-customer',
+        label: 'Customers',
+        type: 'group',
+        children: [
+            {
+                key: 'customer',
+                label: 'Customers',
+                href: '#',
+                icon: TeamOutlined,
+            },
+        ]
+
+    },
+    {
+        key: 'group-marketing',
+        label: 'Marketing',
+        type: 'group',
+        children: [
+            {
+                key: 'marketing',
+                label: 'Marketing',
+                href: '#',
+                icon: ShopOutlined,
+                children: [
+                    {
+                        key: 'flash-sale',
+                        label: 'Flash Sale',
+                        href: routes.eCommerce.products,
+                    },
+                    {
+                        key: 'coupon',
+                        label: 'Coupon',
+                        href: routes.eCommerce.products,
+                    },
+                    {
+                        key: 'email-marketing',
+                        label: 'Email Marketing',
+                        href: routes.eCommerce.products,
+                    },
+                    {
+                        key: 'sms-marketing',
+                        label: 'SMS Marketing',
+                        href: routes.eCommerce.products,
+                    },
+                ]
+            },
+        ]
+    },
+    {
+        key: 'group-management',
+        label: 'Management',
+        type: 'group',
+        children: [
+            {
+                key: 'management',
+                label: 'Management',
+                href: '#',
+                icon: ControlOutlined,
+                children: [
+                    {
+                        key: 'stock-update',
+                        label: 'Stock Update',
+                        href: routes.eCommerce.products,
+                        children: [
+                            {
+                                key: 'leader-system',
+                                label: 'Leader System',
+                                href: routes.eCommerce.products,
+                            },
+                            {
+                                key: 'alloys',
+                                label: 'Alloys',
+                                href: routes.eCommerce.products,
+                            }
+                        ]
+                    },
+                    {
+                        key: 'tools',
+                        label: 'Tools',
+                        href: routes.eCommerce.products,
+                        children: [
+                            {
+                                key: 'importer',
+                                label: 'Importer',
+                                href: routes.eCommerce.products,
+                            },
+                            {
+                                key: 'scrape',
+                                label: 'Scrape',
+                                href: routes.eCommerce.products,
+                            },
+                            {
+                                key: 'scrape-url-list',
+                                label: 'Scrape URL List',
+                                href: routes.eCommerce.products,
+                            },
+                            {
+                                key: 'scrape-trade',
+                                label: 'Scrape Trade',
+                                href: routes.eCommerce.products,
+                            },
+                            {
+                                key: 'scrape-trade-url-list',
+                                label: 'Scrape Trade URL List',
+                                href: routes.eCommerce.products,
+                            },
+                            {
+                                key: 'scrape-buy-price',
+                                label: 'Scrape Buy Price',
+                                href: routes.eCommerce.products,
+                            },
+                            {
+                                key: 'scrape-buy-price-url-list',
+                                label: 'Scrape Buy URL List',
+                                href: routes.eCommerce.products,
+                            },
+                            {
+                                key: 'google-merchant',
+                                label: 'Google Merchant',
+                                href: routes.eCommerce.products,
+                            }
+                        ]
+                    },
+                    {
+                        key: 'report-management',
+                        label: 'Report',
+                        href: routes.eCommerce.products,
+                    },
+                    {
+                        key: 'appearance',
+                        label: 'Appearence',
+                        href: routes.eCommerce.products,
+                        children: [
+                            {
+                                key: 'sliders',
+                                label: 'Sliders',
+                                href: routes.eCommerce.products,
+                            },
+                            {
+                                key: 'storefront',
+                                label: 'Storefront',
+                                href: routes.eCommerce.products,
+                            }
+                        ]
+                    },
+                    {
+                        key: 'blog',
+                        label: 'Blog',
+                        href: routes.eCommerce.products,
+                        children: [
+                            {
+                                key: 'blogs',
+                                label: 'Blogs',
+                                href: routes.eCommerce.products,
+                            },
+                            {
+                                key: 'blog-categories',
+                                label: 'Blog Categories',
+                                href: routes.eCommerce.products,
+                            }
+                        ]
+                    },
+                    {
+                        key: 'pages',
+                        label: 'Pages',
+                        href: routes.eCommerce.products,
+                    },
+                    {
+                        key: 'media',
+                        label: 'Media',
+                        href: routes.eCommerce.products,
+                    },
+                    {
+                        key: 'faq',
+                        label: 'FAQ',
+                        href: routes.eCommerce.products,
+                        children: [
+                            {
+                                key: 'faq-categories',
+                                label: 'FAQ Categories',
+                                href: routes.eCommerce.products,
+                            },
+                            {
+                                key: 'faq-child',
+                                label: 'FAQ',
+                                href: routes.eCommerce.products,
+                            }
+                        ]
+
+                    },
+                ],
+            },
+        ]
+    },
+    {
+        key: 'group-setting',
+        label: 'Settings',
+        type: 'group',
+        children: [
+            {
+                key: 'setting',
+                label: 'Settings',
+                href: '#',
+                icon: SettingOutlined,
+                children: [
+                    {
+                        key: 'general-settings',
+                        label: 'General Settings',
+                        href: routes.eCommerce.products,
+                    },
+                    {
+                        key: 'social-logins',
+                        label: 'Social Logins',
+                        href: routes.eCommerce.products,
+                    },
+                    {
+                        key: 'shipping-methods',
+                        label: 'Shipping Methods',
+                        href: routes.eCommerce.products,
+                    },
+                    {
+                        key: 'payment-methods',
+                        label: 'Payment Methods',
+                        href: routes.eCommerce.products,
+                    },
+                ]
+            },
+        ]
+    }
 ];

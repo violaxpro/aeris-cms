@@ -7,39 +7,75 @@ import { menuItems } from './menu-items';
 import Link from 'next/link';
 
 const Sidebar = () => {
-    const items = menuItems.map((item, index) => {
-        return {
-            key: item?.key ?? `item-${index}`,
-            icon: item?.icon ? <item.icon /> : null,
-            label: (
-                item?.href ?
-                    <Link href={item?.href} className="!text-inherit">
-                        {item.name}
-                    </Link> : <span>{item?.name}</span>
-            ),
-            children: item?.dropdownItems && item?.dropdownItems.map((itemChildren, indexChildren) => {
+    // const items = menuItems.map((item, index) => {
+    //     return {
+    //         key: item?.key ?? `item-${index}`,
+    //         icon: item?.icon ? <item.icon /> : null,
+    //         label: (
+    //             item?.href ?
+    //                 <Link href={item?.href} className="!text-inherit">
+    //                     {item.label}
+    //                 </Link> : <span>{item?.label}</span>
+    //         ),
+    //         children: item?.dropdownItems && item?.dropdownItems.map((itemChildren, indexChildren) => {
+    //             return {
+    //                 key: itemChildren.key,
+    //                 label: (
+    //                     <Link href={itemChildren.href} className="!text-inherit">
+    //                         {itemChildren.label}
+    //                     </Link>
+    //                 ),
+    //                 children: itemChildren?.dropdownItems && itemChildren?.dropdownItems.map((item, index) => {
+    //                     return {
+    //                         key: item.key,
+    //                         label: (
+    //                             <Link href={item.href}>
+    //                                 {item.label}
+    //                             </Link>
+    //                         )
+    //                     }
+    //                 })
+    //             };
+    //         }),
+    //     }
+    // })
+    const renderMenuItems = (items: any) => {
+        return items.map((item: any) => {
+            if (item.type === 'group') {
+                // Jika item adalah grup (label abu-abu)
                 return {
-                    key: itemChildren.key,
-                    label: (
-                        <Link href={itemChildren.href} className="!text-inherit">
-                            {itemChildren.name}
-                        </Link>
-                    ),
-                    children: itemChildren?.dropdownItems && itemChildren?.dropdownItems.map((item, index) => {
-                        return {
-                            key: item.key,
-                            label: (
-                                <Link href={item.href}>
-                                    {item.name}
-                                </Link>
-                            )
-                        }
-                    })
+                    key: item.key,
+                    label: item.label,
+                    type: 'group',
+                    children: item.children ? renderMenuItems(item.children) : undefined,
                 };
-            }),
-        }
-    })
+            } else if (item.children) {
+                // Jika item memiliki sub-menu (dropdown)
+                return {
+                    key: item.key,
+                    icon: item.icon ? <item.icon /> : null,
+                    label: item.label,
+                    children: renderMenuItems(item.children), // Rekursif untuk sub-menu
+                };
+            } else {
+                // Jika item adalah item tunggal (tanpa sub-menu)
+                return {
+                    key: item.key,
+                    icon: item.icon ? <item.icon /> : null,
+                    label: (
+                        // Menggunakan Link dari react-router-dom jika ada href
+                        item.href ?
+                            <Link href={item.href} className="!text-inherit">
+                                {item.label}
+                            </Link> :
+                            item.label // Jika tidak ada href, tampilkan label saja
+                    ),
+                };
+            }
+        });
+    };
 
+    const items = renderMenuItems(menuItems);
     return (
         <Sider
             className='!bg-white'

@@ -2,10 +2,11 @@
 import React, { useState, useEffect } from 'react'
 import TableProduct from "@/components/table"
 import type { TableColumnsType } from 'antd'
+import { Dropdown, Menu } from 'antd'
 import { BrandType } from '@/data/brands-data'
 import Image from 'next/image'
-import { EditOutlined, PlusCircleOutlined, InfoCircleOutlined } from '@ant-design/icons'
-import DeletePopover from '@/components/popover'
+import { EditOutlined, PlusCircleOutlined, InfoCircleOutlined, MoreOutlined } from '@ant-design/icons'
+import Popover from '@/components/popover'
 import { routes } from '@/config/routes'
 import Link from 'next/link'
 import Breadcrumb from "@/components/breadcrumb"
@@ -17,6 +18,7 @@ import { deleteBrand } from '@/services/brands-service'
 import { useNotificationAntd } from '@/components/toast'
 import { useAtom } from 'jotai'
 import { brandAtom } from '@/store/BrandAtomStore'
+import StatusBadge from '@/components/badge/badge-status'
 
 const index = ({ brandsData }: { brandsData?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
@@ -79,35 +81,54 @@ const index = ({ brandsData }: { brandsData?: any }) => {
         {
             title: 'Status',
             dataIndex: 'status',
+            sorter: (a: any, b: any) => {
+                return a?.status - b?.status
+            },
+            render: (value: any) => {
+                return <StatusBadge status={value} />;
+            }
         },
         {
             title: 'Created At',
-            dataIndex: 'createdAt',
+            dataIndex: 'created_at',
             sorter: (a: any, b: any) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
             render: (created_at: string) => {
-                const date = dayjs(created_at).format('DD MMMM, YYYY')
+                const date = dayjs(created_at).format('DD/MM/YYYY')
                 return date
             }
         },
         {
-            // Need to avoid this issue -> <td> elements in a large <table> do not have table headers.
             title: 'Action',
             dataIndex: 'action',
             key: 'action',
             width: 120,
-            render: (_: string, row: any) => (
+            render: (_: string, row: any) => {
+                const menu = (
+                    <Menu>
+                        <Menu.Item key="edit">
+                            <Link href={routes.eCommerce.editBrands(row.id)}>
+                                Edit
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item key="delete">
+                            <Popover
+                                title='Delete Brands'
+                                description='Are you sure to delete this data?'
+                                onDelete={() => handleDelete(row.id)}
+                                label='Delete'
+                            />
+                        </Menu.Item>
+                    </Menu>
+                );
 
-                <div className="flex items-center justify-end gap-3 pe-4">
-                    <Link href={routes.eCommerce.editBrands(row.id)}>
-                        <EditOutlined />
-                    </Link>
-                    <DeletePopover
-                        title='Delete Brands'
-                        description='Are you sure to delete this data?'
-                        onDelete={() => handleDelete(row.id)}
-                    />
-                </div >
-            ),
+                return (
+                    <Dropdown overlay={menu} trigger={['click']} >
+                        <button className="flex items-center justify-center px-2 py-1 border rounded hover:bg-gray-100">
+                            Actions <MoreOutlined className="ml-1" />
+                        </button>
+                    </Dropdown >
+                );
+            }
         },
 
     ]
@@ -129,6 +150,7 @@ const index = ({ brandsData }: { brandsData?: any }) => {
             setFilteredData(brandsData)
         }
     }, [brandsData, search])
+
     return (
         <>
             {contextHolder}

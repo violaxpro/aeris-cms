@@ -345,6 +345,14 @@ const BasicInformationProduct = ({ dataById, onChange, formDataCreate }: ChildFo
                         onSuccess={handleSuccess}
                         onError={handleError}
                         isUpload={isLoading}
+                        fileList={formDataCreate.tab_basic_information.images?.map((img: any, index: any) => {
+                            return {
+                                uid: `${index}`,
+                                name: img.name ?? img.url,
+                                status: 'done',
+                                url: img.url
+                            }
+                        })}
                     />
                     {/* <FileUploader
                         label='Base Images'

@@ -7,12 +7,12 @@ import ProductPrice from './price';
 import AdvancedInformation from './advanced-information';
 import Button from '@/components/button'
 import { routes } from '@/config/routes';
-import { addProduct } from '@/services/products-service';
+import { addProduct, updateProduct } from '@/services/products-service';
 import { useNotificationAntd } from '@/components/toast';
 import { useRouter } from 'next/navigation';
 import { FormProps } from '@/plugins/types/form-type';
 
-const ProductForm: React.FC<FormProps> = ({ mode, initialValues }) => {
+const ProductForm: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const [activeTab, setActiveTab] = useState<'basic' | 'price' | 'advanced'>('basic');
     const router = useRouter()
     const { contextHolder, notifySuccess } = useNotificationAntd()
@@ -105,20 +105,21 @@ const ProductForm: React.FC<FormProps> = ({ mode, initialValues }) => {
                 diamond_price: Number(formData.tab_price.diamond),
                 meta_title: formData.tab_basic_information.metaTitle,
                 meta_description: formData.tab_basic_information.metaDescription,
-                images: [
-                    {
-                        "name": "image a",
-                        "url": "https://cdn.alarmexpert.com.au/local/images/undefined/1738868084095.png",
-                        "default": true,
-                        "alt_image": "image a"
-                    }
-                ]
+                images: formData.tab_basic_information.images
+                // images: [
+                //     {
+                //         "name": "image a",
+                //         "url": "https://cdn.alarmexpert.com.au/local/images/undefined/1738868084095.png",
+                //         "default": true,
+                //         "alt_image": "image a"
+                //     }
+                // ]
             }
             console.log(submitData)
 
             let response
-            if (mode == 'edit') {
-
+            if (mode == 'edit' && slug) {
+                response = await updateProduct(slug, submitData)
             } else {
                 response = await addProduct(submitData)
             }

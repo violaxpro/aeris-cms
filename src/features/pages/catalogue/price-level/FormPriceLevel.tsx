@@ -61,6 +61,7 @@ const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const handleSubmit = async () => {
         try {
             const submitData = {
+                name : formData.name,
                 brandId: formData.brands,
                 categoryId: formData.categories,
                 rrp_price: Number(formData.rrp),
@@ -109,6 +110,14 @@ const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             title="Price"
                             description="Price information"
                         >
+                             <Input
+                                id='name'
+                                label='Name'
+                                type='text'
+                                placeholder='Input Name'
+                                onChange={handleChange}
+                                value={formData.name}
+                            />
                             <SelectInput
                                 id='brands'
                                 label="Brands"
@@ -133,14 +142,7 @@ const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 onChange={(val) => handleChangeSelect("subcategories", val)}
                                 options={optionsCategories}
                             />
-                            {/* <Input
-                                id='buyingPrice'
-                                label='Buying Price'
-                                type='text'
-                                placeholder='Input Buying Price'
-                                onChange={handleChange}
-                                value={formData.buyingPrice}
-                            /> */}
+                           
                             <Input
                                 id='rrp'
                                 label='RRP(%)'

@@ -1,10 +1,11 @@
 'use client'
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import TableProduct from "@/components/table"
 import type { TableColumnsType } from 'antd'
 import { PriceLevelType } from '@/data/price-level-data'
-import { EditOutlined, PlusCircleOutlined, InfoCircleOutlined } from '@ant-design/icons'
-import DeletePopover from '@/components/popover'
+import { Dropdown, Menu } from 'antd'
+import { EditOutlined, PlusCircleOutlined, InfoCircleOutlined, MoreOutlined } from '@ant-design/icons'
+import Popover from '@/components/popover'
 import { routes } from '@/config/routes'
 import Link from 'next/link'
 import Breadcrumb from "@/components/breadcrumb"
@@ -19,6 +20,9 @@ import { useAtom } from 'jotai'
 const index = ({ priceLevels }: { priceLevels?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
     const [data, setData] = useAtom(priceLevelsAtom)
+    const [filteredData, setFilteredData] = useState<PriceLevelType[]>([]);
+    const [search, setSearch] = useState('')
+
     const handleDelete = async (id: any) => {
         try {
             const res = await deletePriceLevel(id)
@@ -30,12 +34,6 @@ const index = ({ priceLevels }: { priceLevels?: any }) => {
             console.error(error)
         }
     }
-
-    console.log(priceLevels)
-
-    useEffect(() => {
-        setData(priceLevels)
-    }, [priceLevels])
 
     const breadcrumb = [
         {
@@ -53,10 +51,16 @@ const index = ({ priceLevels }: { priceLevels?: any }) => {
         {
             title: 'Name',
             dataIndex: 'name',
+            sorter: (a: any, b: any) => {
+                return a?.name?.localeCompare(b?.name)
+            }
         },
         {
             title: 'Brand',
             dataIndex: 'brand',
+            sorter: (a: any, b: any) => {
+                return a?.brand?.name?.localeCompare(b?.brand?.name)
+            },
             render: (brand: { id: number; name: string } | null) => {
                 return brand?.name || '-';
             },
@@ -64,36 +68,67 @@ const index = ({ priceLevels }: { priceLevels?: any }) => {
         {
             title: 'Category',
             dataIndex: 'category',
+            sorter: (a: any, b: any) => {
+                return a?.category?.name?.localeCompare(b?.category?.name)
+            },
             render: (category: { id: number; name: string } | null) => {
                 return category?.name || '-';
             },
         },
         {
-            // Need to avoid this issue -> <td> elements in a large <table> do not have table headers.
             title: 'Action',
             dataIndex: 'action',
             key: 'action',
             width: 120,
-            render: (_: string, row: any) => (
+            render: (_: string, row: any) => {
+                const menu = (
+                    <Menu>
+                        <Menu.Item key="edit">
+                            <Link href={routes.eCommerce.editPriceLevel(row.id)}>
+                                Edit
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item key="delete">
+                            <Popover
+                                title='Delete Price Level'
+                                description='Are you sure to delete this data?'
+                                onDelete={() => handleDelete(row.id)}
+                                label='Delete'
+                            />
+                        </Menu.Item>
+                    </Menu>
+                );
 
-                <div className="flex items-center justify-end gap-3 pe-4">
-                    <Link href={routes.eCommerce.editPriceLevel(row.id)}>
-                        <EditOutlined />
-                    </Link>
-                    <DeletePopover
-                        title='Delete Price Level'
-                        description='Are you sure to delete this data?'
-                        onDelete={() => handleDelete(row.id)}
-                    />
-                </div >
-            ),
+                return (
+                    <Dropdown overlay={menu} trigger={['click']} >
+                        <button className="flex items-center justify-center px-2 py-1 border rounded hover:bg-gray-100">
+                            Actions <MoreOutlined className="ml-1" />
+                        </button>
+                    </Dropdown >
+                );
+            }
         },
 
     ]
 
-    const handleSearch = (query: string) => {
-        console.log('User mencari:', query);
+    const handleSearch = (value: string) => {
+        const search = value.toLowerCase();
+        setSearch(search)
+        const result = data.filter((item: any) => {
+            return item?.name?.toLowerCase().includes(search) ||
+                item?.brand?.name?.toLowerCase().includes(search) ||
+                item?.category?.name?.toLowerCase().includes(search)
+        });
+        setFilteredData(result);
     };
+
+    useEffect(() => {
+        setData(priceLevels)
+        if (!search) {
+            setFilteredData(priceLevels)
+        }
+    }, [priceLevels, search])
+
     return (
         <>
             {contextHolder}
@@ -121,7 +156,7 @@ const index = ({ priceLevels }: { priceLevels?: any }) => {
                     </div>
                     <TableProduct
                         columns={columns}
-                        dataSource={data}
+                        dataSource={filteredData}
                         withSelectableRows
                     />
                 </div>

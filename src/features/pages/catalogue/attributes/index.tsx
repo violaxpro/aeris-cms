@@ -2,9 +2,10 @@
 import React, { useState, useEffect } from 'react'
 import Table from "@/components/table"
 import type { TableColumnsType } from 'antd'
+import { Dropdown, Menu } from 'antd'
 import { AttributesType } from '@/data/attributes-data'
-import { EditOutlined, PlusCircleOutlined, InfoCircleOutlined } from '@ant-design/icons'
-import DeletePopover from '@/components/popover'
+import { EditOutlined, PlusCircleOutlined, MoreOutlined } from '@ant-design/icons'
+import Popover from '@/components/popover'
 import { routes } from '@/config/routes'
 import Link from 'next/link'
 import Breadcrumb from "@/components/breadcrumb"
@@ -22,7 +23,7 @@ const index = ({ attributesData }: { attributesData?: any }) => {
     const [data, setData] = useAtom(attributeAtom)
     const [filteredData, setFilteredData] = useState<AttributesType[]>([])
     const [search, setSearch] = useState('')
-    
+
     const handleDelete = async (id: any) => {
         try {
             const res = await deleteAttribute(id)
@@ -67,13 +68,16 @@ const index = ({ attributesData }: { attributesData?: any }) => {
         {
             title: 'Filterable',
             dataIndex: 'filterable',
+            sorter: (a: any, b: any) => {
+                return a?.filterable - b?.filterable
+            },
         },
         {
             title: 'Created At',
-            dataIndex: 'createdAt',
-            sorter: (a: any, b: any) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+            dataIndex: 'created_at',
+            sorter: (a: any, b: any) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
             render: (created_at: string) => {
-                const date = dayjs(created_at).format('DD MMMM, YYYY')
+                const date = dayjs(created_at).format('DD/MM/YYYY')
                 return date
             }
         },
@@ -82,19 +86,33 @@ const index = ({ attributesData }: { attributesData?: any }) => {
             dataIndex: 'action',
             key: 'action',
             width: 120,
-            render: (_: string, row: any) => (
+            render: (_: string, row: any) => {
+                const menu = (
+                    <Menu>
+                        <Menu.Item key="edit">
+                            <Link href={routes.eCommerce.editAttributes(row.id)}>
+                                Edit
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item key="delete">
+                            <Popover
+                                title='Delete Attributes'
+                                description='Are you sure to delete this data?'
+                                onDelete={() => handleDelete(row.id)}
+                                label='Delete'
+                            />
+                        </Menu.Item>
+                    </Menu>
+                );
 
-                <div className="flex items-center justify-end gap-3 pe-4">
-                    <Link href={routes.eCommerce.editAttributes(row.id)}>
-                        <EditOutlined />
-                    </Link>
-                    <DeletePopover
-                        title='Delete Attribute'
-                        description='Are you sure to delete this data?'
-                        onDelete={() => handleDelete(row.id)}
-                    />
-                </div >
-            ),
+                return (
+                    <Dropdown overlay={menu} trigger={['click']} >
+                        <button className="flex items-center justify-center px-2 py-1 border rounded hover:bg-gray-100">
+                            Actions <MoreOutlined className="ml-1" />
+                        </button>
+                    </Dropdown >
+                );
+            }
         },
 
     ]
@@ -105,6 +123,7 @@ const index = ({ attributesData }: { attributesData?: any }) => {
         const result = data.filter((item: any) => {
             const formattedDate = dayjs(item?.createdAt).format('DD MMMM, YYYY').toLowerCase();
             return item?.name.toLowerCase().includes(search) ||
+                item?.attribute_set.toLowerCase().includes(search) ||
                 formattedDate.includes(search);
         });
         setFilteredData(result);

@@ -82,8 +82,8 @@ const FormBrands: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
             const data = {
                 name: formData.name,
-                // discount_percent: formData.discountPercent,
-                // status: formData.status,
+                discount_percent: Number(formData.discountPercent) ?? 0,
+                status: formData.status == true ? 1 : 0,
                 meta_title: formData.metaTitle,
                 meta_description: formData.metaDescription,
                 url_banner: formData.urlBanner,

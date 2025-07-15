@@ -31,20 +31,27 @@ const index = ({ optionsData }: { optionsData?: any }) => {
         {
             title: 'ID',
             dataIndex: 'id',
+            sorter: (a: any, b: any) => a.id - b.id,
         },
         {
             title: 'Name',
             dataIndex: 'optionName',
+            sorter: (a: any, b: any) => {
+                return a?.option_name?.localeCompare(b?.option_name)
+            }
         },
         {
             title: 'Type',
             dataIndex: 'optionType',
+            sorter: (a: any, b: any) => {
+                return a?.type - b?.type
+            },
         },
         {
             title: 'Created At',
-            dataIndex: 'createdAt',
+            dataIndex: 'created_at',
             render: (created_at: string) => {
-                const date = dayjs(created_at).format('DD MMMM, YYYY')
+                const date = dayjs(created_at).format('DD/MM/YYYY')
                 return date
             }
         },

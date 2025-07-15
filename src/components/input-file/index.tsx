@@ -17,6 +17,7 @@ type FileUploaderProps = {
     error?: boolean
     errorMessage?: string
     isUpload?: boolean
+    fileList?: UploadFile<any>[]
 
 };
 
@@ -29,7 +30,8 @@ const FileUploader: React.FC<FileUploaderProps> = ({
     label,
     error = false,
     errorMessage,
-    isUpload = false
+    isUpload = false,
+    fileList
 }) => {
     const props: UploadProps = {
         name: 'file',
@@ -61,6 +63,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({
         onDrop(e) {
             console.log('Dropped files', e.dataTransfer.files);
         },
+        fileList
     };
 
     return (

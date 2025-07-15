@@ -16,7 +16,7 @@ export default async function EditProductUrl(props: { params: Params }) {
     }
     return (
         <div>
-            <ProductForm mode="edit" initialValues={dataForm} />
+            <ProductForm mode="edit" initialValues={dataForm} slug={slug}/>
         </div>
     )
 }

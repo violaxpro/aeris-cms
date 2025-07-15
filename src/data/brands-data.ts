@@ -1,7 +1,7 @@
 export type BrandType = {
   id?: number | string | undefined
   name: string;
-  status?: boolean
+  status?: boolean | number
   discount_percent?: number
   meta_title?: string;
   meta_description?: string;
