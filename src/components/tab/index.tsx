@@ -4,7 +4,7 @@ export type Tab = {
     key: string;
     label: string;
     onClick?: () => void;
-    count: number
+    count?: number
 };
 
 type TabsProps = {

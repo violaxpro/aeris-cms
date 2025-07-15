@@ -81,6 +81,8 @@ export const routes = {
 
     inventoryList: '/ecommerce/inventory-list',
     warehouses: (slug: string) => `'/ecommerce/warehouse/${slug}/edit`,
+
+    generalSettings: '/ecommerce/general-settings',
   },
   profile: '/profile',
   welcome: '/welcome',

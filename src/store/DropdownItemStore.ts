@@ -10,7 +10,7 @@ export const productSetAtom = atom([])
 
 export const supplierSetAtom = atom([])
 
-
+export const taxSetAtom = atom([])
 // export const fetchAttributeSetAtom = atom(
 //     async () => await getAttributeSet()
 // )

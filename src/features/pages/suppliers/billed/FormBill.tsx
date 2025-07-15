@@ -31,7 +31,7 @@ const FormBilled: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         qty: 0,
         unit_price: 0,
         account: '',
-        tax_rate: 0,
+        tax_rate: '',
         region: '',
         amount: 0
     });
@@ -91,13 +91,21 @@ const FormBilled: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
             dataIndex: 'amount',
         },
         {
-            title: 'Edit',
-            dataIndex: 'edit',
+            title: 'Action',
+            dataIndex: 'action',
             render: (_: any, row: any, index: number) => {
-                return <Button
-                    label="Edit"
-                    onClick={() => handleEditItem(index)}
-                />
+                return (
+                    <div className='flex gap-2'>
+                        <Button
+                            label="Edit"
+                            onClick={() => handleEditItem(index)}
+                        />
+                        <Button
+                            label="Delete"
+                            onClick={() => handleDeleteItem(index)}
+                        />
+                    </div>
+                )
             }
         },
 
@@ -109,6 +117,10 @@ const FormBilled: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         setEditIndex(index);
         setShowAddItem(true);
     }
+
+    const handleDeleteItem = (index: number) => {
+        setItemList(prev => prev.filter((_, i) => i !== index));
+    };
 
     const handleAddProduct = () => {
         if (editIndex !== null) {
@@ -126,7 +138,7 @@ const FormBilled: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
             qty: 0,
             unit_price: 0,
             account: '',
-            tax_rate: 0,
+            tax_rate: '',
             region: '',
             amount: 0
         });

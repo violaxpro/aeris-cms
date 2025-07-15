@@ -9,15 +9,16 @@ import { getBrands } from '@/services/brands-service'
 import { getCategories } from '@/services/category-service'
 import { getAttributeSet } from '@/services/attribute-set-service';
 import { getProduct } from '@/services/products-service';
+import { getTaxes } from '@/services/settings-service';
 import { useAtom } from 'jotai'
-import { brandsAtom, categoriesAtom, attributeSetAtom, productSetAtom } from '@/store/DropdownItemStore'
+import { brandsAtom, categoriesAtom, attributeSetAtom, productSetAtom , taxSetAtom} from '@/store/DropdownItemStore'
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
     const [optionBrands, setOptionBrands] = useAtom(brandsAtom)
     const [optionCategories, setOptionCategories] = useAtom(categoriesAtom)
     const [optionAttributeSet, setOptionAttributeSet] = useAtom(attributeSetAtom)
     const [optionProduct, setOptionProduct] = useAtom(productSetAtom)
-
+    const [optionTaxes, setOptionTaxes] = useAtom(taxSetAtom)
 
     useEffect(() => {
         const fetchData = async () => {
@@ -25,6 +26,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
             const categories = await getCategories()
             const attributeSet = await getAttributeSet()
             const products = await getProduct()
+            const taxes = await getTaxes()
 
             const brandOptions = brands.data.map((brand: any) => ({
                 label: brand.name,
@@ -45,14 +47,20 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                 label: product.name,
                 value: product.id
             }))
+
+            const taxOption = taxes.data.map((tax: any) => ({
+                label: tax.name,
+                value: tax.value
+            }))
             setOptionBrands(brandOptions)
             setOptionCategories(categoryOptions)
             setOptionAttributeSet(attributeSetOption)
             setOptionProduct(productOption)
+            setOptionTaxes(taxOption)
         }
 
         fetchData()
-    }, [setOptionBrands, setOptionCategories, setOptionAttributeSet, setOptionProduct])
+    }, [setOptionBrands, setOptionCategories, setOptionAttributeSet, setOptionProduct, setOptionTaxes])
     return (
         <Layout style={{ minHeight: '100vh' }}>
             <Sidebar />

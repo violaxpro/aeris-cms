@@ -10,7 +10,8 @@ type inputProps = {
     onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
     rows?: number
     maxLength?: number
-    notes?: string
+    notes?: string,
+    error?: string
 }
 
 const index = ({
@@ -21,7 +22,8 @@ const index = ({
     onChange,
     rows,
     maxLength,
-    notes
+    notes,
+    error
 }: inputProps) => {
     return (
         <>
@@ -41,6 +43,9 @@ const index = ({
                     <span className='text-gray-300'>{notes}</span>
                 )
             }
+            {error && (
+                <p className="text-red-500 text-xs mt-1">{error}</p>
+            )}
 
         </>
     );

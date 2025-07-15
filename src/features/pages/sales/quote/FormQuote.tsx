@@ -26,6 +26,7 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         price: 0,
         buying_price: 0,
         qty: 0,
+        tax: '',
         total: 0,
     });
     const [editIndex, setEditIndex] = useState<number | null>(null)
@@ -77,14 +78,20 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
             dataIndex: 'total',
         },
         {
-            title: 'Edit',
-            dataIndex: 'edit',
+            title: 'Action',
+            dataIndex: 'action',
             render: (_: any, row: any, index: number) => {
                 console.log(row)
-                return <Button
-                    label="Edit"
-                    onClick={() => handleEditProduct(index)}
-                />
+                return <div className='flex gap-2'>
+                    <Button
+                        label="Edit"
+                        onClick={() => handleEditProduct(index)}
+                    />
+                    <Button
+                        label="Delete"
+                        onClick={() => handleDeleteProduct(index)}
+                    />
+                </div>
             }
         },
 
@@ -96,6 +103,10 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         setEditIndex(index);
         setShowAddProduct(true);
     }
+
+    const handleDeleteProduct = (index: number) => {
+        setProductList(prev => prev.filter((_, i) => i !== index));
+    };
 
     const handleAddProduct = () => {
         if (editIndex !== null) {
@@ -113,6 +124,7 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
             price: 0,
             buying_price: 0,
             qty: 0,
+            tax: '',
             total: 0,
         });
     };

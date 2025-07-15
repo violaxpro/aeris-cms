@@ -26,6 +26,7 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         price: 0,
         buying_price: 0,
         qty: 0,
+        tax: '',
         total: 0,
     });
     const [editIndex, setEditIndex] = useState<number | null>(null)
@@ -43,6 +44,16 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         shipping_fee: initialValues ? initialValues.shipping_fee : '',
         gst: initialValues ? initialValues.gst : '',
         total: initialValues ? initialValues.total : '',
+    });
+    const [formErrors, setFormErrors] = useState({
+        user: '',
+        billing_address: '',
+        shipping_address: '',
+        subtotal: '',
+        product: '',
+        shipping_fee: '',
+        gst: '',
+        total: '',
     });
 
     const breadcrumb = [
@@ -75,6 +86,10 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
             dataIndex: 'qty',
         },
         {
+            title: 'Tax Fee',
+            dataIndex: 'tax',
+        },
+        {
             title: 'Total',
             dataIndex: 'total',
         },
@@ -82,11 +97,16 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
             title: 'Edit',
             dataIndex: 'edit',
             render: (_: any, row: any, index: number) => {
-                console.log(row)
-                return <Button
-                    label="Edit"
-                    onClick={() => handleEditProduct(index)}
-                />
+                return <div className='flex gap-2'>
+                    <Button
+                        label="Edit"
+                        onClick={() => handleEditProduct(index)}
+                    />
+                    <Button
+                        label="Delete"
+                        onClick={() => handleDeleteProduct(index)}
+                    />
+                </div>
             }
         },
 
@@ -98,6 +118,9 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         setEditIndex(index);
         setShowAddProduct(true);
     }
+    const handleDeleteProduct = (index: number) => {
+        setProductList(prev => prev.filter((_, i) => i !== index));
+    };
 
     const handleAddProduct = () => {
         if (editIndex !== null) {
@@ -113,6 +136,7 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
             sku: '',
             name: '',
             price: 0,
+            tax: '',
             buying_price: 0,
             qty: 0,
             total: 0,
@@ -134,6 +158,44 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     };
 
     const handleSubmit = async () => {
+        const newErrors = {
+            user: '',
+            billing_address: '',
+            shipping_address: '',
+            subtotal: '',
+            product: '',
+            shipping_fee: '',
+            gst: '',
+            total: '',
+        };
+
+        if (!formData.user.trim()) newErrors.user = 'User is required';
+        if (!formData.billing_address.trim()) newErrors.billing_address = 'Billing Address is required';
+        if (!formData.shipping_address.trim()) newErrors.shipping_address = 'Shipping Address is required';
+
+        if (!formData.subtotal || Number(formData.subtotal) <= 0) newErrors.subtotal = 'Subtotal must be greater than 0';
+        if (productList.length === 0) newErrors.product = 'At least one product is required';
+        if (!formData.shipping_fee || Number(formData.shipping_fee) <= 0) newErrors.shipping_fee = 'Shipping Fee is required';
+        if (!formData.gst || Number(formData.gst) <= 0) newErrors.gst = 'GST/Tax is required';
+        if (!formData.total || Number(formData.total) <= 0) newErrors.total = 'Total must be greater than 0';
+
+        const hasErrors = Object.values(newErrors).some((v) => v !== '');
+
+        if (hasErrors) {
+            setFormErrors(newErrors);
+            return;
+        } else {
+            setFormErrors({
+                user: '',
+                billing_address: '',
+                shipping_address: '',
+                subtotal: '',
+                product: '',
+                shipping_fee: '',
+                gst: '',
+                total: '',
+            });
+        }
         try {
             const submitData = {
                 user: formData.user,
@@ -210,6 +272,7 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     placeholder='Input User'
                                     onChange={handleChange}
                                     value={formData.user}
+                                    errorMessage={formErrors.user}
                                 />
                                 <Input
                                     id='po_number'
@@ -234,12 +297,14 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     label='Biiling Address'
                                     value={formData.billing_address}
                                     onChange={handleChange}
+                                    error={formErrors.billing_address}
                                 />
                                 <Textarea
                                     id='shipping_address'
                                     label='Shipping Address'
                                     value={formData.shipping_address}
                                     onChange={handleChange}
+                                    error={formErrors.shipping_address}
                                 />
                             </div>
                         </div>
@@ -264,6 +329,10 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     columns={columns}
                                     dataSource={productList}
                                 />
+                                {
+                                    formErrors.product && <p className="text-red-500 text-xs mt-1">{formErrors.product}</p>
+                                }
+
                             </div>
 
                         </div>
@@ -277,8 +346,9 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     onChange={handleChange}
                                     value={Number(formData.subtotal).toFixed(2)}
                                     disabled
-                                    divClassName='flex gap-3 items-center'
+                                    divClassName='flex gap-3 items-center w-full'
                                     className='w-full'
+                                    errorMessage={formErrors.subtotal}
                                 />
                                 <Input
                                     id='discount'
@@ -298,6 +368,7 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     value={formData.shipping_fee}
                                     divClassName='flex gap-3 items-center'
                                     className='w-full'
+                                    errorMessage={formErrors.shipping_fee}
                                 />
                                 <Input
                                     id='gst'
@@ -307,6 +378,7 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     value={formData.gst}
                                     divClassName='flex gap-3 items-center'
                                     className='w-full'
+                                    errorMessage={formErrors.gst}
                                 />
                                 <Input
                                     id='total'
@@ -317,6 +389,8 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     disabled
                                     divClassName='flex gap-3 items-center'
                                     className='w-full'
+                                    errorMessage={formErrors.total}
+
                                 />
                             </div>
 

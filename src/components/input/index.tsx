@@ -16,6 +16,7 @@ type inputProps = {
     className?: string,
     disabled?: boolean
     divClassName?: string
+    suffix?: React.ReactNode;
 }
 
 const index = ({ label,
@@ -31,7 +32,8 @@ const index = ({ label,
     errorMessage,
     className,
     disabled,
-    divClassName
+    divClassName,
+    suffix
 }: inputProps) => {
 
     return (
@@ -39,29 +41,31 @@ const index = ({ label,
             <label htmlFor={id} className={`block text-sm font-medium text-gray-700 ${className}`}>
                 {label}
             </label>
-            <Input
-                id={id}
-                disabled={disabled}
-                placeholder={placeholder ?? ''}
-                onChange={onChange}
-                value={value}
-                className='rounded-md text-sm'
-                type={type}
-                style={{
-                    ...style,
-                    borderColor: error ? '#f5222d' : '#E5E7EB',
-                }}
-                readOnly={readOnly}
-            />
+            <div>
+                <Input
+                    id={id}
+                    disabled={disabled}
+                    placeholder={placeholder ?? ''}
+                    onChange={onChange}
+                    value={value}
+                    className='rounded-md text-sm'
+                    type={type}
+                    style={{
+                        ...style,
+                        borderColor: error ? '#f5222d' : '#E5E7EB',
+                    }}
+                    readOnly={readOnly}
+                    suffix={suffix}
+                />
+                {errorMessage && (
+                    <p className="text-red-500 text-xs mt-1">{errorMessage}</p>
+                )}
+            </div>
             {
                 notes && (
                     <span>{notes}</span>
                 )
             }
-            {errorMessage && (
-                <p className="text-red-500 text-xs mt-1">{errorMessage}</p>
-            )}
-
         </div>
     );
 };

@@ -1,8 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Input from "@/components/input"
 import SelectInput from '@/components/select';
 import CheckboxInput from '@/components/checkbox';
 import Button from '@/components/button'
+import { useAtom } from 'jotai';
+import { taxSetAtom } from '@/store/DropdownItemStore';
+import { getProduct } from '@/services/products-service';
 
 export interface ItemListProps {
     item: string
@@ -10,7 +13,7 @@ export interface ItemListProps {
     qty: number
     unit_price: number
     account: string
-    tax_rate: number
+    tax_rate: any
     region: string
     amount: number
 }
@@ -26,6 +29,9 @@ const ItemList = ({
     setItemForm,
     onAddItem
 }: ItemInputProps) => {
+    const [optionsTax] = useAtom(taxSetAtom)
+    const [items, setItems] = useState([])
+    const [taxError, setTaxError] = useState('')
     const handleChange = (e: any) => {
         const { id, value } = e.target;
 
@@ -46,20 +52,78 @@ const ItemList = ({
         setItemForm(updatedForm);
     };
 
+    const handleChangeSelect = (id: string, value: any) => {
+        let updateItem = {
+            ...itemForm,
+            [id]: value
+        };
+
+        // Cari data tax di options
+        const selectedTax: any = optionsTax.find((t: any) => t.value === value);
+
+        const taxRate = selectedTax ? Number(selectedTax.value) : 0;
+
+        // Re-hit total dengan tax kalau ada qty & buying_price
+        const qty = Number(updateItem.qty) || 0;
+        const buyingPrice = Number(updateItem.unit_price) || 0;
+        const baseTotal = qty * buyingPrice;
+
+        const taxAmount = (baseTotal * taxRate) / 100;
+
+        updateItem.amount = Number((baseTotal + taxAmount).toFixed(2));
+
+        setItemForm(updateItem);
+    };
+
+    const handleSelectProduct = (productName: string) => {
+        const selectedProduct: any = items.find((p: any) => p.name === productName);
+        if (selectedProduct) {
+            setItemForm(prev => ({
+                ...prev,
+                item: selectedProduct.name,
+            }));
+        }
+    };
+
     const handleAddItem = () => {
+         if (!itemForm.tax_rate) {
+            setTaxError('Tax Rate is required');
+            return; 
+        } else {
+            setTaxError(''); 
+        }
         onAddItem()
     };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await getProduct()
+                if (res.data) {
+                    setItems(res.data)
+                }
+
+            } catch (error) {
+                console.error(error)
+            }
+        }
+
+        fetchData()
+
+    }, [])
 
     return (
         <div>
             <div className='grid md:grid-cols-8 gap-4 mb-2'>
-                <Input
+                <SelectInput
                     id='item'
-                    type='text'
                     label='Item'
                     value={itemForm.item}
-                    onChange={handleChange}
-                    className='mb-1'
+                    onChange={(val: any) => handleSelectProduct(val)}
+                    options={items.map((p: any) => ({
+                        label: p.name,
+                        value: p.name,
+                    }))}
                 />
                 <Input
                     id='description'
@@ -93,15 +157,15 @@ const ItemList = ({
                     value={itemForm.account}
                     onChange={handleChange}
                     className='mb-1'
-
                 />
-                <Input
+                <SelectInput
                     id='tax_rate'
-                    type='text'
                     label='Tax Rate'
+                    placeholder="Select Tax Rate"
                     value={itemForm.tax_rate}
-                    onChange={handleChange}
-                    className='mb-1'
+                    onChange={(val) => handleChangeSelect("tax_rate", val)}
+                    options={optionsTax}
+                    error={taxError}
                 />
                 <Input
                     id='region'
@@ -120,7 +184,6 @@ const ItemList = ({
                     className='mb-1'
                 />
             </div>
-
             <Button
                 label='Save'
                 btnClassname="!bg-[#86A788] !text-white hover:!bg-white hover:!text-[#86A788] hover:!border-[#86A788]"

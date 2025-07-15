@@ -501,7 +501,7 @@ export const menuItems = [
                     {
                         key: 'general-settings',
                         label: 'General Settings',
-                        href: routes.eCommerce.products,
+                        href: routes.eCommerce.generalSettings,
                     },
                     {
                         key: 'social-logins',

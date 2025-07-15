@@ -3,7 +3,7 @@ import { Select } from 'antd';
 
 type Option = {
     label: string;
-    value?: string; 
+    value?: string;
     options?: Option[];
 };
 
@@ -19,6 +19,7 @@ type SelectInputProps = {
     modeType?: 'multiple' | 'tags' | undefined;
     allowClear?: boolean
     popupRender?: any
+    error?: string
 };
 
 const SelectInput: React.FC<SelectInputProps> = ({
@@ -32,6 +33,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
     modeType,
     allowClear = false,
     popupRender,
+    error
 }) => {
     return (
         <div className={className}>
@@ -56,8 +58,10 @@ const SelectInput: React.FC<SelectInputProps> = ({
 
                 } : {})}
                 popupRender={popupRender}
-
             />
+            {error && (
+                <p className="text-red-500 text-xs mt-1">{error}</p>
+            )}
         </div>
     );
 };
