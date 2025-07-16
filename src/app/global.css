@@ -309,3 +309,11 @@ body,
 .ant-layout {
     background: var(--background) !important;
 }
+
+:where(.ant-menu-light.ant-menu-inline) .ant-menu-sub.ant-menu-inline {
+    background: var(--background) !important;
+}
+
+:where(.ant-menu-light > .ant-menu.ant-menu-inline) .ant-menu-sub.ant-menu-inline {
+    background: var(--background) !important;
+}
