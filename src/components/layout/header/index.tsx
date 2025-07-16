@@ -58,10 +58,14 @@ export default function HeaderLayout() {
 
             <div className="flex justify-between items-center gap-4 mx-6">
 
-                <Badge count={3}>
-                    <BellOutlined style={{ color: 'var(--text-color)' }} />
-                </Badge>
+                <Button className='!bg-background'>
+                    <Badge count={3}>
+                        <BellOutlined style={{ color: 'var(--text-color)' }} />
+                    </Badge>
+                </Button>
+
                 <Button
+                    className='!bg-background'
                     type="text"
                     icon={<SettingOutlined style={{ fontSize: 20, color: 'var(--text-color)' }} />}
                     onClick={showDrawer}
@@ -76,8 +80,7 @@ export default function HeaderLayout() {
                     }}
                 >
                     <div className="flex items-center gap-2 cursor-pointer">
-                        <Avatar src={AvatarImage.src} size="small" />
-                        <span>Viola</span>
+                        <Avatar style={{ backgroundColor: '#87d068' }} src={AvatarImage.src} />
                     </div>
                 </Dropdown>
             </div>
