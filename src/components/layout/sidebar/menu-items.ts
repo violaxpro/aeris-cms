@@ -24,8 +24,7 @@ import {
     CarOutlined,
     DashboardOutlined
 } from '@ant-design/icons';
-import { RolesPermissionIcon, DashboardIcon } from '@/components/icon';
-
+import { DashboardIcon } from '@/components/icon';
 
 // Note: do not add href in the label object, it is rendering as label
 export const menuItems = [
