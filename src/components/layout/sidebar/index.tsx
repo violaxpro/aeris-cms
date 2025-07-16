@@ -6,6 +6,17 @@ import logoImg from '@public/logo/Alarm Expert Logo.webp';
 import { menuItems } from './menu-items';
 import Link from 'next/link';
 
+const siderStyle: React.CSSProperties = {
+    overflow: 'auto',
+    height: '100vh',
+    position: 'sticky',
+    insetInlineStart: 0,
+    top: 0,
+    bottom: 0,
+    scrollbarWidth: 'thin',
+    scrollbarGutter: 'stable',
+};
+
 const Sidebar = () => {
     // const items = menuItems.map((item, index) => {
     //     return {
@@ -78,6 +89,7 @@ const Sidebar = () => {
     const items = renderMenuItems(menuItems);
     return (
         <Sider
+            style={siderStyle}
             className='!bg-white'
             breakpoint="lg"
             collapsedWidth="0"

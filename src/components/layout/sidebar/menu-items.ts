@@ -18,12 +18,8 @@ import {
 export const menuItems = [
     // label start
     {
-        key: 'overview',
+        key: 'group-overview',
         label: 'Overview',
-    },
-    {
-        key: 'group-dashboard',
-        label: 'Dashboard',
         type: 'group',
         children: [
             {
@@ -32,13 +28,39 @@ export const menuItems = [
                 href: routes.eCommerce.dashboard,
                 icon: DatabaseOutlined,
             },
-        ]
-    },
-    {
-        key: 'group-catalogue',
-        label: 'Catalogue',
-        type: 'group',
-        children: [
+            {
+                key: 'sales',
+                label: 'Sales',
+                href: '#',
+                icon: PieChartOutlined,
+                children: [
+                    {
+                        key: 'order',
+                        label: 'Order',
+                        href: routes.eCommerce.order,
+                    },
+                    {
+                        key: 'quote',
+                        label: 'Quote',
+                        href: routes.eCommerce.quote,
+                    },
+                    {
+                        key: 'transaction',
+                        label: 'Transaction',
+                        href: routes.eCommerce.transaction,
+                    },
+                    {
+                        key: 'rma',
+                        label: 'RMA',
+                        href: routes.eCommerce.returnSales,
+                    },
+                    {
+                        key: 'credit',
+                        label: 'Credit',
+                        href: routes.eCommerce.creditSalesList,
+                    },
+                ],
+            },
             {
                 key: 'catalogue',
                 label: 'Catalogue',
@@ -87,126 +109,6 @@ export const menuItems = [
                     },
                 ],
             },
-        ]
-    },
-    {
-        key: 'group-sales',
-        label: 'Sales',
-        type: 'group',
-        children: [
-            {
-                key: 'sales',
-                label: 'Sales',
-                href: '#',
-                icon: PieChartOutlined,
-                children: [
-                    {
-                        key: 'order',
-                        label: 'Order',
-                        href: routes.eCommerce.order,
-                    },
-                    {
-                        key: 'quote',
-                        label: 'Quote',
-                        href: routes.eCommerce.quote,
-                    },
-                    {
-                        key: 'transaction',
-                        label: 'Transaction',
-                        href: routes.eCommerce.transaction,
-                    },
-                    {
-                        key: 'rma',
-                        label: 'RMA',
-                        href: routes.eCommerce.returnSales,
-                    },
-                    {
-                        key: 'credit',
-                        label: 'Credit',
-                        href: routes.eCommerce.creditSalesList,
-                    },
-                ],
-            },
-        ]
-    },
-    {
-        key: 'group-employee-management',
-        label: 'Employee Management',
-        type: 'group',
-        children: [
-            {
-                key: 'employee-management',
-                label: 'Employee Management',
-                href: '#',
-                icon: IdcardOutlined,
-                children: [
-                    {
-                        key: 'time-attendance',
-                        label: 'Time & Attendance',
-                        href: routes.eCommerce.products,
-                        children: [
-                            {
-                                key: 'attendance',
-                                label: 'Attendance',
-                                href: routes.eCommerce.products,
-                            },
-                            {
-                                key: 'timesheet',
-                                label: 'Timesheet',
-                                href: routes.eCommerce.products,
-                            },
-                            {
-                                key: 'shift-management',
-                                label: 'Shif Management',
-                                href: routes.eCommerce.products,
-                            },
-                            {
-                                key: 'leave-permit',
-                                label: 'Leave & Permit',
-                                href: routes.eCommerce.products,
-                            },
-                            {
-                                key: 'overtime',
-                                label: 'Overtime',
-                                href: routes.eCommerce.products,
-                            }
-                        ]
-                    },
-                    {
-                        key: 'employee',
-                        label: 'Employee',
-                        href: routes.eCommerce.products,
-                    },
-                    {
-                        key: 'performance',
-                        label: 'Performance',
-                        href: routes.eCommerce.products,
-                    },
-                    {
-                        key: 'report',
-                        label: 'Report',
-                        href: routes.eCommerce.categories,
-                    },
-                    {
-                        key: 'benefit',
-                        label: 'Benefit',
-                        href: routes.eCommerce.brands,
-                    },
-                    {
-                        key: 'organizational',
-                        label: 'Organizational',
-                        href: routes.eCommerce.attributes,
-                    },
-
-                ],
-            },
-        ]
-    },
-    {
-        key: 'group-supplier',
-        label: 'Supplier',
-        type: 'group',
-        children: [
             {
                 key: 'supplier',
                 label: 'Supplier',
@@ -240,13 +142,6 @@ export const menuItems = [
                     },
                 ],
             },
-        ]
-    },
-    {
-        key: 'group-warehouse',
-        label: 'Warehouse',
-        type: 'group',
-        children: [
             {
                 key: 'warehouse',
                 label: 'Warehouse',
@@ -259,93 +154,13 @@ export const menuItems = [
                         href: routes.eCommerce.inventoryList,
                     },
                 ],
-            }
-        ],
-    },
-    {
-        key: 'group-user',
-        label: 'User',
-        type: 'group',
-        children: [
-            {
-                key: 'users',
-                label: 'Users',
-                href: '#',
-                icon: UserOutlined,
-                children: [
-                    {
-                        key: 'users-product',
-                        label: 'Users',
-                        href: routes.eCommerce.products,
-                    },
-                    {
-                        key: 'roles',
-                        label: 'Roles',
-                        href: routes.eCommerce.priceLevel,
-                    },
-                    {
-                        key: 'subcribe',
-                        label: 'Subscribe',
-                        href: routes.eCommerce.categories,
-                    },
-                ],
             },
-        ]
-    },
-    {
-        key: 'group-customer',
-        label: 'Customers',
-        type: 'group',
-        children: [
             {
                 key: 'customer',
                 label: 'Customers',
                 href: '#',
                 icon: TeamOutlined,
             },
-        ]
-
-    },
-    {
-        key: 'group-marketing',
-        label: 'Marketing',
-        type: 'group',
-        children: [
-            {
-                key: 'marketing',
-                label: 'Marketing',
-                href: '#',
-                icon: ShopOutlined,
-                children: [
-                    {
-                        key: 'flash-sale',
-                        label: 'Flash Sale',
-                        href: routes.eCommerce.products,
-                    },
-                    {
-                        key: 'coupon',
-                        label: 'Coupon',
-                        href: routes.eCommerce.products,
-                    },
-                    {
-                        key: 'email-marketing',
-                        label: 'Email Marketing',
-                        href: routes.eCommerce.products,
-                    },
-                    {
-                        key: 'sms-marketing',
-                        label: 'SMS Marketing',
-                        href: routes.eCommerce.products,
-                    },
-                ]
-            },
-        ]
-    },
-    {
-        key: 'group-management',
-        label: 'Management',
-        type: 'group',
-        children: [
             {
                 key: 'management',
                 label: 'Management',
@@ -485,6 +300,129 @@ export const menuItems = [
                     },
                 ],
             },
+            {
+                key: 'users',
+                label: 'Users',
+                href: '#',
+                icon: UserOutlined,
+                children: [
+                    {
+                        key: 'users-product',
+                        label: 'Users',
+                        href: routes.eCommerce.products,
+                    },
+                    {
+                        key: 'roles',
+                        label: 'Roles',
+                        href: routes.eCommerce.priceLevel,
+                    },
+                    {
+                        key: 'subcribe',
+                        label: 'Subscribe',
+                        href: routes.eCommerce.categories,
+                    },
+                ],
+            },
+        ]
+    },
+    {
+        key: 'group-marketing',
+        label: 'Marketing',
+        type: 'group',
+        children: [
+            {
+                key: 'marketing',
+                label: 'Marketing',
+                href: '#',
+                icon: ShopOutlined,
+                children: [
+                    {
+                        key: 'flash-sale',
+                        label: 'Flash Sale',
+                        href: routes.eCommerce.products,
+                    },
+                    {
+                        key: 'coupon',
+                        label: 'Coupon',
+                        href: routes.eCommerce.products,
+                    },
+                    {
+                        key: 'email-marketing',
+                        label: 'Email Marketing',
+                        href: routes.eCommerce.products,
+                    },
+                    {
+                        key: 'sms-marketing',
+                        label: 'SMS Marketing',
+                        href: routes.eCommerce.products,
+                    },
+                ]
+            },
+        ]
+    },
+    {
+        key: 'group-employee-management',
+        label: 'Employee Management',
+        type: 'group',
+        children: [
+            {
+                key: 'time-attendance',
+                label: 'Time & Attendance',
+                href: routes.eCommerce.products,
+                children: [
+                    {
+                        key: 'attendance',
+                        label: 'Attendance',
+                        href: routes.eCommerce.products,
+                    },
+                    {
+                        key: 'timesheet',
+                        label: 'Timesheet',
+                        href: routes.eCommerce.products,
+                    },
+                    {
+                        key: 'shift-management',
+                        label: 'Shif Management',
+                        href: routes.eCommerce.products,
+                    },
+                    {
+                        key: 'leave-permit',
+                        label: 'Leave & Permit',
+                        href: routes.eCommerce.products,
+                    },
+                    {
+                        key: 'overtime',
+                        label: 'Overtime',
+                        href: routes.eCommerce.products,
+                    }
+                ]
+            },
+            {
+                key: 'employee',
+                label: 'Employee',
+                href: routes.eCommerce.products,
+            },
+            {
+                key: 'performance',
+                label: 'Performance',
+                href: routes.eCommerce.products,
+            },
+            {
+                key: 'report',
+                label: 'Report',
+                href: routes.eCommerce.categories,
+            },
+            {
+                key: 'benefit',
+                label: 'Benefit',
+                href: routes.eCommerce.brands,
+            },
+            {
+                key: 'organizational',
+                label: 'Organizational',
+                href: routes.eCommerce.attributes,
+            },
+
         ]
     },
     {
@@ -492,34 +430,29 @@ export const menuItems = [
         label: 'Settings',
         type: 'group',
         children: [
+
             {
-                key: 'setting',
-                label: 'Settings',
-                href: '#',
-                icon: SettingOutlined,
-                children: [
-                    {
-                        key: 'general-settings',
-                        label: 'General Settings',
-                        href: routes.eCommerce.generalSettings,
-                    },
-                    {
-                        key: 'social-logins',
-                        label: 'Social Logins',
-                        href: routes.eCommerce.products,
-                    },
-                    {
-                        key: 'shipping-methods',
-                        label: 'Shipping Methods',
-                        href: routes.eCommerce.products,
-                    },
-                    {
-                        key: 'payment-methods',
-                        label: 'Payment Methods',
-                        href: routes.eCommerce.products,
-                    },
-                ]
+                key: 'general-settings',
+                label: 'General Settings',
+                href: routes.eCommerce.generalSettings,
+            },
+            {
+                key: 'social-logins',
+                label: 'Social Logins',
+                href: routes.eCommerce.products,
+            },
+            {
+                key: 'shipping-methods',
+                label: 'Shipping Methods',
+                href: routes.eCommerce.products,
+            },
+            {
+                key: 'payment-methods',
+                label: 'Payment Methods',
+                href: routes.eCommerce.products,
             },
         ]
-    }
+    },
+
+
 ];
