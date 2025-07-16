@@ -83,6 +83,18 @@ export const routes = {
     warehouses: (slug: string) => `'/ecommerce/warehouse/${slug}/edit`,
 
     generalSettings: '/ecommerce/general-settings',
+
+    users: '/ecommerce/users',
+    createUsers: '/ecommerce/users/create',
+    editUsers: (slug: string) => `/ecommerce/users/${slug}/edit`,
+
+    roles: '/ecommerce/roles',
+    createRoles: '/ecommerce/roles/create',
+    editRoles: (slug: string) => `/ecommerce/roles/${slug}/edit`,
+
+    subscribe: '/ecommerce/subscribe',
+    createSubscribe: '/ecommerce/subscribe/create',
+    editSubscribe: (slug: string) => `/ecommerce/subscribe/${slug}/edit`,
   },
   profile: '/profile',
   welcome: '/welcome',
