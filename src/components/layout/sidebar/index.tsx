@@ -1,23 +1,21 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Menu } from 'antd';
 import Sider from 'antd/es/layout/Sider';
-import Image from 'next/image';
-import logoImg from '@public/logo/Alarm Expert Logo.webp';
 import { menuItems } from './menu-items';
 import Link from 'next/link';
 
-const siderStyle: React.CSSProperties = {
-    overflow: 'auto',
-    height: '100vh',
-    position: 'sticky',
-    insetInlineStart: 0,
-    top: 0,
-    bottom: 0,
-    scrollbarWidth: 'thin',
-    scrollbarGutter: 'stable',
-};
 
 const Sidebar = () => {
+    const [isHovered, setIsHovered] = useState(false);
+    const siderStyle: React.CSSProperties = {
+        overflowY: isHovered ? 'auto' : 'hidden',
+        height: '100vh',
+        position: 'sticky',
+        insetInlineStart: 0,
+        top: 0,
+        bottom: 0,
+        scrollbarWidth: 'thin',
+    };
     // const items = menuItems.map((item, index) => {
     //     return {
     //         key: item?.key ?? `item-${index}`,
@@ -69,7 +67,7 @@ const Sidebar = () => {
                     ) : item.icon ? (
                         <item.icon />
                     ) : null,
-                    label: item.label,
+                    label: <span className=''>{item.label}</span>,
                     children: renderMenuItems(item.children, true), // Rekursif untuk sub-menu
                 };
             } else {
@@ -98,7 +96,9 @@ const Sidebar = () => {
     return (
         <Sider
             style={siderStyle}
-            className='!bg-white'
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            className="sidebar !bg-background"
             breakpoint="lg"
             collapsedWidth="0"
             width={250}
@@ -109,15 +109,8 @@ const Sidebar = () => {
                 console.log(collapsed, type);
             }}
         >
-            <div className="demo-logo-vertical my-2 ">
-                <Image
-                    src={logoImg}
-                    alt='logo'
-                    width={200}
-                    height={50}
-                />
-            </div>
-            <Menu theme="light" mode="inline" defaultSelectedKeys={['1']} items={items} style={{ width: 250 }} />
+
+            <Menu theme="light" mode="inline" defaultSelectedKeys={['1']} items={items} style={{ width: 250 }} className="!bg-background" />
         </Sider>
     )
 }

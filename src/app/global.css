@@ -3,9 +3,215 @@
 :root {
     --background: #ffffff;
     --foreground: #171717;
+    --text-color: #ffffff;
+    --primary-color: #3b82f6;
+    --table-hover-bg: #f5f5f5;
+    --placeholder-color: #9CA3AF;
+    --btn-hover-bg: #ffffff;
+    --table-sort-bg: #f5f5f5;
+    --button-hover-text: #111827;
     font-family: 'Inter', sans-serif;
 }
 
+
+[data-theme="dark"] .ant-table-tbody>tr:hover>td {
+    background: var(--table-hover-bg) !important;
+}
+
+[data-color="blue"] {
+    --primary-color: #3b82f6;
+}
+
+[data-color="black"] {
+    --primary-color: #000000;
+}
+
+[data-color="teal"] {
+    --primary-color: #14b8a6;
+}
+
+[data-theme="light"] {
+    --background: #ffffff;
+    --text-color: #111827;
+}
+
+[data-theme="dark"] {
+    --background: #0f172a;
+    --foreground: #f1f5f9;
+    --text-color: #ffffff;
+    --placeholder-color: #9CA3AF;
+    --button-hover-bg: #1f2937;
+    --table-sort-bg: #1f2937;
+    --table-hover-bg: #1f2937;
+
+
+}
+
+[data-theme="dark"] .ant-layout,
+[data-theme="dark"] .ant-layout-header,
+[data-theme="dark"] .ant-layout-sider,
+[data-theme="dark"] .ant-layout-content div,
+[data-theme="dark"] .ant-layout-footer {
+    background: var(--background) !important;
+    color: var(--text-color) !important;
+}
+
+
+[data-theme="dark"] .ant-menu-light .ant-menu-item a,
+[data-theme="dark"] .ant-menu-light .ant-menu-item span,
+[data-theme="dark"] .ant-menu-light .ant-menu-submenu-title,
+[data-theme="dark"] .ant-menu-light .ant-menu-item-group-title,
+[data-theme="dark"] .ant-breadcrumb,
+[data-theme="dark"] .ant-breadcrumb-link,
+[data-theme="dark"] .ant-breadcrumb-link a,
+[data-theme="dark"] .ant-breadcrumb-link span,
+[data-theme="dark"] .ant-breadcrumb-separator,
+[data-theme="dark"] label,
+[data-theme="dark"] span,
+[data-theme="dark"] p {
+    color: var(--text-color) !important;
+}
+
+
+[data-theme="dark"] .ant-menu-light .ant-menu-submenu-title {
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .ant-table {
+    background: var(--background);
+}
+
+[data-theme="dark"] .ant-table-thead>tr>th {
+    background: var(--background);
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .ant-table-tbody>tr>td {
+    background: var(--background);
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .ant-table-thead>tr>th,
+[data-theme="dark"] .ant-table-tbody>tr>td {
+    border-color: #334155;
+}
+
+[data-theme="dark"] .ant-table-thead>tr>th,
+[data-theme="dark"] .ant-table-tbody>tr>td {
+    border-color: #334155;
+    /* contoh border untuk dark mode */
+}
+
+[data-theme="dark"] .ant-input {
+    background-color: var(--background);
+    color: var(--text-color);
+}
+
+/* Warna teks badge di dark mode */
+[data-theme="dark"] .status-badge .ant-badge-status-text {
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .status-badge .ant-badge-status-dot {
+    background-color: #888 !important;
+}
+
+[data-theme="dark"] .ant-btn,
+[data-theme="dark"] .ant-btn span {
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .ant-btn:hover,
+[data-theme="dark"] .ant-btn:focus,
+[data-theme="dark"] .ant-btn:active {
+    color: var(--text-color) !important;
+    border-color: var(--primary-color) !important;
+}
+
+[data-theme="dark"] .ant-btn-primary {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+}
+
+[data-theme="dark"] .ant-btn-primary:hover,
+[data-theme="dark"] .ant-btn-primary:focus,
+[data-theme="dark"] .ant-btn-primary:active {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+}
+
+[data-theme="dark"] .ant-btn-text:hover,
+[data-theme="dark"] .ant-btn-link:hover {
+    color: var(--primary-color) !important;
+}
+
+[data-theme="dark"] .ant-tabs-tab,
+[data-theme="dark"] .ant-tabs-tab:hover,
+[data-theme="dark"] .ant-tabs-tab-active,
+[data-theme="dark"] .ant-tabs-ink-bar {
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .ant-tabs-card .ant-tabs-tab,
+[data-theme="dark"] .ant-tabs-card .ant-tabs-tab-active {
+    background: transparent !important;
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .ant-tabs-content-holder {
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder,
+[data-theme="dark"] select:invalid {
+    color: var(--placeholder-color);
+    opacity: 1;
+}
+
+[data-theme="dark"] {
+    --btn-hover-bg: #1F2937;
+    /* Tailwind gray-800 */
+}
+
+[data-theme="dark"] .ant-table-column-sort {
+    background: #1f2937 !important;
+    /* Tailwind gray-800 */
+}
+
+[data-theme="light"] .ant-table-column-sort {
+    background: #f5f5f5;
+    /* default, kalau mau bisa dibiarkan */
+}
+
+/* Umum: styling selected item di Menu light */
+.ant-menu-light .ant-menu-item-selected {
+  background-color: #e6f7ff; /* default Ant warna biru muda */
+  color: #1677ff; /* primary color */
+}
+
+/* Dark mode: selected item di sidebar */
+[data-theme="dark"] .ant-menu-light .ant-menu-item-selected {
+  background-color: rgba(255, 255, 255, 0.12); /* semi-transparan putih */
+  color: #ffffff; /* text jadi putih */
+}
+
+/* Kalau pakai submenu: pastikan title juga */
+[data-theme="dark"] .ant-menu-light .ant-menu-submenu-selected > .ant-menu-submenu-title {
+  color: #ffffff !important;
+}
+
+body {
+    background-color: var(--background);
+    color: var(--text-color);
+}
+
+h1 {
+    color: var(--text-color);
+}
+
+
+body,
 .ant-menu,
 .ant-table,
 .ant-breadcrumb,
@@ -14,7 +220,28 @@
 .ant-layout,
 .ant-layout-content,
 .ant-layout-header,
-.ant-layout-footer {
+.ant-layout-footer,
+.ant-btn,
+.ant-input,
+.ant-dropdown-menu,
+.ant-menu,
+.ant-typography,
+.ant-breadcrumb,
+.ant-select,
+.ant-select-selector,
+.ant-select-selection-item,
+.ant-select-selection-placeholder,
+.ant-select-dropdown,
+.ant-select-item-option-content,
+.ant-upload,
+.ant-upload-text,
+.ant-upload-hint,
+.ant-upload-drag,
+.ant-upload-drag-icon,
+.ant-upload-drag-text,
+.ant-upload-drag-hint,
+.ant-checkbox-wrapper,
+.ant-radio-wrapper {
     font-family: 'Inter', sans-serif !important;
 }
 

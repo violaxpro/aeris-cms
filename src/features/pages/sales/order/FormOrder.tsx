@@ -313,7 +313,7 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             <h1 className='text-lg font-bold'>Product List</h1>
                             <Button
                                 label='Add Product'
-                                btnClassname="!bg-[#86A788] !text-white hover:!bg-white hover:!text-[#86A788] hover:!border-[#86A788] mt-3"
+                                btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788] mt-3"
                                 onClick={() => setShowAddProduct(!showAddProduct)}
                             />
                             {
@@ -427,7 +427,7 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                     {/* Submit */}
                     <div className="mt-6 flex justify-end">
                         <Button
-                            btnClassname="!bg-[#86A788] !text-white hover:!bg-white hover:!text-[#86A788] hover:!border-[#86A788]"
+                            btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]"
                             label={mode == 'create' ? 'Create Order' : 'Edit Order'}
                             onClick={handleSubmit}
                         />

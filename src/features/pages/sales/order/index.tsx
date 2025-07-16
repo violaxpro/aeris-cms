@@ -382,7 +382,7 @@ const index = ({ orderData }: { orderData?: any }) => {
 
                 return (
                     <Dropdown overlay={menu} trigger={['click']} >
-                        <button className="flex items-center justify-center px-2 py-1 border rounded hover:bg-gray-100">
+                        <button className="flex items-center justify-center px-2 py-1 border rounded ">
                             Actions <MoreOutlined className="ml-1" />
                         </button>
                     </Dropdown >
@@ -453,7 +453,7 @@ const index = ({ orderData }: { orderData?: any }) => {
                     <div className='flex justify-between mb-4'>
                         <Button
                             label='Add Payment'
-                            btnClassname='!bg-[#86A788] !text-white hover:!bg-white hover:!text-[#86A788] hover:!border-[#86A788]'
+                            btnClassname='!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]'
                             onClick={handleClickModalPaid}
                         />
                         <div className='flex items-center gap-2'>
@@ -462,9 +462,10 @@ const index = ({ orderData }: { orderData?: any }) => {
                                 label='Filter'
                                 icon={<FilterOutlined />}
                                 onClick={() => setisOpenModalFilter(true)}
+                                btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]"
                             />
                             <Button
-                                btnClassname="!bg-[#86A788] !text-white hover:!bg-white hover:!text-[#86A788] hover:!border-[#86A788]"
+                                btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]"
                                 icon={<PlusCircleOutlined />}
                                 label='Add Order'
                                 link={routes.eCommerce.createOrder}

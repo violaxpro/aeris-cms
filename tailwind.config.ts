@@ -18,6 +18,7 @@ const config: Omit<Config, 'content'> = {
         },
         extend: {
             colors: {
+                theme: 'var(--text-color)',
                 gray: {
                     0: 'rgb(var(--gray-0) / <alpha-value>)',
                     50: 'rgb(var(--gray-50) / <alpha-value>)',

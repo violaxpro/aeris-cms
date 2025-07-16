@@ -162,7 +162,7 @@ const index = ({ products }: { products?: any }) => {
 
                 return (
                     <Dropdown overlay={menu} trigger={['click']} >
-                        <button className="flex items-center justify-center px-2 py-1 border rounded hover:bg-gray-100">
+                        <button className="flex items-center justify-center px-2 py-1 border rounded ">
                             Actions <MoreOutlined className="ml-1" />
                         </button>
                     </Dropdown >
@@ -209,7 +209,7 @@ const index = ({ products }: { products?: any }) => {
                         <div className='flex items-center gap-2'>
                             <SearchInput onSearch={handleSearch} />
                             <Button
-                                btnClassname="!bg-[#86A788] !text-white hover:!bg-white hover:!text-[#86A788] hover:!border-[#86A788]"
+                                btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]"
                                 icon={<PlusCircleOutlined />}
                                 label='Add Product'
                                 link={routes.eCommerce.createProduct}

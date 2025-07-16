@@ -296,13 +296,13 @@ const FormPurchases: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     id='date'
                                     label='Date '
                                     value={formData.date ? dayjs(formData.date) : null}
-                                    onChange={(value : any, dateString: any) => handleDateChange('date', value, dateString)}
+                                    onChange={(value: any, dateString: any) => handleDateChange('date', value, dateString)}
                                 />
                                 <DatePickerInput
                                     id='deliveryDate'
                                     label='Delivery Date '
                                     value={formData.deliveryDate ? dayjs(formData.deliveryDate) : null}
-                                    onChange={(value : any, dateString: any) => handleDateChange('deliveryDate', value, dateString)}
+                                    onChange={(value: any, dateString: any) => handleDateChange('deliveryDate', value, dateString)}
                                 />
                             </div>
                         </div>
@@ -311,7 +311,7 @@ const FormPurchases: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             <h1 className='text-lg font-bold'>Product List</h1>
                             <Button
                                 label='Add Product'
-                                btnClassname="!bg-[#86A788] !text-white hover:!bg-white hover:!text-[#86A788] hover:!border-[#86A788] mt-3"
+                                btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788] mt-3"
                                 onClick={() => setShowAddProduct(!showAddProduct)}
                             />
                             {
@@ -443,7 +443,7 @@ const FormPurchases: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                     {/* Submit */}
                     <div className="mt-6 flex justify-end">
                         <Button
-                            btnClassname="!bg-[#86A788] !text-white hover:!bg-white hover:!text-[#86A788] hover:!border-[#86A788]"
+                            btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]"
                             label={mode == 'create' ? 'Create Purchases' : 'Edit Purchases'}
                             onClick={handleSubmit}
                         />

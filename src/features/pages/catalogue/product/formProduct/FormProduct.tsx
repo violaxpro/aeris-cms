@@ -149,7 +149,7 @@ const ProductForm: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
             </div>
 
             {/* Tabs di bawah breadcrumb */}
-            <div className="mx-4 mt-4 mb-0 bg-white px-4 py-3 rounded shadow">
+            <div className="mx-4 mt-4 mb-0 px-4 py-3 rounded shadow">
                 <div className="flex border-b border-gray-200" style={{ borderColor: '#E5E7EB' }}>
                     {['basic', 'price', 'advanced'].map((tab) => (
                         <button
@@ -174,7 +174,7 @@ const ProductForm: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
 
                     {/* Tab Content */}
-                    <div>
+                    <div className='bg-background'>
                         {activeTab === 'basic' && (
                             <div className="space-y-8">
                                 <BasicInformationProduct
@@ -206,7 +206,7 @@ const ProductForm: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                     {/* Submit */}
                     <div className="mt-6 flex justify-end">
                         <Button
-                            btnClassname="!bg-[#86A788] !text-white hover:!bg-white hover:!text-[#86A788] hover:!border-[#86A788]"
+                            btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]"
                             label={mode === 'create' ? 'Create Product' : 'Edit Product'}
                             onClick={handleSubmit}
                         />

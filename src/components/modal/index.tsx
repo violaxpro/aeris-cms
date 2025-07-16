@@ -44,12 +44,12 @@ const index = ({
                                 <Button
                                     label={labelButton ? labelButton : 'Save'}
                                     onClick={handleSubmit}
-                                    btnClassname="!bg-[#86A788] !text-white hover:!bg-white hover:!text-[#86A788] hover:!border-[#86A788]"
+                                    btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]"
                                 /> :
                                 <Button
                                     label='Yes'
                                     onClick={handleYes}
-                                    btnClassname="!bg-[#86A788] !text-white hover:!bg-white hover:!text-[#86A788] hover:!border-[#86A788]"
+                                    btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]"
                                 />
                         }
                         {
@@ -57,7 +57,7 @@ const index = ({
                                 <Button
                                     label='No'
                                     onClick={handleNo}
-                                    btnClassname="!bg-red-500 !text-white hover:!bg-white hover:!text-red-500 hover:!border-red-500"
+                                    btnClassname="!bg-red-500 !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-red-500 hover:!border-red-500"
                                 />
 
                                 : <CancelBtn />

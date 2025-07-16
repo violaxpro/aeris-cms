@@ -205,7 +205,7 @@ const FormReturnSales: React.FC<FormProps> = ({ mode, initialValues, slug, dataT
                             <h1 className='text-xl font-bold'>Product List</h1>
                             <Button
                                 label='Add Product'
-                                btnClassname="!bg-[#86A788] !text-white hover:!bg-white hover:!text-[#86A788] hover:!border-[#86A788] mt-4"
+                                btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788] mt-4"
                                 onClick={() => setShowAddProduct(!showAddProduct)}
                             />
                         </div>
@@ -262,7 +262,7 @@ const FormReturnSales: React.FC<FormProps> = ({ mode, initialValues, slug, dataT
                     </div>
                     <div className="mt-6 flex justify-end">
                         <Button
-                            btnClassname="!bg-[#86A788] !text-white hover:!bg-white hover:!text-[#86A788] hover:!border-[#86A788]"
+                            btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]"
                             label={mode === 'create' ? 'Create Return Sales' : 'Edit Return Sales'}
                             onClick={handleSubmit}
                         />

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import FormGroup from '@/components/form';
-import { Button } from 'antd';
+import Button from '@/components/button'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import SelectInput from '@/components/select';
 import { ChildFormProps } from '@/plugins/types/form-type';
@@ -79,13 +79,11 @@ const KitPriceInformation = ({ dataById, onChange }: ChildFormProps) => {
 
                     <div className="flex justify-end">
                         <Button
-                            type="dashed"
-                            onClick={addItem}
+                            label='Add Kit Price Product'
+                            btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]"
                             icon={<PlusOutlined />}
-                            style={{ marginTop: 12 }}
-                        >
-                            Add Kit Price Product
-                        </Button>
+                            onClick={addItem}
+                        />
                     </div>
                 </div>
             </FormGroup>

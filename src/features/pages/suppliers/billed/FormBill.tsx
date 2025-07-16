@@ -288,7 +288,7 @@ const FormBilled: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             <h1 className='text-lg font-bold'>Item List</h1>
                             <Button
                                 label='Add Item'
-                                btnClassname="!bg-[#86A788] !text-white hover:!bg-white hover:!text-[#86A788] hover:!border-[#86A788] mt-3"
+                                btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788] mt-3"
                                 onClick={() => setShowAddItem(!showAddItem)}
                             />
                             {
@@ -367,7 +367,7 @@ const FormBilled: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                     {/* Submit */}
                     <div className="mt-6 flex justify-end">
                         <Button
-                            btnClassname="!bg-[#86A788] !text-white hover:!bg-white hover:!text-[#86A788] hover:!border-[#86A788]"
+                            btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]"
                             label={mode == 'create' ? 'Create Bill' : 'Edit Bill'}
                             onClick={handleSubmit}
                         />

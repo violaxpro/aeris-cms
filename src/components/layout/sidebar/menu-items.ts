@@ -11,8 +11,21 @@ import {
     TeamOutlined,
     IdcardOutlined,
     ControlOutlined,
-    ShopOutlined
+    ShopOutlined,
+    ShoppingCartOutlined,
+    UsergroupAddOutlined,
+    CreditCardOutlined,
+    ScheduleOutlined,
+    TrophyOutlined,
+    FileTextOutlined,
+    GiftOutlined,
+    ApartmentOutlined,
+    UnlockOutlined,
+    CarOutlined,
+    DashboardOutlined
 } from '@ant-design/icons';
+import { RolesPermissionIcon, DashboardIcon } from '@/components/icon';
+
 
 // Note: do not add href in the label object, it is rendering as label
 export const menuItems = [
@@ -26,13 +39,13 @@ export const menuItems = [
                 key: 'dashboard',
                 label: 'Dashboard',
                 href: routes.eCommerce.dashboard,
-                icon: DatabaseOutlined,
+                icon: DashboardOutlined,
             },
             {
                 key: 'sales',
                 label: 'Sales',
                 href: '#',
-                icon: PieChartOutlined,
+                icon: ShoppingCartOutlined,
                 children: [
                     {
                         key: 'order',
@@ -301,13 +314,13 @@ export const menuItems = [
                 ],
             },
             {
-                key: 'users',
+                key: 'users-parent',
                 label: 'Users',
                 href: '#',
                 icon: UserOutlined,
                 children: [
                     {
-                        key: 'users-product',
+                        key: 'users',
                         label: 'Users',
                         href: routes.eCommerce.users,
                     },
@@ -369,6 +382,7 @@ export const menuItems = [
                 key: 'time-attendance',
                 label: 'Time & Attendance',
                 href: routes.eCommerce.products,
+                icon: ScheduleOutlined,
                 children: [
                     {
                         key: 'attendance',
@@ -401,26 +415,31 @@ export const menuItems = [
                 key: 'employee',
                 label: 'Employee',
                 href: routes.eCommerce.products,
+                icon: UsergroupAddOutlined
             },
             {
                 key: 'performance',
                 label: 'Performance',
                 href: routes.eCommerce.products,
+                icon: TrophyOutlined
             },
             {
                 key: 'report',
                 label: 'Report',
                 href: routes.eCommerce.categories,
+                icon: FileTextOutlined
             },
             {
                 key: 'benefit',
                 label: 'Benefit',
                 href: routes.eCommerce.brands,
+                icon: GiftOutlined
             },
             {
                 key: 'organizational',
                 label: 'Organizational',
                 href: routes.eCommerce.attributes,
+                icon: ApartmentOutlined
             },
 
         ]
@@ -435,21 +454,25 @@ export const menuItems = [
                 key: 'general-settings',
                 label: 'General Settings',
                 href: routes.eCommerce.generalSettings,
+                icon: SettingOutlined
             },
             {
                 key: 'social-logins',
                 label: 'Social Logins',
                 href: routes.eCommerce.products,
+                icon: UnlockOutlined
             },
             {
                 key: 'shipping-methods',
                 label: 'Shipping Methods',
                 href: routes.eCommerce.products,
+                icon: CarOutlined
             },
             {
                 key: 'payment-methods',
                 label: 'Payment Methods',
                 href: routes.eCommerce.products,
+                icon: CreditCardOutlined
             },
         ]
     },

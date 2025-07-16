@@ -157,7 +157,7 @@ const index = ({ transactionData }: { transactionData?: any }) => {
 
                 return (
                     <Dropdown overlay={menu} trigger={['click']} >
-                        <button className="flex items-center justify-center px-2 py-1 border rounded hover:bg-gray-100">
+                        <button className="flex items-center justify-center px-2 py-1 border rounded ">
                             Actions <MoreOutlined className="ml-1" />
                         </button>
                     </Dropdown >

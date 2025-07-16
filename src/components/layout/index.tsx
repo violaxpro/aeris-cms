@@ -11,7 +11,7 @@ import { getAttributeSet } from '@/services/attribute-set-service';
 import { getProduct } from '@/services/products-service';
 import { getTaxes } from '@/services/settings-service';
 import { useAtom } from 'jotai'
-import { brandsAtom, categoriesAtom, attributeSetAtom, productSetAtom , taxSetAtom} from '@/store/DropdownItemStore'
+import { brandsAtom, categoriesAtom, attributeSetAtom, productSetAtom, taxSetAtom } from '@/store/DropdownItemStore'
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
     const [optionBrands, setOptionBrands] = useAtom(brandsAtom)
@@ -62,15 +62,20 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         fetchData()
     }, [setOptionBrands, setOptionCategories, setOptionAttributeSet, setOptionProduct, setOptionTaxes])
     return (
-        <Layout style={{ minHeight: '100vh' }}>
-            <Sidebar />
+        <Layout style={{
+            minHeight: '100vh',
+          
+        }}>
+            <HeaderLayout />
             <Layout>
-                <HeaderLayout />
-                {children}
-                <Footer style={{ textAlign: 'center' }}>
-                    Ant Design ©{new Date().getFullYear()} Created by Ant UED
-                </Footer>
+                <Sidebar />
+                <Layout>
+                    {children}
+                </Layout>
             </Layout>
+            <Footer style={{ textAlign: 'center' }}>
+                Ant Design ©{new Date().getFullYear()} Created by Ant UED
+            </Footer>
         </Layout>
     );
 }

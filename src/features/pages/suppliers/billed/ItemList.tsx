@@ -86,11 +86,11 @@ const ItemList = ({
     };
 
     const handleAddItem = () => {
-         if (!itemForm.tax_rate) {
+        if (!itemForm.tax_rate) {
             setTaxError('Tax Rate is required');
-            return; 
+            return;
         } else {
-            setTaxError(''); 
+            setTaxError('');
         }
         onAddItem()
     };
@@ -186,7 +186,7 @@ const ItemList = ({
             </div>
             <Button
                 label='Save'
-                btnClassname="!bg-[#86A788] !text-white hover:!bg-white hover:!text-[#86A788] hover:!border-[#86A788]"
+                btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]"
                 onClick={handleAddItem}
             />
         </div>

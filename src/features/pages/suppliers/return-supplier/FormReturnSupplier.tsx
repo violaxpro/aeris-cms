@@ -88,7 +88,7 @@ const FormReturnSupplier: React.FC<FormProps> = ({ mode, initialValues, slug, da
                 sales_person: formData.sales_person,
                 status: formData.status,
                 notes: formData.notes,
-                prodcut : formData.product,
+                prodcut: formData.product,
                 subtotal: formData.subtotal,
                 tax_include: formData.tax_include,
                 total: formData.total,
@@ -206,7 +206,7 @@ const FormReturnSupplier: React.FC<FormProps> = ({ mode, initialValues, slug, da
                             <h1 className='text-xl font-bold'>Product List</h1>
                             <Button
                                 label='Add Product'
-                                btnClassname="!bg-[#86A788] !text-white hover:!bg-white hover:!text-[#86A788] hover:!border-[#86A788] mt-4"
+                                btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788] mt-4"
                                 onClick={() => setShowAddProduct(!showAddProduct)}
                             />
                         </div>
@@ -239,7 +239,7 @@ const FormReturnSupplier: React.FC<FormProps> = ({ mode, initialValues, slug, da
                                     placeholder='Input Sub Total'
                                     onChange={handleChange}
                                     value={formData.subtotal}
-                                    
+
                                 />
                                 <Input
                                     id='tax_include'
@@ -263,7 +263,7 @@ const FormReturnSupplier: React.FC<FormProps> = ({ mode, initialValues, slug, da
                     </div>
                     <div className="mt-6 flex justify-end">
                         <Button
-                            btnClassname="!bg-[#86A788] !text-white hover:!bg-white hover:!text-[#86A788] hover:!border-[#86A788]"
+                            btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]"
                             label={mode === 'create' ? 'Create Return Suppliers' : 'Edit Return Suppliers'}
                             onClick={handleSubmit}
                         />

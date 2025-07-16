@@ -5,6 +5,7 @@ import AuthProvider from '@/app/api/auth/[...nextauth]/auth-provider';
 import { siteConfig } from '@/config/site.config';
 import { inter, lexendDeca } from './fonts';
 import cn from '@/core/utils/class-names';
+import { ThemeProvider } from '@/context/ThemeContext';
 // import NextProgress from '@/core/components/next-progress';
 
 // styles
@@ -36,9 +37,11 @@ export default async function RootLayout({
                 className={cn(inter.variable, lexendDeca.variable, 'font-inter')}
             >
                 {/* <AuthProvider session={session}> */}
-                {children}
+                <ThemeProvider>
+                    {children}
+                </ThemeProvider>
                 {/* </AuthProvider> */}
             </body>
-        </html>
+        </html >
     );
 }

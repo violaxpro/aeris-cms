@@ -170,7 +170,7 @@ const FormSerialNumber: React.FC<FormProps> = ({ mode, initialValues, slug }) =>
                     {/* Submit */}
                     <div className="mt-6 flex justify-end">
                         <Button
-                            btnClassname="!bg-[#86A788] !text-white hover:!bg-white hover:!text-[#86A788] hover:!border-[#86A788]"
+                            btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]"
                             label='Create Serial Number'
                             onClick={handleSubmit}
                         />

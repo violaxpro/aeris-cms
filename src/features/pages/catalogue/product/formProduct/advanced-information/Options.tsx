@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import FormGroup from '@/components/form';
-import { Button } from 'antd';
+import Button from '@/components/button'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import SelectInput from '@/components/select';
 import Input from "@/components/input"
@@ -95,13 +95,13 @@ const OptionsInformation = ({ className }: { className?: string }) => {
                                     checked={item.optRequired}
                                     onChange={(checked: boolean) => updateItem(index, 'optRequired', checked)}
                                 />
+
                                 <Button
-                                    type="dashed"
-                                    onClick={() => addGlobalOption(index)}
+                                    label=' Add Global Options'
+                                    btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]"
                                     icon={<PlusOutlined />}
-                                >
-                                    Add Global Options
-                                </Button>
+                                    onClick={() => addGlobalOption(index)}
+                                />
                                 <MinusCircleOutlined
                                     onClick={() => removeItem(index)}
                                     style={{ color: 'red', fontSize: '18px', cursor: 'pointer' }}
@@ -109,51 +109,53 @@ const OptionsInformation = ({ className }: { className?: string }) => {
                             </div>
 
                             {/* Baris 3 dst: Global Option dropdown */}
-                            <div className="flex flex-col w-full">
-                                {item.globalOption?.map((optValue, gIdx) => (
-                                    <div key={gIdx}>
-                                        <div className="flex gap-2">
-                                            <SelectInput
-                                                id='globalOption'
-                                                label={`Product Name ${gIdx + 1}`}
-                                                placeholder="Select Product Name"
-                                                onChange={(selectedOption) => {
-                                                    const updated = [...items];
-                                                    (updated[index] as any).globalOption[gIdx] = selectedOption;
-                                                    handleChange(updated);
-                                                }}
-                                                value={optValue}
-                                                options={options}
-                                                className='w-full'
-                                            />
-                                            <div className='pt-6'>
-                                                <MinusCircleOutlined
-                                                    onClick={() => removeGlobalOption(index, gIdx)}
-                                                    style={{ color: 'red', fontSize: '18px', cursor: 'pointer' }}
+                            < div className="flex flex-col w-full" >
+                                {
+                                    item.globalOption?.map((optValue, gIdx) => (
+                                        <div key={gIdx}>
+                                            <div className="flex gap-2">
+                                                <SelectInput
+                                                    id='globalOption'
+                                                    label={`Product Name ${gIdx + 1}`}
+                                                    placeholder="Select Product Name"
+                                                    onChange={(selectedOption) => {
+                                                        const updated = [...items];
+                                                        (updated[index] as any).globalOption[gIdx] = selectedOption;
+                                                        handleChange(updated);
+                                                    }}
+                                                    value={optValue}
+                                                    options={options}
+                                                    className='w-full'
                                                 />
+                                                <div className='pt-6'>
+                                                    <MinusCircleOutlined
+                                                        onClick={() => removeGlobalOption(index, gIdx)}
+                                                        style={{ color: 'red', fontSize: '18px', cursor: 'pointer' }}
+                                                    />
+                                                </div>
+
                                             </div>
 
                                         </div>
 
-                                    </div>
-
-                                ))}
+                                    ))
+                                }
                             </div>
                         </div>
-                    ))}
+                    ))
+                    }
 
 
-                    <div className="flex justify-end">
+                    <div className="flex justify-end mt-4">
                         <Button
-                            type="dashed"
-                            onClick={addItem}
+                            label=' Add  Options'
+                            btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]"
                             icon={<PlusOutlined />}
-                            style={{ marginTop: 12 }}
-                        >
-                            Add Options
-                        </Button>
+                            onClick={addItem}
+                        />
+
                     </div>
-                </div>
+                </div >
             </FormGroup >
 
             <hr

@@ -18,7 +18,7 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
 
     const config = statusMap[status] || { color: 'default', text: status };
 
-    return <Badge status={config.color as any} text={config.text} />;
+    return <Badge status={config.color as any} text={config.text} className="status-badge" />;
 };
 
 export default StatusBadge;

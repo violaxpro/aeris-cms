@@ -13,7 +13,7 @@ const PriceInformation = ({
     onChange,
     formDataCreate
 }: ChildFormProps) => {
-    const {contextHolder, notifyError} = useNotificationAntd()
+    const { contextHolder, notifyError } = useNotificationAntd()
     const handleChange = (e: any) => {
         const { id, value } = e.target;
         const updated = { ...formDataCreate.tab_price, [id]: value }
@@ -45,8 +45,8 @@ const PriceInformation = ({
                 } else {
                     notifyError("Price Level does'nt available. Please input manually")
                     formDataCreate.tab_price.rrp = 0
-                    formDataCreate.tab_price.trade =  0
-                    formDataCreate.tab_price.silver =  0
+                    formDataCreate.tab_price.trade = 0
+                    formDataCreate.tab_price.silver = 0
                     formDataCreate.tab_price.gold = 0
                     formDataCreate.tab_price.platinum = 0
                     formDataCreate.tab_price.diamond = 0
@@ -143,17 +143,17 @@ const PriceInformation = ({
             <div className='flex justify-end gap-3'>
                 <Button
                     label='Calculate'
-                    btnClassname="!bg-[#86A788] !text-white hover:!bg-white hover:!text-[#86A788] hover:!border-[#86A788]"
+                    btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]"
                     icon={<CalculatorOutlined />}
                     onClick={handleCalculate}
                 />
                 <Button
                     label='View Price History'
-                    btnClassname="!bg-[#86A788] !text-white hover:!bg-white hover:!text-[#86A788] hover:!border-[#86A788]"
+                    btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]"
                 />
                 <Button
                     label='Save'
-                    btnClassname="!bg-[#86A788] !text-white hover:!bg-white hover:!text-[#86A788] hover:!border-[#86A788]"
+                    btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]"
                 />
             </div>
             <hr style={{ borderColor: '#E5E7EB', marginTop: '1rem', marginBottom: '1rem' }} />
