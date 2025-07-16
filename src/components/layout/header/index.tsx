@@ -1,6 +1,6 @@
 
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from 'antd/es/layout/layout';
 import { BellOutlined } from '@ant-design/icons';
 import Avatar from 'antd/es/avatar/Avatar';
@@ -14,6 +14,7 @@ import { Button } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
 
 export default function HeaderLayout() {
+    const [isScrolled, setIsScrolled] = useState(false);
     const [open, setOpen] = useState(false);
 
     const showDrawer = () => {
@@ -23,22 +24,39 @@ export default function HeaderLayout() {
     const onClose = () => {
         setOpen(false);
     };
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 0);
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
     return (
-        <Header className='flex justify-between items-center !bg-background' style={{ padding: 0 }}>
-            <div className=" demo-logo-vertical my-2 ">
+        <Header className={`
+            flex justify-between items-center
+            sticky top-0 z-50
+            !bg-background
+            transition-shadow duration-300
+            ${isScrolled ? 'shadow-md' : ''}
+        `}
+            style={{ padding: '2.2rem 0' }}
+        >
+            <div className="flex items-center demo-logo-vertical my-2  gap-6">
                 <Image
                     src={logoImg}
                     alt='logo'
-                    width={200}
+                    width={240}
                     height={50}
+                />
+                <SearchInput
+                    placeholder="Search..."
+                    onSearch={(value) => console.log(value)}
                 />
             </div>
 
             <div className="flex justify-between items-center gap-4 mx-6">
-                {/* <SearchInput
-                    placeholder="Search..."
-                    onSearch={(value) => console.log(value)}
-                /> */}
 
                 <Badge count={3}>
                     <BellOutlined style={{ color: 'var(--text-color)' }} />

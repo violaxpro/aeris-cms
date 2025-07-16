@@ -202,7 +202,7 @@ const index = ({ products }: { products?: any }) => {
                     items={breadcrumb}
                 />
             </div>
-            <Content className="mt-6 mx-4 mb-0">
+            <Content className="mt-6 mx-4 mb-0 ">
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
                     <div className='flex justify-end mb-4'>
 

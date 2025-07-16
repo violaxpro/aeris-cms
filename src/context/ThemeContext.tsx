@@ -1,4 +1,5 @@
 'use client'
+import { useEffect } from 'react';
 import { createContext, useContext, useState } from 'react';
 
 type LayoutType = 'hydrogen' | 'helium' | 'lithium' | 'beryllium' | 'boron' | 'carbon';

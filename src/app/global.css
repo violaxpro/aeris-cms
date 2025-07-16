@@ -32,6 +32,7 @@
 
 [data-theme="light"] {
     --background: #ffffff;
+    --foreground: #0f172a;
     --text-color: #111827;
 }
 
@@ -186,19 +187,23 @@
 
 /* Umum: styling selected item di Menu light */
 .ant-menu-light .ant-menu-item-selected {
-  background-color: #e6f7ff; /* default Ant warna biru muda */
-  color: #1677ff; /* primary color */
+    background-color: #e6f7ff;
+    /* default Ant warna biru muda */
+    color: #1677ff;
+    /* primary color */
 }
 
 /* Dark mode: selected item di sidebar */
 [data-theme="dark"] .ant-menu-light .ant-menu-item-selected {
-  background-color: rgba(255, 255, 255, 0.12); /* semi-transparan putih */
-  color: #ffffff; /* text jadi putih */
+    background-color: rgba(255, 255, 255, 0.12);
+    /* semi-transparan putih */
+    color: #ffffff;
+    /* text jadi putih */
 }
 
 /* Kalau pakai submenu: pastikan title juga */
-[data-theme="dark"] .ant-menu-light .ant-menu-submenu-selected > .ant-menu-submenu-title {
-  color: #ffffff !important;
+[data-theme="dark"] .ant-menu-light .ant-menu-submenu-selected>.ant-menu-submenu-title {
+    color: #ffffff !important;
 }
 
 body {
@@ -299,4 +304,8 @@ body,
 
 .ant-menu-item-selected .bullet {
     color: #1677ff !important;
+}
+
+.ant-layout {
+    background: var(--background) !important;
 }
