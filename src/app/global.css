@@ -3,6 +3,29 @@
 :root {
     --background: #ffffff;
     --foreground: #171717;
+    font-family: 'Inter', sans-serif;
+}
+
+.ant-menu,
+.ant-table,
+.ant-breadcrumb,
+.ant-page-header-heading-title,
+.ant-typography,
+.ant-layout,
+.ant-layout-content,
+.ant-layout-header,
+.ant-layout-footer {
+    font-family: 'Inter', sans-serif !important;
+}
+
+/* Styling untuk bullet di child item */
+.ant-menu .menu-item-bullet::before {
+    content: '•';
+    /* titik bullet */
+    display: inline-block;
+    margin-right: 8px;
+    color: #999;
+    /* warna bullet */
 }
 
 @theme inline {
@@ -41,4 +64,12 @@
 :where(.ant-tree-title) {
     width: 100% !important;
     /* biar justify-between jalan */
+}
+
+.ant-menu .bullet {
+    color: #999 !important;
+}
+
+.ant-menu-item-selected .bullet {
+    color: #1677ff !important;
 }

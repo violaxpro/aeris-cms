@@ -50,7 +50,7 @@ const Sidebar = () => {
     //         }),
     //     }
     // })
-    const renderMenuItems = (items: any) => {
+    const renderMenuItems = (items: any, isInsideDropdown = false) => {
         return items.map((item: any) => {
             if (item.type === 'group') {
                 // Jika item adalah grup (label abu-abu)
@@ -58,25 +58,33 @@ const Sidebar = () => {
                     key: item.key,
                     label: item.label,
                     type: 'group',
-                    children: item.children ? renderMenuItems(item.children) : undefined,
+                    children: item.children ? renderMenuItems(item.children, false) : undefined,
                 };
             } else if (item.children) {
                 // Jika item memiliki sub-menu (dropdown)
                 return {
                     key: item.key,
-                    icon: item.icon ? <item.icon /> : null,
+                    icon: isInsideDropdown ? (
+                        <span className="bullet text-gray-400 group-hover:text-primary" style={{ color: ' #999' }}>•</span>
+                    ) : item.icon ? (
+                        <item.icon />
+                    ) : null,
                     label: item.label,
-                    children: renderMenuItems(item.children), // Rekursif untuk sub-menu
+                    children: renderMenuItems(item.children, true), // Rekursif untuk sub-menu
                 };
             } else {
                 // Jika item adalah item tunggal (tanpa sub-menu)
                 return {
                     key: item.key,
-                    icon: item.icon ? <item.icon /> : null,
+                    icon: isInsideDropdown ? (
+                        <span className="bullet text-gray-400 group-hover:text-primary">•</span>
+                    ) : item.icon ? (
+                        <item.icon />
+                    ) : null,
                     label: (
                         // Menggunakan Link dari react-router-dom jika ada href
                         item.href ?
-                            <Link href={item.href} className="!text-inherit">
+                            <Link href={item.href} className={`!text-inherit`}>
                                 {item.label}
                             </Link> :
                             item.label // Jika tidak ada href, tampilkan label saja

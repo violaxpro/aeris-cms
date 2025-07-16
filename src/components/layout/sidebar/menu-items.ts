@@ -309,17 +309,17 @@ export const menuItems = [
                     {
                         key: 'users-product',
                         label: 'Users',
-                        href: routes.eCommerce.products,
+                        href: routes.eCommerce.users,
                     },
                     {
                         key: 'roles',
                         label: 'Roles',
-                        href: routes.eCommerce.priceLevel,
+                        href: routes.eCommerce.roles,
                     },
                     {
-                        key: 'subcribe',
+                        key: 'subscribe',
                         label: 'Subscribe',
-                        href: routes.eCommerce.categories,
+                        href: routes.eCommerce.subscribe,
                     },
                 ],
             },
