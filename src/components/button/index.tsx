@@ -14,7 +14,7 @@ type buttonProps = {
 const index = ({ btnClassname, icon, label, link, type, onClick }: buttonProps) => {
     const button = (
         <Button
-            className={btnClassname}
+            className={`!bg-[var(--default-color)] hover:!bg-[var(--btn-hover-bg)] hover:!text-[#103654] hover:!border-[#103654] ${btnClassname}`}
             {...(type ? { type } : {})}
             {...(onClick ? { onClick } : {})}
 

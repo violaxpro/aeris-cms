@@ -75,7 +75,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({
                 <Spin spinning={isUpload}>
                     <Dragger {...props} className={className}>
                         <p className="ant-upload-drag-icon">
-                            <InboxOutlined />
+                            <InboxOutlined className='!text-[#103654]' />
                         </p>
                         <p className="ant-upload-text">Click or drag file to this area to upload</p>
                     </Dragger>

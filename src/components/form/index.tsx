@@ -4,7 +4,8 @@ interface FormGroupProps {
     className?: string;
     description?: string;
     children?: React.ReactNode;
-    column? : number
+    column?: number
+    gridRow?: boolean
 }
 
 export default function FormGroup({
@@ -12,10 +13,11 @@ export default function FormGroup({
     className,
     description,
     children,
-    column
+    column,
+    gridRow = false
 }: FormGroupProps) {
     return (
-        <div className={`grid grid-cols-12 gap-4`}>
+        <div className={`grid ${gridRow == true ? '' : 'grid-cols-12'} gap-4`}>
             <div className="col-span-12 md:col-span-4">
                 <h4 className="text-base font-medium">{title}</h4>
                 {description && <p className="mt-2">{description}</p>}

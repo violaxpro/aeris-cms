@@ -4,7 +4,7 @@
     --background: #ffffff;
     --foreground: #171717;
     --text-color: #ffffff;
-    --primary-color: #3b82f6;
+    --default-color: #103654;
     --table-hover-bg: #f5f5f5;
     --placeholder-color: #9CA3AF;
     --btn-hover-bg: #ffffff;
@@ -18,16 +18,32 @@
     background: var(--table-hover-bg) !important;
 }
 
+[data-color="default"] {
+    --default-color: #103654;
+}
+
 [data-color="blue"] {
-    --primary-color: #3b82f6;
+    --default-color: #3b82f6;
 }
 
 [data-color="black"] {
-    --primary-color: #000000;
+    --default-color: #000000;
 }
 
 [data-color="teal"] {
-    --primary-color: #14b8a6;
+    --default-color: #14b8a6;
+}
+
+[data-color="violet"] {
+    --default-color: rgb(124, 58, 237);
+}
+
+[data-color="rose"] {
+    --default-color: rgb(225, 29, 72);
+}
+
+[data-color="yellow"] {
+    --default-color: rgb(202, 138, 4);
 }
 
 [data-theme="light"] {
@@ -201,10 +217,7 @@
     /* text jadi putih */
 }
 
-/* Kalau pakai submenu: pastikan title juga */
-[data-theme="dark"] .ant-menu-light .ant-menu-submenu-selected>.ant-menu-submenu-title {
-    color: #ffffff !important;
-}
+
 
 body {
     background-color: var(--background);
@@ -259,6 +272,7 @@ body,
     color: #999;
     /* warna bullet */
 }
+
 
 @theme inline {
     --color-background: var(--background);
@@ -316,4 +330,14 @@ body,
 
 :where(.ant-menu-light > .ant-menu.ant-menu-inline) .ant-menu-sub.ant-menu-inline {
     background: var(--background) !important;
+}
+
+.ant-input-search-button {
+    background-color: var(--default-color) !important;
+    border-color: var(--default-color) !important;
+    color: #fff !important;
+}
+
+.ant-input-search-button:hover {
+    opacity: 0.9;
 }

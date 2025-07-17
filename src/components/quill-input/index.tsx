@@ -1,16 +1,16 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState, useId, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import cn from '@/plugins/utils/class-names';
-import 'react-quill-new/dist/quill.snow.css';
+import 'react-quill/dist/quill.snow.css';
 
-// Dynamic import ReactQuill agar tidak SSR
+// SSR-safe import
 const ReactQuill = dynamic(() => import('react-quill-new'), { ssr: false });
 
 interface QuillEditorProps {
-    value: string; 
-    onChange: (value: string) => void; 
+    value: string;
+    onChange: (value: string) => void;
     error?: string;
     label?: React.ReactNode;
     className?: string;
@@ -21,6 +21,8 @@ interface QuillEditorProps {
 }
 
 export default function QuillEditor({
+    value,
+    onChange,
     label,
     error,
     className,
@@ -28,29 +30,60 @@ export default function QuillEditor({
     errorClassName,
     toolbarPosition = 'top',
     notes,
-    ...props
 }: QuillEditorProps) {
     const [mounted, setMounted] = useState(false);
+    const editorId = useId();
+    const toolbarId = `${editorId}-toolbar`;
 
     useEffect(() => {
         setMounted(true);
     }, []);
 
-    if (!mounted) return null; // ⛔ Blok render di SSR
+    const quillModules = useMemo(() => ({
+        toolbar: {
+            container: `#${toolbarId}`, // bind ke ID unik
+        },
+    }), [toolbarId]);
 
-    const quillModules = {
-        toolbar: [
-            ['bold', 'italic', 'underline', 'strike'],
-            ['blockquote', 'code-block'],
-            [{ list: 'ordered' }, { list: 'bullet' }],
-            [{ script: 'sub' }, { script: 'super' }],
-            [{ indent: '-1' }, { indent: '+1' }],
-            [{ color: [] }, { background: [] }],
-            [{ font: [] }],
-            [{ align: [] }],
-            ['clean'],
-        ],
-    };
+    const toolbarContent = useMemo(() => (
+        <div id={toolbarId}>
+            <span className="ql-formats">
+                <button className="ql-bold" />
+                <button className="ql-italic" />
+                <button className="ql-underline" />
+                <button className="ql-strike" />
+            </span>
+            <span className="ql-formats">
+                <button className="ql-blockquote" />
+                <button className="ql-code-block" />
+            </span>
+            <span className="ql-formats">
+                <button className="ql-list" value="ordered" />
+                <button className="ql-list" value="bullet" />
+            </span>
+            <span className="ql-formats">
+                <button className="ql-script" value="sub" />
+                <button className="ql-script" value="super" />
+            </span>
+            <span className="ql-formats">
+                <button className="ql-indent" value="-1" />
+                <button className="ql-indent" value="+1" />
+            </span>
+            <span className="ql-formats">
+                <select className="ql-color" />
+                <select className="ql-background" />
+            </span>
+            <span className="ql-formats">
+                <select className="ql-font" />
+                <select className="ql-align" />
+            </span>
+            <span className="ql-formats">
+                <button className="ql-clean" />
+            </span>
+        </div>
+    ), [toolbarId]);
+
+    if (!mounted) return null;
 
     return (
         <div className={cn(className)}>
@@ -58,23 +91,24 @@ export default function QuillEditor({
                 <label className={cn('mb-1.5 block', labelClassName)}>{label}</label>
             )}
 
+            {toolbarPosition === 'top' && toolbarContent}
+
             <ReactQuill
+                key={editorId}
+                value={value}
+                onChange={onChange}
                 modules={quillModules}
                 className={cn(
                     'react-quill',
                     toolbarPosition === 'bottom' && 'react-quill-toolbar-bottom relative',
                     error && 'rounded-lg border-2 border-red-400'
                 )}
-                {...props}
             />
 
-            {notes && <span>{notes}</span>}
+            {toolbarPosition === 'bottom' && toolbarContent}
 
-            {/* 
-      {error && (
-        <FieldError size="md" error={error} className={errorClassName} />
-      )}
-      */}
+            {notes && <span>{notes}</span>}
+            {/* {error && <FieldError size="md" error={error} className={errorClassName} />} */}
         </div>
     );
 }

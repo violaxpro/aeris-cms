@@ -5,7 +5,7 @@ import { createContext, useContext, useState } from 'react';
 type LayoutType = 'hydrogen' | 'helium' | 'lithium' | 'beryllium' | 'boron' | 'carbon';
 type ThemeMode = 'light' | 'dark';
 type Direction = 'ltr' | 'rtl';
-type Color = 'blue' | 'black' | 'teal';
+type Color = '' | 'blue' | 'black' | 'teal' | 'violet' | 'rose' | 'yellow';
 
 type ThemeContextProps = {
     mode: ThemeMode;
@@ -24,7 +24,9 @@ export const ThemeProvider = ({ children }: { children: any }) => {
     const [mode, setMode] = useState<ThemeMode>('light');
     const [layout, setLayout] = useState<LayoutType>('hydrogen');
     const [direction, setDirection] = useState<Direction>('ltr');
-    const [color, setColor] = useState<Color>('blue');
+    const [color, setColor] = useState<Color>('');
+
+    console.log(color)
 
     return (
         <ThemeContext.Provider value={{ mode, layout, direction, color, setMode, setLayout, setDirection, setColor }}>

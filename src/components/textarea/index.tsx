@@ -27,25 +27,30 @@ const index = ({
 }: inputProps) => {
     return (
         <>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-                {label}
-            </label>
-            <TextArea
-                id={id}
-                rows={rows}
-                placeholder={placeholder}
-                maxLength={maxLength}
-                onChange={onChange}
-                value={value}
-            />
-            {
-                notes && (
-                    <span className='text-gray-300'>{notes}</span>
-                )
-            }
-            {error && (
-                <p className="text-red-500 text-xs mt-1">{error}</p>
-            )}
+            <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                    {label}
+                </label>
+                <div>
+                    <TextArea
+                        id={id}
+                        rows={rows}
+                        placeholder={placeholder}
+                        maxLength={maxLength}
+                        onChange={onChange}
+                        value={value}
+                    />
+                </div>
+                {
+                    notes && (
+                        <span className='text-gray-300'>{notes}</span>
+                    )
+                }
+                {error && (
+                    <p className="text-red-500 text-xs mt-1">{error}</p>
+                )}
+
+            </div>
 
         </>
     );

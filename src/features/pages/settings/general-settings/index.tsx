@@ -3,12 +3,26 @@ import React, { useState } from 'react'
 import Breadcrumb from "@/components/breadcrumb"
 import Tabs, { Tab } from '@/components/tab'
 import TaxesSetting from './TaxesSettings'
+import General from './General'
+import Currency from './Currency'
+import Communications from './Communications'
+import PaymentSettings from './PaymentSettings'
+import Notifications from './Notifications'
 
 const index = ({ taxesData }: { taxesData?: any }) => {
-    const [activeTab, setActiveTab] = useState<string>('tax-setting');
+    const [activeTab, setActiveTab] = useState<string>('notifications');
 
     const tabs: Tab[] = [
-        { key: 'tax-setting', label: 'Tax Settings' },
+        { key: 'general', label: 'General' },
+        { key: 'currency', label: 'Currency' },
+        { key: 'communications', label: 'Communications' },
+        { key: 'payment-settings', label: 'Payment Settings' },
+        { key: 'invoice', label: 'Invoice' },
+        { key: 'notifications', label: 'Notifications' },
+        { key: 'default-setting', label: 'Default Settings' },
+        { key: 'maintenance', label: 'Maintenance' },
+        { key: 'marketing-setting', label: 'Marketing Settings' },
+        { key: 'storage-setting', label: 'Storage Settings' },
     ];
 
 
@@ -38,7 +52,21 @@ const index = ({ taxesData }: { taxesData?: any }) => {
                 setActiveTab={setActiveTab}
             />
 
-            {activeTab == 'tax-setting' && <TaxesSetting taxesData={taxesData} />}
+
+            {activeTab == 'general' && <General mode='create' />}
+
+            {activeTab == 'currency' && <Currency mode='create' />}
+
+            {activeTab == 'communications' && <Communications mode='create' />}
+
+            {activeTab == 'payment-settings' && <PaymentSettings mode='create' />}
+
+            {activeTab == 'invoice' && <TaxesSetting taxesData={taxesData} />}
+
+            {activeTab == 'notifications' && <Notifications mode='create' />}
+
+
+
 
         </>
     )
