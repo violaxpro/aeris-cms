@@ -5,6 +5,7 @@ import Breadcrumb from "@/components/breadcrumb";
 import { Content } from 'antd/es/layout/layout';
 import Button from '@/components/button'
 import { FormProps } from '@/plugins/types/form-type';
+import Tabs, { Tab } from '@/components/tab'
 import GeneralForm from './GeneralForm';
 import ValuesForm from './ValuesForm';
 import { routes } from '@/config/routes';
@@ -13,7 +14,7 @@ import { addAttribute, updateAttribute } from '@/services/attributes-service';
 
 const FormAttributes: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     console.log(initialValues)
-    const [activeTab, setActiveTab] = useState<'general' | 'values'>('general');
+    const [activeTab, setActiveTab] = useState<string>('general');
     const router = useRouter()
     const { contextHolder, notifySuccess, notifyError } = useNotificationAntd()
     const [formData, setFormData] = useState({
@@ -25,6 +26,10 @@ const FormAttributes: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         },
         values: initialValues ? initialValues.values : []
     })
+    const tabs: Tab[] = [
+        { key: 'general', label: 'General Information' },
+        { key: 'values', label: 'Values' },
+    ];
 
     const breadcrumb = [
         { title: 'Catalogue' },
@@ -105,25 +110,11 @@ const FormAttributes: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                 <Breadcrumb items={breadcrumb} />
             </div>
 
-            {/* Tabs di bawah breadcrumb */}
-            <div className="mx-4 mt-4 mb-0 bg-white px-4 py-3 rounded shadow">
-                <div className="flex border-b border-gray-200" style={{ borderColor: '#E5E7EB' }}>
-                    {['general', 'values'].map((tab) => (
-                        <button
-                            key={tab}
-                            className={`capitalize px-4 py-2 -mb-px border-b-2 transition-colors duration-300 ${activeTab === tab
-                                ? 'border-blue-500 text-blue-500'
-                                : 'border-transparent text-gray-500 hover:text-blue-500'
-                                }`}
-                            onClick={() => setActiveTab(tab as any)}
-                        >
-                            {tab === 'general'
-                                ? 'General Information'
-                                : 'Values'}
-                        </button>
-                    ))}
-                </div>
-            </div>
+            <Tabs
+                tabs={tabs}
+                activeTab={activeTab}
+                setActiveTab={setActiveTab}
+            />
 
             <Content className="mt-4 mx-4 mb-0">
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
