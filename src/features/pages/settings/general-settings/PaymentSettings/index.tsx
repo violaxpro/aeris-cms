@@ -330,17 +330,6 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                     value={formData.payment_processor}
                                                     className='mb-2'
                                                 />
-
-                                                <SelectInput
-                                                    id='mode_apple'
-                                                    label='Mode'
-                                                    value={formData.mode_apple}
-                                                    onChange={(selected) => setFormData({
-                                                        ...formData,
-                                                        mode_apple: selected
-                                                    })}
-                                                    options={optionsMode}
-                                                />
                                             </div>
                                         )
                                     }

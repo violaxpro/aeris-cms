@@ -273,6 +273,17 @@ body,
     /* warna bullet */
 }
 
+.ant-layout-content {
+    overflow: initial
+}
+
+.logo-header {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: var(--background);
+    padding: 1rem;
+}
 
 @theme inline {
     --color-background: var(--background);

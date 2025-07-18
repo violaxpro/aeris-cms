@@ -14,20 +14,20 @@ import SearchInput from '@/components/search';
 import { getTaxes, deleteTaxes } from '@/services/settings-service'
 import { useNotificationAntd } from '@/components/toast'
 import { useAtom } from 'jotai'
-import { taxAtom } from '@/store/SettingsAtom'
-import { TaxType } from '@/plugins/types/settings-type'
+import { smsAtom } from '@/store/SettingsAtom'
+import { TemplateType, smsTemplateData } from '@/plugins/types/settings-type'
 import dayjs from 'dayjs';
-import FormTaxes from './FormTaxes'
+import FormSms from './FormSms'
 
-const index = ({ taxesData }: { taxesData?: any }) => {
+const index = ({ smsData }: { smsData?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
-    const [data, setData] = useAtom(taxAtom)
+    const [data, setData] = useAtom(smsAtom)
     const [isOpenModal, setIsOpenModal] = useState(false)
     const [isOpenModalFilter, setisOpenModalFilter] = useState(false)
-    const [filteredData, setFilteredData] = useState<TaxType[]>([])
+    const [filteredData, setFilteredData] = useState<TemplateType[]>([])
     const [search, setSearch] = useState('')
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-    const [currentTax, setCurrentTax] = useState<any>(null)
+    const [currenData, setCurrenData] = useState<any>(null)
 
     const handleDelete = async (id: any) => {
         try {
@@ -41,17 +41,9 @@ const index = ({ taxesData }: { taxesData?: any }) => {
         }
     }
 
-    const breadcrumb = [
+    const columns: TableColumnsType<TemplateType> = [
         {
-            title: 'Settings',
-        },
-        {
-            title: 'General Settings',
-        },
-    ]
-    const columns: TableColumnsType<TaxType> = [
-        {
-            title: 'Tax Name',
+            title: 'Template Name',
             dataIndex: 'name',
             sorter: (a: any, b: any) => a?.name.localeCompare(b?.name),
             render: (val: string) => {
@@ -59,26 +51,25 @@ const index = ({ taxesData }: { taxesData?: any }) => {
             }
         },
         {
-            title: 'Description',
-            dataIndex: 'description',
-            sorter: (a: any, b: any) => a?.description.localeCompare(b?.description),
-            render: (val: string) => {
-                return val
-            }
-        },
-        {
-            title: 'Value',
-            dataIndex: 'value',
-            sorter: (a: any, b: any) => a?.value.localeCompare(b?.value),
-            render: (val: string) => {
-                return val
-            }
-        },
-        {
-            title: 'Created',
+            title: 'Created At',
             dataIndex: 'created_at',
             sorter: (a: any, b: any) => {
                 return new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+            },
+            render: (val: any) => {
+                const date = dayjs(val).format("DD/MM/YYYY")
+                return <div className="flex flex-col w-full">
+                    <div className="flex justify-start gap-1">
+                        <span>{date}</span>
+                    </div>
+                </div>
+            }
+        },
+        {
+            title: 'Updated At',
+            dataIndex: 'updated_at',
+            sorter: (a: any, b: any) => {
+                return new Date(a.updated_at).getTime() - new Date(b.updated_at).getTime()
             },
             render: (val: any) => {
                 const date = dayjs(val).format("DD/MM/YYYY")
@@ -98,14 +89,14 @@ const index = ({ taxesData }: { taxesData?: any }) => {
                 const menu = (
                     <Menu>
                         <Menu.Item key="edit" onClick={() => {
-                            setCurrentTax(row)
+                            setCurrenData(row)
                             setIsOpenModal(true)
                         }}>
                             Edit
                         </Menu.Item>
                         <Menu.Item key="delete">
                             <Popover
-                                title='Delete Tax'
+                                title='Delete Email'
                                 description='Are you sure to delete this data?'
                                 onDelete={() => handleDelete(row.id)}
                                 label='Delete'
@@ -116,7 +107,7 @@ const index = ({ taxesData }: { taxesData?: any }) => {
 
                 return (
                     <Dropdown overlay={menu} trigger={['click']} >
-                        <button className="flex items-center justify-center px-2 py-1 border rounded hover:bg-gray-100">
+                        <button className="flex items-center justify-center px-2 py-1 border rounded ">
                             Actions <MoreOutlined className="ml-1" />
                         </button>
                     </Dropdown >
@@ -137,18 +128,18 @@ const index = ({ taxesData }: { taxesData?: any }) => {
     };
 
     useEffect(() => {
-        setData(taxesData)
+        setData(smsTemplateData)
         if (!search) {
-            setFilteredData(taxesData)
+            setFilteredData(smsTemplateData)
         }
-    }, [taxesData, search])
+    }, [smsTemplateData, search])
 
-    const fetchTaxes = async () => {
+    const fetchData = async () => {
         const res = await getTaxes();
         setData(res.data);
     };
 
-    console.log(data)
+    console.log(currenData)
 
     return (
         <>
@@ -158,7 +149,7 @@ const index = ({ taxesData }: { taxesData?: any }) => {
                     <div className='flex justify-between mb-4'>
                         <div>
                             <h1 className='text-xl font-bold'>
-                                Tax Setting
+                                SMS Templates
                             </h1>
                         </div>
                         <div className='flex items-center gap-2'>
@@ -166,7 +157,7 @@ const index = ({ taxesData }: { taxesData?: any }) => {
                             <Button
                                 btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]"
                                 icon={<PlusCircleOutlined />}
-                                label='Add Tax'
+                                label='Add Template'
                                 onClick={() => setIsOpenModal(true)}
                             />
                         </div>
@@ -179,20 +170,20 @@ const index = ({ taxesData }: { taxesData?: any }) => {
                         onSelectChange={setSelectedRowKeys}
                     />
                 </div>
-                <FormTaxes
+                <FormSms
                     open={isOpenModal}
                     handleCancel={() => {
                         setIsOpenModal(false)
-                        setCurrentTax(null)
+                        setCurrenData(null)
                     }}
                     onSuccess={(msg: any) => {
                         notifySuccess(msg);
                         setIsOpenModal(false);
-                        setCurrentTax(null)
+                        setCurrenData(null)
 
-                        fetchTaxes()
+                        fetchData()
                     }}
-                    databyId={currentTax}
+                    databyId={currenData}
                 />
             </Content>
 

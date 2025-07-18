@@ -95,6 +95,14 @@ export const routes = {
     subscribe: '/ecommerce/subscribe',
     createSubscribe: '/ecommerce/subscribe/create',
     editSubscribe: (slug: string) => `/ecommerce/subscribe/${slug}/edit`,
+
+    shippingMethods: '/ecommerce/shipping-methods',
+
+    socialLogins: '/ecommerce/social-logins',
+
+    template: '/ecommerce/template-settings',
+
+
   },
   profile: '/profile',
   welcome: '/welcome',

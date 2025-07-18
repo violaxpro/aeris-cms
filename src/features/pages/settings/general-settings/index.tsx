@@ -8,9 +8,13 @@ import Currency from './Currency'
 import Communications from './Communications'
 import PaymentSettings from './PaymentSettings'
 import Notifications from './Notifications'
+import DefaultSettings from './DefaultSettings'
+import Maintenance from './Maintenance'
+import MarketingSetting from './MarketingSettings'
+import StorageSettings from './StorageSettings'
 
 const index = ({ taxesData }: { taxesData?: any }) => {
-    const [activeTab, setActiveTab] = useState<string>('notifications');
+    const [activeTab, setActiveTab] = useState<string>('general');
 
     const tabs: Tab[] = [
         { key: 'general', label: 'General' },
@@ -65,7 +69,13 @@ const index = ({ taxesData }: { taxesData?: any }) => {
 
             {activeTab == 'notifications' && <Notifications mode='create' />}
 
+            {activeTab == 'default-setting' && <DefaultSettings mode='create' />}
 
+            {activeTab == 'maintenance' && <Maintenance mode='create' />}
+
+            {activeTab == 'marketing-setting' && <MarketingSetting mode='create' />}
+
+            {activeTab == 'storage-setting' && <StorageSettings mode='create' />}
 
 
         </>

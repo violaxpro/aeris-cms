@@ -6,8 +6,8 @@ import { BellOutlined } from '@ant-design/icons';
 import Avatar from 'antd/es/avatar/Avatar';
 import { Badge, Dropdown } from 'antd';
 import AvatarImage from "public/social-avatar.webp"
-import Image from 'next/image';
-import logoImg from '@public/logo/Alarm Expert Logo.webp';
+// import Image from 'next/image';
+// import logoImg from '@public/logo/Alarm Expert Logo.webp';
 import SearchInput from '@/components/search';
 import SettingsDrawer from '@/components/drawer'
 import { Button } from 'antd';
@@ -43,13 +43,13 @@ export default function HeaderLayout() {
         `}
             style={{ padding: '2.2rem 0' }}
         >
-            <div className="flex items-center demo-logo-vertical my-2  gap-6">
-                <Image
+            <div className="flex items-center demo-logo-vertical my-2 gap-6 ml-2">
+                {/* <Image
                     src={logoImg}
                     alt='logo'
                     width={240}
                     height={50}
-                />
+                /> */}
                 <SearchInput
                     placeholder="Search..."
                     onSearch={(value) => console.log(value)}

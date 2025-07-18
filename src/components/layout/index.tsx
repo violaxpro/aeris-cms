@@ -61,16 +61,22 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
         fetchData()
     }, [setOptionBrands, setOptionCategories, setOptionAttributeSet, setOptionProduct, setOptionTaxes])
+    //  className="pl-[250px] max-md:pl-0 transition-all duration-300"
+    // <Layout>
+    //         <HeaderLayout />
+    //         <Layout hasSider>
+    //             <Sidebar />
+    //             <Layout>
+    //                 {children}
+    //             </Layout>
+    //         </Layout>
+    //     </Layout>
     return (
-        <Layout style={{
-            minHeight: '100vh',
-        }}>
-            <HeaderLayout />
-            <Layout>
-                <Sidebar />
-                <Layout>
-                    {children}
-                </Layout>
+        <Layout hasSider>
+            <Sidebar />
+            <Layout >
+                <HeaderLayout />
+                {children}
             </Layout>
         </Layout>
     );

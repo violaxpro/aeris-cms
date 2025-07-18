@@ -22,7 +22,8 @@ import {
     ApartmentOutlined,
     UnlockOutlined,
     CarOutlined,
-    DashboardOutlined
+    DashboardOutlined,
+    SnippetsOutlined
 } from '@ant-design/icons';
 import { DashboardIcon } from '@/components/icon';
 
@@ -458,20 +459,26 @@ export const menuItems = [
             {
                 key: 'social-logins',
                 label: 'Social Logins',
-                href: routes.eCommerce.products,
+                href: routes.eCommerce.socialLogins,
                 icon: UnlockOutlined
             },
             {
                 key: 'shipping-methods',
                 label: 'Shipping Methods',
-                href: routes.eCommerce.products,
+                href: routes.eCommerce.shippingMethods,
                 icon: CarOutlined
             },
+            // {
+            //     key: 'payment-methods',
+            //     label: 'Payment Methods',
+            //     href: routes.eCommerce.products,
+            //     icon: CreditCardOutlined
+            // },
             {
-                key: 'payment-methods',
-                label: 'Payment Methods',
-                href: routes.eCommerce.products,
-                icon: CreditCardOutlined
+                key: 'templates',
+                label: 'Template Settings',
+                href: routes.eCommerce.template,
+                icon: SnippetsOutlined
             },
         ]
     },

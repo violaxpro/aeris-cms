@@ -88,7 +88,7 @@ const FormTaxes = ({
                     label='Tax Name'
                     placeholder='Tax Name'
                     value={taxData.name}
-                    type='string'
+                    type='text'
                     onChange={handleChange}
                 />
                 <Textarea
