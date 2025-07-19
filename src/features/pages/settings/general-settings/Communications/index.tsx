@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { Content } from 'antd/es/layout/layout';
 import Button from '@/components/button'
 import { FormProps } from '@/plugins/types/form-type';
-import FormGroup from '@/components/form';
+import FormGroup from '@/components/form-group';
 import Input from "@/components/input"
 import TextArea from "@/components/textarea"
 import SelectInput from '@/components/select';
@@ -132,6 +132,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                         <FormGroup
                             title="Email SMTP"
                             description="Email SMTP is used to send email notifications"
+                            childClassName='grid md:grid-cols-2 gap-3'
                         >
                             <Input
                                 id='host'
@@ -167,22 +168,25 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 })}
                                 options={optionsSecurityType}
                             />
-                            <Input
-                                id='username'
-                                label='Username'
-                                type='text'
-                                placeholder='Username'
-                                onChange={handleChange}
-                                value={formData.username}
-                            />
-                            <Input
-                                id='password'
-                                label='Password'
-                                type='password'
-                                placeholder='Password'
-                                onChange={handleChange}
-                                value={formData.password}
-                            />
+                            <div className='grid md:grid-cols-2 gap-3'>
+                                <Input
+                                    id='username'
+                                    label='Username'
+                                    type='text'
+                                    placeholder='Username'
+                                    onChange={handleChange}
+                                    value={formData.username}
+                                />
+                                <Input
+                                    id='password'
+                                    label='Password'
+                                    type='password'
+                                    placeholder='Password'
+                                    onChange={handleChange}
+                                    value={formData.password}
+                                />
+                            </div>
+
                             <Input
                                 id='mail'
                                 label='Mail Encryption'
@@ -192,14 +196,12 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 value={formData.mail}
                             />
                         </FormGroup>
-                        <hr style={{ borderColor: '#E5E7EB', marginTop: '1rem', margin: '1rem 0' }} />
-                        <FormGroup title="SMS" description='SMS is used to send SMS notifications'>
+                        <FormGroup title="SMS" description='SMS is used to send SMS notifications' className='mt-4'>
                             <div className='col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}  >
-
-                                <div className='col-span-full flex gap-3 justify-between mb-4'>
+                                <div className='col-span-full flex gap-3 justify-between'>
                                     <h4 className='text-base font-medium'>Twillio</h4>
                                     <SwitchInput
-                                        label='Enable Twilio'
+                                        label='Enable'
                                         checked={twillio}
                                         onChange={(value) =>
                                             setTwillio(value)
@@ -243,16 +245,14 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
                         </FormGroup>
 
-                        <hr style={{ borderColor: '#E5E7EB', marginTop: '1rem', margin: '1rem 0' }} />
 
-                        <FormGroup title="Chat Features" description='Chat feature'>
-
+                        <FormGroup title="Chat Features" description='Chat feature' className='mt-4' childClassName='flex flex-col gap-3'>
                             <>
-                                <div className='col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}  >
-                                    <div className='col-span-full flex gap-3 justify-between mb-4'>
+                                <div className='col-span-full  border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}  >
+                                    <div className='col-span-full flex justify-between items-center'>
                                         <h4 className='text-base font-medium'>Tawk To</h4>
                                         <SwitchInput
-                                            label='Enable Tawk To'
+                                            label='Enable'
                                             checked={tawkTo}
                                             onChange={(value) =>
                                                 setTawkTo(value)
@@ -281,16 +281,17 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                 </div>
 
                                             </div>
+
                                         )
                                     }
 
                                 </div>
 
-                                <div className='col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}  >
-                                    <div className='col-span-full flex gap-3 justify-between mb-4'>
+                                <div className='col-span-full  border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}  >
+                                    <div className='col-span-full flex gap-3 justify-between items-center'>
                                         <h4 className='text-base font-medium'>Tidio</h4>
                                         <SwitchInput
-                                            label='Enable Tidio'
+                                            label='Enable'
                                             checked={tidio}
                                             onChange={(value) =>
                                                 setTidio(value)
@@ -326,7 +327,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 <div className=' col-span-full flex justify-between items-center border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}>
                                     <h4 className='text-base font-medium'>Facebook</h4>
                                     <SwitchInput
-                                        label='Enable Facebook'
+                                        label='Enable'
                                         checked={facebook}
                                         onChange={(value) =>
                                             setFacebook(value)

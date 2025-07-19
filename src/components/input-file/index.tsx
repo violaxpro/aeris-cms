@@ -2,7 +2,9 @@
 
 import React from 'react';
 import { InboxOutlined } from '@ant-design/icons';
+import { FileUploadIcon } from '@public/icon';
 import type { UploadFile, UploadProps } from 'antd';
+import Image from 'next/image';
 import { Upload, message, Spin } from 'antd';
 
 const { Dragger } = Upload;
@@ -69,15 +71,15 @@ const FileUploader: React.FC<FileUploaderProps> = ({
     return (
         <>
             <div className='flex flex-col w-full gap-2'>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700">
                     {label}
                 </label>
                 <Spin spinning={isUpload}>
                     <Dragger {...props} className={className}>
-                        <p className="ant-upload-drag-icon">
-                            <InboxOutlined className='!text-[#103654]' />
-                        </p>
-                        <p className="ant-upload-text">Click or drag file to this area to upload</p>
+                        <div className="ant-upload-drag-icon flex items-center justify-center w-full h-full mb-4">
+                            <Image src={FileUploadIcon} alt="Upload Icon" width={30} height={30} />
+                        </div>
+                        <p className="ant-upload-text !text-[#A19F9F]">Click or drag file to this area to upload</p>
                     </Dragger>
                 </Spin>
                 {errorMessage && (

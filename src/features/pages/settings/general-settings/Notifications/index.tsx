@@ -4,13 +4,14 @@ import { useRouter } from 'next/navigation';
 import { Content } from 'antd/es/layout/layout';
 import Button from '@/components/button'
 import { FormProps } from '@/plugins/types/form-type';
-import FormGroup from '@/components/form';
+import FormGroup from '@/components/form-group';
 import Input from "@/components/input"
 import TextArea from "@/components/textarea"
 import Modal from '@/components/modal'
 import SelectInput from '@/components/select';
 import SwitchInput from '@/components/switch';
 import { uploadImages } from '@/services/upload-images';
+import { Divider } from 'antd';
 import { useNotificationAntd } from '@/components/toast';
 import FileUploader from '@/components/input-file';
 import { PlusOutlined, MinusCircleOutlined } from '@ant-design/icons';
@@ -280,338 +281,761 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                     <div>
                         <FormGroup title="Order Notifications" description='Notifications for order confirmation' />
                         <div className='flex flex-col gap-4'>
+
                             {/* order notifications payment */}
                             <div className='flex flex-col col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}  >
                                 <div className='col-span-full flex justify-between items-center'>
                                     <h4 className='text-base font-medium'>Order Notification</h4>
                                     <div className='flex gap-4'>
                                         <SwitchInput
-                                            label='Email'
-                                            checked={notifikasi.emailOrderConfirm}
-                                            onChange={(value) => handleChangeNotifikasi("emailOrderConfirm", value)}
-                                        />
-                                        <SwitchInput
-                                            label='SMS'
-                                            checked={notifikasi.smsOrderConfirm}
-                                            onChange={(value) => handleChangeNotifikasi("smsOrderConfirm", value)}
+                                            label='Enable'
+                                            checked={orderConfirm}
+                                            onChange={(checked) => setOrderConfirm(checked)}
                                         />
                                     </div>
                                 </div>
-                                {(notifikasi.emailOrderConfirm == true || notifikasi.smsOrderConfirm == true) && (
-                                    <div className='col-span-full w-full flex gap-3 justify-end items-center mt-4'>
-                                        <Button
-                                            label='View Template'
-                                            onClick={() => handleOpenModal('order_confirm')}
-                                        />
-                                        <SelectInput
-                                            id='order_confirm'
-                                            label='Choose Template'
-                                            value={selectedTemplate.order_confirm}
-                                            onChange={(val: any) => handleTemplateChange('order_confirm', val)}
-                                            options={optionsOrder}
-                                        />
-                                    </div>
-                                )}
+                                {orderConfirm == true && (
+                                    <>
+                                        <div className='flex flex-col gap-3 mt-4'>
+                                            <div className='flex justify-between'>
+                                                <label>Via Email</label>
+                                                <div className='flex items-center gap-3'>
+                                                    {
+                                                        notifikasi.emailOrderConfirm && (
+                                                            <div className='flex items-center gap-3'>
+                                                                {
+                                                                    selectedTemplate.order_confirm && <Button
+                                                                        label='View Template'
+                                                                        onClick={() => handleOpenModal('order_confirm')}
+                                                                    />
+                                                                }
+                                                                <SelectInput
+                                                                    id='order_confirm'
+                                                                    value={selectedTemplate.order_confirm}
+                                                                    onChange={(val: any) => handleTemplateChange('order_confirm', val)}
+                                                                    options={optionsOrder}
+                                                                    selectClassName='!w-[200]'
+                                                                />
 
+                                                            </div>
+                                                        )
+                                                    }
+                                                    <SwitchInput
+                                                        label='Email'
+                                                        checked={notifikasi.emailOrderConfirm}
+                                                        onChange={(value) => handleChangeNotifikasi("emailOrderConfirm", value)}
+                                                    />
+                                                </div>
+
+                                            </div>
+                                            <div className='flex justify-between'>
+                                                <label>Via SMS</label>
+                                                <div className='flex items-center gap-3'>
+                                                    {
+                                                        notifikasi.smsOrderConfirm && (
+                                                            <div className='flex items-center gap-3'>
+                                                                {
+                                                                    selectedTemplate.order_confirm && <Button
+                                                                        label='View Template'
+                                                                        onClick={() => handleOpenModal('order_confirm')}
+                                                                    />
+                                                                }
+
+                                                                <SelectInput
+                                                                    id='order_confirm'
+                                                                    value={selectedTemplate.order_confirm}
+                                                                    onChange={(val: any) => handleTemplateChange('order_confirm', val)}
+                                                                    options={optionsOrder}
+                                                                    selectClassName='!w-[200]'
+                                                                />
+
+                                                            </div>
+                                                        )
+                                                    }
+                                                    <SwitchInput
+                                                        label='SMS'
+                                                        checked={notifikasi.smsOrderConfirm}
+                                                        onChange={(value) => handleChangeNotifikasi("smsOrderConfirm", value)}
+                                                    />
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </>
+
+                                )}
                             </div>
 
-                            {/*  payment received*/}
+                            {/* payment receive */}
                             <div className='flex flex-col col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}  >
                                 <div className='col-span-full flex justify-between items-center'>
                                     <h4 className='text-base font-medium'>Payment Received</h4>
-                                    <div className='flex  gap-4'>
+                                    <div className='flex gap-4'>
                                         <SwitchInput
-                                            label='Email'
-                                            checked={notifikasi.emailPayment}
-                                            onChange={(value) => handleChangeNotifikasi("emailPayment", value)}
-                                        />
-                                        <SwitchInput
-                                            label='SMS'
-                                            checked={notifikasi.smsPayment}
-                                            onChange={(value) => handleChangeNotifikasi("smsPayment", value)}
+                                            label='Enable'
+                                            checked={paymentReceive}
+                                            onChange={(checked) => setPaymentReceive(checked)}
                                         />
                                     </div>
-
                                 </div>
-                                {
-                                    (notifikasi.emailPayment == true || notifikasi.smsPayment == true) && (
-                                        <div className='col-span-full w-full flex gap-3 justify-end items-center mt-4'>
-                                            <Button
-                                                label='View Template'
-                                                onClick={() => handleOpenModal('payment_receive')}
-                                            />
-                                            <SelectInput
-                                                id='payment_receive'
-                                                label='Choose Template'
-                                                value={selectedTemplate.payment_receive}
-                                                onChange={(val: any) => handleTemplateChange('payment_receive', val)}
-                                                options={optionsPaymentReceive}
-                                            />
-                                        </div>
+                                {paymentReceive == true && (
+                                    <>
+                                        <div className='flex flex-col gap-3 mt-4'>
+                                            <div className='flex justify-between'>
+                                                <label>Via Email</label>
+                                                <div className='flex items-center gap-3'>
+                                                    {
+                                                        notifikasi.emailPayment && (
+                                                            <div className='flex items-center gap-3'>
+                                                                {
+                                                                    selectedTemplate.payment_receive && <Button
+                                                                        label='View Template'
+                                                                        onClick={() => handleOpenModal('payment_receive')}
+                                                                    />
+                                                                }
+                                                                <SelectInput
+                                                                    id='payment_receive'
+                                                                    value={selectedTemplate.payment_receive}
+                                                                    onChange={(val: any) => handleTemplateChange('payment_receive', val)}
+                                                                    options={optionsPaymentReceive}
+                                                                    selectClassName='!w-[200]'
+                                                                />
 
-                                    )
-                                }
+                                                            </div>
+                                                        )
+                                                    }
+                                                    <SwitchInput
+                                                        label='Email'
+                                                        checked={notifikasi.emailPayment}
+                                                        onChange={(value) => handleChangeNotifikasi("emailPayment", value)}
+                                                    />
+                                                </div>
+
+                                            </div>
+                                            <div className='flex justify-between'>
+                                                <label>Via SMS</label>
+                                                <div className='flex items-center gap-3'>
+                                                    {
+                                                        notifikasi.smsPayment && (
+                                                            <div className='flex items-center gap-3'>
+                                                                {
+                                                                    selectedTemplate.payment_receive && <Button
+                                                                        label='View Template'
+                                                                        onClick={() => handleOpenModal('payment_receive')}
+                                                                    />
+                                                                }
+                                                                <SelectInput
+                                                                    id='payment_receive'
+                                                                    value={selectedTemplate.payment_receive}
+                                                                    onChange={(val: any) => handleTemplateChange('payment_receive', val)}
+                                                                    options={optionsPaymentReceive}
+                                                                    selectClassName='!w-[200]'
+                                                                />
+                                                            </div>
+                                                        )
+                                                    }
+                                                    <SwitchInput
+                                                        label='SMS'
+                                                        checked={notifikasi.smsPayment}
+                                                        onChange={(value) => handleChangeNotifikasi("smsPayment", value)}
+                                                    />
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
                             </div>
 
-                            {/* order processing*/}
+                            {/* order processing */}
                             <div className='flex flex-col col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}  >
                                 <div className='col-span-full flex justify-between items-center'>
                                     <h4 className='text-base font-medium'>Order Processing</h4>
-                                    <div className='flex  gap-4'>
+                                    <div className='flex gap-4'>
                                         <SwitchInput
-                                            label='Email'
-                                            checked={notifikasi.emailOrderProcess}
-                                            onChange={(value) => handleChangeNotifikasi("emailOrderProcess", value)}
-                                        />
-                                        <SwitchInput
-                                            label='SMS'
-                                            checked={notifikasi.smsOrderProcess}
-                                            onChange={(value) => handleChangeNotifikasi("smsOrderProcess", value)}
+                                            label='Enable'
+                                            checked={orderProcessing}
+                                            onChange={(checked) => setOrderProcessing(checked)}
                                         />
                                     </div>
                                 </div>
-                                {
-                                    (notifikasi.emailOrderProcess == true || notifikasi.smsOrderProcess == true) && (
-                                        <div className='col-span-full w-full flex gap-3 justify-end items-center mt-4'>
-                                            <Button
-                                                label='View Template'
-                                                onClick={() => handleOpenModal('order_processing')}
-                                            />
-                                            <SelectInput
-                                                id='order_processing'
-                                                label='Choose Template'
-                                                value={selectedTemplate.order_processing}
-                                                onChange={(val: any) => handleTemplateChange('order_processing', val)}
-                                                options={optionsOrderProcess}
-                                            />
-                                        </div>
+                                {orderProcessing == true && (
+                                    <>
+                                        <div className='flex flex-col gap-3 mt-4'>
+                                            <div className='flex justify-between'>
+                                                <label>Via Email</label>
+                                                <div className='flex items-center gap-3'>
+                                                    {
+                                                        notifikasi.emailOrderProcess && (
+                                                            <div className='flex items-center gap-3'>
+                                                                {
+                                                                    selectedTemplate.order_processing && <Button
+                                                                        label='View Template'
+                                                                        onClick={() => handleOpenModal('order_processing')}
+                                                                    />
+                                                                }
 
-                                    )
-                                }
+                                                                <SelectInput
+                                                                    id='order_processing'
+                                                                    value={selectedTemplate.order_processing}
+                                                                    onChange={(val: any) => handleTemplateChange('order_processing', val)}
+                                                                    options={optionsOrderProcess}
+                                                                    selectClassName='!w-[200]'
+
+                                                                />
+                                                            </div>
+                                                        )
+                                                    }
+                                                    <SwitchInput
+                                                        label='Email'
+                                                        checked={notifikasi.emailOrderProcess}
+                                                        onChange={(value) => handleChangeNotifikasi("emailOrderProcess", value)}
+                                                    />
+                                                </div>
+
+                                            </div>
+                                            <div className='flex justify-between'>
+                                                <label>Via SMS</label>
+                                                <div className='flex items-center gap-3'>
+                                                    {
+                                                        notifikasi.smsOrderProcess && (
+                                                            <div className='flex items-center gap-3'>
+                                                                {
+                                                                    selectedTemplate.order_processing && <Button
+                                                                        label='View Template'
+                                                                        onClick={() => handleOpenModal('order_processing')}
+                                                                    />
+                                                                }
+                                                                <SelectInput
+                                                                    id='order_processing'
+                                                                    value={selectedTemplate.order_processing}
+                                                                    onChange={(val: any) => handleTemplateChange('order_processing', val)}
+                                                                    options={optionsOrderProcess}
+                                                                    selectClassName='!w-[200]'
+                                                                />
+                                                            </div>
+                                                        )
+                                                    }
+                                                    <SwitchInput
+                                                        label='SMS'
+                                                        checked={notifikasi.smsOrderProcess}
+                                                        onChange={(value) => handleChangeNotifikasi("smsOrderProcess", value)}
+                                                    />
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
                             </div>
 
-                            {/* order packed*/}
+                            {/* order processing */}
                             <div className='flex flex-col col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}  >
                                 <div className='col-span-full flex justify-between items-center'>
                                     <h4 className='text-base font-medium'>Order Packed</h4>
-                                    <div className='flex  gap-4'>
+                                    <div className='flex gap-4'>
                                         <SwitchInput
-                                            label='Email'
-                                            checked={notifikasi.emailOrderPacked}
-                                            onChange={(value) => handleChangeNotifikasi("emailOrderPacked", value)}
-                                        />
-                                        <SwitchInput
-                                            label='SMS'
-                                            checked={notifikasi.smsOrderPacked}
-                                            onChange={(value) => handleChangeNotifikasi("smsOrderPacked", value)}
+                                            label='Enable'
+                                            checked={orderPacked}
+                                            onChange={(checked) => setOrderPacked(checked)}
                                         />
                                     </div>
                                 </div>
-                                {
-                                    (notifikasi.emailOrderPacked == true || notifikasi.smsOrderPacked == true) && (
-                                        <div className='col-span-full w-full flex gap-3 justify-end items-center mt-4'>
-                                            <Button
-                                                label='View Template'
-                                                onClick={() => handleOpenModal('order_packed')}
-                                            />
-                                            <SelectInput
-                                                id='order_packed'
-                                                label='Choose Template'
-                                                value={selectedTemplate.order_packed}
-                                                onChange={(val: any) => handleTemplateChange('order_packed', val)}
-                                                options={optionsOrderPacked}
-                                            />
-                                        </div>
+                                {orderPacked == true && (
+                                    <>
+                                        <div className='flex flex-col gap-3 mt-4'>
+                                            <div className='flex justify-between'>
+                                                <label>Via Email</label>
+                                                <div className='flex items-center gap-3'>
+                                                    {
+                                                        notifikasi.emailOrderPacked && (
+                                                            <div className='flex items-center gap-3'>
+                                                                {
+                                                                    selectedTemplate.order_packed && <Button
+                                                                        label='View Template'
+                                                                        onClick={() => handleOpenModal('order_packed')}
+                                                                    />
+                                                                }
+                                                                <SelectInput
+                                                                    id='order_packed'
+                                                                    value={selectedTemplate.order_packed}
+                                                                    onChange={(val: any) => handleTemplateChange('order_packed', val)}
+                                                                    options={optionsOrderPacked}
+                                                                    selectClassName='!w-[200]'
 
-                                    )
-                                }
+                                                                />
+                                                            </div>
+                                                        )
+                                                    }
+                                                    <SwitchInput
+                                                        label='Email'
+                                                        checked={notifikasi.emailOrderPacked}
+                                                        onChange={(value) => handleChangeNotifikasi("emailOrderPacked", value)}
+                                                    />
+                                                </div>
+
+                                            </div>
+                                            <div className='flex justify-between'>
+                                                <label>Via SMS</label>
+                                                <div className='flex items-center gap-3'>
+                                                    {
+                                                        notifikasi.smsOrderPacked && (
+                                                            <div className='flex items-center gap-3'>
+                                                                {
+                                                                    selectedTemplate.order_packed && <Button
+                                                                        label='View Template'
+                                                                        onClick={() => handleOpenModal('order_packed')}
+                                                                    />
+                                                                }
+                                                                <SelectInput
+                                                                    id='order_packed'
+                                                                    value={selectedTemplate.order_packed}
+                                                                    onChange={(val: any) => handleTemplateChange('order_packed', val)}
+                                                                    options={optionsOrderPacked}
+                                                                    selectClassName='!w-[200]'
+
+                                                                />
+                                                            </div>
+                                                        )
+                                                    }
+                                                    <SwitchInput
+                                                        label='SMS'
+                                                        checked={notifikasi.smsOrderPacked}
+                                                        onChange={(value) => handleChangeNotifikasi("smsOrderPacked", value)}
+                                                    />
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
                             </div>
 
-                            {/* out of delivery*/}
+
+                            {/* outof delivery */}
                             <div className='flex flex-col col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}  >
                                 <div className='col-span-full flex justify-between items-center'>
                                     <h4 className='text-base font-medium'>Out of Delivery</h4>
-                                    <div className='flex  gap-4'>
+                                    <div className='flex gap-4'>
                                         <SwitchInput
-                                            label='Email'
-                                            checked={notifikasi.emailOutofDelivery}
-                                            onChange={(value) => handleChangeNotifikasi("emailOutofDelivery", value)}
-                                        />
-                                        <SwitchInput
-                                            label='SMS'
-                                            checked={notifikasi.smsOutofDelivery}
-                                            onChange={(value) => handleChangeNotifikasi("smsOutofDelivery", value)}
+                                            label='Enable'
+                                            checked={outOfDelivery}
+                                            onChange={(checked) => setOutOfDelivery(checked)}
                                         />
                                     </div>
                                 </div>
-                                {
-                                    (notifikasi.emailOutofDelivery == true || notifikasi.smsOutofDelivery == true) && (
-                                        <div className='col-span-full w-full flex gap-3 justify-end items-center mt-4'>
-                                            <Button
-                                                label='View Template'
-                                                onClick={() => handleOpenModal('outof_delivery')}
-                                            />
-                                            <SelectInput
-                                                id='outof_delivery'
-                                                label='Choose Template'
-                                                value={selectedTemplate.outof_delivery}
-                                                onChange={(val: any) => handleTemplateChange('outof_delivery', val)}
-                                                options={optionsOutofDelivery}
-                                            />
+                                {outOfDelivery == true && (
+                                    <>
+                                        <div className='flex flex-col gap-3 mt-4'>
+                                            <div className='flex justify-between'>
+                                                <label>Via Email</label>
+                                                <div className='flex items-center gap-3'>
+                                                    {
+                                                        notifikasi.emailOutofDelivery && (
+                                                            <div className='flex items-center gap-3'>
+                                                                {
+                                                                    selectedTemplate.outof_delivery && <Button
+                                                                        label='View Template'
+                                                                        onClick={() => handleOpenModal('outof_delivery')}
+                                                                    />
+                                                                }
+                                                                <SelectInput
+                                                                    id='outof_delivery'
+                                                                    value={selectedTemplate.outof_delivery}
+                                                                    onChange={(val: any) => handleTemplateChange('outof_delivery', val)}
+                                                                    options={optionsOutofDelivery}
+                                                                    selectClassName='!w-[200]'
+
+                                                                />
+                                                            </div>
+                                                        )
+                                                    }
+                                                    <SwitchInput
+                                                        label='Email'
+                                                        checked={notifikasi.emailOutofDelivery}
+                                                        onChange={(value) => handleChangeNotifikasi("emailOutofDelivery", value)}
+                                                    />
+                                                </div>
+
+                                            </div>
+                                            <div className='flex justify-between'>
+                                                <label>Via SMS</label>
+                                                <div className='flex items-center gap-3'>
+                                                    {
+                                                        notifikasi.smsOutofDelivery && (
+                                                            <div className='flex items-center gap-3'>
+                                                                {
+                                                                    selectedTemplate.outof_delivery && <Button
+                                                                        label='View Template'
+                                                                        onClick={() => handleOpenModal('outof_delivery')}
+                                                                    />
+                                                                }
+                                                                <SelectInput
+                                                                    id='outof_delivery'
+                                                                    value={selectedTemplate.outof_delivery}
+                                                                    onChange={(val: any) => handleTemplateChange('outof_delivery', val)}
+                                                                    options={optionsOutofDelivery}
+                                                                    selectClassName='!w-[200]'
+
+                                                                />
+                                                            </div>
+                                                        )
+                                                    }
+                                                    <SwitchInput
+                                                        label='SMS'
+                                                        checked={notifikasi.smsOutofDelivery}
+                                                        onChange={(value) => handleChangeNotifikasi("smsOutofDelivery", value)}
+                                                    />
+                                                </div>
+
+                                            </div>
                                         </div>
-                                    )
-                                }
+                                    </>
+                                )}
                             </div>
 
-                            {/* order shipped*/}
+                            {/* order shipped */}
                             <div className='flex flex-col col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}  >
                                 <div className='col-span-full flex justify-between items-center'>
                                     <h4 className='text-base font-medium'>Order Shipped</h4>
-                                    <div className='flex  gap-4'>
+                                    <div className='flex gap-4'>
                                         <SwitchInput
-                                            label='Email'
-                                            checked={notifikasi.emailOrderShipped}
-                                            onChange={(value) => handleChangeNotifikasi("emailOrderShipped", value)}
-                                        />
-                                        <SwitchInput
-                                            label='SMS'
-                                            checked={notifikasi.smsOrderShipped}
-                                            onChange={(value) => handleChangeNotifikasi("smsOrderShipped", value)}
+                                            label='Enable'
+                                            checked={orderShipped}
+                                            onChange={(checked) => setOrderShipped(checked)}
                                         />
                                     </div>
                                 </div>
-                                {
-                                    (notifikasi.emailOrderShipped == true || notifikasi.smsOrderShipped == true) && (
-                                        <div className='col-span-full w-full flex gap-3 justify-end items-center mt-4'>
-                                            <Button
-                                                label='View Template'
-                                                onClick={() => handleOpenModal('order_shipped')}
-                                            />
-                                            <SelectInput
-                                                id='order_shipped'
-                                                label='Choose Template'
-                                                value={selectedTemplate.order_shipped}
-                                                onChange={(val: any) => handleTemplateChange('order_shipped', val)}
-                                                options={optionsOrderShipped}
-                                            />
+                                {orderShipped == true && (
+                                    <>
+                                        <div className='flex flex-col gap-3 mt-4'>
+                                            <div className='flex justify-between'>
+                                                <label>Via Email</label>
+                                                <div className='flex items-center gap-3'>
+                                                    {
+                                                        notifikasi.emailOrderShipped && (
+                                                            <div className='flex items-center gap-3'>
+                                                                {
+                                                                    selectedTemplate.order_shipped && <Button
+                                                                        label='View Template'
+                                                                        onClick={() => handleOpenModal('order_shipped')}
+                                                                    />
+                                                                }
+                                                                <SelectInput
+                                                                    id='order_shipped'
+                                                                    value={selectedTemplate.order_shipped}
+                                                                    onChange={(val: any) => handleTemplateChange('order_shipped', val)}
+                                                                    options={optionsOrderShipped}
+                                                                    selectClassName='!w-[200]'
+                                                                />
+                                                            </div>
+                                                        )
+                                                    }
+                                                    <SwitchInput
+                                                        label='Email'
+                                                        checked={notifikasi.emailOrderShipped}
+                                                        onChange={(value) => handleChangeNotifikasi("emailOrderShipped", value)}
+                                                    />
+                                                </div>
+
+                                            </div>
+                                            <div className='flex justify-between'>
+                                                <label>Via SMS</label>
+                                                <div className='flex items-center gap-3'>
+                                                    {
+                                                        notifikasi.smsOrderShipped && (
+                                                            <div className='flex items-center gap-3'>
+                                                                {
+                                                                    selectedTemplate.order_shipped && <Button
+                                                                        label='View Template'
+                                                                        onClick={() => handleOpenModal('order_shipped')}
+                                                                    />
+                                                                }
+                                                                <SelectInput
+                                                                    id='order_shipped'
+                                                                    value={selectedTemplate.order_shipped}
+                                                                    onChange={(val: any) => handleTemplateChange('order_shipped', val)}
+                                                                    options={optionsOrderShipped}
+                                                                    selectClassName='!w-[200]'
+
+                                                                />
+                                                            </div>
+                                                        )
+                                                    }
+                                                    <SwitchInput
+                                                        label='SMS'
+                                                        checked={notifikasi.smsOrderShipped}
+                                                        onChange={(value) => handleChangeNotifikasi("smsOrderShipped", value)}
+                                                    />
+                                                </div>
+
+                                            </div>
                                         </div>
-                                    )
-                                }
+                                    </>
+                                )}
                             </div>
 
-                            {/* order delivered*/}
+                            {/* order delivered */}
                             <div className='flex flex-col col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}  >
                                 <div className='col-span-full flex justify-between items-center'>
                                     <h4 className='text-base font-medium'>Order Delivered</h4>
-                                    <div className='flex  gap-4'>
+                                    <div className='flex gap-4'>
                                         <SwitchInput
-                                            label='Email'
-                                            checked={notifikasi.emailOrderDelivered}
-                                            onChange={(value) => handleChangeNotifikasi("emailOrderDelivered", value)}
-                                        />
-                                        <SwitchInput
-                                            label='SMS'
-                                            checked={notifikasi.smsOrderDelivered}
-                                            onChange={(value) => handleChangeNotifikasi("smsOrderDelivered", value)}
+                                            label='Enable'
+                                            checked={orderDelivered}
+                                            onChange={(checked) => setOrderDelivered(checked)}
                                         />
                                     </div>
                                 </div>
-                                {
-                                    (notifikasi.emailOrderDelivered == true || notifikasi.smsOrderDelivered == true) && (
-                                        <div className='col-span-full w-full flex gap-3 justify-end items-center mt-4'>
-                                            <Button
-                                                label='View Template'
-                                                onClick={() => handleOpenModal('order_delivered')}
-                                            />
-                                            <SelectInput
-                                                id='order_delivered'
-                                                label='Choose Template'
-                                                value={selectedTemplate.order_delivered}
-                                                onChange={(val: any) => handleTemplateChange('order_delivered', val)}
-                                                options={optionsOrderDelivered}
-                                            />
+                                {orderDelivered == true && (
+                                    <>
+                                        <div className='flex flex-col gap-3 mt-4'>
+                                            <div className='flex justify-between'>
+                                                <label>Via Email</label>
+                                                <div className='flex items-center gap-3'>
+                                                    {
+                                                        notifikasi.emailOrderDelivered && (
+                                                            <div className='flex items-center gap-3'>
+
+                                                                {
+                                                                    selectedTemplate.order_delivered && <Button
+                                                                        label='View Template'
+                                                                        onClick={() => handleOpenModal('order_delivered')}
+                                                                    />
+                                                                }
+                                                                <SelectInput
+                                                                    id='order_delivered'
+                                                                    value={selectedTemplate.order_delivered}
+                                                                    onChange={(val: any) => handleTemplateChange('order_delivered', val)}
+                                                                    options={optionsOrderDelivered}
+                                                                    selectClassName='!w-[200]'
+
+                                                                />
+                                                            </div>
+                                                        )
+                                                    }
+                                                    <SwitchInput
+                                                        label='Email'
+                                                        checked={notifikasi.emailOrderDelivered}
+                                                        onChange={(value) => handleChangeNotifikasi("emailOrderDelivered", value)}
+                                                    />
+                                                </div>
+
+                                            </div>
+                                            <div className='flex justify-between'>
+                                                <label>Via SMS</label>
+                                                <div className='flex items-center gap-3'>
+                                                    {
+                                                        notifikasi.smsOrderDelivered && (
+                                                            <div className='flex items-center gap-3'>
+                                                                {
+                                                                    selectedTemplate.order_delivered && <Button
+                                                                        label='View Template'
+                                                                        onClick={() => handleOpenModal('order_delivered')}
+                                                                    />
+                                                                }
+                                                                <SelectInput
+                                                                    id='order_delivered'
+                                                                    value={selectedTemplate.order_delivered}
+                                                                    onChange={(val: any) => handleTemplateChange('order_delivered', val)}
+                                                                    options={optionsOrderDelivered}
+                                                                    selectClassName='!w-[200]'
+
+                                                                />
+                                                            </div>
+                                                        )
+                                                    }
+                                                    <SwitchInput
+                                                        label='SMS'
+                                                        checked={notifikasi.smsOrderDelivered}
+                                                        onChange={(value) => handleChangeNotifikasi("smsOrderDelivered", value)}
+                                                    />
+                                                </div>
+
+                                            </div>
                                         </div>
-                                    )
-                                }
+                                    </>
+                                )}
                             </div>
 
-                            {/* order cancelled*/}
+
+                            {/* order cancelled */}
                             <div className='flex flex-col col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}  >
                                 <div className='col-span-full flex justify-between items-center'>
                                     <h4 className='text-base font-medium'>Order Cancelled</h4>
-                                    <div className='flex  gap-4'>
+                                    <div className='flex gap-4'>
                                         <SwitchInput
-                                            label='Email'
-                                            checked={notifikasi.emailOrderCancel}
-                                            onChange={(value) => handleChangeNotifikasi("emailOrderCancel", value)}
-                                        />
-                                        <SwitchInput
-                                            label='SMS'
-                                            checked={notifikasi.smsOrderCancel}
-                                            onChange={(value) => handleChangeNotifikasi("smsOrderCancel", value)}
+                                            label='Enable'
+                                            checked={orderCancelled}
+                                            onChange={(checked) => setOrderCancelled(checked)}
                                         />
                                     </div>
                                 </div>
-                                {
-                                    (notifikasi.emailOrderCancel == true || notifikasi.smsOrderCancel == true) && (
-                                        <div className='col-span-full w-full flex gap-3 justify-end items-center mt-4'>
-                                            <Button
-                                                label='View Template'
-                                                onClick={() => handleOpenModal('order_canceled')}
-                                            />
-                                            <SelectInput
-                                                id='order_canceled'
-                                                label='Choose Template'
-                                                value={selectedTemplate.order_canceled}
-                                                onChange={(val: any) => handleTemplateChange('order_canceled', val)}
-                                                options={optionsOrderCanceled}
-                                            />
+                                {orderCancelled == true && (
+                                    <>
+                                        <div className='flex flex-col gap-3 mt-4'>
+                                            <div className='flex justify-between'>
+                                                <label>Via Email</label>
+                                                <div className='flex items-center gap-3'>
+                                                    {
+                                                        notifikasi.emailOrderCancel && (
+                                                            <div className='flex items-center gap-3'>
+
+                                                                {
+                                                                    selectedTemplate.order_canceled && <Button
+                                                                        label='View Template'
+                                                                        onClick={() => handleOpenModal('order_canceled')}
+                                                                    />
+                                                                }
+                                                                <SelectInput
+                                                                    id='order_canceled'
+                                                                    value={selectedTemplate.order_canceled}
+                                                                    onChange={(val: any) => handleTemplateChange('order_canceled', val)}
+                                                                    options={optionsOrderCanceled}
+                                                                    selectClassName='!w-[200]'
+
+                                                                />
+                                                            </div>
+                                                        )
+                                                    }
+                                                    <SwitchInput
+                                                        label='Email'
+                                                        checked={notifikasi.emailOrderCancel}
+                                                        onChange={(value) => handleChangeNotifikasi("emailOrderCancel", value)}
+                                                    />
+                                                </div>
+
+                                            </div>
+                                            <div className='flex justify-between'>
+                                                <label>Via SMS</label>
+                                                <div className='flex items-center gap-3'>
+                                                    {
+                                                        notifikasi.smsOrderCancel && (
+                                                            <div className='flex items-center gap-3'>
+                                                                {
+                                                                    selectedTemplate.order_canceled && <Button
+                                                                        label='View Template'
+                                                                        onClick={() => handleOpenModal('order_canceled')}
+                                                                    />
+                                                                }
+                                                                <SelectInput
+                                                                    id='order_canceled'
+                                                                    value={selectedTemplate.order_canceled}
+                                                                    onChange={(val: any) => handleTemplateChange('order_canceled', val)}
+                                                                    options={optionsOrderCanceled}
+                                                                    selectClassName='!w-[200]'
+
+                                                                />
+                                                            </div>
+                                                        )
+                                                    }
+                                                    <SwitchInput
+                                                        label='SMS'
+                                                        checked={notifikasi.smsOrderCancel}
+                                                        onChange={(value) => handleChangeNotifikasi("smsOrderCancel", value)}
+                                                    />
+                                                </div>
+
+                                            </div>
                                         </div>
-                                    )
-                                }
+                                    </>
+                                )}
                             </div>
 
-                            {/* order refund*/}
+
+                            {/* order refund process */}
                             <div className='flex flex-col col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}  >
                                 <div className='col-span-full flex justify-between items-center'>
                                     <h4 className='text-base font-medium'>Order Refund Processed</h4>
-                                    <div className='flex  gap-4'>
+                                    <div className='flex gap-4'>
                                         <SwitchInput
-                                            label='Email'
-                                            checked={notifikasi.emailOrderRefund}
-                                            onChange={(value) => handleChangeNotifikasi("emailOrderRefund", value)}
-                                        />
-                                        <SwitchInput
-                                            label='SMS'
-                                            checked={notifikasi.smsOrderrRefund}
-                                            onChange={(value) => handleChangeNotifikasi("smsOrderrRefund", value)}
+                                            label='Enable'
+                                            checked={orderRefund}
+                                            onChange={(checked) => setOrderRefund(checked)}
                                         />
                                     </div>
                                 </div>
-                                {
-                                    (notifikasi.emailOrderRefund == true || notifikasi.smsOrderrRefund == true) && (
-                                        <div className='col-span-full w-full flex gap-3 justify-end items-center mt-4'>
-                                            <Button
-                                                label='View Template'
-                                                onClick={() => handleOpenModal('order_refund')}
-                                            />
-                                            <SelectInput
-                                                id='order_refund'
-                                                label='Choose Template'
-                                                value={selectedTemplate.order_refund}
-                                                onChange={(val: any) => handleTemplateChange('order_refund', val)}
-                                                options={optionsOrderRefund}
-                                            />
+                                {orderRefund == true && (
+                                    <>
+                                        <div className='flex flex-col gap-3 mt-4'>
+                                            <div className='flex justify-between'>
+                                                <label>Via Email</label>
+                                                <div className='flex items-center gap-3'>
+                                                    {
+                                                        notifikasi.emailOrderRefund && (
+                                                            <div className='flex items-center gap-3'>
+
+                                                                {
+                                                                    selectedTemplate.order_refund && <Button
+                                                                        label='View Template'
+                                                                        onClick={() => handleOpenModal('order_refund')}
+                                                                    />
+                                                                }
+
+                                                                <SelectInput
+                                                                    id='order_refund'
+                                                                    value={selectedTemplate.order_refund}
+                                                                    onChange={(val: any) => handleTemplateChange('order_refund', val)}
+                                                                    options={optionsOrderRefund}
+                                                                    selectClassName='!w-[200]'
+
+                                                                />
+                                                            </div>
+                                                        )
+                                                    }
+                                                    <SwitchInput
+                                                        label='Email'
+                                                        checked={notifikasi.emailOrderRefund}
+                                                        onChange={(value) => handleChangeNotifikasi("emailOrderRefund", value)}
+                                                    />
+                                                </div>
+
+                                            </div>
+                                            <div className='flex justify-between'>
+                                                <label>Via SMS</label>
+                                                <div className='flex items-center gap-3'>
+                                                    {
+                                                        notifikasi.smsOrderrRefund && (
+                                                            <div className='flex items-center gap-3'>
+
+                                                                {
+                                                                    selectedTemplate.order_refund && <Button
+                                                                        label='View Template'
+                                                                        onClick={() => handleOpenModal('order_refund')}
+                                                                    />
+                                                                }
+
+                                                                <SelectInput
+                                                                    id='order_refund'
+                                                                    value={selectedTemplate.order_refund}
+                                                                    onChange={(val: any) => handleTemplateChange('order_refund', val)}
+                                                                    options={optionsOrderRefund}
+                                                                    selectClassName='!w-[200]'
+
+                                                                />
+                                                            </div>
+                                                        )
+                                                    }
+                                                    <SwitchInput
+                                                        label='SMS'
+                                                        checked={notifikasi.smsOrderrRefund}
+                                                        onChange={(value) => handleChangeNotifikasi("smsOrderrRefund", value)}
+                                                    />
+                                                </div>
+
+                                            </div>
                                         </div>
-                                    )
-                                }
+                                    </>
+                                )}
                             </div>
+
                         </div>
-
-
-                        <hr style={{ borderColor: '#E5E7EB', marginTop: '1rem', margin: '1rem 0' }} />
-
-                        <FormGroup title="Customer Account Notification">
+                        <FormGroup
+                            title="Customer Account"
+                            description='Customer Account Notification'
+                            className='mt-5'
+                            childClassName='grid md:grid-cols-3 gap-3'
+                        >
                             <Input
                                 id='account_registration'
                                 label='Account Registration Confirmation'

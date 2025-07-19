@@ -13,6 +13,7 @@ type inputProps = {
     notes?: string,
     error?: string
     className?: string
+    textareaClassname?: string
 }
 
 const index = ({
@@ -25,7 +26,8 @@ const index = ({
     maxLength,
     notes,
     error,
-    className
+    className,
+    textareaClassname
 }: inputProps) => {
     return (
         <>
@@ -41,6 +43,7 @@ const index = ({
                         maxLength={maxLength}
                         onChange={onChange}
                         value={value}
+                        className={textareaClassname}
                     />
                 </div>
                 {

@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { Content } from 'antd/es/layout/layout';
 import Button from '@/components/button'
 import { FormProps } from '@/plugins/types/form-type';
-import FormGroup from '@/components/form';
+import FormGroup from '@/components/form-group';
 import Input from "@/components/input"
 import CheckboxInput from '@/components/checkbox';
 import { uploadImages } from '@/services/upload-images';
@@ -75,6 +75,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                         <FormGroup
                             title="Mailchimp"
                             description="Mailchimp setting for sending broadcast email to subscriber"
+                            childClassName='grid grid-cols-2 gap-3'
                         >
                             <Input
                                 id='mailchimp_api_key'
@@ -103,7 +104,6 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     }))
                                 )}
                             />
-
                         </FormGroup>
                         <hr style={{ borderColor: '#E5E7EB', marginTop: '1rem', margin: '1rem 0' }} />
 

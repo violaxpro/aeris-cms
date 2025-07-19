@@ -3,8 +3,10 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Content } from 'antd/es/layout/layout';
 import Button from '@/components/button'
+import { Divider } from 'antd';
 import { FormProps } from '@/plugins/types/form-type';
-import FormGroup from '@/components/form';
+import FormGroup from '@/components/form-group';
+import SwitchInput from '@/components/switch';
 import Input from "@/components/input"
 import CheckboxInput from '@/components/checkbox';
 import SelectInput from '@/components/select';
@@ -17,7 +19,7 @@ import dayjs from 'dayjs'
 const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd();
     const [formData, setFormData] = useState({
-        mode: initialValues ? initialValues.mode : '',
+        mode: initialValues ? initialValues.mode : false,
         access_key_test: initialValues ? initialValues.access_key_test : '',
         secret_key_test: initialValues ? initialValues.secret_key_test : '',
         bucket_name_test: initialValues ? initialValues.bucket_name_test : '',
@@ -27,7 +29,6 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         bucket_name_live: initialValues ? initialValues.bucket_name_live : '',
         region_live: initialValues ? initialValues.region_live : '',
     });
-
     const optionsMode = [
         { label: "Live", value: 'live' },
         { label: "Test", value: 'test' },
@@ -82,25 +83,26 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
             {contextHolder}
             <Content className="mt-4 mx-4 mb-0">
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
-
-                    <div>
-                        <FormGroup
-                            title="Storage Settings"
-                            description="Storage Settings"
-                        >
-                            <div className='col-span-full justify-between'>
-                                <h4 className='text-base font-medium'>S3</h4>
+                    <div className='mt-4'>
+                        <div className='flex justify-between mt-4 items-center'>
+                            <div>
+                                <h4 className="text-base font-medium">Storage Settings</h4>
+                                <p className="mt-2">Storage Settings</p>
                             </div>
-                            <SelectInput
-                                id='mode'
-                                label='Mode'
-                                value={formData.mode}
-                                onChange={(selected) => setFormData({
-                                    ...formData,
-                                    mode: selected
-                                })}
-                                options={optionsMode}
+                            <SwitchInput
+                                label='Live/Test Mode'
+                                checked={formData.mode}
+                                onChange={(checked) =>
+                                    setFormData((prev) => ({
+                                        ...prev,
+                                        mode: checked
+                                    }))
+                                }
                             />
+                        </div>
+                        <Divider />
+                        <div className={`col-span-12 md:col-span-8 grid grid-cols-2 gap-4`}>
+
                             <Input
                                 id='access_key_test'
                                 label='Access Key Test'
@@ -108,7 +110,6 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 placeholder='Access Key Test'
                                 onChange={handleChange}
                                 value={formData.access_key_test}
-                                className='mb-1'
                             />
                             <Input
                                 id='secret_key_test'
@@ -166,9 +167,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 onChange={handleChange}
                                 value={formData.region_live}
                             />
-                        </FormGroup>
-                        <hr style={{ borderColor: '#E5E7EB', marginTop: '1rem', margin: '1rem 0' }} />
-
+                        </div>
                     </div>
 
                     {/* Submit */}

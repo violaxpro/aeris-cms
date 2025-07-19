@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { Content } from 'antd/es/layout/layout';
 import Button from '@/components/button'
 import { FormProps } from '@/plugins/types/form-type';
-import FormGroup from '@/components/form';
+import FormGroup from '@/components/form-group';
 import Input from "@/components/input"
 import TextArea from "@/components/textarea"
 import SelectInput from '@/components/select';
@@ -161,15 +161,15 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
 
                     <div>
-                        <FormGroup title="Payment Gateaway" description='Payment gateaway'>
+                        <FormGroup title="Payment Gateaway" description='Payment gateaway settings' childClassName='flex flex-col gap-3'>
 
                             <>
                                 {/* stripe payment */}
                                 <div className='col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}  >
-                                    <div className='col-span-full flex gap-3 justify-between mb-4'>
+                                    <div className='col-span-full flex gap-3 justify-between'>
                                         <h4 className='text-base font-medium'>Stripe Payment</h4>
                                         <SwitchInput
-                                            label='Enable Stripe Payment'
+                                            label='Enable'
                                             checked={stripPayment}
                                             onChange={(value) =>
                                                 setStripPayment(value)
@@ -195,32 +195,35 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                     onChange={handleChange}
                                                     value={formData.secret_key_live}
                                                 />
-                                                <Input
-                                                    id='publishable_key_test'
-                                                    label='Publisable Key Test'
-                                                    type='text'
-                                                    placeholder='Publisable Key Test'
-                                                    onChange={handleChange}
-                                                    value={formData.publishable_key_test}
-                                                />
-                                                <Input
-                                                    id='secret_key_test'
-                                                    label='Secret Key Test'
-                                                    type='text'
-                                                    placeholder='Secret Key Test'
-                                                    onChange={handleChange}
-                                                    value={formData.secret_key_test}
-                                                />
-                                                <SelectInput
-                                                    id='mode'
-                                                    label='Mode'
-                                                    value={formData.mode}
-                                                    onChange={(selected) => setFormData({
-                                                        ...formData,
-                                                        mode: selected
-                                                    })}
-                                                    options={optionsMode}
-                                                />
+                                                <div className='grid md:grid-cols-3 col-span-full gap-3'>
+                                                    <Input
+                                                        id='publishable_key_test'
+                                                        label='Publisable Key Test'
+                                                        type='text'
+                                                        placeholder='Publisable Key Test'
+                                                        onChange={handleChange}
+                                                        value={formData.publishable_key_test}
+                                                    />
+                                                    <Input
+                                                        id='secret_key_test'
+                                                        label='Secret Key Test'
+                                                        type='text'
+                                                        placeholder='Secret Key Test'
+                                                        onChange={handleChange}
+                                                        value={formData.secret_key_test}
+                                                    />
+                                                    <SelectInput
+                                                        id='mode'
+                                                        label='Mode'
+                                                        value={formData.mode}
+                                                        onChange={(selected) => setFormData({
+                                                            ...formData,
+                                                            mode: selected
+                                                        })}
+                                                        options={optionsMode}
+                                                    />
+                                                </div>
+
                                             </div>
                                         )
                                     }
@@ -228,10 +231,10 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
                                 {/* paypal payment */}
                                 <div className='col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}  >
-                                    <div className='col-span-full flex gap-3 justify-between mb-4'>
+                                    <div className='col-span-full flex gap-3 justify-between'>
                                         <h4 className='text-base font-medium'>Paypal Payment</h4>
                                         <SwitchInput
-                                            label='Enable Paypal Payment'
+                                            label='Enable'
                                             checked={paypalPayment}
                                             onChange={(value) =>
                                                 setPaypalPayment(value)
@@ -257,32 +260,35 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                     onChange={handleChange}
                                                     value={formData.client_secret_live}
                                                 />
-                                                <Input
-                                                    id='client_id_sandbox'
-                                                    label='Client ID Sandbox'
-                                                    type='text'
-                                                    placeholder='Client ID Sandbox'
-                                                    onChange={handleChange}
-                                                    value={formData.client_id_sandbox}
-                                                />
-                                                <Input
-                                                    id='payment_processor'
-                                                    label='Client Key Sandbox'
-                                                    type='text'
-                                                    placeholder='Client Key Sandbox'
-                                                    onChange={handleChange}
-                                                    value={formData.client_key_sandbox}
-                                                />
-                                                <SelectInput
-                                                    id='mode_paypal'
-                                                    label='Mode'
-                                                    value={formData.mode_paypal}
-                                                    onChange={(selected) => setFormData({
-                                                        ...formData,
-                                                        mode_paypal: selected
-                                                    })}
-                                                    options={optionsModePaypal}
-                                                />
+                                                <div className='grid md:grid-cols-3 col-span-full gap-3'>
+                                                    <Input
+                                                        id='client_id_sandbox'
+                                                        label='Client ID Sandbox'
+                                                        type='text'
+                                                        placeholder='Client ID Sandbox'
+                                                        onChange={handleChange}
+                                                        value={formData.client_id_sandbox}
+                                                    />
+                                                    <Input
+                                                        id='payment_processor'
+                                                        label='Client Key Sandbox'
+                                                        type='text'
+                                                        placeholder='Client Key Sandbox'
+                                                        onChange={handleChange}
+                                                        value={formData.client_key_sandbox}
+                                                    />
+                                                    <SelectInput
+                                                        id='mode_paypal'
+                                                        label='Mode'
+                                                        value={formData.mode_paypal}
+                                                        onChange={(selected) => setFormData({
+                                                            ...formData,
+                                                            mode_paypal: selected
+                                                        })}
+                                                        options={optionsModePaypal}
+                                                    />
+                                                </div>
+
                                             </div>
                                         )
                                     }
@@ -290,10 +296,10 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
                                 {/* apple payment */}
                                 <div className='col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}  >
-                                    <div className='col-span-full flex gap-3 justify-between mb-4'>
+                                    <div className='col-span-full flex gap-3 justify-between'>
                                         <h4 className='text-base font-medium'>Apple Payment</h4>
                                         <SwitchInput
-                                            label='Enable Apple Payment'
+                                            label='Enable'
                                             checked={applePayment}
                                             onChange={(value) =>
                                                 setApplePayment(value)
@@ -302,7 +308,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     </div>
                                     {
                                         applePayment == true && (
-                                            <div className='grid md:grid-cols-2 gap-2'>
+                                            <div className='grid md:grid-cols-3 gap-2'>
                                                 <Input
                                                     id='merchant_id'
                                                     label='Merchant ID'
@@ -337,10 +343,10 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
                                 {/* google payment */}
                                 <div className='col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}  >
-                                    <div className='col-span-full flex gap-3 justify-between mb-4'>
+                                    <div className='col-span-full flex gap-3 justify-between'>
                                         <h4 className='text-base font-medium'>Google Payment</h4>
                                         <SwitchInput
-                                            label='Enable Google Payment'
+                                            label='Enable'
                                             checked={googlePayment}
                                             onChange={(value) =>
                                                 setGooglePayment(value)
@@ -349,7 +355,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     </div>
                                     {
                                         googlePayment == true && (
-                                            <div className='grid md:grid-cols-2 gap-2'>
+                                            <div className='grid md:grid-cols-3 gap-2'>
                                                 <Input
                                                     id='merchant_id_google'
                                                     label='Merchant ID'
@@ -385,32 +391,32 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
                         </FormGroup>
 
-                        <hr style={{ borderColor: '#E5E7EB', marginTop: '1rem', margin: '1rem 0' }} />
-
-                        <FormGroup title="Other Payment" description='Other Description'>
-                            <div className=' col-span-full flex justify-start gap-4'>
+                        <FormGroup title="Other Payment" description='Other Payment' childClassName='flex flex-col gap-3' className='mt-4'>
+                            <div className='col-span-full border p-4 rounded-md flex gap-3 justify-between' style={{ borderColor: '#E5E7EB' }}  >
+                                <h4 className='text-base font-medium'>Cash Payment</h4>
                                 <SwitchInput
-                                    label='Cash Payment'
+                                    label='Enable'
                                     checked={cash}
                                     onChange={(value) =>
                                         setCash(value)
                                     }
                                 />
-                                <SwitchInput
-                                    label='Bank Transfer'
-                                    checked={bankTransfer}
-                                    onChange={(value) =>
-                                        setBankTransfer(value)
-                                    }
-                                />
                             </div>
-                            {
-                                bankTransfer == true && (
-                                    <>
-                                        <div className='col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}  >
-                                            <div className='col-span-full flex gap-3 justify-between mb-4'>
-                                                <h4 className='text-base font-medium'>Bank Transfer</h4>
-                                            </div>
+                            <div className='col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}  >
+                                <div className='col-span-full flex gap-3 justify-between'>
+                                    <h4 className='text-base font-medium'>Bank Transfer</h4>
+                                    <SwitchInput
+                                        label='Enable'
+                                        checked={bankTransfer}
+                                        onChange={(value) =>
+                                            setBankTransfer(value)
+                                        }
+                                    />
+                                </div>
+                                {
+                                    bankTransfer == true && (
+                                        <>
+
                                             <div className='grid grid-cols-2 gap-2'>
                                                 <Input
                                                     id='label'
@@ -444,34 +450,26 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                     onChange={handleChange}
                                                     value={formData.bank_account_number}
                                                 />
-                                                <div className='col-span-full w-full'>
-                                                    <TextArea
-                                                        id='description'
-                                                        label='Description'
-                                                        placeholder='Description'
-                                                        onChange={handleChange}
-                                                        value={formData.description}
-                                                    />
-                                                </div>
-                                                <div className='col-span-full w-full'>
-                                                    <TextArea
-                                                        id='instruction'
-                                                        label='Instruction'
-                                                        placeholder='Instruction'
-                                                        onChange={handleChange}
-                                                        value={formData.instruction}
-                                                    />
-                                                </div>
-
-
+                                                <TextArea
+                                                    id='description'
+                                                    label='Description'
+                                                    placeholder='Description'
+                                                    onChange={handleChange}
+                                                    value={formData.description}
+                                                />
+                                                <TextArea
+                                                    id='instruction'
+                                                    label='Instruction'
+                                                    placeholder='Instruction'
+                                                    onChange={handleChange}
+                                                    value={formData.instruction}
+                                                />
                                             </div>
-                                        </div>
+                                        </>
+                                    )
 
-                                    </>
-                                )
-
-                            }
-
+                                }
+                            </div>
                         </FormGroup>
 
                     </div>

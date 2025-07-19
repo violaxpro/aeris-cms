@@ -189,7 +189,7 @@ const FormSlider: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             <div className='space-y-4 col-span-full'>
                                 {formData.image_slide.map((slide, index) => {
                                     return (
-                                        <div className='col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}>
+                                        <div key={index} className='col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}>
                                             <div className='col-span-full flex gap-3 justify-between mb-4'>
                                                 <h4 className='text-base font-medium'>Image Slide</h4>
                                                 <div>

@@ -1,12 +1,13 @@
 import { Divider } from "antd";
+import Button from '@/components/button'
+
 interface FormGroupProps {
     title: React.ReactNode;
     className?: string;
     description?: string;
     children?: React.ReactNode;
     column?: number
-    gridRow?: boolean
-    isDivider?: boolean
+    childClassName?: string
 }
 
 export default function FormGroup({
@@ -15,17 +16,17 @@ export default function FormGroup({
     description,
     children,
     column,
-    gridRow = false,
-    isDivider = false
+    childClassName
 }: FormGroupProps) {
     return (
-        <div className={`grid ${gridRow == true ? '' : 'grid-cols-12'} gap-4`}>
-            <div className="col-span-12 md:col-span-4">
+        <div className={className}>
+            <div>
                 <h4 className="text-lg font-semibold">{title}</h4>
                 {description && <p className="mt-2">{description}</p>}
+                <Divider />
             </div>
             {children && (
-                <div className={`col-span-12 md:col-span-8 grid ${column ? '' : 'grid-cols-2'} gap-4`}>
+                <div className={childClassName}>
                     {children}
                 </div>
             )}

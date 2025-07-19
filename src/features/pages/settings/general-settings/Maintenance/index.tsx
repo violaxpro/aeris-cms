@@ -64,18 +64,22 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                         <FormGroup
                             title="Maintenance"
                             description="Maintenance setting for handling if system is maintenance"
-                        >
-                            <CheckboxInput
-                                text='Maintenance Mode'
-                                checked={formData.maintenance}
-                                onChange={(checked) => (
-                                    setFormData((prev) => ({
-                                        ...prev,
-                                        maintenance: checked
-                                    }))
-                                )}
-                            />
 
+                        >
+                            <div className="space-y-4 col-span-full">
+                                <div className='flex justify-end'>
+                                    <CheckboxInput
+                                        text='Maintenance Mode'
+                                        checked={formData.maintenance}
+                                        onChange={(checked) => (
+                                            setFormData((prev) => ({
+                                                ...prev,
+                                                maintenance: checked
+                                            }))
+                                        )}
+                                    />
+                                </div>
+                            </div>
                         </FormGroup>
                         <hr style={{ borderColor: '#E5E7EB', marginTop: '1rem', margin: '1rem 0' }} />
 

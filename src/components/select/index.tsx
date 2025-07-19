@@ -10,7 +10,7 @@ type Option = {
 
 type SelectInputProps = {
     id: string;
-    label: string;
+    label?: string;
     placeholder?: string;
     value: string | string[] | undefined;
     onChange: (value: string | string[]) => void;
@@ -20,6 +20,7 @@ type SelectInputProps = {
     allowClear?: boolean
     popupRender?: any
     error?: string
+    selectClassName?: string
 };
 
 const SelectInput: React.FC<SelectInputProps> = ({
@@ -33,17 +34,22 @@ const SelectInput: React.FC<SelectInputProps> = ({
     modeType,
     allowClear = false,
     popupRender,
-    error
+    error,
+    selectClassName
 }) => {
     return (
         <div className={className}>
-            <label htmlFor={id} className="block text-sm font-medium text-gray-700 mb-1">
-                {label}
-            </label>
+            {
+                label && (<label htmlFor={id} className="block text-sm font-medium text-gray-700">
+                    {label}
+                </label>)
+            }
+
             <Select
                 id={id}
                 showSearch
                 style={{ width: '100%' }}
+                className={`!h-10 ${selectClassName}`}
                 placeholder={placeholder}
                 allowClear={allowClear}
                 optionFilterProp="label"

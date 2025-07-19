@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { Content } from 'antd/es/layout/layout';
 import Button from '@/components/button'
 import { FormProps } from '@/plugins/types/form-type';
-import FormGroup from '@/components/form';
+import FormGroup from '@/components/form-group';
 import Input from "@/components/input"
 import TextArea from "@/components/textarea"
 import SelectInput from '@/components/select';
@@ -130,6 +130,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                         <FormGroup
                             title="Default Setting"
                             description="Default Setting"
+                            childClassName='flex gap-3'
                         >
                             <DatePickerInput
                                 id='bills_default_due_date'
@@ -144,52 +145,39 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 onChange={(value: any, dateString: any) => handleDateChange('sales_invoice_default_due_date', value, dateString)}
                             />
                         </FormGroup>
-                        <hr style={{ borderColor: '#E5E7EB', marginTop: '1rem', margin: '1rem 0' }} />
-                        <FormGroup title="Automatic Sequencing" description='Automatic Sequencing'>
+                        <FormGroup title="Automatic Sequencing" description='Automatic Sequencing' className='mt-6'>
                             <div className='col-span-full grid grid-cols-2 gap-3' style={{ borderColor: '#E5E7EB' }}  >
                                 <div>
-                                    <div className='col-span-full flex gap-3 justify-between mb-4'>
-                                        <h4 className='text-base font-medium'>Invoice Prefix</h4>
-                                    </div>
                                     <Input
                                         id='invoice_next_number'
-                                        label='Next Number'
+                                        label='Invoice Prefix'
                                         type='text'
-                                        placeholder='Next Number'
+                                        placeholder='Invoice Prefix'
                                         onChange={handleChange}
                                         value={formData.invoice_next_number}
                                     />
                                 </div>
                                 <div>
-                                    <div className='col-span-full flex gap-3 justify-between mb-4'>
-                                        <h4 className='text-base font-medium'>Purchase Order Prefix</h4>
-                                    </div>
                                     <Input
                                         id='purchase_next_number'
-                                        label='Next Number'
+                                        label='Purchase Order Prefix'
                                         type='text'
-                                        placeholder='Next Number'
+                                        placeholder='Purchase Order Prefix'
                                         onChange={handleChange}
                                         value={formData.purchase_next_number}
                                     />
                                 </div>
                                 <div>
-                                    <div className='col-span-full flex gap-3 justify-between mb-4'>
-                                        <h4 className='text-base font-medium'>Quote Prefix</h4>
-                                    </div>
                                     <Input
                                         id='quote_next_number'
-                                        label='Next Number'
+                                        label='Quote Prefix'
                                         type='text'
-                                        placeholder='Next Number'
+                                        placeholder='Quote Prefix'
                                         onChange={handleChange}
                                         value={formData.quote_next_number}
                                     />
                                 </div>
                                 <div>
-                                    <div className='col-span-full flex gap-3 justify-between mb-4'>
-                                        <h4 className='text-base font-medium'>Credit Note Prefix</h4>
-                                    </div>
                                     <Input
                                         id='credit_note'
                                         label='Credit Note Prefix'
@@ -204,28 +192,29 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
                         </FormGroup>
 
-                        <hr style={{ borderColor: '#E5E7EB', marginTop: '1rem', margin: '1rem 0' }} />
 
                         <FormGroup
                             title="Show Outstanding Bills"
                             description="Show Outstanding Bills"
+                            className='mt-6'
                         >
                             <div className='col-span-full'>
                                 <Input
                                     id='include_link_invoice'
-                                    label='INCLUDE A LINK ON ONLINE INVOICES TO SHOW ALL OUTSTANDING BILLS FOR A CONTACT.'
+                                    label='Include a Link on Online Invoices to Show All Outstanding Bills for a Contact'
                                     type='text'
-                                    placeholder='INCLUDE A LINK ON ONLINE INVOICES TO SHOW ALL OUTSTANDING BILLS FOR A CONTACT.'
+                                    placeholder='Type here'
                                     onChange={handleChange}
                                     value={formData.include_link_invoice}
                                 />
                             </div>
 
                         </FormGroup>
-                        <hr style={{ borderColor: '#E5E7EB', marginTop: '1rem', margin: '1rem 0' }} />
+
                         <FormGroup
                             title="Quote Expire Date"
                             description="Quote Expire Date"
+                            className='mt-6'
                         >
                             <DatePickerInput
                                 id='expire_due_date'
