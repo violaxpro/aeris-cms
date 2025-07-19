@@ -11,15 +11,17 @@ type TabsProps = {
     tabs: Tab[];
     activeTab: string;
     setActiveTab: (tabKey: string) => void;
+    className?: string
 };
 
 const index = ({
     tabs,
     activeTab,
     setActiveTab,
+    className
 }: TabsProps) => {
     return (
-        <div className="mx-4 mt-4 mb-0 px-4 py-3 rounded bg-background">
+        <div className={`mx-4 mt-4 mb-0 px-4 py-3 rounded bg-background ${className}`}>
             <div className="flex border-b border-gray-200 gap-4" style={{ borderColor: '#E5E7EB' }}>
                 {tabs.map((tab) => (
                     <button

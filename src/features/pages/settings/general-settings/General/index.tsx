@@ -152,74 +152,155 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
             {contextHolder}
             <Content className="mt-4 mx-4 mb-0">
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
-
                     <div>
                         <FormGroup
                             title="Company"
                             description="Company information"
+                            gridRow={true}
                         >
-                            <FileUploader
-                                label='Logo'
-                                action="https://api-dev.alarmexpert.com.au/admin/product/cdn/upload"
-                                multiple={true}
-                                onSuccess={handleSuccess}
-                                onError={handleError}
-                                isUpload={isLoading}
-                                fileList={formData.logo?.map((img: any, index: any) => {
-                                    return {
-                                        uid: `${index}`,
-                                        name: img.name ?? img.url,
-                                        status: 'done',
-                                        url: img.url
-                                    }
-                                })}
-                            />
-                            <FileUploader
-                                label='Logo Favicon'
-                                action="https://api-dev.alarmexpert.com.au/admin/product/cdn/upload"
-                                multiple={true}
-                                onSuccess={handleSuccess}
-                                onError={handleError}
-                                isUpload={isLoading}
-                                fileList={formData.logo_favicon?.map((img: any, index: any) => {
-                                    return {
-                                        uid: `${index}`,
-                                        name: img.name ?? img.url,
-                                        status: 'done',
-                                        url: img.url
-                                    }
-                                })}
-                            />
-                            <Input
-                                id='company_name'
-                                label='Company Name'
-                                type='text'
-                                placeholder='Input Company Name'
-                                onChange={handleChange}
-                                value={formData.company_name}
-                            />
                             <div>
-                                {dynamicFields.address.map((item, index: any) => (
-                                    <div key={index} className='flex gap-2'>
-                                        <div className='col-span-full w-full'>
-                                            <TextArea id='address'
-                                                label='Address'
-                                                placeholder='Input Address'
-                                                onChange={(e) => updateDynamicItem(index, 'address', e.target.value)}
-                                                value={item.value}
+                                <FileUploader
+                                    label='Logo'
+                                    action="https://api-dev.alarmexpert.com.au/admin/product/cdn/upload"
+                                    multiple={true}
+                                    onSuccess={handleSuccess}
+                                    onError={handleError}
+                                    isUpload={isLoading}
+                                    fileList={formData.logo?.map((img: any, index: any) => {
+                                        return {
+                                            uid: `${index}`,
+                                            name: img.name ?? img.url,
+                                            status: 'done',
+                                            url: img.url
+                                        }
+                                    })}
+                                    className='!w-48'
+                                />
+                                <FileUploader
+                                    label='Logo Favicon'
+                                    action="https://api-dev.alarmexpert.com.au/admin/product/cdn/upload"
+                                    multiple={true}
+                                    onSuccess={handleSuccess}
+                                    onError={handleError}
+                                    isUpload={isLoading}
+                                    fileList={formData.logo_favicon?.map((img: any, index: any) => {
+                                        return {
+                                            uid: `${index}`,
+                                            name: img.name ?? img.url,
+                                            status: 'done',
+                                            url: img.url
+                                        }
+                                    })}
+                                />
+                            </div>
+                            <div className='grid md:grid-cols-2 gap-2 w-full'>
+                                <Input
+                                    id='company_name'
+                                    label='Company Name'
+                                    type='text'
+                                    placeholder='Company Name'
+                                    onChange={handleChange}
+                                    value={formData.company_name}
+                                />
+                                <Input
+                                    id='city'
+                                    label='City'
+                                    type='text'
+                                    placeholder='City'
+                                    onChange={handleChange}
+                                    value={formData.city}
+                                />
+                                <Input
+                                    id='email'
+                                    label='Email'
+                                    type='email'
+                                    placeholder='Input Email'
+                                    onChange={handleChange}
+                                    value={formData.email}
+                                />
+                                <div className='grid md:grid-cols-2 gap-2'>
+                                    <Input
+                                        id='country'
+                                        label='Country'
+                                        type='text'
+                                        placeholder='Input Country'
+                                        onChange={handleChange}
+                                        value={formData.country}
+                                    />
+                                    <Input
+                                        id='postcode'
+                                        label='Post Code'
+                                        type='text'
+                                        placeholder='Input Post Code'
+                                        onChange={handleChange}
+                                        value={formData.postcode}
+                                    />
+                                </div>
+                                <div className='flex items-center'>
+                                    <Input
+                                        id='phone_number'
+                                        label='Phone Number'
+                                        type='text'
+                                        placeholder='Phone Number'
+                                        onChange={handleChange}
+                                        value={formData.phone_number}
+                                        divClassName='w-full'
+                                    />
+                                    {dynamicFields.phone_number.map((item, index: any) => (
+                                        <div key={index} className='flex gap-2'>
+                                            <div className='col-span-full w-full'>
+                                                <Input
+                                                    id='phone_number'
+                                                    label='Phone Number'
+                                                    type='text'
+                                                    placeholder='Input Phone Number'
+                                                    onChange={(e) => updateDynamicItem(index, 'phone_number', e.target.value)}
+                                                    value={item.value}
+
+                                                />
+                                            </div>
+                                            <MinusCircleOutlined
+                                                onClick={() => removeDynamicItem('phone_number', index)}
+                                                style={{ color: 'red', fontSize: '18px', cursor: 'pointer' }}
                                             />
                                         </div>
 
-                                        <MinusCircleOutlined
-                                            onClick={() => removeDynamicItem('address', index)}
-                                            style={{ color: 'red', fontSize: '18px', cursor: 'pointer' }}
-                                        />
-                                    </div>
-
-                                ))}
-                                <div className='md:mt-5 flex justify-end'>
+                                    ))}
                                     <Button
-                                        label='Add Address'
+                                        icon={<PlusOutlined />}
+                                        onClick={() => addDynamicItem('phone_number')}
+                                        btnClassname='!h-10'
+                                    />
+                                </div>
+                                <div className='flex items-center'>
+                                    <Input
+                                        id='address'
+                                        label='Address'
+                                        type='text'
+                                        placeholder='Input Address'
+                                        onChange={handleChange}
+                                        value={formData.address}
+                                        divClassName='w-full'
+                                    />
+                                    {dynamicFields.address.map((item, index: any) => (
+                                        <div key={index} className='flex gap-2'>
+                                            <div className='col-span-full w-full'>
+                                                <TextArea id='address'
+                                                    label='Address'
+                                                    placeholder='Input Address'
+                                                    onChange={(e) => updateDynamicItem(index, 'address', e.target.value)}
+                                                    value={item.value}
+                                                />
+                                            </div>
+
+                                            <MinusCircleOutlined
+                                                onClick={() => removeDynamicItem('address', index)}
+                                                style={{ color: 'red', fontSize: '18px', cursor: 'pointer' }}
+                                            />
+                                        </div>
+
+                                    ))}
+                                    <Button
                                         btnClassname="!text-white"
                                         icon={<PlusOutlined />}
                                         onClick={() => addDynamicItem('address')}
@@ -227,71 +308,6 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 </div>
                             </div>
 
-                            <Input
-                                id='city'
-                                label='City'
-                                type='text'
-                                placeholder='Input City'
-                                onChange={handleChange}
-                                value={formData.city}
-                            />
-                            <Input
-                                id='postcode'
-                                label='Post Code'
-                                type='text'
-                                placeholder='Input Post Code'
-                                onChange={handleChange}
-                                value={formData.postcode}
-                            />
-                            <Input
-                                id='country'
-                                label='Country'
-                                type='text'
-                                placeholder='Input Country'
-                                onChange={handleChange}
-                                value={formData.country}
-                            />
-
-                            <div>
-                                {dynamicFields.phone_number.map((item, index: any) => (
-                                    <div key={index} className='flex gap-2'>
-                                        <div className='col-span-full w-full'>
-                                            <Input
-                                                id='phone_number'
-                                                label='Phone Number'
-                                                type='text'
-                                                placeholder='Input Phone Number'
-                                                onChange={(e) => updateDynamicItem(index, 'phone_number', e.target.value)}
-                                                value={item.value}
-
-                                            />
-                                        </div>
-
-                                        <MinusCircleOutlined
-                                            onClick={() => removeDynamicItem('phone_number', index)}
-                                            style={{ color: 'red', fontSize: '18px', cursor: 'pointer' }}
-                                        />
-                                    </div>
-
-                                ))}
-                                <div className='md:mt-5 flex justify-end'>
-                                    <Button
-                                        label='Add Phone Number'
-                                        btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]"
-                                        icon={<PlusOutlined />}
-                                        onClick={() => addDynamicItem('phone_number')}
-                                    />
-                                </div>
-                            </div>
-
-                            <Input
-                                id='email'
-                                label='Email'
-                                type='email'
-                                placeholder='Input Email'
-                                onChange={handleChange}
-                                value={formData.email}
-                            />
                         </FormGroup>
                         <hr style={{ borderColor: '#E5E7EB', marginTop: '1rem', margin: '1rem 0' }} />
                         <FormGroup title="Company Details" description='Company Details Information'>

@@ -188,19 +188,7 @@ export const menuItems = [
                     {
                         key: 'stock-update',
                         label: 'Stock Update',
-                        href: routes.eCommerce.products,
-                        children: [
-                            {
-                                key: 'leader-system',
-                                label: 'Leader System',
-                                href: routes.eCommerce.products,
-                            },
-                            {
-                                key: 'alloys',
-                                label: 'Alloys',
-                                href: routes.eCommerce.products,
-                            }
-                        ]
+                        href: routes.eCommerce.stockUpdate,
                     },
                     {
                         key: 'tools',
@@ -256,18 +244,18 @@ export const menuItems = [
                     },
                     {
                         key: 'appearance',
-                        label: 'Appearence',
-                        href: routes.eCommerce.products,
+                        label: 'Appearance',
+                        href: '#',
                         children: [
                             {
                                 key: 'sliders',
                                 label: 'Sliders',
-                                href: routes.eCommerce.products,
+                                href: routes.eCommerce.slider,
                             },
                             {
                                 key: 'storefront',
                                 label: 'Storefront',
-                                href: routes.eCommerce.products,
+                                href: routes.eCommerce.storeFront,
                             }
                         ]
                     },

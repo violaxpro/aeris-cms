@@ -20,9 +20,11 @@ const index = ({ btnClassname, icon, label, link, type, onClick }: buttonProps) 
 
         >
             {icon ?? icon}
-            <span>
+            {label && <span>
                 {label}
             </span>
+            }
+
         </Button>
     )
     return link ? (

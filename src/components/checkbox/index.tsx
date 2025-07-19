@@ -5,6 +5,7 @@ import { Checkbox } from 'antd';
 import type { CheckboxProps } from 'antd';
 
 type CheckboxInputProps = {
+    id?: string
     label?: string;
     checked: boolean;
     onChange: (checked: boolean) => void;
@@ -14,6 +15,7 @@ type CheckboxInputProps = {
 };
 
 const CheckboxInput: React.FC<CheckboxInputProps> = ({
+    id,
     label,
     checked,
     onChange,
@@ -32,7 +34,7 @@ const CheckboxInput: React.FC<CheckboxInputProps> = ({
                     {label}
                 </label>
             }
-            <Checkbox checked={checked} onChange={handleChange} disabled={disabled}>
+            <Checkbox id={id} checked={checked} onChange={handleChange} disabled={disabled}>
                 {text}
             </Checkbox>
         </div>

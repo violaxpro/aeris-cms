@@ -48,7 +48,7 @@ const index = ({ label,
                     placeholder={placeholder ?? ''}
                     onChange={onChange}
                     value={value}
-                    className='rounded-md text-sm w-full'
+                    className='rounded-md text-sm w-full h-10'
                     type={type}
                     style={{
                         ...style,

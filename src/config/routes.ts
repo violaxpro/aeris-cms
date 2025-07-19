@@ -84,7 +84,13 @@ export const routes = {
 
     warehouseBranchList: '/ecommerce/warehouse-branch-list',
 
-    generalSettings: '/ecommerce/general-settings',
+    stockUpdate: '/ecommerce/stock-update',
+
+    slider: '/ecommerce/slider',
+    createSlider: '/ecommerce/slider/create',
+    editSlider: (slug: string) => `/ecommerce/slider/${slug}/edit`,
+
+    storeFront: '/ecommerce/storefront',
 
     users: '/ecommerce/users',
     createUsers: '/ecommerce/users/create',
@@ -97,6 +103,8 @@ export const routes = {
     subscribe: '/ecommerce/subscribe',
     createSubscribe: '/ecommerce/subscribe/create',
     editSubscribe: (slug: string) => `/ecommerce/subscribe/${slug}/edit`,
+
+    generalSettings: '/ecommerce/general-settings',
 
     shippingMethods: '/ecommerce/shipping-methods',
 

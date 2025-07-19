@@ -12,6 +12,7 @@ type inputProps = {
     maxLength?: number
     notes?: string,
     error?: string
+    className?: string
 }
 
 const index = ({
@@ -23,11 +24,12 @@ const index = ({
     rows,
     maxLength,
     notes,
-    error
+    error,
+    className
 }: inputProps) => {
     return (
         <>
-            <div>
+            <div className={className}>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                     {label}
                 </label>
