@@ -8,3 +8,11 @@ export type InventoryListType = {
     sold?: number
     added?: string;
 };
+
+export type WarehouseBranchListType = {
+    id?: number | string | undefined
+    name: string
+    address: string
+    phone_number: string
+    email: string
+};

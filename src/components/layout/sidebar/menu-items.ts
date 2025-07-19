@@ -166,6 +166,11 @@ export const menuItems = [
                         label: 'Inventory List',
                         href: routes.eCommerce.inventoryList,
                     },
+                    {
+                        key: 'warehouse-branch-list',
+                        label: 'Warehouse Branch List',
+                        href: routes.eCommerce.warehouseBranchList,
+                    },
                 ],
             },
             {
