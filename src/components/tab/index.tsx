@@ -14,13 +14,17 @@ type TabsProps = {
     activeTab: string;
     setActiveTab: (tabKey: string) => void;
     className?: string
+    overflowClass?: string
+    borderClass?: string
 };
 
 const index = ({
     tabs,
     activeTab,
     setActiveTab,
-    className
+    className,
+    overflowClass,
+    borderClass
 }: TabsProps) => {
     const scrollRef = useRef<HTMLDivElement>(null);
     const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -70,8 +74,8 @@ const index = ({
 
             <div
                 ref={scrollRef}
-                className="relative z-10 flex overflow-x-auto scrollbar-none gap-6 whitespace-nowrap pr-8">
-                <div className="flex border-b border-gray-200 gap-6" style={{ borderColor: '#E5E7EB' }}>
+                className={`relative z-10 flex overflow-x-auto scrollbar-none whitespace-nowrap ${overflowClass}`}>
+                <div className={`flex border-b border-gray-200 gap-6 ${borderClass}`} style={{ borderColor: '#E5E7EB' }}>
                     {tabs.map((tab) => (
                         <button
                             key={tab.key}

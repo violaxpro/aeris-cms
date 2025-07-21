@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { Content } from 'antd/es/layout/layout';
 import Button from '@/components/button'
 import { FormProps } from '@/plugins/types/form-type';
-import FormGroup from '@/components/form';
+import FormGroup from '@/components/form-group';
 import Input from "@/components/input"
 import TextArea from "@/components/textarea"
 import SelectInput from '@/components/select';
@@ -249,60 +249,62 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             title="Default Setting"
                             description="Default Setting"
                         >
-                            <Input
-                                id='welcome_text'
-                                label='Welcome Text'
-                                type='text'
-                                placeholder='Welcome Text'
-                                onChange={handleChange}
-                                value={formData.welcome_text}
-                            />
-                            <Input
-                                id='middle_top_text'
-                                label='Middle Top Text'
-                                type='text'
-                                placeholder='Middle Top Text'
-                                onChange={handleChange}
-                                value={formData.middle_top_text}
-                            />
-                            <SelectInput
-                                id='theme_color'
-                                label='Theme Color'
-                                onChange={(val) => handleChangeSelect('theme_color', val)}
-                                value={formData.theme_color}
-                                options={optionsColor}
-                                className='mb-1'
-                            />
-                            <SelectInput
-                                id='mail_theme_color'
-                                label='Mail Theme Color'
-                                onChange={(val) => handleChangeSelect('mail_theme_color', val)}
-                                value={formData.mail_theme_color}
-                                options={optionsColor}
-                                className='mb-1'
-                            />
-                            <SelectInput
-                                id='slider'
-                                label='Slider'
-                                onChange={(val) => handleChangeSelect('slider', val)}
-                                value={formData.slider}
-                                options={optionsSlider}
-                                className='mb-1'
-                            />
-                            <SelectInput
-                                id='term_conditions_page'
-                                label='Terms & Conditions Page'
-                                onChange={(val) => handleChangeSelect('term_conditions_page', val)}
-                                value={formData.term_conditions_page}
-                                options={optionsTermConditions}
-                                className='mb-1'
-                            />
-                            <div className='col-span-full'>
-                                <TextArea
-                                    label='Address'
-                                    value={formData.address}
+                            <div className='grid md:grid-cols-2 gap-3'>
+                                <Input
+                                    id='welcome_text'
+                                    label='Welcome Text'
+                                    type='text'
+                                    placeholder='Welcome Text'
                                     onChange={handleChange}
+                                    value={formData.welcome_text}
                                 />
+                                <Input
+                                    id='middle_top_text'
+                                    label='Middle Top Text'
+                                    type='text'
+                                    placeholder='Middle Top Text'
+                                    onChange={handleChange}
+                                    value={formData.middle_top_text}
+                                />
+                                <SelectInput
+                                    id='theme_color'
+                                    label='Theme Color'
+                                    onChange={(val) => handleChangeSelect('theme_color', val)}
+                                    value={formData.theme_color}
+                                    options={optionsColor}
+                                    className='mb-1'
+                                />
+                                <SelectInput
+                                    id='mail_theme_color'
+                                    label='Mail Theme Color'
+                                    onChange={(val) => handleChangeSelect('mail_theme_color', val)}
+                                    value={formData.mail_theme_color}
+                                    options={optionsColor}
+                                    className='mb-1'
+                                />
+                                <SelectInput
+                                    id='slider'
+                                    label='Slider'
+                                    onChange={(val) => handleChangeSelect('slider', val)}
+                                    value={formData.slider}
+                                    options={optionsSlider}
+                                    className='mb-1'
+                                />
+                                <SelectInput
+                                    id='term_conditions_page'
+                                    label='Terms & Conditions Page'
+                                    onChange={(val) => handleChangeSelect('term_conditions_page', val)}
+                                    value={formData.term_conditions_page}
+                                    options={optionsTermConditions}
+                                    className='mb-1'
+                                />
+                                <div className='col-span-full'>
+                                    <TextArea
+                                        label='Address'
+                                        value={formData.address}
+                                        onChange={handleChange}
+                                    />
+                                </div>
                             </div>
 
                         </FormGroup>
@@ -310,183 +312,186 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                         <FormGroup
                             title="Logo"
                             description="Logo"
+                            className='mt-4'
                         >
-                            <FileUploader
-                                label='Logo'
-                                action="https://api-dev.alarmexpert.com.au/admin/product/cdn/upload"
-                                onSuccess={(file) => handleSuccess(file, 'logo')}
-                                onError={handleError}
-                                isUpload={isLoading.logo}
-                                fileList={formData.logo?.map((img: any, index: any) => {
-                                    return {
-                                        uid: `${index}`,
-                                        name: img.name ?? img.url,
-                                        status: 'done',
-                                        url: img.url
-                                    }
-                                })}
-                            />
-                            <FileUploader
-                                label='Logo Favicon'
-                                action="https://api-dev.alarmexpert.com.au/admin/product/cdn/upload"
-                                onSuccess={(file) => handleSuccess(file, 'favicon')}
-                                onError={handleError}
-                                isUpload={isLoading.favicon}
-                                fileList={formData.favicon?.map((img: any, index: any) => {
-                                    return {
-                                        uid: `${index}`,
-                                        name: img.name ?? img.url,
-                                        status: 'done',
-                                        url: img.url
-                                    }
-                                })}
-                            />
-                            <FileUploader
-                                label='Mail Logo'
-                                action="https://api-dev.alarmexpert.com.au/admin/product/cdn/upload"
-                                onSuccess={(file) => handleSuccess(file, 'mail_logo')}
-                                onError={handleError}
-                                isUpload={isLoading.mail_logo}
-                                fileList={formData.mail_logo?.map((img: any, index: any) => {
-                                    return {
-                                        uid: `${index}`,
-                                        name: img.name ?? img.url,
-                                        status: 'done',
-                                        url: img.url
-                                    }
-                                })}
-                            />
-
+                            <div className='grid  md:grid-cols-3 gap-3'>
+                                <FileUploader
+                                    label='Logo'
+                                    action="https://api-dev.alarmexpert.com.au/admin/product/cdn/upload"
+                                    onSuccess={(file) => handleSuccess(file, 'logo')}
+                                    onError={handleError}
+                                    isUpload={isLoading.logo}
+                                    fileList={formData.logo?.map((img: any, index: any) => {
+                                        return {
+                                            uid: `${index}`,
+                                            name: img.name ?? img.url,
+                                            status: 'done',
+                                            url: img.url
+                                        }
+                                    })}
+                                />
+                                <FileUploader
+                                    label='Logo Favicon'
+                                    action="https://api-dev.alarmexpert.com.au/admin/product/cdn/upload"
+                                    onSuccess={(file) => handleSuccess(file, 'favicon')}
+                                    onError={handleError}
+                                    isUpload={isLoading.favicon}
+                                    fileList={formData.favicon?.map((img: any, index: any) => {
+                                        return {
+                                            uid: `${index}`,
+                                            name: img.name ?? img.url,
+                                            status: 'done',
+                                            url: img.url
+                                        }
+                                    })}
+                                />
+                                <FileUploader
+                                    label='Mail Logo'
+                                    action="https://api-dev.alarmexpert.com.au/admin/product/cdn/upload"
+                                    onSuccess={(file) => handleSuccess(file, 'mail_logo')}
+                                    onError={handleError}
+                                    isUpload={isLoading.mail_logo}
+                                    fileList={formData.mail_logo?.map((img: any, index: any) => {
+                                        return {
+                                            uid: `${index}`,
+                                            name: img.name ?? img.url,
+                                            status: 'done',
+                                            url: img.url
+                                        }
+                                    })}
+                                />
+                            </div>
                         </FormGroup>
-                        <hr style={{ borderColor: '#E5E7EB', marginTop: '1rem', margin: '1rem 0' }} />
                         <FormGroup
                             title="Menus"
                             description="Menus"
+                            className='mt-4'
                         >
-                            <Input
-                                id='navbar_text'
-                                label='Navbar Text'
-                                type='text'
-                                placeholder='Navbar Text'
-                                onChange={handleChange}
-                                value={formData.navbar_text}
-                                className='mb-1'
-                            />
-                            <SelectInput
-                                id='primary_menu'
-                                label='Primary Menu'
-                                onChange={(val) => handleChangeSelect('primary_menu', val)}
-                                value={formData.primary_menu}
-                                options={optionsCategory}
-                            />
-                            <SelectInput
-                                id='primary_category_menu'
-                                label='Primary Category Meny'
-                                onChange={(val) => handleChangeSelect('primary_category_menu', val)}
-                                value={formData.primary_category_menu}
-                                options={optionsCategory}
-                                className='mb-1'
-                            />
-                            <SelectInput
-                                id='popular_categories'
-                                label='Popular Categories'
-                                onChange={(val) => handleChangeSelect('popular_categories', val)}
-                                value={formData.popular_categories}
-                                options={optionsCategory}
-                                className='mb-1'
-                            />
-                            <SelectInput
-                                id='category_menu'
-                                label='Category Menu'
-                                onChange={(val) => handleChangeSelect('category_menu', val)}
-                                value={formData.category_menu}
-                                options={optionsCategory}
-                                className='mb-1'
-                            />
-                            <Input
-                                id='footer_menu_one_title'
-                                label='Footer Menu One Title'
-                                type='text'
-                                placeholder='Footer Menu One Title'
-                                onChange={handleChange}
-                                value={formData.footer_menu_one_title}
-                                className='mb-1'
+                            <div className='grid md:grid-cols-2 gap-3'>
+                                <Input
+                                    id='navbar_text'
+                                    label='Navbar Text'
+                                    type='text'
+                                    placeholder='Navbar Text'
+                                    onChange={handleChange}
+                                    value={formData.navbar_text}
+                                    className='mb-1'
+                                />
+                                <SelectInput
+                                    id='primary_menu'
+                                    label='Primary Menu'
+                                    onChange={(val) => handleChangeSelect('primary_menu', val)}
+                                    value={formData.primary_menu}
+                                    options={optionsCategory}
+                                />
+                                <SelectInput
+                                    id='primary_category_menu'
+                                    label='Primary Category Meny'
+                                    onChange={(val) => handleChangeSelect('primary_category_menu', val)}
+                                    value={formData.primary_category_menu}
+                                    options={optionsCategory}
+                                    className='mb-1'
+                                />
+                                <SelectInput
+                                    id='popular_categories'
+                                    label='Popular Categories'
+                                    onChange={(val) => handleChangeSelect('popular_categories', val)}
+                                    value={formData.popular_categories}
+                                    options={optionsCategory}
+                                    className='mb-1'
+                                />
+                                <SelectInput
+                                    id='category_menu'
+                                    label='Category Menu'
+                                    onChange={(val) => handleChangeSelect('category_menu', val)}
+                                    value={formData.category_menu}
+                                    options={optionsCategory}
+                                    className='mb-1'
+                                />
+                                <Input
+                                    id='footer_menu_one_title'
+                                    label='Footer Menu One Title'
+                                    type='text'
+                                    placeholder='Footer Menu One Title'
+                                    onChange={handleChange}
+                                    value={formData.footer_menu_one_title}
+                                    className='mb-1'
 
-                            />
+                                />
 
-                            <SelectInput
-                                id='footer_menu_one'
-                                label='Footer Menu One'
-                                onChange={(val) => handleChangeSelect('footer_menu_one', val)}
-                                value={formData.footer_menu_one}
-                                options={optionsCategory}
-                                className='mb-1'
-                            />
-                            <Input
-                                id='footer_menu_two_title'
-                                label='Footer Menu Two Title'
-                                type='text'
-                                placeholder='Footer Menu Two Title'
-                                onChange={handleChange}
-                                value={formData.footer_menu_two_title}
-                                className='mb-1'
-                            />
+                                <SelectInput
+                                    id='footer_menu_one'
+                                    label='Footer Menu One'
+                                    onChange={(val) => handleChangeSelect('footer_menu_one', val)}
+                                    value={formData.footer_menu_one}
+                                    options={optionsCategory}
+                                    className='mb-1'
+                                />
+                                <Input
+                                    id='footer_menu_two_title'
+                                    label='Footer Menu Two Title'
+                                    type='text'
+                                    placeholder='Footer Menu Two Title'
+                                    onChange={handleChange}
+                                    value={formData.footer_menu_two_title}
+                                    className='mb-1'
+                                />
 
-                            <SelectInput
-                                id='footer_menu_two'
-                                label='Footer Menu Two'
-                                onChange={(val) => handleChangeSelect('footer_menu_two', val)}
-                                value={formData.footer_menu_two}
-                                options={optionsCategory}
-                                className='mb-1'
-                            />
-
+                                <SelectInput
+                                    id='footer_menu_two'
+                                    label='Footer Menu Two'
+                                    onChange={(val) => handleChangeSelect('footer_menu_two', val)}
+                                    value={formData.footer_menu_two}
+                                    options={optionsCategory}
+                                    className='mb-1'
+                                />
+                            </div>
                         </FormGroup>
-                        <hr style={{ borderColor: '#E5E7EB', marginTop: '1rem', margin: '1rem 0' }} />
                         <FormGroup
                             title="Footer"
                             description="Footer"
+                            className='mt-4'
                         >
-                            <SelectInput
-                                id='footer_tags'
-                                label='Footer Tags'
-                                modeType='multiple'
-                                onChange={(val) => handleChangeSelect('footer_tags', val)}
-                                value={formData.footer_tags || undefined}
-                                options={optionsCategory}
-                            />
-                            <Input
-                                id='footer_copyright_text'
-                                label='Footer Copyright Text'
-                                type='text'
-                                placeholder='Footer Copyright Text'
-                                onChange={handleChange}
-                                value={formData.footer_copyright_text}
-                                className='mb-1'
-                            />
+                            <div className='grid md:grid-cols-2 gap-3'>
+                                <SelectInput
+                                    id='footer_tags'
+                                    label='Footer Tags'
+                                    modeType='multiple'
+                                    onChange={(val) => handleChangeSelect('footer_tags', val)}
+                                    value={formData.footer_tags || undefined}
+                                    options={optionsCategory}
+                                />
+                                <Input
+                                    id='footer_copyright_text'
+                                    label='Footer Copyright Text'
+                                    type='text'
+                                    placeholder='Footer Copyright Text'
+                                    onChange={handleChange}
+                                    value={formData.footer_copyright_text}
+                                    className='mb-1'
+                                />
 
-                            <FileUploader
-                                label='Accept Payment Method Image'
-                                action="https://api-dev.alarmexpert.com.au/admin/product/cdn/upload"
-                                onSuccess={(file) => handleSuccess(file, 'payment_method_image')}
-                                onError={handleError}
-                                isUpload={isLoading.payment_method_image}
-                                fileList={formData.payment_method_image?.map((img: any, index: any) => {
-                                    return {
-                                        uid: `${index}`,
-                                        name: img.name ?? img.url,
-                                        status: 'done',
-                                        url: img.url
-                                    }
-                                })}
-                            />
-
-
+                                <FileUploader
+                                    label='Accept Payment Method Image'
+                                    action="https://api-dev.alarmexpert.com.au/admin/product/cdn/upload"
+                                    onSuccess={(file) => handleSuccess(file, 'payment_method_image')}
+                                    onError={handleError}
+                                    isUpload={isLoading.payment_method_image}
+                                    fileList={formData.payment_method_image?.map((img: any, index: any) => {
+                                        return {
+                                            uid: `${index}`,
+                                            name: img.name ?? img.url,
+                                            status: 'done',
+                                            url: img.url
+                                        }
+                                    })}
+                                />
+                            </div>
                         </FormGroup>
-                        <hr style={{ borderColor: '#E5E7EB', marginTop: '1rem', margin: '1rem 0' }} />
                         <FormGroup
                             title="Newsletter"
                             description="Newsletter"
+                            className='mt-4'
                         >
                             <FileUploader
                                 label='Background Image'
@@ -504,10 +509,10 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 })}
                             />
                         </FormGroup>
-                        <hr style={{ borderColor: '#E5E7EB', marginTop: '1rem', margin: '1rem 0' }} />
                         <FormGroup
                             title="Section Status"
                             description="Section Status"
+                            className='mt-4'
                         >
                             <CheckboxInput
                                 label='Section Status'
@@ -571,6 +576,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                         <FormGroup
                             title="Product Page"
                             description="Product Page"
+                            className='mt-4'
                         >
                             <div className='col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}>
                                 <div className='col-span-full flex gap-3 justify-between mb-4'>
@@ -611,45 +617,46 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 </div>
                             </div>
                         </FormGroup>
-                        <hr style={{ borderColor: '#E5E7EB', marginTop: '1rem', margin: '1rem 0' }} />
                         <FormGroup
                             title="Social Links"
                             description="Social Links"
+                            className='mt-4'
                         >
-                            <Input
-                                id='facebook_link'
-                                label='Facebook Link'
-                                type='text'
-                                placeholder='Facebook Link'
-                                onChange={handleChange}
-                                value={formData.facebook_link}
-                            />
-                            <Input
-                                id='instagram_link'
-                                label='Instagram Link'
-                                type='text'
-                                placeholder='Instagram Link'
-                                onChange={handleChange}
-                                value={formData.instagram_link}
-                            />
-                            <Input
-                                id='twitter_link'
-                                label='Twitter Link'
-                                type='text'
-                                placeholder='Twitter Link'
-                                onChange={handleChange}
-                                value={formData.twitter_link}
-                            />
-                            <Input
-                                id='youtube_link'
-                                label='Youtube Link'
-                                type='text'
-                                placeholder='Youtube Link'
-                                onChange={handleChange}
-                                value={formData.youtube_link}
-                            />
+                            <div className='grid md:grid-cols-2 gap-3'>
+                                <Input
+                                    id='facebook_link'
+                                    label='Facebook Link'
+                                    type='text'
+                                    placeholder='Facebook Link'
+                                    onChange={handleChange}
+                                    value={formData.facebook_link}
+                                />
+                                <Input
+                                    id='instagram_link'
+                                    label='Instagram Link'
+                                    type='text'
+                                    placeholder='Instagram Link'
+                                    onChange={handleChange}
+                                    value={formData.instagram_link}
+                                />
+                                <Input
+                                    id='twitter_link'
+                                    label='Twitter Link'
+                                    type='text'
+                                    placeholder='Twitter Link'
+                                    onChange={handleChange}
+                                    value={formData.twitter_link}
+                                />
+                                <Input
+                                    id='youtube_link'
+                                    label='Youtube Link'
+                                    type='text'
+                                    placeholder='Youtube Link'
+                                    onChange={handleChange}
+                                    value={formData.youtube_link}
+                                />
+                            </div>
                         </FormGroup>
-
                     </div>
 
                     {/* Submit */}

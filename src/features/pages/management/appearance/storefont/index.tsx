@@ -39,6 +39,7 @@ const index = ({ taxesData }: { taxesData?: any }) => {
                 tabs={tabs}
                 activeTab={activeTab}
                 setActiveTab={setActiveTab}
+                borderClass='w-full'
             />
 
 

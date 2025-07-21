@@ -158,6 +158,7 @@ const ProductForm: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                 tabs={tabs}
                 activeTab={activeTab}
                 setActiveTab={setActiveTab}
+                borderClass='w-full'
             />
 
             <Content className="mt-4 mx-4 mb-0">

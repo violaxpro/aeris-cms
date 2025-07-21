@@ -54,6 +54,7 @@ const index = ({ taxesData }: { taxesData?: any }) => {
                 activeTab={activeTab}
                 setActiveTab={setActiveTab}
                 className='relative'
+                overflowClass='gap-6 pr-8'
             />
 
 
