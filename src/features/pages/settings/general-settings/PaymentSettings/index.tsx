@@ -8,6 +8,7 @@ import FormGroup from '@/components/form-group';
 import Input from "@/components/input"
 import TextArea from "@/components/textarea"
 import SelectInput from '@/components/select';
+import CheckboxInput from '@/components/checkbox';
 import SwitchInput from '@/components/switch';
 import { uploadImages } from '@/services/upload-images';
 import { useNotificationAntd } from '@/components/toast';
@@ -26,6 +27,10 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const [bankTransfer, setBankTransfer] = useState(true)
     const [isLoading, setIsLoading] = useState(false)
     const [formData, setFormData] = useState({
+        support_currency: initialValues ? initialValues.support_currency : '',
+        default_currency: initialValues ? initialValues.default_currency : '',
+        rate_service: initialValues ? initialValues.rate_service : '',
+        auto_refresh: initialValues ? initialValues.auto_refresh : false,
         host: initialValues ? initialValues.host : '',
         email: initialValues ? initialValues.email : '',
         email_port: initialValues ? initialValues.email_port : '',
@@ -161,8 +166,47 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
 
                     <div>
-                        <FormGroup title="Payment Gateaway" description='Payment gateaway settings' childClassName='flex flex-col gap-3'>
-
+                        <FormGroup
+                            title="Currency"
+                            description="Currency information"
+                        >
+                            <div className='grid md:grid-cols-2 gap-3'>
+                                <Input
+                                    id='support_currency'
+                                    label='Supported Currency'
+                                    type='text'
+                                    placeholder='Supported Currency'
+                                    onChange={handleChange}
+                                    value={formData.support_currency}
+                                />
+                                <Input
+                                    id='default_currency'
+                                    label='Default Currency'
+                                    type='text'
+                                    placeholder='Default Currency'
+                                    onChange={handleChange}
+                                    value={formData.default_currency}
+                                />
+                                <Input
+                                    id='rate_service'
+                                    label='Exchange Rate Service'
+                                    type='text'
+                                    placeholder='Exchange Rate Service'
+                                    onChange={handleChange}
+                                    value={formData.rate_service}
+                                />
+                                <CheckboxInput
+                                    label='Auto Refresh'
+                                    text={formData.auto_refresh == true ? 'True' : 'False'}
+                                    onChange={(e: any) => setFormData({
+                                        ...formData,
+                                        auto_refresh: e
+                                    })}
+                                    checked={formData.auto_refresh}
+                                />
+                            </div>
+                        </FormGroup>
+                        <FormGroup title="Payment Gateaway" description='Payment gateaway settings' childClassName='flex flex-col gap-3' className='mt-5'>
                             <>
                                 {/* stripe payment */}
                                 <div className='col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}  >

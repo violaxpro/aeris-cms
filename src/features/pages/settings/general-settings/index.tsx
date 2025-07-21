@@ -18,7 +18,6 @@ const index = ({ taxesData }: { taxesData?: any }) => {
 
     const tabs: Tab[] = [
         { key: 'general', label: 'General' },
-        { key: 'currency', label: 'Currency' },
         { key: 'communications', label: 'Communications' },
         { key: 'payment-settings', label: 'Payment Settings' },
         { key: 'invoice', label: 'Invoice' },
@@ -54,12 +53,11 @@ const index = ({ taxesData }: { taxesData?: any }) => {
                 tabs={tabs}
                 activeTab={activeTab}
                 setActiveTab={setActiveTab}
+                className='relative'
             />
 
 
             {activeTab == 'general' && <General mode='create' />}
-
-            {activeTab == 'currency' && <Currency mode='create' />}
 
             {activeTab == 'communications' && <Communications mode='create' />}
 

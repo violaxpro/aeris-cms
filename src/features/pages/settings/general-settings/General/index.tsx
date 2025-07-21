@@ -326,7 +326,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                         <div className='mt-4'>
                             <div className='flex justify-between mt-4 items-center'>
                                 <div>
-                                    <h4 className="text-base font-medium">Company Details</h4>
+                                    <h4 className="text-lg font-semibold">Company Details</h4>
                                     <p className="mt-2">Company Details Information</p>
                                 </div>
                                 <Button
@@ -380,7 +380,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     value={formData.meta_title}
                                     notes='min.55 / max.65, Character 0'
                                     className='w-full'
-                                    textareaClassname='!h-30'
+                                    textareaClassname='!h-20'
                                 />
                                 <TextArea id='meta_description'
                                     label='Meta Description'
@@ -389,7 +389,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     value={formData.meta_description}
                                     notes='min.145 / max.165, Character 0'
                                     className='w-full'
-                                    textareaClassname='!h-30'
+                                    textareaClassname='!h-20'
                                 />
                             </div>
 
