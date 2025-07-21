@@ -165,7 +165,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
             <Content className="mt-4 mx-4 mb-0">
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
 
-                    <div>
+                    <div className='flex flex-col gap-8'>
                         <FormGroup
                             title="Currency"
                             description="Currency information"
@@ -521,7 +521,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                     {/* Submit */}
                     <div className="mt-6 flex justify-end">
                         <Button
-                            btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]"
+
                             label='Create Communications'
                             onClick={handleSubmit}
                         />

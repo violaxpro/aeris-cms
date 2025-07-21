@@ -10,13 +10,18 @@ type buttonProps = {
     link?: string
     type?: ButtonProps['type'];
     onClick?: () => void
+    shape?: any
+    style?: any
 }
-const index = ({ btnClassname, icon, label, link, type, onClick }: buttonProps) => {
+const index = ({ btnClassname, icon, label, link, type, onClick, shape, style }: buttonProps) => {
+    // hover:!bg-inherit hover:!text-inherit hover:!border-inherit
     const button = (
         <Button
-            className={`!text-white !bg-[var(--default-color)] hover:!bg-[var(--btn-hover-bg)] hover:!text-[#103654] hover:!border-[#103654] ${btnClassname}`}
+            className={`!text-white w-auto !bg-[var(--default-color)] hover:!border-inherit ${btnClassname}`}
             {...(type ? { type } : {})}
             {...(onClick ? { onClick } : {})}
+            shape={shape}
+            style={style}
 
         >
             {icon ?? icon}

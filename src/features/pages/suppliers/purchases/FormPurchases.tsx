@@ -443,7 +443,7 @@ const FormPurchases: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                     {/* Submit */}
                     <div className="mt-6 flex justify-end">
                         <Button
-                            btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]"
+
                             label={mode == 'create' ? 'Create Purchases' : 'Edit Purchases'}
                             onClick={handleSubmit}
                         />

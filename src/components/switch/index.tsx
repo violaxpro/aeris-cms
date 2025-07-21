@@ -17,12 +17,13 @@ const SwitchInput: React.FC<SwitchInputProps> = ({
     size = 'default',
 }) => {
     return (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
             <Switch
                 checked={checked}
                 onChange={onChange}
                 disabled={disabled}
                 size={size}
+                className="scale-[1.3]"
             />
             {label && <label className="text-sm">{label}</label>}
         </div>

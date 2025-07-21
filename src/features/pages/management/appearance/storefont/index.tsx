@@ -3,9 +3,10 @@ import React, { useState } from 'react'
 import Breadcrumb from "@/components/breadcrumb"
 import Tabs, { Tab } from '@/components/tab'
 import GeneralSetting from './general-setting'
+import HomepageSetting from './homepage-section'
 
 const index = ({ taxesData }: { taxesData?: any }) => {
-    const [activeTab, setActiveTab] = useState<string>('general');
+    const [activeTab, setActiveTab] = useState<string>('homepage');
 
     const tabs: Tab[] = [
         { key: 'general', label: 'General Setting' },
@@ -44,6 +45,7 @@ const index = ({ taxesData }: { taxesData?: any }) => {
 
 
             {activeTab == 'general' && <GeneralSetting mode='create' />}
+            {activeTab == 'homepage' && <HomepageSetting mode='create' />}
 
 
         </>

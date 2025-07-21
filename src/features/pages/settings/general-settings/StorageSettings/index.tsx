@@ -83,7 +83,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
             {contextHolder}
             <Content className="mt-4 mx-4 mb-0">
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
-                    <div className='mt-4'>
+                    <div className='flex flex-col gap-8'>
                         <div className='flex justify-between mt-4 items-center'>
                             <div>
                                 <h4 className="text-base font-medium">Storage Settings</h4>
@@ -173,7 +173,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                     {/* Submit */}
                     <div className="mt-6 flex justify-end">
                         <Button
-                            btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]"
+
                             label='Create Storage Settings'
                             onClick={handleSubmit}
                         />

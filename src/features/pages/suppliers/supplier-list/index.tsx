@@ -113,7 +113,7 @@ const index = ({ suppliersData }: { suppliersData?: any }) => {
                         <div className='flex items-center gap-2'>
                             <SearchInput onSearch={handleSearch} />
                             <Button
-                                btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]"
+
                                 icon={<PlusCircleOutlined />}
                                 label='Add Supplier List'
                                 link={routes.eCommerce.createSupplierList}

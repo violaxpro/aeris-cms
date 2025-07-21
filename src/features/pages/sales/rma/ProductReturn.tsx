@@ -119,7 +119,7 @@ const ProductReturn = ({
             </div>
             <Button
                 label='Save'
-                btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]"
+
                 onClick={handleAddProduct}
             />
         </div>

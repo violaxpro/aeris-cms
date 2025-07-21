@@ -143,17 +143,17 @@ const PriceInformation = ({
             <div className='flex justify-end gap-3'>
                 <Button
                     label='Calculate'
-                    btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]"
+
                     icon={<CalculatorOutlined />}
                     onClick={handleCalculate}
                 />
                 <Button
                     label='View Price History'
-                    btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]"
+
                 />
                 <Button
                     label='Save'
-                    btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]"
+
                 />
             </div>
             <hr style={{ borderColor: '#E5E7EB', marginTop: '1rem', marginBottom: '1rem' }} />

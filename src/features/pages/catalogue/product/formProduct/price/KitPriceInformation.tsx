@@ -80,7 +80,7 @@ const KitPriceInformation = ({ dataById, onChange }: ChildFormProps) => {
                     <div className="flex justify-end">
                         <Button
                             label='Add Kit Price Product'
-                            btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]"
+
                             icon={<PlusOutlined />}
                             onClick={addItem}
                         />

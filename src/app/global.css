@@ -259,7 +259,11 @@ body,
 .ant-upload-drag-text,
 .ant-upload-drag-hint,
 .ant-checkbox-wrapper,
-.ant-radio-wrapper {
+.ant-radio-wrapper,
+label,
+span,
+p,
+div {
     font-family: 'Inter', sans-serif !important;
 }
 
@@ -364,3 +368,5 @@ body,
     scrollbar-width: none;
     /* Firefox */
 }
+
+/* styles/globals.css atau file CSS global kamu */

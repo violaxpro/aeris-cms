@@ -21,7 +21,7 @@ export default function FormGroup({
     return (
         <div className={className}>
             <div>
-                <h4 className="text-lg font-semibold">{title}</h4>
+                <h4 className="text-2xl font-semibold">{title}</h4>
                 {description && <p className="mt-2">{description}</p>}
                 <Divider />
             </div>

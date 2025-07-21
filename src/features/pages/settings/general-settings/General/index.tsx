@@ -154,7 +154,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
             {contextHolder}
             <Content className="mt-4 mx-4 mb-0">
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
-                    <div>
+                    <div className='flex flex-col gap-8'>
                         <FormGroup
                             title="Company"
                             description="Company information"
@@ -331,7 +331,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 </div>
                                 <Button
                                     label='Add Business Number'
-                                    btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]"
+
                                     icon={<PlusOutlined />}
                                     onClick={() => addDynamicItem('business_number')}
                                 />
@@ -441,7 +441,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                     {/* Submit */}
                     <div className="mt-6 flex justify-end">
                         <Button
-                            btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]"
+
                             label={mode === 'create' ? 'Create General' : 'Edit General'}
                             onClick={handleSubmit}
                         />

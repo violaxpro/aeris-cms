@@ -15,12 +15,17 @@ import { Divider } from 'antd';
 import { useNotificationAntd } from '@/components/toast';
 import FileUploader from '@/components/input-file';
 import { PlusOutlined, MinusCircleOutlined } from '@ant-design/icons';
+import Image from 'next/image';
+import { PencilIcon } from '@public/icon';
 import dynamic from 'next/dynamic';
 
 const QuillInput = dynamic(() => import('@/components/quill-input'), { ssr: false, loading: () => <p>Loading editor...</p>, });
 
 const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd();
+    const [viaEmail, setViaEmail] = useState(false)
+    const [viaSms, setViaSms] = useState(false)
+    const [currentVia, setCurrentVia] = useState<'email' | 'sms' | null>(null);
     const [orderConfirm, setOrderConfirm] = useState(true)
     const [paymentReceive, setPaymentReceive] = useState(true)
     const [orderProcessing, setOrderProcessing] = useState(true)
@@ -31,7 +36,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const [orderCancelled, setOrderCancelled] = useState(true)
     const [orderRefund, setOrderRefund] = useState(true)
     const [isModalOpen, setIsModalOpen] = useState(false)
-    const [currentTemplateKey, setCurrentTemplateKey] = useState<string | null>(null);
+    const [currentTemplateKey, setCurrentTemplateKey] = useState<any>(null);
     const [editorContent, setEditorContent] = useState('');
     const [notifikasi, setNotifikasi] = useState({
         emailOrderConfirm: true,
@@ -132,6 +137,28 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
     };
 
+    const emailTemplate: any = [
+        {
+            name: 'Appointment Order',
+            html_template: '<p>This is the appointment order template.</p>'
+        },
+        {
+            name: 'Booking Order',
+            html_template: '<p>This is the booking order template.</p>'
+        }
+    ]
+
+    const smsTemplate: any = [
+        {
+            name: 'SMS Order',
+            html_template: '<p>This is the sms order template.</p>'
+        },
+        {
+            name: 'SMS Booking Order',
+            html_template: '<p>This is the sms booking order template.</p>'
+        }
+    ]
+
     const optionsMode = [
         { label: "Live", value: 'live' },
         { label: "Sandbox", value: 'sandbox' },
@@ -168,14 +195,22 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         });
     };
 
-    const handleOpenModal = (templateKey: string) => {
-        const selected = selectedTemplate[templateKey as keyof typeof selectedTemplate];
-        console.log(selected)
+    // const handleOpenModal = (templateKey: string) => {
+    //     const selected = selectedTemplate[templateKey as keyof typeof selectedTemplate];
+    //     console.log(selected)
 
-        const content = templateContents[selected] || '';
-        console.log(content)
+    //     const content = templateContents[selected] || '';
+    //     console.log(content)
+    //     setEditorContent(content);
+    //     setCurrentTemplateKey(templateKey); // Pastikan ini match dengan `formData` key
+    //     setIsModalOpen(true);
+    // };
+    const handleOpenModal = (templateKey: string, channel: 'email' | 'sms') => {
+        const selected = selectedTemplate[templateKey as keyof typeof selectedTemplate]; // Misalnya 'order_confirm'
+        const content = templateContents?.[selected]?.[channel] || ''; // Ambil dari email/sms
+        setCurrentTemplateKey(templateKey);
+        setCurrentVia(channel);
         setEditorContent(content);
-        setCurrentTemplateKey(templateKey); // Pastikan ini match dengan `formData` key
         setIsModalOpen(true);
     };
 
@@ -249,43 +284,80 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
     }
 
-    console.log(formData, currentTemplateKey, selectedTemplate, editorContent)
+    console.log(currentTemplateKey, currentVia)
+    const getTemplateName = (key: string) => {
+        const map: Record<string, string> = {
+            order_confirm: 'Order Confirmation',
+            payment_receive: 'Payment Receive',
+            order_processing: 'Order Processing',
+            outof_delivery: 'Order Delivery',
+            order_packed: 'Order Packed',
+            order_shipped: 'Order Shipped',
+            order_delivered: 'Order Delivered',
+            order_canceled: 'Order Canceled',
+            order_refund: 'Order Refund Processing'
+            // tambahkan yang lain di sini
+        };
+        return map[key] || key;
+    };
+
+    const mapTemplatesToOptions = (templates: any[]) => {
+        return templates.map((t) => ({
+            label: t.name,
+            value: t.html_template,
+        }));
+    };
+
+
 
     return (
         <>
             <Modal
                 open={isModalOpen}
                 handleCancel={() => setIsModalOpen(false)}
-                title='View Template'
+                title={`Via ${currentVia == 'sms' ? 'SMS' : 'Email'}`}
+                subtitle={` ${getTemplateName(currentTemplateKey ?? 'order_confirm')} Via ${currentVia == 'sms' ? 'SMS' : 'Email'} `}
             >
-                <QuillInput
-                    key={currentTemplateKey}
-                    label=""
-                    value={editorContent}
-                    onChange={(value) => {
-                        setEditorContent(value);
-                        if (currentTemplateKey) {
-                            setFormData((prev) => ({
-                                ...prev,
-                                [currentTemplateKey]: value,
-                            }));
-                        }
-                    }}
-                    className="col-span-full [&_.ql-editor]:min-h-[100px]"
-                    labelClassName="font-medium text-gray-700 dark:text-gray-600 mb-1.5"
-                />
+                <div className='flex flex-col gap-3 py-4'>
+                    <SelectInput
+                        id={`${currentTemplateKey}`}
+                        label=''
+                        placeholder='Choose Template'
+                        value={selectedTemplate.order_confirm}
+                        onChange={(val: any) => handleTemplateChange(currentTemplateKey, val)}
+                        options={currentVia === 'sms' ? mapTemplatesToOptions(smsTemplate) : mapTemplatesToOptions(emailTemplate)}
+                        selectClassName='!w-full'
+                    />
+                    <QuillInput
+                        key={currentTemplateKey}
+                        label={`${currentVia == 'sms' ? 'SMS' : 'Email'} Notification Template`}
+                        value={editorContent}
+                        onChange={(value) => {
+                            setEditorContent(value);
+                            if (currentTemplateKey) {
+                                setFormData((prev) => ({
+                                    ...prev,
+                                    [currentTemplateKey]: value,
+                                }));
+                            }
+                        }}
+                        className="col-span-full [&_.ql-editor]:min-h-[100px]"
+                        labelClassName="font-medium text-gray-700 dark:text-gray-600 mb-1.5"
+                    />
+                </div>
+
             </Modal>
             {contextHolder}
             <Content className="mt-4 mx-4 mb-0">
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
-                    <div>
+                    <div className='flex flex-col gap-8'>
                         <FormGroup title="Order Notifications" description='Notifications for order confirmation' />
                         <div className='flex flex-col gap-4'>
 
-                            {/* order notifications payment */}
-                            <div className='flex flex-col col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}  >
+                            {/* order confirm payment */}
+                            <div className='flex flex-col col-span-full border p-8 rounded-md' style={{ borderColor: '#E5E7EB' }}  >
                                 <div className='col-span-full flex justify-between items-center'>
-                                    <h4 className='text-base font-medium'>Order Notification</h4>
+                                    <h4 className='text-lg font-semibold'>Order Confirmation</h4>
                                     <div className='flex gap-4'>
                                         <SwitchInput
                                             label='Enable'
@@ -298,68 +370,55 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     <>
                                         <div className='flex flex-col gap-3 mt-4'>
                                             <div className='flex justify-between'>
-                                                <label>Via Email</label>
+                                                <label className='font-semibold'>Via SMS</label>
                                                 <div className='flex items-center gap-3'>
-                                                    {
-                                                        notifikasi.emailOrderConfirm && (
-                                                            <div className='flex items-center gap-3'>
-                                                                {
-                                                                    selectedTemplate.order_confirm && <Button
-                                                                        label='View Template'
-                                                                        onClick={() => handleOpenModal('order_confirm')}
-                                                                    />
-                                                                }
-                                                                <SelectInput
-                                                                    id='order_confirm'
-                                                                    value={selectedTemplate.order_confirm}
-                                                                    onChange={(val: any) => handleTemplateChange('order_confirm', val)}
-                                                                    options={optionsOrder}
-                                                                    selectClassName='!w-[200]'
-                                                                />
-
-                                                            </div>
-                                                        )
-                                                    }
+                                                    <div className='flex items-center gap-3'>
+                                                        <Button
+                                                            label='Edit'
+                                                            onClick={() => handleOpenModal('order_confirm', 'sms')}
+                                                            icon={<Image
+                                                                src={PencilIcon}
+                                                                alt='edit-icon'
+                                                                width={15}
+                                                                height={15}
+                                                            />}
+                                                            shape='round'
+                                                            btnClassname='!text-white'
+                                                        />
+                                                    </div>
                                                     <SwitchInput
-                                                        label='Email'
+                                                        label='Enable'
+                                                        checked={notifikasi.smsOrderConfirm}
+                                                        onChange={(value) => handleChangeNotifikasi("smsOrderConfirm", value)}
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className='flex justify-between'>
+                                                <label className='font-semibold'>Via Email</label>
+                                                <div className='flex items-center gap-3'>
+                                                    <div className='flex items-center gap-3'>
+                                                        <Button
+                                                            label='Edit'
+                                                            onClick={() => handleOpenModal('order_confirm', 'email')}
+                                                            icon={<Image
+                                                                src={PencilIcon}
+                                                                alt='edit-icon'
+                                                                width={15}
+                                                                height={15}
+                                                            />}
+                                                            shape='round'
+                                                            btnClassname='!text-white'
+                                                        />
+                                                    </div>
+                                                    <SwitchInput
+                                                        label='Enable'
                                                         checked={notifikasi.emailOrderConfirm}
                                                         onChange={(value) => handleChangeNotifikasi("emailOrderConfirm", value)}
                                                     />
                                                 </div>
 
                                             </div>
-                                            <div className='flex justify-between'>
-                                                <label>Via SMS</label>
-                                                <div className='flex items-center gap-3'>
-                                                    {
-                                                        notifikasi.smsOrderConfirm && (
-                                                            <div className='flex items-center gap-3'>
-                                                                {
-                                                                    selectedTemplate.order_confirm && <Button
-                                                                        label='View Template'
-                                                                        onClick={() => handleOpenModal('order_confirm')}
-                                                                    />
-                                                                }
 
-                                                                <SelectInput
-                                                                    id='order_confirm'
-                                                                    value={selectedTemplate.order_confirm}
-                                                                    onChange={(val: any) => handleTemplateChange('order_confirm', val)}
-                                                                    options={optionsOrder}
-                                                                    selectClassName='!w-[200]'
-                                                                />
-
-                                                            </div>
-                                                        )
-                                                    }
-                                                    <SwitchInput
-                                                        label='SMS'
-                                                        checked={notifikasi.smsOrderConfirm}
-                                                        onChange={(value) => handleChangeNotifikasi("smsOrderConfirm", value)}
-                                                    />
-                                                </div>
-
-                                            </div>
                                         </div>
                                     </>
 
@@ -369,7 +428,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             {/* payment receive */}
                             <div className='flex flex-col col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}  >
                                 <div className='col-span-full flex justify-between items-center'>
-                                    <h4 className='text-base font-medium'>Payment Received</h4>
+                                    <h4 className='text-lg font-semibold'>Payment Received</h4>
                                     <div className='flex gap-4'>
                                         <SwitchInput
                                             label='Enable'
@@ -390,7 +449,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                                 {
                                                                     selectedTemplate.payment_receive && <Button
                                                                         label='View Template'
-                                                                        onClick={() => handleOpenModal('payment_receive')}
+                                                                        onClick={() => handleOpenModal('payment_receive', 'email')}
                                                                     />
                                                                 }
                                                                 <SelectInput
@@ -421,7 +480,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                                 {
                                                                     selectedTemplate.payment_receive && <Button
                                                                         label='View Template'
-                                                                        onClick={() => handleOpenModal('payment_receive')}
+                                                                        onClick={() => handleOpenModal('payment_receive', 'sms')}
                                                                     />
                                                                 }
                                                                 <SelectInput
@@ -450,7 +509,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             {/* order processing */}
                             <div className='flex flex-col col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}  >
                                 <div className='col-span-full flex justify-between items-center'>
-                                    <h4 className='text-base font-medium'>Order Processing</h4>
+                                    <h4 className='text-lg font-semibold'>Order Processing</h4>
                                     <div className='flex gap-4'>
                                         <SwitchInput
                                             label='Enable'
@@ -471,7 +530,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                                 {
                                                                     selectedTemplate.order_processing && <Button
                                                                         label='View Template'
-                                                                        onClick={() => handleOpenModal('order_processing')}
+                                                                        onClick={() => handleOpenModal('order_processing', 'email')}
                                                                     />
                                                                 }
 
@@ -503,7 +562,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                                 {
                                                                     selectedTemplate.order_processing && <Button
                                                                         label='View Template'
-                                                                        onClick={() => handleOpenModal('order_processing')}
+                                                                        onClick={() => handleOpenModal('order_processing', 'sms')}
                                                                     />
                                                                 }
                                                                 <SelectInput
@@ -532,7 +591,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             {/* order processing */}
                             <div className='flex flex-col col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}  >
                                 <div className='col-span-full flex justify-between items-center'>
-                                    <h4 className='text-base font-medium'>Order Packed</h4>
+                                    <h4 className='text-lg font-semibold'>Order Packed</h4>
                                     <div className='flex gap-4'>
                                         <SwitchInput
                                             label='Enable'
@@ -553,7 +612,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                                 {
                                                                     selectedTemplate.order_packed && <Button
                                                                         label='View Template'
-                                                                        onClick={() => handleOpenModal('order_packed')}
+                                                                        onClick={() => handleOpenModal('order_packed', 'email')}
                                                                     />
                                                                 }
                                                                 <SelectInput
@@ -584,7 +643,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                                 {
                                                                     selectedTemplate.order_packed && <Button
                                                                         label='View Template'
-                                                                        onClick={() => handleOpenModal('order_packed')}
+                                                                        onClick={() => handleOpenModal('order_packed', 'sms')}
                                                                     />
                                                                 }
                                                                 <SelectInput
@@ -615,7 +674,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             {/* outof delivery */}
                             <div className='flex flex-col col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}  >
                                 <div className='col-span-full flex justify-between items-center'>
-                                    <h4 className='text-base font-medium'>Out of Delivery</h4>
+                                    <h4 className='text-lg font-semibold'>Out of Delivery</h4>
                                     <div className='flex gap-4'>
                                         <SwitchInput
                                             label='Enable'
@@ -636,7 +695,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                                 {
                                                                     selectedTemplate.outof_delivery && <Button
                                                                         label='View Template'
-                                                                        onClick={() => handleOpenModal('outof_delivery')}
+                                                                        onClick={() => handleOpenModal('outof_delivery', 'email')}
                                                                     />
                                                                 }
                                                                 <SelectInput
@@ -667,7 +726,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                                 {
                                                                     selectedTemplate.outof_delivery && <Button
                                                                         label='View Template'
-                                                                        onClick={() => handleOpenModal('outof_delivery')}
+                                                                        onClick={() => handleOpenModal('outof_delivery', 'sms')}
                                                                     />
                                                                 }
                                                                 <SelectInput
@@ -697,7 +756,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             {/* order shipped */}
                             <div className='flex flex-col col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}  >
                                 <div className='col-span-full flex justify-between items-center'>
-                                    <h4 className='text-base font-medium'>Order Shipped</h4>
+                                    <h4 className='text-lg font-semibold'>Order Shipped</h4>
                                     <div className='flex gap-4'>
                                         <SwitchInput
                                             label='Enable'
@@ -718,7 +777,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                                 {
                                                                     selectedTemplate.order_shipped && <Button
                                                                         label='View Template'
-                                                                        onClick={() => handleOpenModal('order_shipped')}
+                                                                        onClick={() => handleOpenModal('order_shipped', 'email')}
                                                                     />
                                                                 }
                                                                 <SelectInput
@@ -748,7 +807,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                                 {
                                                                     selectedTemplate.order_shipped && <Button
                                                                         label='View Template'
-                                                                        onClick={() => handleOpenModal('order_shipped')}
+                                                                        onClick={() => handleOpenModal('order_shipped', 'sms')}
                                                                     />
                                                                 }
                                                                 <SelectInput
@@ -778,7 +837,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             {/* order delivered */}
                             <div className='flex flex-col col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}  >
                                 <div className='col-span-full flex justify-between items-center'>
-                                    <h4 className='text-base font-medium'>Order Delivered</h4>
+                                    <h4 className='text-lg font-semibold'>Order Delivered</h4>
                                     <div className='flex gap-4'>
                                         <SwitchInput
                                             label='Enable'
@@ -800,7 +859,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                                 {
                                                                     selectedTemplate.order_delivered && <Button
                                                                         label='View Template'
-                                                                        onClick={() => handleOpenModal('order_delivered')}
+                                                                        onClick={() => handleOpenModal('order_delivered', 'email')}
                                                                     />
                                                                 }
                                                                 <SelectInput
@@ -831,7 +890,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                                 {
                                                                     selectedTemplate.order_delivered && <Button
                                                                         label='View Template'
-                                                                        onClick={() => handleOpenModal('order_delivered')}
+                                                                        onClick={() => handleOpenModal('order_delivered', 'sms')}
                                                                     />
                                                                 }
                                                                 <SelectInput
@@ -862,7 +921,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             {/* order cancelled */}
                             <div className='flex flex-col col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}  >
                                 <div className='col-span-full flex justify-between items-center'>
-                                    <h4 className='text-base font-medium'>Order Cancelled</h4>
+                                    <h4 className='text-lg font-semibold'>Order Cancelled</h4>
                                     <div className='flex gap-4'>
                                         <SwitchInput
                                             label='Enable'
@@ -884,7 +943,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                                 {
                                                                     selectedTemplate.order_canceled && <Button
                                                                         label='View Template'
-                                                                        onClick={() => handleOpenModal('order_canceled')}
+                                                                        onClick={() => handleOpenModal('order_canceled', 'email')}
                                                                     />
                                                                 }
                                                                 <SelectInput
@@ -915,7 +974,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                                 {
                                                                     selectedTemplate.order_canceled && <Button
                                                                         label='View Template'
-                                                                        onClick={() => handleOpenModal('order_canceled')}
+                                                                        onClick={() => handleOpenModal('order_canceled', 'sms')}
                                                                     />
                                                                 }
                                                                 <SelectInput
@@ -946,7 +1005,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             {/* order refund process */}
                             <div className='flex flex-col col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}  >
                                 <div className='col-span-full flex justify-between items-center'>
-                                    <h4 className='text-base font-medium'>Order Refund Processed</h4>
+                                    <h4 className='text-lg font-semibold'>Order Refund Processed</h4>
                                     <div className='flex gap-4'>
                                         <SwitchInput
                                             label='Enable'
@@ -968,7 +1027,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                                 {
                                                                     selectedTemplate.order_refund && <Button
                                                                         label='View Template'
-                                                                        onClick={() => handleOpenModal('order_refund')}
+                                                                        onClick={() => handleOpenModal('order_refund', 'email')}
                                                                     />
                                                                 }
 
@@ -1001,7 +1060,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                                 {
                                                                     selectedTemplate.order_refund && <Button
                                                                         label='View Template'
-                                                                        onClick={() => handleOpenModal('order_refund')}
+                                                                        onClick={() => handleOpenModal('order_refund', 'sms')}
                                                                     />
                                                                 }
 
@@ -1067,7 +1126,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                     {/* Submit */}
                     <div className="mt-6 flex justify-end">
                         <Button
-                            btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]"
+
                             label='Create Communications'
                             onClick={handleSubmit}
                         />

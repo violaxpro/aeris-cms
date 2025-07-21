@@ -405,10 +405,10 @@ const index = ({ quoteData }: { quoteData?: any }) => {
                                 label='Filter'
                                 icon={<FilterOutlined />}
                                 onClick={() => setisOpenModalFilter(true)}
-                                btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]"
+
                             />
                             <Button
-                                btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]"
+
                                 icon={<PlusCircleOutlined />}
                                 label='Add Quote'
                                 link={routes.eCommerce.createQuote}

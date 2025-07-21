@@ -308,7 +308,6 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             </div>
 
                         </FormGroup>
-                        <hr style={{ borderColor: '#E5E7EB', marginTop: '1rem', margin: '1rem 0' }} />
                         <FormGroup
                             title="Logo"
                             description="Logo"
@@ -572,7 +571,6 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 </div>
                             </div>
                         </FormGroup>
-                        <hr style={{ borderColor: '#E5E7EB', marginTop: '1rem', margin: '1rem 0' }} />
                         <FormGroup
                             title="Product Page"
                             description="Product Page"
@@ -662,7 +660,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                     {/* Submit */}
                     <div className="mt-6 flex justify-end">
                         <Button
-                            btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]"
+
                             label='Create General'
                             onClick={handleSubmit}
                         />

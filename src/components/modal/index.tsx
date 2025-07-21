@@ -14,6 +14,9 @@ type ModalProps = {
     children: React.ReactNode
     labelButton?: string
     isBtnPopover?: boolean
+    subtitle?: string
+    isBtnReset?: boolean
+    handleDelete?: () => void
 }
 
 const index = ({
@@ -27,44 +30,68 @@ const index = ({
     isBtnSave = false,
     children,
     labelButton,
-    isBtnPopover
+    isBtnPopover,
+    subtitle,
+    isBtnReset = false,
+    handleDelete
 }: ModalProps) => {
 
     return (
         <>
             <Modal
-                title={title}
-                closable={{ 'aria-label': 'Custom Close Button' }}
+                title={
+                    <div>
+                        <div className='text-lg font-semibold text-[#103654]'>{title}</div>
+                        <div className='text-sm text-gray-300 font-normal'>{subtitle}</div>
+                    </div>
+                }
+                closable={true}
                 open={open}
+                centered
                 onCancel={handleCancel}
                 footer={(_, { CancelBtn }) => (
                     <>
-                        {
-                            isBtnSave == true ?
-                                <Button
-                                    label={labelButton ? labelButton : 'Save'}
-                                    onClick={handleSubmit}
-                                    btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]"
-                                /> :
-                                <Button
-                                    label='Yes'
-                                    onClick={handleYes}
-                                    btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]"
+                        <div className="flex justify-center gap-2">
+                            {
+                                isBtnReset == true && <Button
+                                    label='Reset'
+                                    onClick={handleDelete}
+                                    btnClassname='!bg-white'
+                                    style={{ color: 'black !important' }}
                                 />
-                        }
-                        {
-                            isBtnPopover == true ?
+                            }
+                            {
+                                isBtnSave == true ?
+                                    <Button
+                                        label={labelButton ? labelButton : 'Save'}
+                                        onClick={handleSubmit}
+                                    /> :
+                                    <Button
+                                        label='Yes'
+                                        onClick={handleYes}
+                                    />
+                            }
+                            {
+                                isBtnPopover == true &&
                                 <Button
                                     label='No'
                                     onClick={handleNo}
                                     btnClassname="!bg-red-500 !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-red-500 hover:!border-red-500"
                                 />
 
-                                : <CancelBtn />
-                        }
-
+                                // : <CancelBtn />
+                            }
+                        </div>
                     </>
                 )}
+                width={{
+                    xs: '90%',
+                    sm: '80%',
+                    md: '70%',
+                    lg: '60%',
+                    xl: '50%',
+                    xxl: '40%',
+                }}
 
             >
                 {children}

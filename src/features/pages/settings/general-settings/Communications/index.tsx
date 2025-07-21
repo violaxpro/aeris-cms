@@ -9,18 +9,31 @@ import Input from "@/components/input"
 import TextArea from "@/components/textarea"
 import SelectInput from '@/components/select';
 import SwitchInput from '@/components/switch';
+import CustomSwitch from '@/components/switch/CustomSwitch';
+import ModalEmailSmtp from './ModalEmailSmtp';
+import ModalAmazonSmtp from './ModalAmazonSmtp';
+import ModalTwillio from './ModalTwillio';
+import ModalTidio from './ModalTidio';
+import ModalTawkTo from './ModalTawkTo';
 import { uploadImages } from '@/services/upload-images';
+import Image from 'next/image';
 import { useNotificationAntd } from '@/components/toast';
 import FileUploader from '@/components/input-file';
-import { PlusOutlined, MinusCircleOutlined } from '@ant-design/icons';
+import { PlusOutlined, MinusCircleOutlined, EyeOutlined } from '@ant-design/icons';
+import { PencilIcon, BodyIconSwitch, HeaderIconSwitch } from '@public/icon';
 
 const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd();
-    const [twillio, setTwillio] = useState(true)
-    const [facebook, setFacebook] = useState(true)
-    const [tawkTo, setTawkTo] = useState(true)
-    const [tidio, setTidio] = useState(true)
+    const [emailSmtp, setEmailSmtp] = useState(false)
+    const [awsSmtp, setAwsSmtp] = useState(false)
+    const [twillio, setTwillio] = useState(false)
+    const [facebook, setFacebook] = useState(false)
+    const [tawkTo, setTawkTo] = useState(false)
+    const [tidio, setTidio] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [currentMethod, setCurrentMethod] = useState<string | null>()
+    const [editorContent, setEditorContent] = useState('');
     const [formData, setFormData] = useState({
         host: initialValues ? initialValues.host : '',
         email: initialValues ? initialValues.email : '',
@@ -30,6 +43,12 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         mail: initialValues ? initialValues.mail : '',
         security_type: initialValues ? initialValues.security_type : '',
         phone_number: initialValues ? initialValues.phone_number : '',
+        endpoint_ses: '',
+        access_key_id: '',
+        secret_key: '',
+        email_from: '',
+        smtp_port: '',
+        security_type_amazon: '',
         twillio_id_key: initialValues ? initialValues.twillio_id_key : '',
         auth_token: initialValues ? initialValues.auth_token : '',
         twillio_phone_number: initialValues ? initialValues.twillio_phone_number : '',
@@ -77,6 +96,12 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         });
     };
 
+    const handleOpenModal = (method: string) => {
+        setCurrentMethod(method)
+        setIsModalOpen(true);
+    };
+
+
 
     const handleChange = (e: any) => {
         const { id, value } = e.target;
@@ -120,127 +145,148 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
     }
 
-    console.log(formData)
+    console.log(formData, twillio)
 
     return (
         <>
             {contextHolder}
+            {
+                currentMethod == 'email_smtp' && <ModalEmailSmtp
+                    isModalOpen={isModalOpen}
+                    handleCancel={() => setIsModalOpen(false)}
+                    handleChange={handleChange}
+                    formData={formData}
+                />
+            }
+            {
+                currentMethod == 'aws_smtp' && <ModalAmazonSmtp
+                    isModalOpen={isModalOpen}
+                    handleCancel={() => setIsModalOpen(false)}
+                    handleChange={handleChange}
+                    formData={formData}
+                />
+            }
+            {
+                currentMethod == 'twillio' && <ModalTwillio
+                    isModalOpen={isModalOpen}
+                    handleCancel={() => setIsModalOpen(false)}
+                    handleChange={handleChange}
+                    formData={formData}
+                />
+            }
+            {
+                currentMethod == 'tawkto' && <ModalTidio
+                    isModalOpen={isModalOpen}
+                    handleCancel={() => setIsModalOpen(false)}
+                    handleChange={handleChange}
+                    formData={formData}
+                />
+            }
+            {
+                currentMethod == 'tidio' && <ModalTawkTo
+                    isModalOpen={isModalOpen}
+                    handleCancel={() => setIsModalOpen(false)}
+                    handleChange={handleChange}
+                    formData={formData}
+                />
+            }
             <Content className="mt-4 mx-4 mb-0">
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
 
-                    <div>
+                    <div className='flex flex-col gap-8'>
                         <FormGroup
-                            title="Email SMTP"
-                            description="Email SMTP is used to send email notifications"
+                            title="SMTP Settings"
+                            description="SMTP Settings is used to send email notifications"
                             childClassName='grid md:grid-cols-2 gap-3'
                         >
-                            <Input
-                                id='host'
-                                label='Host/Email Server'
-                                type='text'
-                                placeholder='Host/Email Server'
-                                onChange={handleChange}
-                                value={formData.host}
-                            />
-                            <Input
-                                id='email'
-                                label='Email Address'
-                                type='email'
-                                placeholder='Email Address'
-                                onChange={handleChange}
-                                value={formData.email}
-                            />
-                            <Input
-                                id='email_port'
-                                label='Email Port'
-                                type='text'
-                                placeholder='Email Port'
-                                onChange={handleChange}
-                                value={formData.email_port}
-                            />
-                            <SelectInput
-                                id='security_type'
-                                label='Security Type'
-                                value={formData.security_type}
-                                onChange={(selected) => setFormData({
-                                    ...formData,
-                                    security_type: selected
-                                })}
-                                options={optionsSecurityType}
-                            />
-                            <div className='grid md:grid-cols-2 gap-3'>
-                                <Input
-                                    id='username'
-                                    label='Username'
-                                    type='text'
-                                    placeholder='Username'
-                                    onChange={handleChange}
-                                    value={formData.username}
-                                />
-                                <Input
-                                    id='password'
-                                    label='Password'
-                                    type='password'
-                                    placeholder='Password'
-                                    onChange={handleChange}
-                                    value={formData.password}
-                                />
+                            <div className='col-span-full border p-8 rounded-xl' style={{ borderColor: '#E5E7EB' }}  >
+                                <div className='col-span-full flex gap-3 justify-between items-center'>
+                                    <h4 className='text-lg font-semibold'>Manual Setup</h4>
+                                    <div className='flex gap-3'>
+                                        {/* <CustomSwitch
+                                            labelOn="Body"
+                                            labelOff="Header"
+                                            iconOn={BodyIconSwitch}
+                                            iconOff={HeaderIconSwitch}
+                                            onToggle={(state) => console.log('Mode:', state ? 'header' : 'body')}
+                                        /> */}
+                                        <Button
+                                            label='Edit'
+                                            onClick={() => handleOpenModal('email_smtp')}
+                                            icon={<Image
+                                                src={PencilIcon}
+                                                alt='edit-icon'
+                                                width={15}
+                                                height={15}
+                                            />}
+                                            shape='round'
+                                            btnClassname='!text-white'
+                                        />
+                                        <SwitchInput
+                                            label='Enable'
+                                            checked={emailSmtp}
+                                            onChange={(value) =>
+                                                setEmailSmtp(value)
+                                            }
+                                        />
+                                    </div>
+                                </div>
                             </div>
 
-                            <Input
-                                id='mail'
-                                label='Mail Encryption'
-                                type='text'
-                                placeholder='Mail Encryption'
-                                onChange={handleChange}
-                                value={formData.mail}
-                            />
+                            <div className='col-span-full border p-8 rounded-xl' style={{ borderColor: '#E5E7EB' }}  >
+                                <div className='col-span-full flex gap-3 justify-between items-center'>
+                                    <h4 className='text-lg font-semibold'>Amazon Email Service</h4>
+                                    <div className='flex gap-3'>
+                                        <Button
+                                            label='Edit'
+                                            onClick={() => handleOpenModal('aws_smtp')}
+                                            icon={<Image
+                                                src={PencilIcon}
+                                                alt='edit-icon'
+                                                width={15}
+                                                height={15}
+                                            />}
+                                            shape='round'
+                                            btnClassname='!text-white'
+                                        />
+                                        <SwitchInput
+                                            label='Enable'
+                                            checked={awsSmtp}
+                                            onChange={(value) =>
+                                                setAwsSmtp(value)
+                                            }
+                                        />
+                                    </div>
+                                </div>
+                            </div>
                         </FormGroup>
                         <FormGroup title="SMS" description='SMS is used to send SMS notifications' className='mt-4'>
-                            <div className='col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}  >
-                                <div className='col-span-full flex gap-3 justify-between'>
-                                    <h4 className='text-base font-medium'>Twillio</h4>
-                                    <SwitchInput
-                                        label='Enable'
-                                        checked={twillio}
-                                        onChange={(value) =>
-                                            setTwillio(value)
-                                        }
-                                    />
+                            <div className='col-span-full border p-8 rounded-xl' style={{ borderColor: '#E5E7EB' }}  >
+                                <div className='col-span-full flex gap-3 justify-between items-center'>
+                                    <h4 className='text-lg font-semibold'>Twillio</h4>
+                                    <div className='flex gap-3'>
+                                        <Button
+                                            label='Edit'
+                                            onClick={() => handleOpenModal('twillio')}
+                                            icon={<Image
+                                                src={PencilIcon}
+                                                alt='edit-icon'
+                                                width={15}
+                                                height={15}
+                                            />}
+                                            shape='round'
+                                            btnClassname='!text-white'
+                                        />
+
+                                        <SwitchInput
+                                            label='Enable'
+                                            checked={twillio}
+                                            onChange={(value) =>
+                                                setTwillio(value)
+                                            }
+                                        />
+                                    </div>
                                 </div>
-
-                                {
-                                    twillio == true && (
-                                        <div className='grid md:grid-cols-3 gap-2'>
-                                            <Input
-                                                id='twillio_id_key'
-                                                label='Twillio ID KEY'
-                                                type='text'
-                                                placeholder='Twillio ID KEY'
-                                                onChange={handleChange}
-                                                value={formData.twillio_id_key}
-                                            />
-                                            <Input
-                                                id='auth_token'
-                                                label='Auth Token'
-                                                type='text'
-                                                placeholder='Facebook Link'
-                                                onChange={handleChange}
-                                                value={formData.auth_token}
-                                            />
-                                            <Input
-                                                id='twillio_phone_number'
-                                                label='Twillio Phone Number'
-                                                type='text'
-                                                placeholder='Twillio Phone Number'
-                                                onChange={handleChange}
-                                                value={formData.twillio_phone_number}
-                                            />
-                                        </div>
-                                    )
-                                }
-
-
                             </div>
 
                         </FormGroup>
@@ -248,84 +294,65 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
                         <FormGroup title="Chat Features" description='Chat feature' className='mt-4' childClassName='flex flex-col gap-3'>
                             <>
-                                <div className='col-span-full  border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}  >
+                                <div className='col-span-full  border p-8 rounded-xl' style={{ borderColor: '#E5E7EB' }}  >
                                     <div className='col-span-full flex justify-between items-center'>
-                                        <h4 className='text-base font-medium'>Tawk To</h4>
-                                        <SwitchInput
-                                            label='Enable'
-                                            checked={tawkTo}
-                                            onChange={(value) =>
-                                                setTawkTo(value)
-                                            }
-                                        />
+                                        <h4 className='text-lg font-semibold'>Tawk To</h4>
+                                        <div className='flex gap-3'>
+                                            <Button
+                                                label='Edit'
+                                                onClick={() => handleOpenModal('tawkto')}
+                                                icon={<Image
+                                                    src={PencilIcon}
+                                                    alt='edit-icon'
+                                                    width={15}
+                                                    height={15}
+                                                />}
+                                                shape='round'
+                                                btnClassname='!text-white'
+                                            />
+
+                                            <SwitchInput
+                                                label='Enable'
+                                                checked={tawkTo}
+                                                onChange={(value) =>
+                                                    setTawkTo(value)
+                                                }
+                                            />
+                                        </div>
                                     </div>
-                                    {
-                                        tawkTo == true && (
-                                            <div className='grid gap-2'>
-                                                <Input
-                                                    id='header_tawk_to'
-                                                    label='Header'
-                                                    type='text'
-                                                    placeholder='Header'
-                                                    onChange={handleChange}
-                                                    value={formData.header_tawk_to}
-                                                />
-                                                <div className='col-span-full w-full'>
-                                                    <TextArea
-                                                        id='body_tawk_to'
-                                                        label='Body'
-                                                        placeholder='Body'
-                                                        onChange={handleChange}
-                                                        value={formData.body_tawk_to}
-                                                    />
-                                                </div>
-
-                                            </div>
-
-                                        )
-                                    }
-
                                 </div>
 
-                                <div className='col-span-full  border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}  >
+                                <div className='col-span-full  border p-8 rounded-xl' style={{ borderColor: '#E5E7EB' }}  >
                                     <div className='col-span-full flex gap-3 justify-between items-center'>
-                                        <h4 className='text-base font-medium'>Tidio</h4>
-                                        <SwitchInput
-                                            label='Enable'
-                                            checked={tidio}
-                                            onChange={(value) =>
-                                                setTidio(value)
-                                            }
-                                        />
-                                    </div>
-                                    {
-                                        tidio == true && (
-                                            <div className='grid gap-2'>
-                                                <Input
-                                                    id='header_tidio'
-                                                    label='Header'
-                                                    type='text'
-                                                    placeholder='Header'
-                                                    onChange={handleChange}
-                                                    value={formData.header_tidio}
-                                                />
-                                                <div className='col-span-full w-full'>
-                                                    <TextArea
-                                                        id='body_tidio'
-                                                        label='Body'
-                                                        placeholder='Body'
-                                                        onChange={handleChange}
-                                                        value={formData.body_tidio}
-                                                    />
-                                                </div>
+                                        <h4 className='text-lg font-semibold'>Tidio</h4>
+                                        <div className='flex gap-3'>
+                                            <Button
+                                                label='Edit'
+                                                onClick={() => handleOpenModal('tidio')}
+                                                icon={<Image
+                                                    src={PencilIcon}
+                                                    alt='edit-icon'
+                                                    width={15}
+                                                    height={15}
+                                                />}
+                                                shape='round'
+                                                btnClassname='!text-white'
+                                            />
 
-                                            </div>
-                                        )
-                                    }
+                                            <SwitchInput
+                                                label='Enable'
+                                                checked={tidio}
+                                                onChange={(value) =>
+                                                    setTidio(value)
+                                                }
+                                            />
+                                        </div>
+
+                                    </div>
                                 </div>
 
-                                <div className=' col-span-full flex justify-between items-center border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}>
-                                    <h4 className='text-base font-medium'>Facebook</h4>
+                                <div className=' col-span-full flex justify-between items-center border p-8 rounded-xl' style={{ borderColor: '#E5E7EB' }}>
+                                    <h4 className='text-lg font-semibold'>Facebook</h4>
                                     <SwitchInput
                                         label='Enable'
                                         checked={facebook}
@@ -344,7 +371,6 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                     {/* Submit */}
                     <div className="mt-6 flex justify-end">
                         <Button
-                            btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]"
                             label='Create Communications'
                             onClick={handleSubmit}
                         />

@@ -263,7 +263,7 @@ const FormReturnSupplier: React.FC<FormProps> = ({ mode, initialValues, slug, da
                     </div>
                     <div className="mt-6 flex justify-end">
                         <Button
-                            btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]"
+
                             label={mode === 'create' ? 'Create Return Suppliers' : 'Edit Return Suppliers'}
                             onClick={handleSubmit}
                         />

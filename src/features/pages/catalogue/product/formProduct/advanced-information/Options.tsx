@@ -98,7 +98,7 @@ const OptionsInformation = ({ className }: { className?: string }) => {
 
                                 <Button
                                     label=' Add Global Options'
-                                    btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]"
+
                                     icon={<PlusOutlined />}
                                     onClick={() => addGlobalOption(index)}
                                 />
@@ -149,7 +149,7 @@ const OptionsInformation = ({ className }: { className?: string }) => {
                     <div className="flex justify-end mt-4">
                         <Button
                             label=' Add  Options'
-                            btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]"
+
                             icon={<PlusOutlined />}
                             onClick={addItem}
                         />

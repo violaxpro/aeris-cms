@@ -243,7 +243,7 @@ const BasicInformationProduct = ({ dataById, onChange, formDataCreate }: ChildFo
             <div className='flex justify-end'>
                 <Button
                     label='Save'
-                    btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]"
+
                 />
             </div>
             <hr style={{ borderColor: '#E5E7EB', marginTop: '1rem', marginBottom: '1rem' }} />
