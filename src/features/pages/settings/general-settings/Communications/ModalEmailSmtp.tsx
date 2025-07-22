@@ -47,14 +47,32 @@ const ModalEmailSmtp = ({
             handleCancel={handleCancel}
             handleSubmit={handleSubmit}
         >
-            <div className='grid md:grid-cols-2 gap-2 my-4'>
+            <div className='grid md:grid-cols-2 gap-4 my-4'>
+                <div className='col-span-full'>
+                    <Input
+                        id='host'
+                        label='Host/Email Server'
+                        type='text'
+                        placeholder='Host/Email Server'
+                        onChange={handleChange}
+                        value={formData.host}
+                    />
+                </div>
                 <Input
-                    id='host'
-                    label='Host/Email Server'
+                    id='username'
+                    label='Username'
                     type='text'
-                    placeholder='Host/Email Server'
+                    placeholder='Username'
                     onChange={handleChange}
-                    value={formData.host}
+                    value={formData.username}
+                />
+                <Input
+                    id='password'
+                    label='Password'
+                    type='password'
+                    placeholder='Password'
+                    onChange={handleChange}
+                    value={formData.password}
                 />
                 <Input
                     id='email'
@@ -64,53 +82,30 @@ const ModalEmailSmtp = ({
                     onChange={handleChange}
                     value={formData.email}
                 />
-                <Input
-                    id='email_port'
-                    label='Email Port'
-                    type='text'
-                    placeholder='Email Port'
-                    onChange={handleChange}
-                    value={formData.email_port}
-                />
-                <SelectInput
-                    id='security_type'
-                    label='Security Type'
-                    value={formData.security_type}
 
-                    onChange={(selected) => handleChange({
-                        target: {
-                            id: 'security_type',
-                            value: selected
-                        }
-                    })}
-                    options={optionsSecurityType}
-                />
                 <div className='grid md:grid-cols-2 gap-3'>
                     <Input
-                        id='username'
-                        label='Username'
+                        id='email_port'
+                        label='Email Port'
                         type='text'
-                        placeholder='Username'
+                        placeholder='Email Port'
                         onChange={handleChange}
-                        value={formData.username}
+                        value={formData.email_port}
                     />
-                    <Input
-                        id='password'
-                        label='Password'
-                        type='password'
-                        placeholder='Password'
-                        onChange={handleChange}
-                        value={formData.password}
+                    <SelectInput
+                        id='security_type'
+                        label='Security Type'
+                        value={formData.security_type}
+
+                        onChange={(selected) => handleChange({
+                            target: {
+                                id: 'security_type',
+                                value: selected
+                            }
+                        })}
+                        options={optionsSecurityType}
                     />
                 </div>
-                <Input
-                    id='mail'
-                    label='Mail Encryption'
-                    type='text'
-                    placeholder='Mail Encryption'
-                    onChange={handleChange}
-                    value={formData.mail}
-                />
             </div>
         </Modal >
     )

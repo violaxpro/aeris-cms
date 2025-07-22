@@ -17,6 +17,7 @@ type ModalProps = {
     subtitle?: string
     isBtnReset?: boolean
     handleDelete?: () => void
+    rightButton?: any
 }
 
 const index = ({
@@ -33,16 +34,24 @@ const index = ({
     isBtnPopover,
     subtitle,
     isBtnReset = false,
-    handleDelete
+    handleDelete,
+    rightButton
 }: ModalProps) => {
 
     return (
         <>
             <Modal
                 title={
-                    <div>
-                        <div className='text-lg font-semibold text-[#103654]'>{title}</div>
-                        <div className='text-sm text-gray-300 font-normal'>{subtitle}</div>
+                    <div className='flex justify-between items-center my-5  mx-5'>
+                        <div className='flex flex-col'>
+                            <span className='text-2xl font-semibold text-[#103654]'>{title}</span>
+                            <span className='text-sm text-gray-300 font-normal'>{subtitle}</span>
+                        </div>
+                        {
+                            rightButton && <div className='mr-4'>
+                                {rightButton}
+                            </div>
+                        }
                     </div>
                 }
                 closable={true}
@@ -94,7 +103,9 @@ const index = ({
                 }}
 
             >
-                {children}
+                <div className='my-5  mx-5'>
+                    {children}
+                </div>
             </Modal>
         </>
     );

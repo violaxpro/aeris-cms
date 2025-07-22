@@ -4,7 +4,7 @@ import { Input } from 'antd';
 const { TextArea } = Input;
 type inputProps = {
     id?: string
-    label: string
+    label?: string
     placeholder?: string
     value: string
     onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void

@@ -29,10 +29,8 @@ const ModalTwillio = ({
         <Modal
             open={isModalOpen}
             title='Twillio'
-            subtitle='Edit or delete your Twillio data'
+            subtitle='Edit twillio data'
             isBtnSave={true}
-            labelButton={reset == true ? 'Edit' : 'Save'}
-            isBtnReset={reset}
             handleCancel={handleCancel}
             handleSubmit={handleSubmit}
             handleDelete={handleReset}

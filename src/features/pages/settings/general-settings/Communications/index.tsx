@@ -15,6 +15,7 @@ import ModalAmazonSmtp from './ModalAmazonSmtp';
 import ModalTwillio from './ModalTwillio';
 import ModalTidio from './ModalTidio';
 import ModalTawkTo from './ModalTawkTo';
+import ModalFacebook from './ModalFacebook';
 import { uploadImages } from '@/services/upload-images';
 import Image from 'next/image';
 import { useNotificationAntd } from '@/components/toast';
@@ -56,6 +57,8 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         body_tawk_to: initialValues ? initialValues.body_tawk_to : '',
         header_tidio: initialValues ? initialValues.header_tidio : '',
         body_tidio: initialValues ? initialValues.body_tidio : '',
+        header_facebook: initialValues ? initialValues.header_facebook : '',
+        body_facebook: initialValues ? initialValues.body_facebook : '',
     });
 
     const optionsSecurityType = [
@@ -175,7 +178,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                 />
             }
             {
-                currentMethod == 'tawkto' && <ModalTidio
+                currentMethod == 'tawkto' && <ModalTawkTo
                     isModalOpen={isModalOpen}
                     handleCancel={() => setIsModalOpen(false)}
                     handleChange={handleChange}
@@ -183,7 +186,15 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                 />
             }
             {
-                currentMethod == 'tidio' && <ModalTawkTo
+                currentMethod == 'tidio' && <ModalTidio
+                    isModalOpen={isModalOpen}
+                    handleCancel={() => setIsModalOpen(false)}
+                    handleChange={handleChange}
+                    formData={formData}
+                />
+            }
+            {
+                currentMethod == 'facebook' && <ModalFacebook
                     isModalOpen={isModalOpen}
                     handleCancel={() => setIsModalOpen(false)}
                     handleChange={handleChange}
@@ -203,13 +214,6 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 <div className='col-span-full flex gap-3 justify-between items-center'>
                                     <h4 className='text-lg font-semibold'>Manual Setup</h4>
                                     <div className='flex gap-3'>
-                                        {/* <CustomSwitch
-                                            labelOn="Body"
-                                            labelOff="Header"
-                                            iconOn={BodyIconSwitch}
-                                            iconOff={HeaderIconSwitch}
-                                            onToggle={(state) => console.log('Mode:', state ? 'header' : 'body')}
-                                        /> */}
                                         <Button
                                             label='Edit'
                                             onClick={() => handleOpenModal('email_smtp')}
@@ -353,13 +357,29 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
                                 <div className=' col-span-full flex justify-between items-center border p-8 rounded-xl' style={{ borderColor: '#E5E7EB' }}>
                                     <h4 className='text-lg font-semibold'>Facebook</h4>
-                                    <SwitchInput
-                                        label='Enable'
-                                        checked={facebook}
-                                        onChange={(value) =>
-                                            setFacebook(value)
-                                        }
-                                    />
+                                    <div className='flex gap-3'>
+                                        <Button
+                                            label='Edit'
+                                            onClick={() => handleOpenModal('facebook')}
+                                            icon={<Image
+                                                src={PencilIcon}
+                                                alt='edit-icon'
+                                                width={15}
+                                                height={15}
+                                            />}
+                                            shape='round'
+                                            btnClassname='!text-white'
+                                        />
+
+                                        <SwitchInput
+                                            label='Enable'
+                                            checked={facebook}
+                                            onChange={(value) =>
+                                                setFacebook(value)
+                                            }
+                                        />
+                                    </div>
+
                                 </div>
                             </>
 

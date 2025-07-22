@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import Modal from '@/components/modal'
-import Input from "@/components/input"
 import TextArea from '@/components/textarea'
+import CustomSwitch from '@/components/switch/CustomSwitch';
+import { BodyIconSwitch, HeaderIconSwitch } from '@public/icon';
 
 type ModalTawkToProps = {
     isModalOpen: boolean
@@ -21,38 +22,32 @@ const ModalTawkTo = ({
     formData,
     handleSubmit
 }: ModalTawkToProps) => {
-    const [reset, setReset] = useState(true)
-    const handleReset = () => {
-        setReset(false)
-    }
+    const [field, setField] = useState(false)
     return (
         <Modal
             open={isModalOpen}
             title='Tawk To'
-            subtitle='Edit or delete your Tawk To data'
+            subtitle='Edit Tawk To data '
+            rightButton={<CustomSwitch
+                labelOn="Body"
+                labelOff="Header"
+                iconOn={BodyIconSwitch}
+                iconOff={HeaderIconSwitch}
+                onToggle={(state) => setField(state)}
+                size='md'
+            />}
             isBtnSave={true}
-            labelButton={reset == true ? 'Edit' : 'Save'}
-            isBtnReset={reset}
             handleCancel={handleCancel}
             handleSubmit={handleSubmit}
-            handleDelete={handleReset}
         >
             <div className='grid gap-2 my-4'>
-                <Input
-                    id='header_tawk_to'
-                    label='Header'
-                    type='text'
-                    placeholder='Header'
-                    onChange={handleChange}
-                    value={formData.header_tawk_to}
-                />
                 <div className='col-span-full w-full'>
                     <TextArea
-                        id='body_tawk_to'
-                        label='Body'
-                        placeholder='Body'
+                        id={`${field ? 'body_tawk_to' : 'header_tawk_to'} `}
+                        placeholder='Copy here'
                         onChange={handleChange}
-                        value={formData.body_tawk_to}
+                        value={field ? formData.body_tawk_to : formData.header_tawk_to}
+                        textareaClassname='!h-30'
                     />
                 </div>
             </div>
