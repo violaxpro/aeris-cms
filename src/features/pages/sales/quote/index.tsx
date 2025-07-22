@@ -4,6 +4,8 @@ import Table from "@/components/table"
 import type { TableColumnsType } from 'antd'
 import { Dropdown, Menu } from 'antd'
 import { EditOutlined, PlusCircleOutlined, FilterOutlined, MoreOutlined } from '@ant-design/icons'
+import { FilterIcon, AddIcon } from '@public/icon'
+import Image from 'next/image'
 import Popover from '@/components/popover'
 import { routes } from '@/config/routes'
 import Link from 'next/link'
@@ -13,8 +15,10 @@ import { Content } from 'antd/es/layout/layout'
 import Button from "@/components/button"
 import SelectInput from '@/components/select'
 import SearchInput from '@/components/search';
+import SearchTable from '@/components/search/SearchTable'
 import Modal from '@/components/modal'
 import { deleteSupplierList } from '@/services/supplier-list-service'
+import ShowPageSize from '@/components/pagination/ShowPageSize'
 import { useNotificationAntd } from '@/components/toast'
 import { useAtom } from 'jotai'
 import { quoteAtom } from '@/store/SalesAtom'
@@ -22,6 +26,7 @@ import { QuoteType } from '@/plugins/types/sales-type'
 import dayjs from 'dayjs';
 import DatePickerInput from '@/components/date-picker';
 import StatusTag from '@/components/tag'
+import ButtonFilter from '@/components/button/ButtonFilter'
 
 const index = ({ quoteData }: { quoteData?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
@@ -38,6 +43,7 @@ const index = ({ quoteData }: { quoteData?: any }) => {
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
     const [date, setDate] = useState<any | null>(null);
     const [currentOrder, setCurrentOrder] = useState<any>(null)
+    const [pageSize, setPageSize] = useState(10);
 
     const handleDateChange = (date: any, dateString: string | string[]) => {
         console.log('Selected date:', dateString);
@@ -154,38 +160,35 @@ const index = ({ quoteData }: { quoteData?: any }) => {
     ]
     const columns: TableColumnsType<QuoteType> = [
         {
-            title: 'Order ID',
+            title: 'Quote Number',
             dataIndex: 'id',
             sorter: (a: any, b: any) => a.id - b.id,
             render: (_: any, row: any) => {
                 return <div className="flex flex-col w-full">
                     <div className="flex justify-start gap-1">
-                        <span>Order Id</span>
-                        <span>:</span>
-                        <span>{row.id}</span>
-                    </div>
-                    <div className="flex justify-start gap-1">
-                        <span>PO Number</span>
-                        <span>:</span>
                         <span>{row.status !== 'Draft' ? row.po_number : '-'}</span>
                     </div>
                 </div>
             }
         },
         {
-            title: 'Email',
+            title: 'Customer Name',
+            dataIndex: 'user',
+            sorter: (a: any, b: any) => a.user.localeCompare(b.user),
+            render: (val: any) => {
+                return val
+            }
+        },
+        {
+            title: 'Contact',
             dataIndex: 'email',
             sorter: (a: any, b: any) => a.email.localeCompare(b.email),
             render: (_: any, row: any) => {
                 return <div className="flex flex-col w-full">
                     <div className="flex justify-start gap-1">
-                        <span>Email</span>
-                        <span>:</span>
                         <span>{row.email}</span>
                     </div>
                     <div className="flex justify-start gap-1">
-                        <span>Phone</span>
-                        <span>:</span>
                         <span>{row.mobile_number}</span>
                     </div>
                 </div>
@@ -384,34 +387,55 @@ const index = ({ quoteData }: { quoteData?: any }) => {
         <>
             {contextHolder}
             <div className="mt-6 mx-4 mb-0">
-                <h1 className='text-xl font-bold'>
-                    Quote
-                </h1>
-                <Breadcrumb
-                    items={breadcrumb}
-                />
+                <div className='flex justify-between items-center'>
+                    <div>
+                        <h1 className='text-xl font-bold'>
+                            Quote
+                        </h1>
+                        <Breadcrumb
+                            items={breadcrumb}
+                        />
+                    </div>
+                    <Button
+                        icon={<Image
+                            src={AddIcon}
+                            alt='add-icon'
+                            width={15}
+                            height={15}
+                        />}
+                        label='Add Quote'
+                        link={routes.eCommerce.createQuote}
+                    />
+                </div>
             </div>
             <Content className="mt-6 mx-4 mb-0">
-                <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
-                    <div className='flex justify-between mb-4'>
-                        <Button
+                <div style={{ padding: 24, minHeight: 360 }}>
+                    <div className='flex justify-start mb-4 gap-2'>
+                        {/* <Button
                             label='Add Payment'
-                            btnClassname='!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]'
                             onClick={handleClickModalPaid}
+                        /> */}
+                        <ShowPageSize
+                            pageSize={pageSize}
+                            onChange={setPageSize}
                         />
                         <div className='flex items-center gap-2'>
-                            <SearchInput onSearch={handleSearch} />
-                            <Button
-                                label='Filter'
-                                icon={<FilterOutlined />}
+                            <ButtonFilter
+                                label='Filter by'
+                                icon={<Image
+                                    src={FilterIcon}
+                                    alt='add-icon'
+                                    width={15}
+                                    height={15}
+                                />}
                                 onClick={() => setisOpenModalFilter(true)}
-
+                                position='end'
+                                style={{ padding: '1.2rem 1.7rem' }}
                             />
-                            <Button
-
-                                icon={<PlusCircleOutlined />}
-                                label='Add Quote'
-                                link={routes.eCommerce.createQuote}
+                            <SearchTable
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                                onSearch={() => console.log('Searching for:', search)}
                             />
                         </div>
                     </div>

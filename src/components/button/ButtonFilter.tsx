@@ -14,13 +14,13 @@ type buttonProps = {
     style?: any
     position?: 'start' | 'end'
 }
-const index = ({ btnClassname, icon, label, link, type, onClick, shape, style, position = 'start' }: buttonProps) => {
+const ButtonFilter = ({ btnClassname, icon, label, link, type, onClick, shape, style, position = 'start' }: buttonProps) => {
     // hover:!bg-inherit hover:!text-inherit hover:!border-inherit
     const button = (
         <Button
-            className={`!text-white w-auto !bg-[var(--default-color)] hover:!border-inherit ${btnClassname}`}
-            {...(type ? { type } : {})}
-            {...(onClick ? { onClick } : {})}
+            className={`${btnClassname}`}
+            type={type}
+            onClick={onClick}
             shape={shape}
             style={style}
             iconPosition={position}
@@ -33,11 +33,7 @@ const index = ({ btnClassname, icon, label, link, type, onClick, shape, style, p
 
         </Button>
     )
-    return link ? (
-        <Link href={link}>
-            {button}
-        </Link>
-    ) : (button)
+    return button
 }
 
-export default index
+export default ButtonFilter

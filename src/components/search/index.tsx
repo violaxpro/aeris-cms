@@ -8,6 +8,7 @@ type SearchInputProps = {
     placeholder?: string;
     onSearch: (value: string) => void;
     width?: number | string;
+    height?: number | string;
 };
 
 const SearchInput: React.FC<SearchInputProps> = ({

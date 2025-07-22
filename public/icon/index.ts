@@ -7,6 +7,9 @@ export { default as PencilIcon } from './PencilIcon.svg'
 export { default as PencilIconBlue } from './PencilIconBlue.svg'
 export { default as HeaderIconSwitch } from './HeaderIconSwitch.svg'
 export { default as BodyIconSwitch } from './BodyIconSwitch.svg'
+export { default as AddIcon } from './AddIcon.svg'
+export { default as FilterIcon } from './FilterIcon.svg'
+
 
 
 

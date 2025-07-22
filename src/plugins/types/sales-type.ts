@@ -562,7 +562,7 @@ export const orderDummyData = [
 export const quoteDummyData = [
     {
         id: 1,
-        po_number: '2568231',
+        po_number: 'Q8903',
         email: 'user@gmail.com',
         mobile_number: '628229019021203',
         payment_method: 'Bank Transfer',
@@ -577,7 +577,7 @@ export const quoteDummyData = [
             date: '2025-02-27T01:52:08.234Z',
             name: 'User'
         },
-        user: 'User',
+        user: 'Ayu Lestari',
         billing_address: 'Indonesia',
         shipping_address: 'Indonesia',
         order_reference: 'Order 1',
@@ -600,7 +600,7 @@ export const quoteDummyData = [
     },
     {
         id: 2,
-        po_number: '2568233',
+        po_number: 'Q8903',
         email: 'user@gmail.com',
         mobile_number: '628229019021203',
         payment_method: 'Bank Transfer',
@@ -616,7 +616,7 @@ export const quoteDummyData = [
             date: '2025-02-25T01:52:08.234Z',
             name: 'User'
         },
-        user: 'User',
+        user: 'Marcella Indarwati',
         billing_address: 'Indonesia',
         shipping_address: 'Indonesia',
         order_reference: 'Order 1',
@@ -639,7 +639,7 @@ export const quoteDummyData = [
     },
     {
         id: 4,
-        po_number: '2568233',
+        po_number: 'Q8904',
         email: 'user@gmail.com',
         mobile_number: '628229019021203',
         payment_method: 'Bank Transfer',
@@ -655,7 +655,7 @@ export const quoteDummyData = [
             date: '2025-02-26T01:52:08.234Z',
             name: 'User'
         },
-        user: 'User',
+        user: 'Ayu Lestari',
         billing_address: 'Indonesia',
         shipping_address: 'Indonesia',
         order_reference: 'Order 1',
