@@ -7,18 +7,27 @@ import { FormProps } from '@/plugins/types/form-type';
 import FormGroup from '@/components/form-group';
 import Input from "@/components/input"
 import CheckboxInput from '@/components/checkbox';
+import SwitchInput from '@/components/switch';
 import { uploadImages } from '@/services/upload-images';
+import Modal from '@/components/modal'
 import { useNotificationAntd } from '@/components/toast';
 import FileUploader from '@/components/input-file';
 import DatePickerInput from '@/components/date-picker';
+import CustomSwitch from '@/components/switch/CustomSwitch';
+import { BodyIconSwitch, HeaderIconSwitch } from '@public/icon';
 import dayjs from 'dayjs'
+import Image from 'next/image';
+import { PencilIcon } from '@public/icon';
 
 const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd();
+    const [marketing, setMarketing] = useState(false)
+    const [isOpenModal, setIsOpenModal] = useState(false)
     const [formData, setFormData] = useState({
         newsletter: initialValues ? initialValues.newsletter : false,
         mailchimp_api_key: initialValues ? initialValues.mailchimp_api_key : '',
         mailchimp_list_id: initialValues ? initialValues.mailchimp_list_id : '',
+        mode: initialValues ? initialValues.mailchimp_list_id : false,
     });
 
     const handleChange = (e: any) => {
@@ -68,42 +77,80 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     return (
         <>
             {contextHolder}
+            <Modal
+                open={isOpenModal}
+                title='Marketing Setting'
+                subtitle='Edit Marketing Settings'
+                isBtnSave={true}
+                handleCancel={() => setIsOpenModal(false)}
+                handleSubmit={handleSubmit}
+            >
+                <div className='grid gap-2 my-4'>
+                    <div className='col-span-full w-full grid gap-4'>
+                        <Input
+                            id='mailchimp_api_key'
+                            label='Mailchim API KEY'
+                            type='text'
+                            placeholder='Mailchim API KEY'
+                            onChange={handleChange}
+                            value={formData.mailchimp_api_key}
+                        />
+                        <Input
+                            id='mailchimp_list_id'
+                            label='Mailchimp List ID'
+                            type='text'
+                            placeholder='Mailchimp List ID'
+                            onChange={handleChange}
+                            value={formData.mailchimp_list_id}
+                        />
+                        <CheckboxInput
+                            label='NewsLetter'
+                            text='Enable NewsLetter'
+                            checked={formData.newsletter}
+                            onChange={(checked) => (
+                                setFormData((prev) => ({
+                                    ...prev,
+                                    newsletter: checked
+                                }))
+                            )}
+                        />
+                    </div>
+                </div>
+            </Modal >
             <Content className="mt-4 mx-4 mb-0">
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
 
                     <div>
                         <FormGroup
-                            title="Mailchimp"
-                            description="Mailchimp setting for sending broadcast email to subscriber"
-                            childClassName='grid grid-cols-2 gap-3'
+                            title="Marketing Platform"
+                            description="Broadcast email and sms to a third party"
                         >
-                            <Input
-                                id='mailchimp_api_key'
-                                label='Mailchim API KEY'
-                                type='text'
-                                placeholder='Mailchim API KEY'
-                                onChange={handleChange}
-                                value={formData.mailchimp_api_key}
-                            />
-                            <Input
-                                id='mailchimp_list_id'
-                                label='Mailchimp List ID'
-                                type='text'
-                                placeholder='Mailchimp List ID'
-                                onChange={handleChange}
-                                value={formData.mailchimp_list_id}
-                            />
-                            <CheckboxInput
-                                label='NewsLetter'
-                                text='Enable NewsLetter'
-                                checked={formData.newsletter}
-                                onChange={(checked) => (
-                                    setFormData((prev) => ({
-                                        ...prev,
-                                        newsletter: checked
-                                    }))
-                                )}
-                            />
+                            <div className='col-span-full border p-8 rounded-xl' style={{ borderColor: '#E5E7EB' }}  >
+                                <div className='col-span-full flex gap-3 justify-between'>
+                                    <h4 className='text-lg font-semibold'>Marketing</h4>
+                                    <div className='flex gap-3'>
+                                        <Button
+                                            label='Edit'
+                                            onClick={() => setIsOpenModal(true)}
+                                            icon={<Image
+                                                src={PencilIcon}
+                                                alt='edit-icon'
+                                                width={15}
+                                                height={15}
+                                            />}
+                                            shape='round'
+                                            btnClassname='!text-white'
+                                        />
+                                        <SwitchInput
+                                            label='Enable'
+                                            checked={marketing}
+                                            onChange={(value) =>
+                                                setMarketing(value)
+                                            }
+                                        />
+                                    </div>
+                                </div>
+                            </div>
                         </FormGroup>
                         <hr style={{ borderColor: '#E5E7EB', marginTop: '1rem', margin: '1rem 0' }} />
 

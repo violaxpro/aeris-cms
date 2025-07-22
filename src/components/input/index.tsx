@@ -38,7 +38,7 @@ const index = ({ label,
 
     return (
         <div className={divClassName}>
-            <label htmlFor={id} className={`block text-sm font-medium text-gray-700 ${className}`}>
+            <label htmlFor={id} className={`block text-sm font-semibold text-gray-700 ${className}`}>
                 {label}
             </label>
             <div>

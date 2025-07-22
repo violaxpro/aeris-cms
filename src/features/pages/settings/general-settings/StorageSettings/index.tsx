@@ -9,9 +9,11 @@ import FormGroup from '@/components/form-group';
 import SwitchInput from '@/components/switch';
 import Input from "@/components/input"
 import CheckboxInput from '@/components/checkbox';
+import CustomSwitch from '@/components/switch/CustomSwitch';
 import SelectInput from '@/components/select';
 import { uploadImages } from '@/services/upload-images';
 import { useNotificationAntd } from '@/components/toast';
+import { BodyIconSwitch, HeaderIconSwitch } from '@public/icon';
 import FileUploader from '@/components/input-file';
 import DatePickerInput from '@/components/date-picker';
 import dayjs from 'dayjs'
@@ -86,19 +88,21 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                     <div className='flex flex-col gap-8'>
                         <div className='flex justify-between mt-4 items-center'>
                             <div>
-                                <h4 className="text-base font-medium">Storage Settings</h4>
+                                <h4 className="text-2xl font-semibold">Storage Settings</h4>
                                 <p className="mt-2">Storage Settings</p>
                             </div>
-                            <SwitchInput
-                                label='Live/Test Mode'
-                                checked={formData.mode}
-                                onChange={(checked) =>
-                                    setFormData((prev) => ({
-                                        ...prev,
-                                        mode: checked
-                                    }))
-                                }
+                            <CustomSwitch
+                                labelOn="Live Mode"
+                                labelOff="Tes Mode"
+                                iconOn={BodyIconSwitch}
+                                iconOff={HeaderIconSwitch}
+                                onToggle={(state) => setFormData((prev: any) => ({
+                                    ...prev,
+                                    mode: state
+                                }))}
+                                size='md'
                             />
+
                         </div>
                         <Divider />
                         <div className={`col-span-12 md:col-span-8 grid grid-cols-2 gap-4`}>
