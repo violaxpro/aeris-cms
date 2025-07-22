@@ -27,6 +27,7 @@ import dayjs from 'dayjs';
 import DatePickerInput from '@/components/date-picker';
 import StatusTag from '@/components/tag'
 import ButtonFilter from '@/components/button/ButtonFilter'
+import Pagination from '@/components/pagination'
 
 const index = ({ quoteData }: { quoteData?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
@@ -43,6 +44,7 @@ const index = ({ quoteData }: { quoteData?: any }) => {
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
     const [date, setDate] = useState<any | null>(null);
     const [currentOrder, setCurrentOrder] = useState<any>(null)
+    const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
 
     const handleDateChange = (date: any, dateString: string | string[]) => {
@@ -445,6 +447,18 @@ const index = ({ quoteData }: { quoteData?: any }) => {
                         withSelectableRows
                         selectedRowKeys={selectedRowKeys}
                         onSelectChange={setSelectedRowKeys}
+                    // pagination={{
+                    //     pageSize,
+                    //     onShowSizeChange: (_, size) => setPageSize(size),
+                    //     showQuickJumper: true,
+                    //     total: data.length,
+                    // }}
+                    />
+                    <Pagination
+                        current={currentPage}
+                        total={finalData.length}
+                        pageSize={pageSize}
+                        onChange={(page) => setCurrentPage(page)}
                     />
                 </div>
             </Content>

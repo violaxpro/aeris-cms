@@ -368,6 +368,51 @@ div {
     border-color: var(--default-color) !important;
 }
 
+/* Untuk item aktif di pagination */
+.ant-pagination-item-active {
+    background-color: var(--default-color) !important;
+    border-color: var(--default-color) !important;
+    color: #fff !important;
+}
+
+/* Untuk item hover (opsional) */
+.ant-pagination-item:hover {
+    border-color: var(--default-color) !important;
+    color: var(--default-color) !important;
+}
+
+/* Untuk prev/next */
+.ant-pagination-prev .ant-pagination-item-link,
+.ant-pagination-next .ant-pagination-item-link {
+    color: var(--default-color) !important;
+    border-color: var(--default-color) !important;
+}
+
+.ant-pagination-prev:hover .ant-pagination-item-link,
+.ant-pagination-next:hover .ant-pagination-item-link {
+    color: #fff !important;
+    background-color: var(--default-color) !important;
+    border-color: var(--default-color) !important;
+}
+
+/* Angka di item aktif */
+.ant-pagination-item-active a {
+    color: #fff !important;
+    /* putih biar kontras dengan background */
+}
+
+/* Angka di item biasa saat hover */
+.ant-pagination-item a:hover {
+    color: var(--default-color) !important;
+}
+
+/* Angka di item biasa */
+.ant-pagination-item a {
+    color: inherit !important;
+    /* biar ngikut warna biasa atau bisa ganti jadi var(--default-color) */
+}
+
+
 /* Tambahkan ini agar scrollbar hilang */
 .scrollbar-none::-webkit-scrollbar {
     display: none;

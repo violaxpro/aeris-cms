@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Table } from 'antd';
-import type { TableColumnsType, TableProps } from 'antd';
+import type { TableColumnsType, TableProps, TablePaginationConfig } from 'antd';
 
 type TableRowSelection<T extends object = object> = TableProps<T>['rowSelection'];
 
@@ -10,9 +10,10 @@ type tableProps<data> = {
     withSelectableRows?: boolean;
     selectedRowKeys?: React.Key[]
     onSelectChange?: (keys: React.Key[]) => void
+    pagination?: TablePaginationConfig
 }
 
-const index = <data extends object>({ columns, dataSource, withSelectableRows = false, selectedRowKeys, onSelectChange }: tableProps<data>) => {
+const index = <data extends object>({ columns, dataSource, withSelectableRows = false, selectedRowKeys, onSelectChange, pagination }: tableProps<data>) => {
     const [selectRowKeys, setSelectRowKey] = useState<React.Key[]>([]);
 
     const keys = selectedRowKeys ?? selectRowKeys;
@@ -50,6 +51,12 @@ const index = <data extends object>({ columns, dataSource, withSelectableRows = 
         columns={columns}
         dataSource={dataSource}
         scroll={{ x: 'max-content' }}
+        // pagination={{
+        //     position: ['bottomCenter'],
+        //     ...pagination,
+        // }}
+        pagination={false}
+
     />;
 };
 
