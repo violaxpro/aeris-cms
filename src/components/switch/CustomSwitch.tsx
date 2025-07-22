@@ -27,7 +27,7 @@ const sizeClasses: any = {
     md: {
         container: 'h-10 w-24',
         circle: 'h-8 w-8',
-        icon: 22,
+        icon: 20,
         label: 'text-xs',
         translate: 'translate-x-[3.5rem]',
         ml: 'ml-4'

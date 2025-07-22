@@ -14,7 +14,7 @@ import MarketingSetting from './MarketingSettings'
 import StorageSettings from './StorageSettings'
 
 const index = ({ taxesData }: { taxesData?: any }) => {
-    const [activeTab, setActiveTab] = useState<string>('notifications');
+    const [activeTab, setActiveTab] = useState<string>('payment-settings');
 
     const tabs: Tab[] = [
         { key: 'general', label: 'General' },
