@@ -71,6 +71,13 @@ export const slugify = (text: string) => {
     .replace(/-+/g, '-');      // multi dash → 1 dash
 };
 
+export const mapTemplatesToOptions = (templates: any[]) => {
+  return templates.map((t) => ({
+    label: t.name,
+    value: t.html_template,
+  }));
+};
+
 
 
 
