@@ -9,6 +9,7 @@ import Link from 'next/link'
 import Image from 'next/image';
 import { routes } from '@/config/routes';
 import { EditOutlined } from '@ant-design/icons';
+import Textarea from '@/components/textarea'
 import { addressData } from '@/plugins/types/settings-type';
 import { TrashIconRed, PencilIconBlue } from '@public/icon';
 import ButtonAction from '@/components/button/ButtonAction';
@@ -134,15 +135,15 @@ const ModalAddress = ({
             >
                 <div className='grid md:grid-cols-2 gap-4 my-4'>
                     <div className='col-span-full'>
-                        <Input
+                        <Textarea
                             id='address'
                             label='Address'
-                            type='text'
                             placeholder='Input Address'
                             onChange={handleChange}
                             value={formData.address}
-                            divClassName='w-full'
+                            className='!h-20'
                         />
+
                     </div>
                     <div className='col-span-full grid md:grid-cols-4 gap-2'>
                         <Input
