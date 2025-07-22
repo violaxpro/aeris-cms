@@ -35,12 +35,12 @@ const ModalTwillio = ({
             handleSubmit={handleSubmit}
             handleDelete={handleReset}
         >
-            <div className='grid gap-2 my-4'>
+            <div className='grid gap-4 my-4'>
                 <Input
                     id='twillio_id_key'
                     label='Twillio ID KEY'
                     type='text'
-                    placeholder='Twillio ID KEY'
+                    placeholder='Enter here'
                     onChange={handleChange}
                     value={formData.twillio_id_key}
                 />
@@ -48,7 +48,7 @@ const ModalTwillio = ({
                     id='auth_token'
                     label='Auth Token'
                     type='text'
-                    placeholder='Auth Token'
+                    placeholder='Enter here'
                     onChange={handleChange}
                     value={formData.auth_token}
                 />
@@ -56,7 +56,7 @@ const ModalTwillio = ({
                     id='twillio_phone_number'
                     label='Twillio Phone Number'
                     type='text'
-                    placeholder='Twillio Phone Number'
+                    placeholder='+61xxxx'
                     onChange={handleChange}
                     value={formData.twillio_phone_number}
                 />

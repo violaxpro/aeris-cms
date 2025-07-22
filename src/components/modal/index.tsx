@@ -44,7 +44,7 @@ const index = ({
                 title={
                     <div className='flex justify-between items-center my-5  mx-5'>
                         <div className='flex flex-col'>
-                            <span className='text-2xl font-semibold text-[#103654]'>{title}</span>
+                            <span className='text-2xl font-semibold'>{title}</span>
                             <span className='text-sm text-gray-300 font-normal'>{subtitle}</span>
                         </div>
                         {
@@ -58,41 +58,7 @@ const index = ({
                 open={open}
                 centered
                 onCancel={handleCancel}
-                footer={(_, { CancelBtn }) => (
-                    <>
-                        <div className="flex justify-center gap-2">
-                            {
-                                isBtnReset == true && <Button
-                                    label='Reset'
-                                    onClick={handleDelete}
-                                    btnClassname='!bg-white'
-                                    style={{ color: 'black !important' }}
-                                />
-                            }
-                            {
-                                isBtnSave == true ?
-                                    <Button
-                                        label={labelButton ? labelButton : 'Save'}
-                                        onClick={handleSubmit}
-                                    /> :
-                                    <Button
-                                        label='Yes'
-                                        onClick={handleYes}
-                                    />
-                            }
-                            {
-                                isBtnPopover == true &&
-                                <Button
-                                    label='No'
-                                    onClick={handleNo}
-                                    btnClassname="!bg-red-500 !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-red-500 hover:!border-red-500"
-                                />
-
-                                // : <CancelBtn />
-                            }
-                        </div>
-                    </>
-                )}
+                footer={null}
                 width={{
                     xs: '90%',
                     sm: '80%',
@@ -103,8 +69,37 @@ const index = ({
                 }}
 
             >
-                <div className='my-5  mx-5'>
+                <div className='my-5 mx-5'>
                     {children}
+
+                    {/* Tambahkan button manual di sini */}
+                    <div className="flex justify-center gap-2 mt-6">
+                        {isBtnReset && (
+                            <Button
+                                label="Reset"
+                                onClick={handleDelete}
+                                btnClassname="!bg-white"
+                                style={{ color: 'black !important' }}
+                            />
+                        )}
+                        {isBtnSave && (
+                            <Button
+                                label={labelButton ? labelButton : 'Save'}
+                                onClick={handleSubmit}
+                            />
+                        )}
+                        {/* <Button
+                                label="Yes"
+                                onClick={handleYes}
+                            /> */}
+                        {isBtnPopover && (
+                            <Button
+                                label="No"
+                                onClick={handleNo}
+                                btnClassname="!bg-red-500 !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-red-500 hover:!border-red-500"
+                            />
+                        )}
+                    </div>
                 </div>
             </Modal>
         </>

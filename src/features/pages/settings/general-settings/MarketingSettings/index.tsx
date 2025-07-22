@@ -152,7 +152,6 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 </div>
                             </div>
                         </FormGroup>
-                        <hr style={{ borderColor: '#E5E7EB', marginTop: '1rem', margin: '1rem 0' }} />
 
                     </div>
 

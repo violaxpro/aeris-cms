@@ -12,18 +12,21 @@ import { uploadImages } from '@/services/upload-images';
 import { useNotificationAntd } from '@/components/toast';
 import FileUploader from '@/components/input-file';
 import { PlusOutlined, MinusCircleOutlined, DeleteOutlined } from '@ant-design/icons';
+import ModalAddress from './ModalAddress';
 import Image from 'next/image';
 import { Divider } from 'antd';
 
 const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd();
     const [isLoading, setIsLoading] = useState(false)
+    const [isModalOpen, setIsModalOpen] = useState(false)
     const [formData, setFormData] = useState({
         logo: initialValues ? initialValues.logo : [],
         logo_favicon: initialValues ? initialValues.logo_favicon : [],
         company_name: initialValues ? initialValues.company_name : '',
         address: initialValues ? initialValues.address : '',
         city: initialValues ? initialValues.city : '',
+        state: initialValues ? initialValues.state : '',
         postcode: initialValues ? initialValues.postcode : '',
         country: initialValues ? initialValues.country : '',
         phone_number: initialValues ? initialValues.phone_number : '',
@@ -152,15 +155,21 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     return (
         <>
             {contextHolder}
+            <ModalAddress
+                isModalOpen={isModalOpen}
+                handleCancel={() => setIsModalOpen(false)}
+                handleChange={handleChange}
+                formData={formData}
+            />
             <Content className="mt-4 mx-4 mb-0">
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
-                    <div className='flex flex-col gap-8'>
+                    <div className='flex flex-col gap-10'>
                         <FormGroup
-                            title="Company"
-                            description="Company information"
-                            childClassName='grid grid-cols-3 gap-3'
+                            title="Company Details"
+                            description="Company details information"
+                            childClassName='grid md:grid-cols-3 gap-4'
                         >
-                            <div className='grid gap-2'>
+                            <div className='grid gap-4 md:h-[220px]'>
                                 <FileUploader
                                     label='Logo'
                                     action="https://api-dev.alarmexpert.com.au/admin/product/cdn/upload"
@@ -194,7 +203,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     })}
                                 />
                             </div>
-                            <div className='grid md:grid-cols-2 gap-2 w-full mt-2 col-span-2'>
+                            <div className='grid md:grid-cols-2 gap-4 w-full mt-2 col-span-2'>
                                 <Input
                                     id='company_name'
                                     label='Company Name'
@@ -204,29 +213,40 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     value={formData.company_name}
                                 />
                                 <Input
-                                    id='city'
-                                    label='City'
+                                    id='business_number'
+                                    label='Business Name'
                                     type='text'
-                                    placeholder='City'
+                                    placeholder='Business Name'
+                                    value={formData.business_number}
                                     onChange={handleChange}
-                                    value={formData.city}
                                 />
-                                <Input
-                                    id='email'
-                                    label='Email'
-                                    type='email'
-                                    placeholder='Input Email'
-                                    onChange={handleChange}
-                                    value={formData.email}
-                                />
-                                <div className='grid md:grid-cols-2 gap-2'>
+                                <div className='col-span-full'>
                                     <Input
-                                        id='country'
-                                        label='Country'
+                                        id='address'
+                                        label='Address'
                                         type='text'
-                                        placeholder='Input Country'
+                                        placeholder='Input Address'
                                         onChange={handleChange}
-                                        value={formData.country}
+                                        value={formData.address}
+                                        divClassName='w-full'
+                                    />
+                                </div>
+                                <div className='col-span-full grid md:grid-cols-4 gap-2'>
+                                    <Input
+                                        id='city'
+                                        label='City'
+                                        type='text'
+                                        placeholder='City'
+                                        onChange={handleChange}
+                                        value={formData.city}
+                                    />
+                                    <Input
+                                        id='state'
+                                        label='State'
+                                        type='text'
+                                        placeholder='State'
+                                        onChange={handleChange}
+                                        value={formData.state}
                                     />
                                     <Input
                                         id='postcode'
@@ -236,49 +256,80 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                         onChange={handleChange}
                                         value={formData.postcode}
                                     />
+                                    <Input
+                                        id='country'
+                                        label='Country'
+                                        type='text'
+                                        placeholder='Input Country'
+                                        onChange={handleChange}
+                                        value={formData.country}
+                                    />
                                 </div>
-                                <div className='flex flex-col gap-2'>
-                                    <div className='flex gap-2'>
-                                        <Input
-                                            id='phone_number'
-                                            label='Phone Number'
-                                            type='text'
-                                            placeholder='Phone Number'
-                                            onChange={handleChange}
-                                            value={formData.phone_number}
-                                            divClassName='w-full'
-                                        />
+                                <div className='col-span-full'>
+                                    <div className='flex w-32'>
                                         <Button
+                                            label='Add Another Address'
+                                            btnClassname="!text-white !h-10 md:mt-5"
                                             icon={<PlusOutlined />}
-                                            onClick={() => addDynamicItem('phone_number')}
-                                            btnClassname='!h-10 md:mt-5'
+                                            onClick={() => setIsModalOpen(true)}
                                         />
                                     </div>
-
-                                    {dynamicFields.phone_number.map((item, index: any) => (
-                                        <div key={index} className='flex gap-2'>
+                                </div>
+                                <div className='col-span-full grid md:grid-cols-2 gap-2'>
+                                    <Input
+                                        id='email'
+                                        label='Email'
+                                        type='email'
+                                        placeholder='Email'
+                                        onChange={handleChange}
+                                        value={formData.email}
+                                    />
+                                    <div className='grid gap-4'>
+                                        <div className='flex gap-2'>
                                             <Input
                                                 id='phone_number'
                                                 label='Phone Number'
                                                 type='text'
-                                                placeholder='Input Phone Number'
-                                                onChange={(e) => updateDynamicItem(index, 'phone_number', e.target.value)}
-                                                value={item.value}
+                                                placeholder='Phone Number'
+                                                onChange={handleChange}
+                                                value={formData.phone_number}
                                                 divClassName='w-full'
                                             />
                                             <Button
-                                                icon={
-                                                    <DeleteOutlined className='!text-inherit' />
-                                                }
-                                                onClick={() => removeDynamicItem('phone_number', index)}
+                                                icon={<PlusOutlined />}
+                                                onClick={() => addDynamicItem('phone_number')}
                                                 btnClassname='!h-10 md:mt-5'
                                             />
-                                        </div>
 
-                                    ))}
+                                        </div>
+                                        {dynamicFields.phone_number.map((item, index: any) => (
+                                            <div key={index} className='flex gap-2'>
+                                                <Input
+                                                    id='phone_number'
+                                                    label='Phone Number'
+                                                    type='text'
+                                                    placeholder='Input Phone Number'
+                                                    onChange={(e) => updateDynamicItem(index, 'phone_number', e.target.value)}
+                                                    value={item.value}
+                                                    divClassName='w-full'
+                                                />
+                                                <Button
+                                                    icon={
+                                                        <DeleteOutlined className='!text-inherit' />
+                                                    }
+                                                    onClick={() => removeDynamicItem('phone_number', index)}
+                                                    btnClassname='!h-10 md:mt-5'
+                                                />
+                                            </div>
+
+                                        ))}
+                                    </div>
+
+
+
                                 </div>
 
-                                <div className='flex flex-col gap-2'>
+                                {/* <div className='flex flex-col gap-2'>
                                     <div className='flex gap-2'>
                                         <Input
                                             id='address'
@@ -319,60 +370,15 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
                                     ))}
 
-                                </div>
+                                </div> */}
                             </div>
 
                         </FormGroup>
-                        <div className='mt-4'>
-                            <div className='flex justify-between mt-4 items-center'>
-                                <div>
-                                    <h4 className="text-lg font-semibold">Company Details</h4>
-                                    <p className="mt-2">Company Details Information</p>
-                                </div>
-                                <Button
-                                    label='Add Business Number'
-
-                                    icon={<PlusOutlined />}
-                                    onClick={() => addDynamicItem('business_number')}
-                                />
-                            </div>
-                            <Divider />
-                            <div className={`col-span-12 md:col-span-8 grid grid-cols-2 gap-4`}>
-                                <div className="space-y-4 col-span-full">
-                                    {dynamicFields.business_number.map((item, index: any) => (
-                                        <div key={index} className="flex items-center gap-2 mb-3 w-full">
-                                            <div className="w-full">
-                                                <Input
-                                                    id='business_number'
-                                                    label='Business Name'
-                                                    type='text'
-                                                    placeholder='Business Name'
-                                                    value={item.value}
-                                                    onChange={(e) => updateDynamicItem(index, 'business_number', e.target.value)}
-                                                    style={{ width: '100%', borderColor: '#E5E7EB' }}
-                                                />
-                                            </div>
-
-                                            <Button
-                                                icon={
-                                                    <DeleteOutlined className='!text-inherit' />
-                                                }
-                                                onClick={() => removeDynamicItem('business_number', index)}
-                                                btnClassname='!h-10 mt-4'
-                                            />
-
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-
-                        </div>
-
                         <FormGroup
                             title="SEO"
                             description="SEO information"
                         >
-                            <div className='flex gap-3'>
+                            <div className='flex gap-4'>
                                 <TextArea id='meta_title'
                                     label='Meta Title'
                                     placeholder='Input Meta Title'
@@ -397,9 +403,8 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                         <FormGroup
                             title="Social Media"
                             description="Social Media Link Information"
-                            className='mt-4'
                         >
-                            <div className='grid md:grid-cols-2 gap-3'>
+                            <div className='grid md:grid-cols-2 gap-4'>
                                 <Input
                                     id='facebook'
                                     label='Facebook Link'

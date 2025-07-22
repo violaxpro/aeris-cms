@@ -30,3 +30,14 @@ export const smsTemplateData = [
         "updated_at": "2025-04-25T04:49:57.922Z"
     }
 ]
+
+export const addressData = [
+    {
+        id: 1,
+        address: '123 George Street',
+        city: 'Sydney',
+        state: 'NSW',
+        postcode: '2000',
+        country: 'Australia'
+    }
+]
