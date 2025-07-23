@@ -106,7 +106,7 @@ export const orderDummyData = [
         mobile_number: '628229019021203',
         payment_method: 'Bank Transfer',
         status: 'Draft',
-        payment_status: '',
+        payment_status: 'Verification',
         total: 400,
         created_by: {
             date: '2025-02-25T01:52:08.234Z',
@@ -181,7 +181,7 @@ export const orderDummyData = [
         po_number: '1235467',
         email: 'user@gmail.com',
         mobile_number: '628229019021203',
-        payment_method: 'Pay',
+        payment_method: 'Paypal',
         status: 'Processing',
         payment_status: 'Partially Paid',
         total: 400,
@@ -487,7 +487,7 @@ export const orderDummyData = [
         mobile_number: '628229019021203',
         payment_method: 'Bank Transfer',
         status: 'Draft',
-        payment_status: '',
+        payment_status: 'Refunded',
         total: 400,
         created_by: {
             date: '2025-02-25T01:52:08.234Z',
@@ -683,6 +683,45 @@ export const quoteDummyData = [
         mobile_number: '628229019021203',
         payment_method: 'Credit Card',
         status: 'Cancelled',
+        payment_status: 'Waiting for Payment',
+        paid_amount: 200,
+        total: 400,
+        created_by: {
+            date: '2025-02-26T01:52:08.234Z',
+            name: 'User'
+        },
+        modified: {
+            date: '2025-02-26T01:52:08.234Z',
+            name: 'User'
+        },
+        user: 'Ayu Lestari',
+        billing_address: 'Indonesia',
+        shipping_address: 'Indonesia',
+        order_reference: 'Order 1',
+        product: [
+            {
+                sku: '459834',
+                name: 'Product A',
+                price: 500,
+                buying_price: 600,
+                qty: 2,
+                total: 1200
+            }
+        ],
+        delivery_note: '',
+        internal_note: '',
+        subtotal: 1200,
+        discount: 0.5,
+        shipping_fee: 400,
+        gst: 10
+    },
+    {
+        id: 6,
+        po_number: 'Q8908',
+        email: 'user@gmail.com',
+        mobile_number: '628229019021203',
+        payment_method: 'Credit Card',
+        status: 'Sent',
         payment_status: 'Waiting for Payment',
         paid_amount: 200,
         total: 400,

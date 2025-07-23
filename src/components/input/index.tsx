@@ -16,7 +16,10 @@ type inputProps = {
     className?: string,
     disabled?: boolean
     divClassName?: string
+    prefix?: React.ReactNode;
     suffix?: React.ReactNode;
+    required?: boolean;
+    segmented?: any
 }
 
 const index = ({ label,
@@ -33,14 +36,26 @@ const index = ({ label,
     className,
     disabled,
     divClassName,
-    suffix
+    prefix,
+    suffix,
+    required,
+    segmented
 }: inputProps) => {
 
     return (
         <div className={divClassName}>
-            <label htmlFor={id} className={`block text-sm font-semibold text-gray-700 ${className}`}>
-                {label}
-            </label>
+            {
+                label && (<label htmlFor={id} className="flex justify-between items-center text-sm font-medium text-gray-700">
+                    <div>
+                        {label}
+                        {required && <span className="text-red-500 ml-1">*</span>}
+                    </div>
+                    {
+                        segmented && segmented
+                    }
+
+                </label>)
+            }
             <div>
                 <Input
                     id={id}
@@ -56,6 +71,7 @@ const index = ({ label,
                     }}
                     readOnly={readOnly}
                     suffix={suffix}
+                    prefix={prefix}
                 />
                 {errorMessage && (
                     <p className="text-red-500 text-xs mt-1">{errorMessage}</p>

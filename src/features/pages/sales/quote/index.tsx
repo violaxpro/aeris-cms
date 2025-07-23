@@ -13,7 +13,7 @@ import Breadcrumb from "@/components/breadcrumb"
 import Input from '@/components/input'
 import { Content } from 'antd/es/layout/layout'
 import Button from "@/components/button"
-import ButtonAction from '@/components/button/ButtonAction'
+import ButtonAction from '@/components/button/ButtonIcon'
 import SelectInput from '@/components/select'
 import SearchInput from '@/components/search';
 import SearchTable from '@/components/search/SearchTable'
@@ -28,8 +28,8 @@ import dayjs from 'dayjs';
 import DatePickerInput from '@/components/date-picker';
 import StatusTag from '@/components/tag'
 import StatusBadge from '@/components/badge/badge-status'
-import ButtonFilter from '@/components/button/ButtonFilterDelete'
-import ButtonDelete from '@/components/button/ButtonFilterDelete'
+import ButtonFilter from '@/components/button/ButtonAction'
+import ButtonDelete from '@/components/button/ButtonAction'
 import Pagination from '@/components/pagination'
 import { MoreIcon, TrashIconRed } from '@public/icon'
 
@@ -316,6 +316,11 @@ const index = ({ quoteData }: { quoteData?: any }) => {
                         <Menu.Item key="status" onClick={actionStatus}>
                             {row?.status}
                         </Menu.Item>
+                        <Menu.Item key="detail">
+                            <Link href={routes.eCommerce.detailQuote(row.id)}>
+                                Detail
+                            </Link>
+                        </Menu.Item>
                         <Menu.Item key="edit">
                             <Link href={routes.eCommerce.editQuote(row.id)}>
                                 Edit
@@ -401,7 +406,7 @@ const index = ({ quoteData }: { quoteData?: any }) => {
     return (
         <>
             {contextHolder}
-            <div className="mt-6 mx-4 mb-0">
+            <div className="mt-6 mx-5 mb-0">
                 <div className='flex justify-between items-center'>
                     <div>
                         <h1 className='text-xl font-bold'>
@@ -423,7 +428,7 @@ const index = ({ quoteData }: { quoteData?: any }) => {
                     />
                 </div>
             </div>
-            <Content className="mt-6 mx-4 mb-0">
+            <Content className="mb-0">
                 <div style={{ padding: 24, minHeight: 360 }}>
                     <div className='flex justify-between mb-4 gap-2'>
                         {/* <Button

@@ -83,6 +83,12 @@
     border-color: #ff4d4f !important;
 }
 
+.btn-action:hover {
+    background: inherit !important;
+    color: black !important;
+    border-color: inherit !important;
+}
+
 .btn-delete-all {
     background: #EA00000D;
     color: #EA0000;
@@ -94,6 +100,10 @@
     background: rgba(234, 0, 0, 0.2);
     /* atau pakai #EA000033 */
     color: #FF6B6B;
+}
+
+.btn-trash-item {
+    background: #7777771A !important;
 }
 
 
@@ -405,10 +415,30 @@ div {
     border-color: var(--default-color) !important;
 }
 
+.ant-segmented-item {
+    /* Teks default */
+    /* Full rounded */
+    transition: all 0.2s;
+}
+
+.ant-segmented-item-selected {
+    background-color: #1d3557 !important;
+    color: #fff !important;
+}
+
+/* Bisa juga pakai Tailwind @layer jika perlu */
+.custom-segmented-border {
+    border: 1px solid #000 !important;
+}
+
+.custom-segmented-border .ant-segmented {
+    border-color: #000 !important;
+}
+
 /* Untuk item aktif di pagination */
 .ant-pagination-item-active {
     background-color: var(--default-color) !important;
-    border-color: var(--default-color) !important;
+    border-color: #000 !important;
     color: #fff !important;
 }
 

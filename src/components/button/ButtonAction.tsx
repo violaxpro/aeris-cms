@@ -1,32 +1,40 @@
-import React from 'react'
-import { Button, ButtonProps } from 'antd'
-import Image from 'next/image'
+'use client'
+import React, { useState } from 'react'
+import { Button } from 'antd'
+import { ButtonProps } from 'antd';
+import Link from 'next/link';
 
-type ButtonActionProps = {
+type buttonProps = {
+    btnClassname?: string
     icon?: any
+    label?: string
+    link?: string
+    type?: ButtonProps['type'];
     onClick?: () => void
-} & ButtonProps
-const ButtonAction = ({
-    icon,
-    onClick,
-    ...props
-}: ButtonActionProps) => {
-    return (
+    shape?: any
+    style?: any
+    position?: 'start' | 'end'
+}
+const index = ({ btnClassname, icon, label, link, type, onClick, shape, style, position = 'start' }: buttonProps) => {
+    // hover:!bg-inherit hover:!text-inherit hover:!border-inherit
+    const button = (
         <Button
+            className={`btn-action ${btnClassname}`}
+            type={type}
             onClick={onClick}
-            icon={
-                icon && (
-                    <Image
-                        src={icon}
-                        alt="icon"
-                        width={10}
-                        height={10}
-                    />
-                )
+            shape={shape}
+            style={style}
+            iconPosition={position}
+        >
+            {icon ?? icon}
+            {label && <span className='!text-black'>
+                {label}
+            </span>
             }
-            {...props}
-        />
+
+        </Button>
     )
+    return button
 }
 
-export default ButtonAction
+export default index

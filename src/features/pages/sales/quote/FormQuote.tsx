@@ -7,6 +7,7 @@ import { Content } from 'antd/es/layout/layout';
 import Button from '@/components/button'
 import { FormProps } from '@/plugins/types/form-type';
 import FormGroup from '@/components/form';
+import Image from 'next/image';
 import Input from "@/components/input"
 import Textarea from '@/components/textarea'
 import SelectInput from '@/components/select';
@@ -14,24 +15,32 @@ import { routes } from '@/config/routes';
 import Table from '@/components/table'
 import { useNotificationAntd } from '@/components/toast';
 import ProductInput, { ProductForm } from '../ProductInput';
+import { PlusOutlined, PercentageOutlined } from '@ant-design/icons';
+import { DollarIcon } from '@public/icon';
+import { Divider } from 'antd';
+import Segmented from '@/components/segmented'
+import OrderSummary from '../OrderSummary';
+import ButtonCancel from '@/components/button/ButtonAction'
 
 const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const router = useRouter()
     const { contextHolder, notifySuccess } = useNotificationAntd();
     const [showAddProduct, setShowAddProduct] = useState(false)
     const [productList, setProductList] = useState<any[]>([]);
-    const [productForm, setProductForm] = useState({
+    const [productForm, setProductForm] = useState([{
         sku: '',
         name: '',
         price: 0,
         buying_price: 0,
         qty: 0,
-        tax: '',
+        // tax: '',
         total: 0,
-    });
+    }]);
     const [editIndex, setEditIndex] = useState<number | null>(null)
     const [formData, setFormData] = useState({
+        customer_name: initialValues ? initialValues.customer_name : '',
         user: initialValues ? initialValues.user : '',
+        payment_method: initialValues ? initialValues.payment_method : '',
         po_number: initialValues ? initialValues.po_number : '',
         billing_address: initialValues ? initialValues.billing_address : '',
         shipping_address: initialValues ? initialValues.shipping_address : '',
@@ -42,14 +51,22 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         shipping_fee: initialValues ? initialValues.shipping_fee : '',
         gst: initialValues ? initialValues.gst : '',
         total: initialValues ? initialValues.total : '',
+        coupon_apply: initialValues ? initialValues.coupon_apply : '',
+        discount_type: initialValues ? initialValues.discount_type : '',
+        shipping_method: initialValues ? initialValues.shipping_method : '',
+        delivery_note: initialValues ? initialValues.delivery_note : '',
+        internal_note: initialValues ? initialValues.internal_note : '',
+
     });
+    const [selectedDiscountType, setSelectedDiscountType] = useState('percent')
+    const [profitHidden, setProfitHidden] = useState(true)
 
     const breadcrumb = [
         { title: 'Sales' },
         {
             title: 'Quote', url: routes.eCommerce.quote
         },
-        { title: mode == 'create' ? 'Create Quote' : 'Edit Quote' },
+        { title: mode == 'create' ? 'Create' : 'Edit' },
     ];
 
     const columns: TableColumnsType<ProductForm> = [
@@ -108,26 +125,26 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         setProductList(prev => prev.filter((_, i) => i !== index));
     };
 
-    const handleAddProduct = () => {
-        if (editIndex !== null) {
-            const updatedList = [...productList];
-            updatedList[editIndex] = productForm;
-            setProductList(updatedList);
-            setEditIndex(null);
-        } else {
-            setProductList([...productList, productForm]);
+    // const handleAddProduct = () => {
+    //     if (editIndex !== null) {
+    //         const updatedList = [...productList];
+    //         updatedList[editIndex] = productForm;
+    //         setProductList(updatedList);
+    //         setEditIndex(null);
+    //     } else {
+    //         setProductList([...productList, productForm]);
 
-        }
-        setProductForm({
-            sku: '',
-            name: '',
-            price: 0,
-            buying_price: 0,
-            qty: 0,
-            tax: '',
-            total: 0,
-        });
-    };
+    //     }
+    //     setProductForm({
+    //         sku: '',
+    //         name: '',
+    //         price: 0,
+    //         buying_price: 0,
+    //         qty: 0,
+    //         tax: '',
+    //         total: 0,
+    //     });
+    // };
     const handleChange = (e: any) => {
         const { id, value } = e.target;
         setFormData((prev) => ({
@@ -177,6 +194,33 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
     }
 
+    const addItem = () => {
+        setProductForm([
+            ...productForm,
+            {
+                sku: '',
+                name: '',
+                price: 0,
+                buying_price: 0,
+                qty: 0,
+                // tax: '',
+                total: 0,
+            }
+        ])
+    }
+
+    const handleRemoveRow = (index: number) => {
+        const updated = [...productForm];
+        updated.splice(index, 1);
+        setProductForm(updated);
+    };
+
+    const handleUpdateRow = (index: number, updatedForm: ProductForm) => {
+        const updated = [...productForm];
+        updated[index] = updatedForm;
+        setProductForm(updated);
+    };
+
     const options = [
         { label: 'WAITING', value: 'WAITING' },
         { label: 'RECEIVE', value: 'RECEIVE' }
@@ -201,23 +245,36 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     return (
         <>
             {contextHolder}
-            <div className="mt-6 mx-4 mb-0">
-                <h1 className="text-xl font-bold mb-4">{mode == 'create' ? 'Create Quote' : 'Edit Quote'}</h1>
+            <div className="mt-6 mx-5 mb-0">
+                <h1 className="text-xl font-bold mb-4">{mode == 'create' ? 'Create Quotes' : 'Edit Quotes'}</h1>
                 <Breadcrumb items={breadcrumb} />
+                <Divider />
             </div>
 
-            <Content className="mt-4 mx-4 mb-0">
+            <Content className="mb-0">
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
-                    <div>
-                        <div className='grid grid-cols-2 gap-3'>
-                            <div className='flex flex-col gap-2 mt-2'>
+                    <div className='flex flex-col gap-5'>
+                        <div className='grid gap-3'>
+                            <div className='grid md:grid-cols-4 gap-4 mt-2'>
                                 <Input
-                                    id='user'
-                                    label='User'
+                                    id='customer_name'
+                                    label='Customer Name'
                                     type='text'
-                                    placeholder='Input User'
+                                    placeholder='Input Customer Name'
                                     onChange={handleChange}
-                                    value={formData.user}
+                                    value={formData.customer_name}
+                                    required
+                                />
+                                <SelectInput
+                                    id='payment_method'
+                                    label='Payment Method'
+                                    placeholder='Select Payment Method'
+                                    onChange={(selected) => handleChangeSelect('payment_method', selected)}
+                                    value={formData.payment_method}
+                                    options={[
+                                        { label: 'Paypal', value: 'Paypal' }
+                                    ]}
+                                    required
                                 />
                                 <Input
                                     id='po_number'
@@ -226,6 +283,7 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     placeholder='Input PO Number'
                                     onChange={handleChange}
                                     value={formData.po_number}
+                                    required
                                 />
                                 <Input
                                     id='order_reference'
@@ -234,97 +292,185 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     placeholder='Input Order Reference'
                                     onChange={handleChange}
                                     value={formData.order_reference}
+                                    required
                                 />
                             </div>
-                            <div>
-                                <Textarea
+                            <div className='grid md:grid-cols-2 gap-4'>
+                                <SelectInput
+                                    id='billing_address'
+                                    label='Billing Address'
+                                    placeholder='Select Billing Address'
+                                    onChange={(selected) => handleChangeSelect('billing_address', selected)}
+                                    value={formData.billing_address}
+                                    options={[
+                                        { label: 'Jl. Rambutan', value: 'Jl. Rambutan' }
+                                    ]}
+                                    required
+                                />
+                                <SelectInput
+                                    id='shipping_address'
+                                    label='Shipping Address'
+                                    placeholder='Select Shipping Address'
+                                    onChange={(selected) => handleChangeSelect('shipping_address', selected)}
+                                    value={formData.shipping_address}
+                                    options={[
+                                        { label: 'Jl. Rambutan', value: 'Jl. Rambutan' }
+                                    ]}
+                                    required
+                                />
+                                {/* <Textarea
                                     id='billing_address'
                                     label='Biiling Address'
                                     value={formData.billing_address}
                                     onChange={handleChange}
+                                    textareaClassname='!h-20'
+                                    required
                                 />
                                 <Textarea
                                     id='shipping_address'
                                     label='Shipping Address'
                                     value={formData.shipping_address}
                                     onChange={handleChange}
-                                />
+                                    textareaClassname='!h-20'
+                                    required
+                                /> */}
                             </div>
                         </div>
 
-                        <div className='mt-4'>
+                        <div >
                             <h1 className='text-lg font-bold'>Product List</h1>
-                            <Button
-                                label='Add Product'
-                                btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788] mt-3"
-                                onClick={() => setShowAddProduct(!showAddProduct)}
-                            />
+                            <Divider />
                             {
+                                productForm.map((item, index) => {
+                                    return (
+                                        <ProductInput
+                                            key={index}
+                                            index={index}
+                                            productForm={item}
+                                            onChange={(updateItem) => handleUpdateRow(index, updateItem)}
+                                            onRemove={() => handleRemoveRow(index)}
+                                        />
+
+                                    )
+                                })
+                            }
+                            <Divider />
+                            <div className='flex justify-end'>
+                                <Button
+                                    label='Add Product'
+                                    icon={<PlusOutlined />}
+                                    onClick={addItem}
+                                />
+                            </div>
+                            {/* {
                                 showAddProduct &&
                                 <ProductInput
                                     productForm={productForm}
                                     setProductForm={setProductForm}
                                     onAddProduct={handleAddProduct}
                                 />
-                            }
-                            <div className='mt-2'>
+                            } */}
+                            {/* <div className='mt-2'>
                                 <Table
                                     columns={columns}
                                     dataSource={productList}
                                 />
-                            </div>
+                            </div> */}
 
                         </div>
 
-                        <div className='flex justify-end gap-2 mt-2'>
-                            <div className='flex flex-col gap-1'>
-                                <Input
-                                    id='subtotal'
-                                    label='Subtotal'
-                                    type='number'
-                                    onChange={handleChange}
-                                    value={Number(formData.subtotal).toFixed(2)}
-                                    disabled
-                                    divClassName='flex gap-3 items-center'
-                                    className='w-full'
-                                />
-                                <Input
-                                    id='discount'
-                                    label='Discount'
-                                    type='number'
-                                    onChange={handleChange}
-                                    value={formData.discount}
-                                    divClassName='flex gap-3 items-center'
-                                    className='w-full'
+                        <div className='grid md:grid-cols-[3fr_3fr_6fr] gap-3'>
+                            <Input
+                                id='coupon_apply'
+                                label='Coupon Apply'
+                                type='number'
+                                onChange={handleChange}
+                                value={formData.coupon_apply}
+                                suffix={
+                                    <Button
+                                        label='Apply'
+                                    />
+                                }
+                                style={{ marginTop: '1rem' }}
 
-                                />
-                                <Input
-                                    id='shipping_fee'
-                                    label='Shipping Fee'
-                                    type='number'
+                            />
+                            <Input
+                                id='discount_type'
+                                label='Discount Type'
+                                type='number'
+                                onChange={handleChange}
+                                value={formData.discount_type}
+                                suffix={
+                                    selectedDiscountType == 'percent' && <PercentageOutlined />
+                                }
+                                prefix={
+                                    selectedDiscountType == 'fixed' &&
+                                    <Image
+                                        src={DollarIcon}
+                                        alt='dollar-icon'
+                                        width={8}
+                                        height={8}
+                                    />
+                                }
+                                segmented={
+                                    <div className='mb-2'>
+                                        <Segmented
+                                            size='small'
+                                            value={selectedDiscountType}
+                                            onChange={(selected: any) => setSelectedDiscountType(selected)}
+                                            options={[
+                                                { label: 'Percent', value: 'percent' },
+                                                { label: 'Fixed', value: 'fixed' }
+                                            ]}
+                                        />
+                                    </div>
+
+                                }
+                            />
+                            <SelectInput
+                                id='shipping_method'
+                                label='Shipping Method'
+                                placeholder='Select Shipping Method'
+                                onChange={(selected) => handleChangeSelect('shipping_method', selected)}
+                                value={formData.shipping_method}
+                                options={[
+                                    { label: 'Free Shipping', value: 'Free SHipping' },
+                                    { label: 'Local Pickup', value: 'Local Pickup' },
+                                    { label: 'Drop Off', value: 'Drop Off' },
+                                    { label: 'Flat Rate', value: 'Flat Rate' }
+                                ]}
+                                selectClassName='!mt-[1rem]'
+                                required
+                            />
+                        </div>
+
+                        <div className='grid md:grid-cols-12 gap-3 mt-5'>
+                            <div className='grid grid-cols-2 col-span-9 gap-3'>
+                                <Textarea
+                                    id='delivery_note'
+                                    label='Delivery Notes'
+                                    value={formData.delivery_note}
                                     onChange={handleChange}
-                                    value={formData.shipping_fee}
-                                    divClassName='flex gap-3 items-center'
-                                    className='w-full'
+                                    textareaClassname='!h-20'
                                 />
-                                <Input
-                                    id='gst'
-                                    label='GST or Tax'
-                                    type='number'
+                                <Textarea
+                                    id='internal_note'
+                                    label='Internal Notes'
+                                    value={formData.internal_note}
                                     onChange={handleChange}
-                                    value={formData.gst}
-                                    divClassName='flex gap-3 items-center'
-                                    className='w-full'
+                                    textareaClassname='!h-20'
                                 />
-                                <Input
-                                    id='total'
-                                    label='Total'
-                                    type='number'
-                                    onChange={handleChange}
-                                    value={Number(formData.total).toFixed(2)}
-                                    disabled
-                                    divClassName='flex gap-3 items-center'
-                                    className='w-full'
+                            </div>
+
+                            <div className='grid col-span-3 gap-1 '>
+                                <OrderSummary
+                                    profitHidden={profitHidden}
+                                    onReveal={() => setProfitHidden(false)}
+                                    profit={100}
+                                    subtotal={1130.4}
+                                    shippingFee={50}
+                                    discount={5}
+                                    gstRate={0.1}
                                 />
                             </div>
 
@@ -333,9 +479,12 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                     </div>
 
                     {/* Submit */}
-                    <div className="mt-6 flex justify-end">
+                    <div className="mt-6 flex justify-end gap-3">
+                        <ButtonCancel
+                            label='Cancel'
+                            onClick={() => router.push(routes.eCommerce.quote)}
+                        />
                         <Button
-
                             label={mode == 'create' ? 'Create Quote' : 'Edit Quote'}
                             onClick={handleSubmit}
                         />

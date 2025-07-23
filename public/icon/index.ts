@@ -11,6 +11,15 @@ export { default as AddIcon } from './AddIcon.svg'
 export { default as FilterIcon } from './FilterIcon.svg'
 export { default as MoreIcon } from './MoreIcon.svg'
 export { default as FilterWhiteIcon } from './FilterWhiteIcon.svg'
+export { default as DollarIcon } from './DollarIcon.svg'
+export { default as PencilIconBlack } from './PencilIconBlack.svg'
+export { default as PrintIconBlack } from './PrintIconBlack.svg'
+export { default as ExportIcon } from './ExportIcon.svg'
+export { default as SentEmailIcon } from './SentEmailIcon.svg'
+export { default as ConvertIcon } from './ConvertIcon.svg'
+export { default as ApproveIcon } from './ApproveIcon.svg'
+
+
 
 
 

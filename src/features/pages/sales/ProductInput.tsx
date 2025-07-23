@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react'
 import Input from "@/components/input"
 import SelectInput from '@/components/select';
 import CheckboxInput from '@/components/checkbox';
-import Button from '@/components/button'
+import ButtonAction from '@/components/button/ButtonIcon';
 import { useAtom } from 'jotai';
 import { taxSetAtom } from '@/store/DropdownItemStore';
 import { getProduct } from '@/services/products-service';
+import Image from 'next/image';
+import { TrashIcon } from '@public/icon';
 export interface ProductForm {
     sku: string
     name: string
@@ -13,19 +15,24 @@ export interface ProductForm {
     buying_price: number
     qty: number
     total: number
-    tax: any;
+    // tax: any;
 }
 
 interface ProductInputProps {
     productForm: ProductForm
-    setProductForm: React.Dispatch<React.SetStateAction<ProductForm>>
-    onAddProduct: () => void
+    // setProductForm?: React.Dispatch<React.SetStateAction<ProductForm>>
+    // onAddProduct?: () => void
+    onChange: (form: ProductForm) => void;
+    onRemove?: () => void;
+    index: number;
 }
 
 const ProductInput = ({
     productForm,
-    setProductForm,
-    onAddProduct
+    // setProductForm,
+    // onAddProduct,
+    onRemove,
+    onChange
 }: ProductInputProps) => {
     const [optionsTax] = useAtom(taxSetAtom)
     const [items, setItems] = useState([])
@@ -45,7 +52,7 @@ const ProductInput = ({
             updatedProductForm.total = Number(total.toFixed(2))
         }
 
-        setProductForm(updatedProductForm);
+        onChange(updatedProductForm);
     };
 
     const handleChangeSelect = (id: string, value: any) => {
@@ -68,31 +75,33 @@ const ProductInput = ({
 
         updatedProductForm.total = Number((baseTotal + taxAmount).toFixed(2));
 
-        setProductForm(updatedProductForm);
+        onChange(updatedProductForm);
     };
 
     const handleSelectProduct = (productName: string) => {
-        const selectedProduct: any = items.find((p: any) => p.name === productName);
-        if (selectedProduct) {
-            setProductForm(prev => ({
-                ...prev,
-                name: selectedProduct.name,
-                sku: selectedProduct.sku,
-                price: selectedProduct.price,
-            }));
+        const selected: any = items.find((p: any) => p.name === productName);
+        if (selected) {
+            const updatedForm = {
+                ...productForm,
+                name: selected.name,
+                sku: selected.sku,
+                price: selected.price,
+            };
+            onChange(updatedForm);
         }
     };
 
-    const handleAddProduct = () => {
-        if (!productForm.tax) {
-            setTaxError('Tax Fee is required');
-            return;
-        } else {
-            setTaxError('');
-        }
 
-        onAddProduct()
-    };
+    // const handleAddProduct = () => {
+    //     if (!productForm.tax) {
+    //         setTaxError('Tax Fee is required');
+    //         return;
+    //     } else {
+    //         setTaxError('');
+    //     }
+
+    //     onAddProduct()
+    // };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -113,7 +122,7 @@ const ProductInput = ({
 
     return (
         <div>
-            <div className='grid md:grid-cols-7 gap-4 mb-2'>
+            <div className='grid md:grid-cols-[1fr_3fr_1fr_1fr_70px_1fr_50px] items-center gap-4 mb-2'>
                 <Input
                     id='sku'
                     type='text'
@@ -121,15 +130,8 @@ const ProductInput = ({
                     value={productForm.sku}
                     onChange={handleProductChange}
                     className='mb-1'
+                    required
                 />
-                {/* <Input
-                    id='name'
-                    type='text'
-                    label='Product Name'
-                    value={productForm.name}
-                    onChange={handleProductChange}
-                    className='mb-1'
-                /> */}
                 <SelectInput
                     id='name'
                     label='Product Name'
@@ -139,7 +141,9 @@ const ProductInput = ({
                         label: p.name,
                         value: p.name,
                     }))}
+                    required
                 />
+
                 <Input
                     id='price'
                     type='text'
@@ -147,8 +151,10 @@ const ProductInput = ({
                     value={productForm.price}
                     onChange={handleProductChange}
                     className='mb-1'
-                    disabled
+                    required
+
                 />
+
                 <Input
                     id='buying_price'
                     type='text'
@@ -156,6 +162,7 @@ const ProductInput = ({
                     value={productForm.buying_price}
                     onChange={handleProductChange}
                     className='mb-1'
+                    required
                 />
                 <Input
                     id='qty'
@@ -164,9 +171,9 @@ const ProductInput = ({
                     value={productForm.qty}
                     onChange={handleProductChange}
                     className='mb-1'
-
+                    required
                 />
-                <SelectInput
+                {/* <SelectInput
                     id="tax"
                     label="Tax Fee"
                     placeholder="Select Tax Fee"
@@ -174,7 +181,8 @@ const ProductInput = ({
                     onChange={(val) => handleChangeSelect("tax", val)}
                     options={optionsTax}
                     error={taxError}
-                />
+                /> */}
+
                 <Input
                     id='total'
                     type='text'
@@ -182,14 +190,20 @@ const ProductInput = ({
                     value={productForm.total}
                     onChange={handleProductChange}
                     className='mb-1'
+                    required
                 />
+                {
+                    onRemove && <div className='flex item-ends justify-center mt-4 '>
+                        <ButtonAction
+                            icon={TrashIcon}
+                            width={15}
+                            height={15}
+                            className='btn-trash-item !h-10 !w-15'
+                            onClick={onRemove}
+                        />
+                    </div>
+                }
             </div>
-
-            <Button
-                label='Save'
-
-                onClick={handleAddProduct}
-            />
         </div>
 
     )

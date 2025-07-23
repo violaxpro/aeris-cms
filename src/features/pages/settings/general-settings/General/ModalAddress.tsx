@@ -12,7 +12,7 @@ import { EditOutlined } from '@ant-design/icons';
 import Textarea from '@/components/textarea'
 import { addressData } from '@/plugins/types/settings-type';
 import { TrashIconRed, PencilIconBlue } from '@public/icon';
-import ButtonAction from '@/components/button/ButtonAction';
+import ButtonAction from '@/components/button/ButtonIcon';
 import DeleteConfirmModal from '@/components/modal/ModalDelete'
 import Button from '@/components/button'
 

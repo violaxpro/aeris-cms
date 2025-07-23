@@ -10,10 +10,11 @@ type inputProps = {
     onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
     rows?: number
     maxLength?: number
-    notes?: string,
+    notes?: any,
     error?: string
     className?: string
     textareaClassname?: string
+    required?: boolean
 }
 
 const index = ({
@@ -27,13 +28,15 @@ const index = ({
     notes,
     error,
     className,
-    textareaClassname
+    textareaClassname,
+    required
 }: inputProps) => {
     return (
         <>
             <div className={className}>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                     {label}
+                    {required && <span className="text-red-500 ml-1">*</span>}
                 </label>
                 <div>
                     <TextArea
@@ -46,11 +49,7 @@ const index = ({
                         className={textareaClassname}
                     />
                 </div>
-                {
-                    notes && (
-                        <span className='text-gray-300'>{notes}</span>
-                    )
-                }
+                {notes && <div className='text-xs mt-1'>{notes}</div>}
                 {error && (
                     <p className="text-red-500 text-xs mt-1">{error}</p>
                 )}

@@ -23,6 +23,15 @@ import { OrderType } from '@/plugins/types/sales-type'
 import dayjs from 'dayjs';
 import DatePickerInput from '@/components/date-picker';
 import StatusTag from '@/components/tag'
+import StatusBadge from '@/components/badge/badge-status'
+import ButtonFilter from '@/components/button/ButtonAction'
+import ButtonDelete from '@/components/button/ButtonAction'
+import Pagination from '@/components/pagination'
+import { MoreIcon, TrashIconRed, FilterIcon, AddIcon } from '@public/icon'
+import Image from 'next/image'
+import ButtonAction from '@/components/button/ButtonIcon'
+import SearchTable from '@/components/search/SearchTable'
+import ShowPageSize from '@/components/pagination/ShowPageSize'
 
 const index = ({ orderData }: { orderData?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
@@ -41,6 +50,8 @@ const index = ({ orderData }: { orderData?: any }) => {
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
     const [date, setDate] = useState<any | null>(null);
     const [currentOrder, setCurrentOrder] = useState<any>(null)
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
 
     const handleDateChange = (date: any, dateString: string | string[]) => {
         console.log('Selected date:', dateString);
@@ -186,38 +197,27 @@ const index = ({ orderData }: { orderData?: any }) => {
     ]
     const columns: TableColumnsType<OrderType> = [
         {
-            title: 'Order ID',
+            title: 'Number',
             dataIndex: 'id',
             sorter: (a: any, b: any) => a.id - b.id,
             render: (_: any, row: any) => {
                 return <div className="flex flex-col w-full">
                     <div className="flex justify-start gap-1">
-                        <span>Order Id</span>
-                        <span>:</span>
-                        <span>{row.id}</span>
-                    </div>
-                    <div className="flex justify-start gap-1">
-                        <span>PO Number</span>
-                        <span>:</span>
                         <span>{row.status !== 'Draft' ? row.po_number : '-'}</span>
                     </div>
                 </div>
             }
         },
         {
-            title: 'Email',
+            title: 'Contact',
             dataIndex: 'email',
             sorter: (a: any, b: any) => a.email.localeCompare(b.email),
             render: (_: any, row: any) => {
                 return <div className="flex flex-col w-full">
                     <div className="flex justify-start gap-1">
-                        <span>Email</span>
-                        <span>:</span>
                         <span>{row.email}</span>
                     </div>
                     <div className="flex justify-start gap-1">
-                        <span>Phone</span>
-                        <span>:</span>
                         <span>{row.mobile_number}</span>
                     </div>
                 </div>
@@ -232,25 +232,21 @@ const index = ({ orderData }: { orderData?: any }) => {
 
             },
             render: (_: any, row: any) => {
-                let payment_status
-                if (row.paid_amount === 0) {
-                    payment_status = 'Waiting for Payment'
-                } else if (row.paid_amount < row.total) {
-                    payment_status = 'Partially Paid'
-                } else if (row.paid_amount >= row.total) {
-                    payment_status = 'Paid'
-                }
+                // let payment_status
+                // if (row.paid_amount === 0) {
+                //     payment_status = 'Waiting for Payment'
+                // } else if (row.paid_amount < row.total) {
+                //     payment_status = 'Partially Paid'
+                // } else if (row.paid_amount >= row.total) {
+                //     payment_status = 'Paid'
+                // }
                 return (
                     <div className="flex flex-col w-full">
                         <div className="flex justify-start gap-1">
-                            <span>Method</span>
-                            <span>:</span>
                             <span>{row.payment_method}</span>
                         </div>
                         <div className="flex justify-start gap-1">
-                            <span>Status</span>
-                            <span>:</span>
-                            <span>{payment_status || '-'}</span>
+                            <StatusBadge status={row.payment_status} />
                         </div>
                     </div>
                 )
@@ -268,9 +264,10 @@ const index = ({ orderData }: { orderData?: any }) => {
                 )
             },
             render: (val: any) => {
-                const status = val.toUpperCase()
+                const status = val
+                console.log(status)
                 return (
-                    <StatusTag status={status} />
+                    <StatusTag status={status} type='order' />
                 );
                 // kalau dia sudah bayar full baru bisa di lanjut ke processing
                 // kalau processing sudah beres bisa di klik dan lanjut ke proses awaiting stock
@@ -282,7 +279,19 @@ const index = ({ orderData }: { orderData?: any }) => {
             }
         },
         {
-            title: 'Created',
+            title: 'Total',
+            dataIndex: 'total',
+            sorter: (a: any, b: any) => a.email.localeCompare(b.email),
+            render: (_: any, row: any) => {
+                return <div className="flex flex-col w-full">
+                    <div className="flex justify-start gap-1">
+                        <span>${row.total}</span>
+                    </div>
+                </div>
+            }
+        },
+        {
+            title: 'Created By',
             dataIndex: 'created_by',
             defaultSortOrder: 'descend',
             sorter: (a: any, b: any) => {
@@ -302,7 +311,7 @@ const index = ({ orderData }: { orderData?: any }) => {
             }
         },
         {
-            title: 'Modified',
+            title: 'Modified By',
             dataIndex: 'modified',
             sorter: (a: any, b: any) => {
                 return new Date(a.modified).getTime() - new Date(b.modified).getTime()
@@ -381,15 +390,28 @@ const index = ({ orderData }: { orderData?: any }) => {
                 );
 
                 return (
-                    <Dropdown overlay={menu} trigger={['click']} >
-                        <button className="flex items-center justify-center px-2 py-1 border rounded ">
-                            Actions <MoreOutlined className="ml-1" />
-                        </button>
-                    </Dropdown >
+                    <div className='flex items-center gap-2'>
+                        <Dropdown overlay={menu} trigger={['click']} >
+                            <ButtonAction
+                                color='primary'
+                                variant='filled'
+                                size="small"
+                                icon={MoreIcon}
+                            />
+                        </Dropdown >
+                        <ButtonAction
+                            color='danger'
+                            variant='filled'
+                            size="small"
+                            icon={TrashIconRed}
+                        // onClick={() => setOpenModalDelete(true)}
+                        />
+                    </div>
                 );
             }
         },
     ]
+
 
     // const paymentStatusColumn = {
     //     title: 'Payment Status',
@@ -441,36 +463,73 @@ const index = ({ orderData }: { orderData?: any }) => {
         <>
             {contextHolder}
             <div className="mt-6 mx-4 mb-0">
-                <h1 className='text-xl font-bold'>
-                    Order
-                </h1>
-                <Breadcrumb
-                    items={breadcrumb}
-                />
-            </div>
-            <Content className="mt-6 mx-4 mb-0">
-                <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
-                    <div className='flex justify-between mb-4'>
-                        <Button
-                            label='Add Payment'
-                            btnClassname='!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788]'
-                            onClick={handleClickModalPaid}
+                <div className='flex justify-between items-center'>
+                    <div>
+                        <h1 className='text-xl font-bold'>
+                            Order
+                        </h1>
+                        <Breadcrumb
+                            items={breadcrumb}
                         />
+                    </div>
+                    <Button
+                        icon={<Image
+                            src={AddIcon}
+                            alt='add-icon'
+                            width={15}
+                            height={15}
+                        />}
+                        label='Add Order'
+                        link={routes.eCommerce.createOrder}
+                    />
+                </div>
+            </div>
+            <Content className="mb-0">
+                <div style={{ padding: 24, minHeight: 360 }}>
+                    <div className='flex justify-between mb-4 gap-2'>
+                        {/* <Button
+                                       label='Add Payment'
+                                       onClick={handleClickModalPaid}
+                                   /> */}
+
                         <div className='flex items-center gap-2'>
-                            <SearchInput onSearch={handleSearch} />
-                            <Button
-                                label='Filter'
-                                icon={<FilterOutlined />}
-                                onClick={() => setisOpenModalFilter(true)}
-
+                            <ShowPageSize
+                                pageSize={pageSize}
+                                onChange={setPageSize}
                             />
-                            <Button
-
-                                icon={<PlusCircleOutlined />}
-                                label='Add Order'
-                                link={routes.eCommerce.createOrder}
+                            <ButtonFilter
+                                label='Filter by'
+                                icon={<Image
+                                    src={FilterIcon}
+                                    alt='filter-icon'
+                                    width={15}
+                                    height={15}
+                                />}
+                                onClick={() => setisOpenModalFilter(true)}
+                                position='end'
+                                style={{ padding: '1.2rem 1.7rem' }}
+                            />
+                            <SearchTable
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                                onSearch={() => console.log('Searching for:', search)}
                             />
                         </div>
+                        {
+                            selectedRowKeys.length > 0 && <ButtonDelete
+                                label='Delete All'
+                                icon={<Image
+                                    src={TrashIconRed}
+                                    alt='trash-icon'
+                                    width={10}
+                                    height={10}
+                                />}
+                                onClick={() => setisOpenModalFilter(true)}
+                                position='start'
+                                style={{ padding: '1.2rem 1.7rem' }}
+                                btnClassname='btn-delete-all'
+                            />
+                        }
                     </div>
                     <Table
                         columns={columns}
@@ -478,6 +537,18 @@ const index = ({ orderData }: { orderData?: any }) => {
                         withSelectableRows
                         selectedRowKeys={selectedRowKeys}
                         onSelectChange={setSelectedRowKeys}
+                    // pagination={{
+                    //     pageSize,
+                    //     onShowSizeChange: (_, size) => setPageSize(size),
+                    //     showQuickJumper: true,
+                    //     total: data.length,
+                    // }}
+                    />
+                    <Pagination
+                        current={currentPage}
+                        total={finalData.length}
+                        pageSize={pageSize}
+                        onChange={(page) => setCurrentPage(page)}
                     />
                 </div>
             </Content>

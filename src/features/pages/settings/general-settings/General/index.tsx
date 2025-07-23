@@ -45,6 +45,15 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         address: [],
     });
 
+    const metaTitle = formData.meta_title;
+    const titleLength = metaTitle.length;
+    const isTitleInvalid = titleLength > 65;
+
+    const metaDescription = formData.meta_description;
+    const descLength = metaDescription.length;
+    const isDescInvalid = descLength > 165;
+
+
 
     const addDynamicItem = (field: string) => {
         setDynamicFields(prev => ({
@@ -384,18 +393,26 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     placeholder='Input Meta Title'
                                     onChange={handleChange}
                                     value={formData.meta_title}
-                                    notes='min.55 / max.65, Character 0'
                                     className='w-full'
-                                    textareaClassname='!h-20'
+                                    textareaClassname={`!h-20 ${isTitleInvalid ? '!border !border-red-500' : ''}`}
+                                    notes={
+                                        <span className={isTitleInvalid ? 'text-red-500' : 'text-gray-400'}>
+                                            min.55 / max.65, Character {titleLength}
+                                        </span>
+                                    }
                                 />
                                 <TextArea id='meta_description'
                                     label='Meta Description'
                                     placeholder='Input Meta Description'
                                     onChange={handleChange}
                                     value={formData.meta_description}
-                                    notes='min.145 / max.165, Character 0'
                                     className='w-full'
-                                    textareaClassname='!h-20'
+                                    textareaClassname={`!h-20 ${isDescInvalid ? '!border !border-red-500' : ''}`}
+                                    notes={
+                                        <span className={isDescInvalid ? 'text-red-500' : 'text-gray-400'}>
+                                            min.145 / max.165, Character {descLength}
+                                        </span>
+                                    }
                                 />
                             </div>
 

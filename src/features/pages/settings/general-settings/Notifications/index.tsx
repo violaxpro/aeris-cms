@@ -348,6 +348,14 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                         className="col-span-full [&_.ql-editor]:min-h-[100px]"
                         labelClassName="font-medium text-gray-700 dark:text-gray-600 mb-1.5"
                     />
+
+                </div>
+                <div className='flex justify-center'>
+                    <Button
+                        label='Save'
+                        onClick={handleSubmit}
+                        style={{ padding: '1rem 2rem' }}
+                    />
                 </div>
 
             </Modal>

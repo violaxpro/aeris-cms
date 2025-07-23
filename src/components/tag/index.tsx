@@ -1,11 +1,13 @@
 import React from 'react';
 import { Tag } from 'antd';
+import { statusMap } from '@/config/colors-status';
 
 type StatusTagProps = {
     status: string;
+    type?: string
 };
 
-const StatusTag: React.FC<StatusTagProps> = ({ status }) => {
+const StatusTag: React.FC<StatusTagProps> = ({ status, type = 'quote' }) => {
     // const colorMap: Record<string, string> = {
     //     // DRFAT: '#9CA3AF',
     //     // DRAFT: '#FF6A00',
@@ -27,15 +29,16 @@ const StatusTag: React.FC<StatusTagProps> = ({ status }) => {
     // };
 
     // const color = colorMap[status] || 'gray';
-    const statusMap: Record<string, { color: string; text: string, textColor: string }> = {
-        Draft: { color: '#FF6A001A', text: 'Draft', textColor: '#FF6A00' },
-        Approved: { color: '#3666AA1A', text: 'Approved', textColor: '#3666AA' },
-        Cancelled: { color: '#EA00001A', text: 'Cancelled', textColor: '#EA0000' },
-        Invoiced: { color: '#00B3061A', text: 'Invoiced', textColor: '#00B306' },
 
+    // const config = statusMap[status] || { color: 'default', text: status };
+    let config;
 
-    };
-    const config = statusMap[status] || { color: 'default', text: status };
+    // Kondisi khusus untuk status 'Draft'
+    if (status === 'Draft' && type === 'order') {
+        config = statusMap['Draft Order'];
+    } else {
+        config = statusMap[status] || { color: 'default', text: status, textColor: 'inherit' };
+    }
 
     return <Tag color={config.color} bordered={false}>
         <span style={{ color: config.textColor }}>{config.text}</span>

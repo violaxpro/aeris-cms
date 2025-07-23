@@ -21,6 +21,7 @@ type SelectInputProps = {
     popupRender?: any
     error?: string
     selectClassName?: string
+    required?: boolean
 };
 
 const SelectInput: React.FC<SelectInputProps> = ({
@@ -35,36 +36,37 @@ const SelectInput: React.FC<SelectInputProps> = ({
     allowClear = false,
     popupRender,
     error,
-    selectClassName
+    selectClassName,
+    required
 }) => {
     return (
         <div className={className}>
             {
                 label && (<label htmlFor={id} className="block text-sm font-medium text-gray-700">
                     {label}
+                    {required && <span className="text-red-500 ml-1">*</span>}
                 </label>)
             }
+            <div>
+                <Select
+                    id={id}
+                    showSearch
+                    style={{ width: '100%' }}
+                    className={`!h-10 ${selectClassName}`}
+                    placeholder={placeholder}
+                    allowClear={allowClear}
+                    optionFilterProp="label"
+                    value={value}
+                    onChange={onChange}
+                    options={options}
+                    filterSort={(a, b) =>
+                        (a?.label ?? '').toLowerCase().localeCompare((b?.label ?? '').toLowerCase())
+                    }
+                    mode={modeType}
+                    popupRender={popupRender}
+                />
+            </div>
 
-            <Select
-                id={id}
-                showSearch
-                style={{ width: '100%' }}
-                className={`!h-10 ${selectClassName}`}
-                placeholder={placeholder}
-                allowClear={allowClear}
-                optionFilterProp="label"
-                value={value}
-                onChange={onChange}
-                options={options}
-                filterSort={(a, b) =>
-                    (a?.label ?? '').toLowerCase().localeCompare((b?.label ?? '').toLowerCase())
-                }
-                {...(modeType ? {
-                    mode: modeType,
-
-                } : {})}
-                popupRender={popupRender}
-            />
             {error && (
                 <p className="text-red-500 text-xs mt-1">{error}</p>
             )}

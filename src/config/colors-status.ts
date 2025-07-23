@@ -1,0 +1,20 @@
+export const statusMap: Record<string, { color: string; text: string, textColor: string }> = {
+    Draft: { color: '#FF6A001A', text: 'Draft', textColor: '#FF6A00' },
+    Approved: { color: '#3666AA1A', text: 'Approved', textColor: '#3666AA' },
+    Cancelled: { color: '#EA00001A', text: 'Cancelled', textColor: '#EA0000' },
+    Invoiced: { color: '#00B3061A', text: 'Invoiced', textColor: '#00B306' },
+    Sent: { color: '#9747FF1A', text: 'Sent', textColor: '#9747FF' },
+    'Draft Order': { color: '#4E4E4E1A', text: 'Draft', textColor: '#4E4E4ECC' },
+    Processing: { color: '#FF6A001A', text: 'Processing', textColor: '#FF6A00' },
+    'Awaiting Stock': { color: '#E2E7EE', text: 'Awaiting Stock', textColor: '#3666AA' },
+    Packed: { color: '#01DA7C1A', text: 'Packed', textColor: '#01DA7C' },
+    'Ready for Pickup': { color: '#9747FF1A', text: 'Ready For Pickup', textColor: '#9747FF' },
+    Shipped: { color: '#017D931A', text: 'Shipped', textColor: '#017D93' },
+    'In Transit': { color: '#FF4AC31A', text: 'In Transit', textColor: '#FF4AC3' },
+    'Out of Delivery': { color: '#0A33531A', text: 'Out of Delivery', textColor: '#0A3353' },
+    Delivered: { color: '#5C4AFF1A', text: 'Delivered', textColor: '#5C4AFF' },
+    Completed: { color: '#01933B1A', text: 'Completed', textColor: '#01933B' },
+    Refunded: { color: '#A329041A', text: 'Refunded', textColor: '#A32904' },
+
+};
+

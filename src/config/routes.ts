@@ -55,6 +55,7 @@ export const routes = {
     quote: '/ecommerce/quote',
     createQuote: '/ecommerce/quote/create',
     editQuote: (slug: string) => `/ecommerce/quote/${slug}/edit`,
+    detailQuote: (slug: string) => `/ecommerce/quote/${slug}/detail`,
 
     purchases: '/ecommerce/purchases',
     createPurchases: '/ecommerce/purchases/create',

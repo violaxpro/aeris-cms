@@ -15,8 +15,12 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
         1: { color: 'success', text: 'Enabled' },
         0: { color: 'default', text: 'Disabled' },
         Paid: { color: '#01933B', text: 'Paid' },
-        Unpaid: { color: '#FF6A00', text: 'Unpaid' },
-        'Partially Paid': { color: '#FF6A00', text: 'Partially Paid' },
+        Unpaid: { color: '#828282', text: 'Unpaid' },
+        'Partially Paid': { color: '#FBBC0E', text: 'Partially Paid' },
+        'Waiting for Payment': { color: '#FF6A00', text: 'Waiting for Payment' },
+        'Verification': { color: '#FF7601', text: 'Verification' },
+        'Refunded': { color: '#A32904', text: 'Refunded' },
+
     };
 
     const config = statusMap[status] || { color: 'default', text: status };
