@@ -676,6 +676,45 @@ export const quoteDummyData = [
         shipping_fee: 400,
         gst: 10
     },
+    {
+        id: 5,
+        po_number: 'Q8905',
+        email: 'user@gmail.com',
+        mobile_number: '628229019021203',
+        payment_method: 'Credit Card',
+        status: 'Cancelled',
+        payment_status: 'Waiting for Payment',
+        paid_amount: 200,
+        total: 400,
+        created_by: {
+            date: '2025-02-26T01:52:08.234Z',
+            name: 'User'
+        },
+        modified: {
+            date: '2025-02-26T01:52:08.234Z',
+            name: 'User'
+        },
+        user: 'Ayu Lestari',
+        billing_address: 'Indonesia',
+        shipping_address: 'Indonesia',
+        order_reference: 'Order 1',
+        product: [
+            {
+                sku: '459834',
+                name: 'Product A',
+                price: 500,
+                buying_price: 600,
+                qty: 2,
+                total: 1200
+            }
+        ],
+        delivery_note: '',
+        internal_note: '',
+        subtotal: 1200,
+        discount: 0.5,
+        shipping_fee: 400,
+        gst: 10
+    },
 
 ]
 

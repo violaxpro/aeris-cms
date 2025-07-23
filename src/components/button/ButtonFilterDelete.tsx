@@ -14,7 +14,7 @@ type buttonProps = {
     style?: any
     position?: 'start' | 'end'
 }
-const ButtonFilter = ({ btnClassname, icon, label, link, type, onClick, shape, style, position = 'start' }: buttonProps) => {
+const index = ({ btnClassname, icon, label, link, type, onClick, shape, style, position = 'start' }: buttonProps) => {
     // hover:!bg-inherit hover:!text-inherit hover:!border-inherit
     const button = (
         <Button
@@ -36,4 +36,4 @@ const ButtonFilter = ({ btnClassname, icon, label, link, type, onClick, shape, s
     return button
 }
 
-export default ButtonFilter
+export default index

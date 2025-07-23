@@ -9,6 +9,9 @@ export { default as HeaderIconSwitch } from './HeaderIconSwitch.svg'
 export { default as BodyIconSwitch } from './BodyIconSwitch.svg'
 export { default as AddIcon } from './AddIcon.svg'
 export { default as FilterIcon } from './FilterIcon.svg'
+export { default as MoreIcon } from './MoreIcon.svg'
+export { default as FilterWhiteIcon } from './FilterWhiteIcon.svg'
+
 
 
 

@@ -13,6 +13,7 @@ import Breadcrumb from "@/components/breadcrumb"
 import Input from '@/components/input'
 import { Content } from 'antd/es/layout/layout'
 import Button from "@/components/button"
+import ButtonAction from '@/components/button/ButtonAction'
 import SelectInput from '@/components/select'
 import SearchInput from '@/components/search';
 import SearchTable from '@/components/search/SearchTable'
@@ -26,8 +27,11 @@ import { QuoteType } from '@/plugins/types/sales-type'
 import dayjs from 'dayjs';
 import DatePickerInput from '@/components/date-picker';
 import StatusTag from '@/components/tag'
-import ButtonFilter from '@/components/button/ButtonFilter'
+import StatusBadge from '@/components/badge/badge-status'
+import ButtonFilter from '@/components/button/ButtonFilterDelete'
+import ButtonDelete from '@/components/button/ButtonFilterDelete'
 import Pagination from '@/components/pagination'
+import { MoreIcon, TrashIconRed } from '@public/icon'
 
 const index = ({ quoteData }: { quoteData?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
@@ -205,7 +209,7 @@ const index = ({ quoteData }: { quoteData?: any }) => {
 
             },
             render: (_: any, row: any) => {
-                let payment_status
+                let payment_status: any = ''
                 if (row.paid_amount === 0) {
                     payment_status = 'Waiting for Payment'
                 } else if (row.paid_amount < row.total) {
@@ -216,14 +220,10 @@ const index = ({ quoteData }: { quoteData?: any }) => {
                 return (
                     <div className="flex flex-col w-full">
                         <div className="flex justify-start gap-1">
-                            <span>Method</span>
-                            <span>:</span>
                             <span>{row.payment_method}</span>
                         </div>
                         <div className="flex justify-start gap-1">
-                            <span>Status</span>
-                            <span>:</span>
-                            <span>{payment_status || '-'}</span>
+                            <StatusBadge status={payment_status} />
                         </div>
                     </div>
                 )
@@ -241,7 +241,7 @@ const index = ({ quoteData }: { quoteData?: any }) => {
                 )
             },
             render: (val: any) => {
-                const status = val ? val.toUpperCase() : ''
+                const status = val
                 return (
                     <StatusTag status={status} />
                 );
@@ -353,11 +353,24 @@ const index = ({ quoteData }: { quoteData?: any }) => {
                 );
 
                 return (
-                    <Dropdown overlay={menu} trigger={['click']} >
-                        <button className="flex items-center justify-center px-2 py-1 border rounded ">
-                            Actions <MoreOutlined className="ml-1" />
-                        </button>
-                    </Dropdown >
+                    <div className='flex items-center gap-2'>
+                        <Dropdown overlay={menu} trigger={['click']} >
+                            <ButtonAction
+                                color='primary'
+                                variant='filled'
+                                size="small"
+                                icon={MoreIcon}
+                            />
+                        </Dropdown >
+                        <ButtonAction
+                            color='danger'
+                            variant='filled'
+                            size="small"
+                            icon={TrashIconRed}
+                        // onClick={() => setOpenModalDelete(true)}
+                        />
+                    </div>
+
                 );
             }
         },
@@ -384,7 +397,7 @@ const index = ({ quoteData }: { quoteData?: any }) => {
 
     console.log(currentOrder)
 
-    console.log(!search ? dataByStatus : filteredData, filteredData, valueStatus)
+    console.log(selectedRowKeys)
     return (
         <>
             {contextHolder}
@@ -412,21 +425,22 @@ const index = ({ quoteData }: { quoteData?: any }) => {
             </div>
             <Content className="mt-6 mx-4 mb-0">
                 <div style={{ padding: 24, minHeight: 360 }}>
-                    <div className='flex justify-start mb-4 gap-2'>
+                    <div className='flex justify-between mb-4 gap-2'>
                         {/* <Button
                             label='Add Payment'
                             onClick={handleClickModalPaid}
                         /> */}
-                        <ShowPageSize
-                            pageSize={pageSize}
-                            onChange={setPageSize}
-                        />
+
                         <div className='flex items-center gap-2'>
+                            <ShowPageSize
+                                pageSize={pageSize}
+                                onChange={setPageSize}
+                            />
                             <ButtonFilter
                                 label='Filter by'
                                 icon={<Image
                                     src={FilterIcon}
-                                    alt='add-icon'
+                                    alt='filter-icon'
                                     width={15}
                                     height={15}
                                 />}
@@ -440,6 +454,21 @@ const index = ({ quoteData }: { quoteData?: any }) => {
                                 onSearch={() => console.log('Searching for:', search)}
                             />
                         </div>
+                        {
+                            selectedRowKeys.length > 0 && <ButtonDelete
+                                label='Delete All'
+                                icon={<Image
+                                    src={TrashIconRed}
+                                    alt='trash-icon'
+                                    width={10}
+                                    height={10}
+                                />}
+                                onClick={() => setisOpenModalFilter(true)}
+                                position='start'
+                                style={{ padding: '1.2rem 1.7rem' }}
+                                btnClassname='btn-delete-all'
+                            />
+                        }
                     </div>
                     <Table
                         columns={columns}
