@@ -32,6 +32,7 @@ export type OrderType = {
 export type QuoteType = {
     id?: string | number | undefined
     po_number: string
+    quote_number: string
     email: string
     mobile_number: string
     payment_method: string
@@ -563,6 +564,7 @@ export const quoteDummyData = [
     {
         id: 1,
         po_number: 'Q8903',
+        quote_number: 'Q8901',
         email: 'user@gmail.com',
         mobile_number: '628229019021203',
         payment_method: 'Bank Transfer',
@@ -601,6 +603,7 @@ export const quoteDummyData = [
     {
         id: 2,
         po_number: 'Q8903',
+        quote_number: 'Q8905',
         email: 'user@gmail.com',
         mobile_number: '628229019021203',
         payment_method: 'Bank Transfer',
@@ -640,6 +643,7 @@ export const quoteDummyData = [
     {
         id: 4,
         po_number: 'Q8904',
+        quote_number: 'Q8905',
         email: 'user@gmail.com',
         mobile_number: '628229019021203',
         payment_method: 'Bank Transfer',

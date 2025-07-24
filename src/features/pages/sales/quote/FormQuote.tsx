@@ -21,6 +21,8 @@ import { Divider } from 'antd';
 import Segmented from '@/components/segmented'
 import OrderSummary from '../OrderSummary';
 import ButtonCancel from '@/components/button/ButtonAction'
+import { useAtom } from 'jotai';
+import { taxSetAtom } from '@/store/DropdownItemStore';
 
 const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const router = useRouter()
@@ -37,6 +39,7 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         total: 0,
     }]);
     const [editIndex, setEditIndex] = useState<number | null>(null)
+    const [selectedDiscountType, setSelectedDiscountType] = useState('percent')
     const [formData, setFormData] = useState({
         customer_name: initialValues ? initialValues.customer_name : '',
         user: initialValues ? initialValues.user : '',
@@ -45,9 +48,9 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         billing_address: initialValues ? initialValues.billing_address : '',
         shipping_address: initialValues ? initialValues.shipping_address : '',
         order_reference: initialValues ? initialValues.order_reference : '',
-        subtotal: initialValues ? initialValues.subtotal : '',
+        subtotal: initialValues ? initialValues.subtotal : 0,
         product: initialValues ? initialValues.product : [],
-        discount: initialValues ? initialValues.discount : '',
+        discount: initialValues ? initialValues.discount : 0,
         shipping_fee: initialValues ? initialValues.shipping_fee : '',
         gst: initialValues ? initialValues.gst : '',
         total: initialValues ? initialValues.total : '',
@@ -58,8 +61,8 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         internal_note: initialValues ? initialValues.internal_note : '',
 
     });
-    const [selectedDiscountType, setSelectedDiscountType] = useState('percent')
     const [profitHidden, setProfitHidden] = useState(true)
+    const [optionsTax] = useAtom(taxSetAtom)
 
     const breadcrumb = [
         { title: 'Sales' },
@@ -226,20 +229,32 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         { label: 'RECEIVE', value: 'RECEIVE' }
     ]
 
-    console.log(formData, productForm)
+    console.log(formData, productForm, productForm?.reduce((acc, item) => acc + Number(item?.total || 0), 0))
 
     useEffect(() => {
-        const newSubtotal = productList.reduce((acc, item) => acc + Number(item.total || 0), 0);
-        const discount = Number(formData.discount || 0)
+        // const newSubtotal = productForm?.length > 0 && productForm?.reduce((acc, item) => {
+        //     console.log(item)
+        //     return acc + Number(item?.total || 0), 0
+        // });
+        const newSubtotal = productForm?.length > 0
+            ? productForm.reduce((acc, item) => acc + Number(item?.total || 0), 0)
+            : 0;
+
+        console.log('ini subtotal baru', newSubtotal)
+        const discount = formData.discount_type == 'percent' ? (Number(formData.discount) / 100) : Number(formData.discount || 0)
+        console.log(discount, selectedDiscountType)
         const shipping_fee = Number(formData.shipping_fee || 0)
         const tax = Number(formData.gst || 0)
         const total = newSubtotal - discount + shipping_fee + tax
         setFormData(prev => ({
             ...prev,
             subtotal: newSubtotal.toString(),
+            discount: discount,
             total: total.toString()
         }));
-    }, [productList, formData.discount, formData.shipping_fee, formData.gst]);
+    }, [productForm, formData.discount, formData.shipping_fee, formData.gst]);
+
+    console.log(optionsTax, selectedDiscountType)
 
 
     return (
@@ -255,7 +270,7 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
                     <div className='flex flex-col gap-5'>
                         <div className='grid gap-3'>
-                            <div className='grid md:grid-cols-4 gap-4 mt-2'>
+                            <div className='grid md:grid-cols-[2fr_1fr_1fr_2fr] gap-4 mt-2'>
                                 <Input
                                     id='customer_name'
                                     label='Customer Name'
@@ -265,7 +280,7 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     value={formData.customer_name}
                                     required
                                 />
-                                <SelectInput
+                                {/* <SelectInput
                                     id='payment_method'
                                     label='Payment Method'
                                     placeholder='Select Payment Method'
@@ -275,7 +290,7 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                         { label: 'Paypal', value: 'Paypal' }
                                     ]}
                                     required
-                                />
+                                /> */}
                                 <Input
                                     id='po_number'
                                     label='PO Number'
@@ -292,6 +307,15 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     placeholder='Input Order Reference'
                                     onChange={handleChange}
                                     value={formData.order_reference}
+                                    required
+                                />
+                                <SelectInput
+                                    id='gst'
+                                    label='Tax Rate'
+                                    placeholder='Select Tax Rate'
+                                    onChange={(selected) => handleChangeSelect('gst', selected)}
+                                    value={formData.gst}
+                                    options={optionsTax}
                                     required
                                 />
                             </div>
@@ -396,11 +420,11 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
                             />
                             <Input
-                                id='discount_type'
+                                id='discount'
                                 label='Discount Type'
                                 type='number'
                                 onChange={handleChange}
-                                value={formData.discount_type}
+                                value={formData.discount}
                                 suffix={
                                     selectedDiscountType == 'percent' && <PercentageOutlined />
                                 }
@@ -418,7 +442,13 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                         <Segmented
                                             size='small'
                                             value={selectedDiscountType}
-                                            onChange={(selected: any) => setSelectedDiscountType(selected)}
+                                            onChange={(selected: any) => {
+                                                setSelectedDiscountType(selected)
+                                                setFormData((prev) => ({
+                                                    ...prev,
+                                                    discount_type: selected
+                                                }))
+                                            }}
                                             options={[
                                                 { label: 'Percent', value: 'percent' },
                                                 { label: 'Fixed', value: 'fixed' }
@@ -435,10 +465,10 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 onChange={(selected) => handleChangeSelect('shipping_method', selected)}
                                 value={formData.shipping_method}
                                 options={[
-                                    { label: 'Free Shipping', value: 'Free SHipping' },
-                                    { label: 'Local Pickup', value: 'Local Pickup' },
-                                    { label: 'Drop Off', value: 'Drop Off' },
-                                    { label: 'Flat Rate', value: 'Flat Rate' }
+                                    { label: 'Free Shipping', value: '0' },
+                                    { label: 'Local Pickup', value: '10' },
+                                    { label: 'Drop Off', value: '0' },
+                                    { label: 'Flat Rate', value: '5' }
                                 ]}
                                 selectClassName='!mt-[1rem]'
                                 required
@@ -468,10 +498,10 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     profitHidden={profitHidden}
                                     onReveal={() => setProfitHidden(false)}
                                     profit={100}
-                                    subtotal={1130.4}
-                                    shippingFee={50}
-                                    discount={5}
-                                    gstRate={0.1}
+                                    subtotal={formData.subtotal}
+                                    shippingFee={Number(formData.shipping_fee)}
+                                    discount={formData.discount}
+                                    gstRate={formData.gst}
                                 />
                             </div>
 

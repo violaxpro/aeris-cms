@@ -168,13 +168,13 @@ const index = ({ quoteData }: { quoteData?: any }) => {
         {
             title: 'Quote Number',
             dataIndex: 'id',
-            sorter: (a: any, b: any) => a.id - b.id,
+            sorter: (a: any, b: any) => a?.po_number.localeCompare(b?.po_number),
             render: (_: any, row: any) => {
-                return <div className="flex flex-col w-full">
-                    <div className="flex justify-start gap-1">
-                        <span>{row.status !== 'Draft' ? row.po_number : '-'}</span>
-                    </div>
-                </div>
+                return row.status !== 'Draft'
+                    ? <Link href={routes.eCommerce.detailOrder(row.po_number)}>
+                        {row.status !== 'Draft' ? row.po_number : '-'}
+                    </Link>
+                    : <span>-</span>
             }
         },
         {
@@ -192,10 +192,10 @@ const index = ({ quoteData }: { quoteData?: any }) => {
             render: (_: any, row: any) => {
                 return <div className="flex flex-col w-full">
                     <div className="flex justify-start gap-1">
-                        <span>{row.email}</span>
+                        <span>{row?.user?.email}</span>
                     </div>
                     <div className="flex justify-start gap-1">
-                        <span>{row.mobile_number}</span>
+                        <span>{row?.user?.mobile_number}</span>
                     </div>
                 </div>
             }
@@ -256,13 +256,13 @@ const index = ({ quoteData }: { quoteData?: any }) => {
         },
         {
             title: 'Created',
-            dataIndex: 'created_by',
+            dataIndex: 'date',
             sorter: (a: any, b: any) => {
-                return new Date(a.created_by).getTime() - new Date(b.created_by).getTime()
+                return new Date(a?.date).getTime() - new Date(b?.date).getTime()
             },
-            render: (val: any) => {
-                const date = dayjs(val.date).format("DD/MM/YYYY")
-                const user = val.name
+            render: (_: any, row: any) => {
+                const date = dayjs(row.date).format("DD/MM/YYYY")
+                const user = row?.user?.name
                 return <div className="flex flex-col w-full">
                     <div className="flex justify-start gap-1">
                         <span>{date}</span>
@@ -277,11 +277,11 @@ const index = ({ quoteData }: { quoteData?: any }) => {
             title: 'Modified',
             dataIndex: 'modified',
             sorter: (a: any, b: any) => {
-                return new Date(a.modified).getTime() - new Date(b.modified).getTime()
+                return new Date(a?.date).getTime() - new Date(b?.date).getTime()
             },
-            render: (val: any) => {
-                const date = dayjs(val.date).format("DD/MM/YYYY")
-                const user = val.name
+            render: (_: any, row: any) => {
+                const date = dayjs(row?.date).format("DD/MM/YYYY")
+                const user = row?.user?.name
                 return <div className="flex flex-col w-full">
                     <div className="flex justify-start gap-1">
                         <span>{date}</span>
@@ -402,7 +402,7 @@ const index = ({ quoteData }: { quoteData?: any }) => {
 
     console.log(currentOrder)
 
-    console.log(selectedRowKeys)
+    console.log(quoteData)
     return (
         <>
             {contextHolder}

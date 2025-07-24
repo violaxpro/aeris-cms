@@ -54,7 +54,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
             </div>
 
             <div className="flex justify-between mb-1">
-                <span>GST ({(gstRate * 100).toFixed(0)}%)</span>
+                <span>Tax ({(gstRate * 100).toFixed(0)}%)</span>
                 <span>{formatCurrency(gst)}</span>
             </div>
 

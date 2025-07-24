@@ -10,7 +10,7 @@ export default async function DetailQuotePage(props: { params: Params }) {
     try {
 
         const dataByid = quoteDummyData.find((item) => {
-            return item.id === Number(slug)
+            return item.quote_number === slug
         })
         data = dataByid
     } catch (error) {

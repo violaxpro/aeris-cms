@@ -199,13 +199,14 @@ const index = ({ orderData }: { orderData?: any }) => {
         {
             title: 'Number',
             dataIndex: 'id',
-            sorter: (a: any, b: any) => a.id - b.id,
+            sorter: (a: any, b: any) => a.po_number - b.po_number,
             render: (_: any, row: any) => {
-                return <div className="flex flex-col w-full">
-                    <div className="flex justify-start gap-1">
-                        <span>{row.status !== 'Draft' ? row.po_number : '-'}</span>
-                    </div>
-                </div>
+                return row.status !== 'Draft'
+                    ? <Link href={routes.eCommerce.detailOrder(row.po_number)}>
+                        {row.status !== 'Draft' ? row.po_number : '-'}
+                    </Link>
+                    : <span>-</span>
+
             }
         },
         {

@@ -1,10 +1,11 @@
 
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { InvoicePDF } from '@/features/pages/sales/invoice';
 import { Params } from '@/plugins/types'
 import { orderDummyData } from '@/plugins/types/sales-type';
 import { PDFViewer } from '@react-pdf/renderer';
+import { pdf } from '@react-pdf/renderer';
 
 export default async function InvoicePage(props: { params: Params }) {
     // const params = await props.params;
@@ -34,6 +35,45 @@ export default async function InvoicePage(props: { params: Params }) {
         unitPrice: 200,
         quantity: 10
     };
+
+    //preview dulu baru cetak
+    useEffect(() => {
+        const generateAndPrint = async () => {
+            const blob = await pdf(<InvoicePDF invoiceData={invoiceData} />).toBlob();
+            const blobUrl = URL.createObjectURL(blob);
+
+            // Buka di tab baru
+            const newWindow = window.open(blobUrl);
+            if (newWindow) {
+                newWindow.onload = () => {
+                    newWindow.print();
+                };
+            }
+        };
+
+        generateAndPrint();
+    }, []);
+
+    //langsung cetak
+
+    // useEffect(() => {
+    //     const generateAndDownload = async () => {
+    //         const blob = await pdf(<InvoicePDF invoiceData={invoiceData} />).toBlob();
+    //         const blobUrl = URL.createObjectURL(blob);
+
+    //         const link = document.createElement('a');
+    //         link.href = blobUrl;
+    //         link.download = `invoice-${invoiceData.invoiceNumber}.pdf`;
+    //         document.body.appendChild(link);
+    //         link.click();
+    //         document.body.removeChild(link);
+    //         URL.revokeObjectURL(blobUrl); // optional cleanup
+    //     };
+
+    //     generateAndDownload();
+    // }, []);
+
+
 
     return (
         <div className="h-screen">

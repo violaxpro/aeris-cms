@@ -10,7 +10,7 @@ export default async function DetailOrderPage(props: { params: Params }) {
     try {
 
         const dataByid = orderDummyData.find((item) => {
-            return item.id === Number(slug)
+            return item.po_number === slug
         })
         data = dataByid
     } catch (error) {

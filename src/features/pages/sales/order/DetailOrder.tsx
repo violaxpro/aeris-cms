@@ -24,6 +24,7 @@ import dayjs from 'dayjs'
 import { Card } from '@/components/card'
 import { InfoItem } from '@/components/card/InfoItem'
 import { useRouter } from 'next/navigation'
+import { downloadInvoicePDF } from '@/services/invoice-service'
 
 const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
     const router = useRouter()
@@ -287,6 +288,25 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
             }
         },
     ]
+
+    const invoiceData = {
+        invoiceNumber: 'INV-2025-001',
+        customerName: 'John Doe',
+        customerEmail: 'john@example.com',
+        items: [
+            { sku: '0317-8471', name: 'U-Prox Keyfob - White SMART9412', quantity: 2, unit_price: 141.44 },
+            { sku: '0317-8471', name: 'Hikvision Wireless Repeater DS-PR1-WB', quantity: 3, unit_price: 235.36 },
+        ],
+        total: 250,
+        subtotal: 879.98,
+        gst: 56.00,
+        freight: 15.00,
+        unitPrice: 200,
+        quantity: 10
+    };
+    const handlePrint = async (data: any) => {
+        await downloadInvoicePDF(data);
+    }
     console.log(data)
     return (
         <>
@@ -356,7 +376,7 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
                                 height={15}
                             />}
                             label='Print'
-                            onClick={() => router.push(routes.eCommerce.invoice(slug))}
+                            onClick={() => handlePrint(invoiceData)}
                         />
                         <Button
                             icon={<Image
