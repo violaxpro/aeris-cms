@@ -3,6 +3,8 @@ import Input from "@/components/input"
 import SelectInput from '@/components/select';
 import CheckboxInput from '@/components/checkbox';
 import Button from '@/components/button'
+import { TrashIcon, TrashIconRed } from '@public/icon';
+import ButtonAction from '@/components/button/ButtonIcon';
 
 export interface ProductForm {
     sku: string
@@ -16,37 +18,41 @@ export interface ProductForm {
 
 interface ProductInputProps {
     productForm: ProductForm
-    setProductForm: React.Dispatch<React.SetStateAction<ProductForm>>
-    onAddProduct: () => void
+    // setProductForm: React.Dispatch<React.SetStateAction<ProductForm>>
+    // onAddProduct: () => void
+    onChange: (form: ProductForm) => void;
+    onRemove?: () => void;
+    index: number;
+    length?: number
 }
 
 const ProductReturn = ({
     productForm,
-    setProductForm,
-    onAddProduct
+    // setProductForm,
+    // onAddProduct
+    onChange,
+    onRemove,
+    index,
+    length,
 }: ProductInputProps) => {
     const handleProductChange = (e: any) => {
         const { id, value } = e.target;
-        setProductForm((prev) => ({
-            ...prev,
-            [id]: value
-        }));
+        const updated = { ...productForm, [id]: value }
+        onChange(updated);
     };
 
     const handleProductCheckbox = (field: string, checked: boolean) => {
-        setProductForm((prev) => ({
-            ...prev,
-            [field]: checked
-        }));
+        const updated = { ...productForm, [field]: checked }
+        onChange(updated);
     };
 
 
-    const handleAddProduct = () => {
-        onAddProduct()
-    };
+    // const handleAddProduct = () => {
+    //     onAddProduct()
+    // };
 
     return (
-        <div className='grid md:grid-cols-7 gap-4 mb-6'>
+        <div className='grid md:grid-cols-[1fr_2fr_1fr_1fr_1.5fr_1fr_1fr_50px] gap-4 mb-6'>
             <Input
                 id='sku'
                 type='text'
@@ -54,6 +60,8 @@ const ProductReturn = ({
                 value={productForm.sku}
                 onChange={handleProductChange}
                 className='mb-1'
+                required
+
             />
             <Input
                 id='name'
@@ -62,6 +70,8 @@ const ProductReturn = ({
                 value={productForm.name}
                 onChange={handleProductChange}
                 className='mb-1'
+                required
+
 
             />
             <Input
@@ -71,6 +81,8 @@ const ProductReturn = ({
                 value={productForm.price}
                 onChange={handleProductChange}
                 className='mb-1'
+                required
+
             />
             <Input
                 id='return_type'
@@ -79,6 +91,8 @@ const ProductReturn = ({
                 value={productForm.return_type}
                 onChange={handleProductChange}
                 className='mb-1'
+                required
+
             />
             {/* <SelectInput
                 id='return_type'
@@ -99,6 +113,7 @@ const ProductReturn = ({
                 value={productForm.current_serial_number}
                 onChange={handleProductChange}
                 className='mb-1'
+                required
 
             />
             <Input
@@ -108,6 +123,8 @@ const ProductReturn = ({
                 value={productForm.reason}
                 onChange={handleProductChange}
                 className='mb-1'
+                required
+
             />
             <div className='flex flex-col'>
                 <CheckboxInput
@@ -115,13 +132,35 @@ const ProductReturn = ({
                     checked={productForm.product_return}
                     onChange={(val) => handleProductCheckbox('product_return', val)}
                     text={productForm.product_return == true ? 'True' : 'False'}
+                    required
+
                 />
             </div>
-            <Button
-                label='Save'
+            {
+                onRemove && <div className='flex item-ends justify-center mt-4 '>
+                    {
+                        length && length <= 1 ?
+                            <ButtonAction
+                                icon={TrashIcon}
+                                width={20}
+                                height={20}
+                                className='btn-trash-item !h-10 !w-15'
+                            /> :
+                            <ButtonAction
+                                color='danger'
+                                variant='filled'
+                                size="small"
+                                icon={TrashIconRed}
+                                width={15}
+                                height={15}
+                                className='!h-10 !w-15'
 
-                onClick={handleAddProduct}
-            />
+                                onClick={onRemove}
+                            />
+                    }
+
+                </div>
+            }
         </div>
 
     )

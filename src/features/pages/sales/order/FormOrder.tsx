@@ -300,6 +300,7 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
             <div className="mt-6 mx-4 mb-0">
                 <h1 className="text-xl font-bold mb-4">{mode == 'create' ? 'Create Order' : 'Edit Order'}</h1>
                 <Breadcrumb items={breadcrumb} />
+                <Divider />
             </div>
 
             <Content className="mb-0">
@@ -388,7 +389,7 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             </div>
                         </div>
 
-                        <div >
+                        <div>
                             <h1 className='text-lg font-bold'>Product List</h1>
                             <Divider />
                             {
@@ -400,6 +401,7 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                             productForm={item}
                                             onChange={(updateItem) => handleUpdateRow(index, updateItem)}
                                             onRemove={() => handleRemoveRow(index)}
+                                            length={productForm.length}
                                         />
 
                                     )

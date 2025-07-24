@@ -48,9 +48,12 @@ export const routes = {
     createReturnSupplier: '/ecommerce/return-suppliers/create',
     editReturnSupplier: (slug: string) => `/ecommerce/return-suppliers/${slug}/edit`,
 
+    invoice: (slug: string) => `/ecommerce/order/${slug}/invoice`,
+
     order: '/ecommerce/order',
     createOrder: '/ecommerce/order/create',
     editOrder: (slug: string) => `/ecommerce/order/${slug}/edit`,
+    detailOrder: (slug: string) => `/ecommerce/order/${slug}/detail`,
 
     quote: '/ecommerce/quote',
     createQuote: '/ecommerce/quote/create',

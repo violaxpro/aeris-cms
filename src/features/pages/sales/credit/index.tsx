@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import Table from "@/components/table"
 import type { TableColumnsType } from 'antd'
 import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons'
@@ -16,10 +16,24 @@ import { useAtom } from 'jotai'
 import { creditSupplierAtom } from '@/store/SuppliersAtom'
 import { CreditSalesType } from '@/plugins/types/sales-type'
 import { stripHTML } from '@/plugins/validators/common-rules'
+import { Dropdown, Menu } from 'antd'
+import Pagination from '@/components/pagination'
+import { MoreIcon, TrashIconRed, FilterIcon, AddIcon } from '@public/icon'
+import Image from 'next/image'
+import ButtonAction from '@/components/button/ButtonIcon'
+import SearchTable from '@/components/search/SearchTable'
+import ShowPageSize from '@/components/pagination/ShowPageSize'
+import ButtonDelete from '@/components/button/ButtonAction'
+import StatusTag from '@/components/tag'
 
 const index = ({ creditSalesData }: { creditSalesData?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
     const [data, setData] = useAtom(creditSupplierAtom)
+    const [search, setSearch] = useState('')
+
+    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
 
 
     const handleDelete = async (id: any) => {
@@ -36,10 +50,10 @@ const index = ({ creditSalesData }: { creditSalesData?: any }) => {
 
     const breadcrumb = [
         {
-            title: 'Suppliers',
+            title: 'Sales',
         },
         {
-            title: 'Credit Supplier',
+            title: 'Credit',
         },
     ]
     const columns: TableColumnsType<CreditSalesType> = [
@@ -64,7 +78,8 @@ const index = ({ creditSalesData }: { creditSalesData?: any }) => {
             dataIndex: 'status',
             render: (val) => {
                 const status = stripHTML(val);
-                return status
+                const statusCapitalized = status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
+                return <StatusTag status={statusCapitalized} />
             }
         },
         {
@@ -72,19 +87,47 @@ const index = ({ creditSalesData }: { creditSalesData?: any }) => {
             dataIndex: 'action',
             key: 'action',
             width: 120,
-            render: (_: string, row: any) => (
+            render: (_: string, row: any) => {
+                const menu = (
+                    <Menu>
+                        <Menu.Item key="edit">
+                            <Link href={routes.eCommerce.editPurchases(row.id)}>
+                                Edit
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item key="detail">
+                            <Link href={routes.eCommerce.editOrder(row.id)}>
+                                Detail
+                            </Link>
+                        </Menu.Item>
 
-                <div className="flex items-center justify-end gap-3 pe-4">
-                    <Link href={routes.eCommerce.editCreditSalesList(row.id)}>
-                        <EditOutlined />
-                    </Link>
-                    <DeletePopover
-                        title='Delete Credit Supplier'
-                        description='Are you sure to delete this data?'
-                        onDelete={() => handleDelete(row.id)}
-                    />
-                </div >
-            ),
+
+                    </Menu>
+                );
+
+                return (
+                    <div className='flex items-center gap-2'>
+                        <Dropdown overlay={menu} trigger={['click']} >
+                            <ButtonAction
+                                color='primary'
+                                variant='filled'
+                                size="small"
+                                icon={MoreIcon}
+                            />
+                        </Dropdown >
+                        <ButtonAction
+                            color='danger'
+                            variant='filled'
+                            size="small"
+                            icon={TrashIconRed}
+                        // onClick={() => setOpenModalDelete(true)}
+                        />
+                    </div>
+                );
+
+            }
+
+
         },
 
     ]
@@ -109,17 +152,49 @@ const index = ({ creditSalesData }: { creditSalesData?: any }) => {
             </div>
             <Content className="mt-6 mx-4 mb-0">
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
-                    <div className='flex justify-end mb-4'>
+                    <div className='flex justify-between mb-4'>
                         <div className='flex items-center gap-2'>
-                            <SearchInput onSearch={handleSearch} />
+                            <ShowPageSize
+                                pageSize={pageSize}
+                                onChange={setPageSize}
+                            />
+
+                            <SearchTable
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                                onSearch={() => console.log('Searching for:', search)}
+                            />
                         </div>
+                        {
+                            selectedRowKeys.length > 0 && <ButtonDelete
+                                label='Delete All'
+                                icon={<Image
+                                    src={TrashIconRed}
+                                    alt='trash-icon'
+                                    width={10}
+                                    height={10}
+                                />}
+                                position='start'
+                                style={{ padding: '1.2rem 1.7rem' }}
+                                btnClassname='btn-delete-all'
+                            />
+                        }
 
                     </div>
                     <Table
                         columns={columns}
                         dataSource={data}
                         withSelectableRows
+                        selectedRowKeys={selectedRowKeys}
+                        onSelectChange={setSelectedRowKeys}
                     />
+                    <Pagination
+                        current={currentPage}
+                        total={data.length}
+                        pageSize={pageSize}
+                        onChange={(page) => setCurrentPage(page)}
+                    />
+
                 </div>
             </Content>
         </>

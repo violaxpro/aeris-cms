@@ -18,6 +18,10 @@ import { brandsAtom, categoriesAtom } from '@/store/DropdownItemStore';
 import { useNotificationAntd } from '@/components/toast';
 import ProductReturn, { ProductForm } from './ProductReturn';
 import Table from '@/components/table'
+import { Divider } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
+import ButtonCancel from '@/components/button/ButtonAction'
+
 
 const FormReturnSales: React.FC<FormProps> = ({ mode, initialValues, slug, dataTable }) => {
     const [optionBrands] = useAtom(brandsAtom)
@@ -37,7 +41,7 @@ const FormReturnSales: React.FC<FormProps> = ({ mode, initialValues, slug, dataT
     });
     const [showAddProduct, setShowAddProduct] = useState(false)
     const [productList, setProductList] = useState<any[]>([]);
-    const [productForm, setProductForm] = useState({
+    const [productForm, setProductForm] = useState([{
         sku: '',
         name: '',
         price: '',
@@ -45,25 +49,26 @@ const FormReturnSales: React.FC<FormProps> = ({ mode, initialValues, slug, dataT
         current_serial_number: '',
         reason: '',
         product_return: false
-    });
+    }]);
 
     const breadcrumb = [
-        { title: 'Return Sales', url: routes.eCommerce.returnSales },
-        { title: mode === 'create' ? 'Create Return Sales' : 'Edit Return Sales' },
+        { title: 'Sales' },
+        { title: 'RMA', url: routes.eCommerce.returnSales },
+        { title: mode === 'create' ? 'Create' : 'Edit' },
     ];
 
-    const handleAddProduct = () => {
-        setProductList([...productList, productForm]);
-        setProductForm({
-            sku: '',
-            name: '',
-            price: '',
-            return_type: '',
-            current_serial_number: '',
-            reason: '',
-            product_return: false
-        });
-    };
+    // const handleAddProduct = () => {
+    //     setProductList([...productList, productForm]);
+    //     setProductForm({
+    //         sku: '',
+    //         name: '',
+    //         price: '',
+    //         return_type: '',
+    //         current_serial_number: '',
+    //         reason: '',
+    //         product_return: false
+    //     });
+    // };
 
     const handleChange = (e: any) => {
         const { id, value } = e.target;
@@ -155,6 +160,33 @@ const FormReturnSales: React.FC<FormProps> = ({ mode, initialValues, slug, dataT
         },
     ]
 
+    const addItem = () => {
+        setProductForm([
+            ...productForm,
+            {
+                sku: '',
+                name: '',
+                price: '',
+                return_type: '',
+                current_serial_number: '',
+                reason: '',
+                product_return: false
+            }
+        ])
+    }
+
+    const handleRemoveRow = (index: number) => {
+        const updated = [...productForm];
+        updated.splice(index, 1);
+        setProductForm(updated);
+    };
+
+    const handleUpdateRow = (index: number, updatedForm: ProductForm) => {
+        const updated = [...productForm];
+        updated[index] = updatedForm;
+        setProductForm(updated);
+    };
+
     console.log(productList)
     useEffect(() => {
         const newSubtotal = productList.reduce((acc, item) => acc + Number(item.price || 0), 0);
@@ -172,26 +204,30 @@ const FormReturnSales: React.FC<FormProps> = ({ mode, initialValues, slug, dataT
             <div className="mt-6 mx-4 mb-0">
                 <h1 className="text-xl font-bold mb-4">{mode === 'create' ? 'Create Return Sales' : 'Edit Return Sales'}</h1>
                 <Breadcrumb items={breadcrumb} />
+                <Divider />
             </div>
 
-            <Content className="mt-4 mx-4 mb-0">
+            <Content className="mb-0">
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
-                    <div className='grid md:grid-cols-3 gap-2'>
-                        <SelectInput
-                            id='purchase_id'
-                            label='Purchase Id'
-                            value={formData.purchase_id}
-                            placeholder='Select Purchase Id'
-                            onChange={(val) => handleChangeSelect('purchase_id', val)}
-                        />
-                        <SelectInput
-                            id='sales_person'
-                            label='Sales Person'
-                            placeholder='Select Sales Person'
-                            value={formData.sales_person}
-                            onChange={(val) => handleChangeSelect('sales_person', val)}
-                        />
-                        {/* <SelectInput
+                    <div className='flex flex-col gap-5'>
+                        <div className='grid md:grid-cols-2 gap-2'>
+                            <SelectInput
+                                id='purchase_id'
+                                label='Purchase Id'
+                                value={formData.purchase_id}
+                                placeholder='Select Purchase Id'
+                                onChange={(val) => handleChangeSelect('purchase_id', val)}
+                                required
+                            />
+                            <SelectInput
+                                id='sales_person'
+                                label='Sales Person'
+                                placeholder='Select Sales Person'
+                                value={formData.sales_person}
+                                onChange={(val) => handleChangeSelect('sales_person', val)}
+                                required
+                            />
+                            {/* <SelectInput
                             id='status'
                             label='Status'
                             placeholder='Select Status'
@@ -199,8 +235,36 @@ const FormReturnSales: React.FC<FormProps> = ({ mode, initialValues, slug, dataT
                             onChange={(val) => handleChangeSelect('status', val)}
                             options={optionStatus}
                         /> */}
-                    </div>
-                    <div className='mt-4'>
+                        </div>
+                        <div>
+                            <h1 className='text-lg font-bold'>Product List</h1>
+                            <Divider />
+                            {
+                                productForm.map((item, index) => {
+                                    return (
+                                        <ProductReturn
+                                            key={index}
+                                            index={index}
+                                            productForm={item}
+                                            onChange={(updateItem) => handleUpdateRow(index, updateItem)}
+                                            onRemove={() => handleRemoveRow(index)}
+                                            length={productForm.length}
+                                        />
+
+                                    )
+                                })
+                            }
+                            <Divider />
+                            <div className='flex justify-end'>
+                                <Button
+                                    label='Add Product'
+                                    icon={<PlusOutlined />}
+                                    onClick={addItem}
+                                />
+                            </div>
+
+                        </div>
+                        {/* <div className='mt-4'>
                         <div className='mb-4'>
                             <h1 className='text-xl font-bold'>Product List</h1>
                             <Button
@@ -259,13 +323,61 @@ const FormReturnSales: React.FC<FormProps> = ({ mode, initialValues, slug, dataT
                             </div>
 
                         </div>
-                    </div>
-                    <div className="mt-6 flex justify-end">
-                        <Button
+                    </div> */}
+                        <div className='grid md:grid-cols-12 gap-3 mt-5'>
+                            <div className='grid col-span-8 gap-3'>
+                                <Textarea
+                                    id='notes'
+                                    label='Notes'
+                                    value={formData.notes}
+                                    onChange={handleChange}
+                                    textareaClassname='!h-20'
+                                />
+                            </div>
+                            <div className='flex items-center col-span-4 gap-3'>
+                                <Input
+                                    id='subtotal'
+                                    type='number'
+                                    label='Subtotal'
+                                    value={formData.subtotal}
+                                    onChange={handleChange}
+                                    className='mb-1'
+                                    required
+                                />
+                                <Input
+                                    id='tax_include'
+                                    type='number'
+                                    label='Tax Include'
+                                    value={formData.tax_include}
+                                    onChange={handleChange}
+                                    className='mb-1'
+                                    required
 
-                            label={mode === 'create' ? 'Create Return Sales' : 'Edit Return Sales'}
-                            onClick={handleSubmit}
-                        />
+                                />
+                                <Input
+                                    id='total'
+                                    type='number'
+                                    label='Total'
+                                    value={formData.total}
+                                    onChange={handleChange}
+                                    className='mb-1'
+                                    required
+
+                                />
+                            </div>
+
+
+                        </div>
+                        <div className="mt-6 flex justify-end gap-3">
+                            <ButtonCancel
+                                label='Cancel'
+                                onClick={() => router.push(routes.eCommerce.returnSales)}
+                            />
+                            <Button
+                                label={mode === 'create' ? 'Create Return Sales' : 'Edit Return Sales'}
+                                onClick={handleSubmit}
+                            />
+                        </div>
                     </div>
                 </div>
             </Content>

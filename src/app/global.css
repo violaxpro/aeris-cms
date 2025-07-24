@@ -96,6 +96,10 @@
     border: none;
 }
 
+.btn-delete-all span {
+    color: inherit;
+}
+
 [data-theme="dark"] .btn-delete-all {
     background: rgba(234, 0, 0, 0.2);
     /* atau pakai #EA000033 */
@@ -106,6 +110,9 @@
     background: #7777771A !important;
 }
 
+.btn-trash-item:hover {
+    border: #7777771A !important;
+}
 
 [data-theme="dark"] {
     --background: #0f172a;

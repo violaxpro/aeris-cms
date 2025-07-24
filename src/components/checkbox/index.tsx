@@ -12,6 +12,8 @@ type CheckboxInputProps = {
     disabled?: boolean;
     text: string
     className?: string
+    required?: boolean;
+
 };
 
 const CheckboxInput: React.FC<CheckboxInputProps> = ({
@@ -21,7 +23,8 @@ const CheckboxInput: React.FC<CheckboxInputProps> = ({
     onChange,
     disabled = false,
     text,
-    className
+    className,
+    required
 }) => {
     const handleChange: CheckboxProps['onChange'] = (e) => {
         onChange(e.target.checked);
@@ -31,7 +34,10 @@ const CheckboxInput: React.FC<CheckboxInputProps> = ({
         <div className='flex flex-col'>
             {
                 label && <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {label}
+                    <div>
+                        {label}
+                        {required && <span className="text-red-500 ml-1">*</span>}
+                    </div>
                 </label>
             }
             <Checkbox id={id} checked={checked} onChange={handleChange} disabled={disabled}>

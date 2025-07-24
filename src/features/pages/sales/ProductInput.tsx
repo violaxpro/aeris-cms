@@ -7,7 +7,7 @@ import { useAtom } from 'jotai';
 import { taxSetAtom } from '@/store/DropdownItemStore';
 import { getProduct } from '@/services/products-service';
 import Image from 'next/image';
-import { TrashIcon } from '@public/icon';
+import { TrashIcon, TrashIconRed } from '@public/icon';
 export interface ProductForm {
     sku: string
     name: string
@@ -25,6 +25,7 @@ interface ProductInputProps {
     onChange: (form: ProductForm) => void;
     onRemove?: () => void;
     index: number;
+    length?: number
 }
 
 const ProductInput = ({
@@ -32,7 +33,8 @@ const ProductInput = ({
     // setProductForm,
     // onAddProduct,
     onRemove,
-    onChange
+    onChange,
+    length
 }: ProductInputProps) => {
     const [optionsTax] = useAtom(taxSetAtom)
     const [items, setItems] = useState([])
@@ -120,6 +122,7 @@ const ProductInput = ({
 
     }, [])
 
+
     return (
         <div>
             <div className='grid md:grid-cols-[1fr_3fr_1fr_1fr_70px_1fr_50px] items-center gap-4 mb-2'>
@@ -194,13 +197,27 @@ const ProductInput = ({
                 />
                 {
                     onRemove && <div className='flex item-ends justify-center mt-4 '>
-                        <ButtonAction
-                            icon={TrashIcon}
-                            width={15}
-                            height={15}
-                            className='btn-trash-item !h-10 !w-15'
-                            onClick={onRemove}
-                        />
+                        {
+                            length && length <= 1 ?
+                                <ButtonAction
+                                    icon={TrashIcon}
+                                    width={20}
+                                    height={20}
+                                    className='btn-trash-item !h-10 !w-15'
+                                /> :
+                                <ButtonAction
+                                    color='danger'
+                                    variant='filled'
+                                    size="small"
+                                    icon={TrashIconRed}
+                                    width={15}
+                                    height={15}
+                                    className='!h-10 !w-15'
+
+                                    onClick={onRemove}
+                                />
+                        }
+
                     </div>
                 }
             </div>

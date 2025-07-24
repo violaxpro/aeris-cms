@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Table from "@/components/table"
 import type { TableColumnsType } from 'antd'
 import { Dropdown, Menu } from 'antd'
@@ -17,10 +17,23 @@ import { useNotificationAntd } from '@/components/toast'
 import { useAtom } from 'jotai'
 import { transactionAtom } from '@/store/SalesAtom'
 import dayjs from 'dayjs'
+import Pagination from '@/components/pagination'
+import { MoreIcon, TrashIconRed, FilterIcon, AddIcon } from '@public/icon'
+import Image from 'next/image'
+import ButtonAction from '@/components/button/ButtonIcon'
+import SearchTable from '@/components/search/SearchTable'
+import ShowPageSize from '@/components/pagination/ShowPageSize'
+import ButtonDelete from '@/components/button/ButtonAction'
+
 
 const index = ({ transactionData }: { transactionData?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
     const [data, setData] = useAtom(transactionAtom)
+    const [search, setSearch] = useState('')
+
+    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
 
     const handleDelete = async (id: any) => {
         try {
@@ -63,29 +76,33 @@ const index = ({ transactionData }: { transactionData?: any }) => {
     ]
     const columns: TableColumnsType<TransactionType> = [
         {
-            title: 'Order Id',
+            title: 'Order ID',
             dataIndex: 'order_id',
         },
         {
-            title: 'Transaction',
+            title: 'Transaction ID',
             dataIndex: 'transaction_id',
             render: (_: any, row: any) => {
                 return <div className="flex flex-col w-full">
                     <div className="flex justify-start gap-1">
-                        <span>Transaction Id</span>
-                        <span>:</span>
                         <span>{row.transaction_id}</span>
                     </div>
+                </div>
+            }
+        },
+        {
+            title: 'Payment Method',
+            dataIndex: 'payment_method',
+            render: (_: any, row: any) => {
+                return <div className="flex flex-col w-full">
                     <div className="flex justify-start gap-1">
-                        <span> Payment Method</span>
-                        <span>:</span>
                         <span>{row.payment_method}</span>
                     </div>
                 </div>
             }
         },
         {
-            title: 'Created',
+            title: 'Created by',
             dataIndex: 'created',
             defaultSortOrder: 'descend',
             sorter: (a: any, b: any) => {
@@ -156,11 +173,23 @@ const index = ({ transactionData }: { transactionData?: any }) => {
                 );
 
                 return (
-                    <Dropdown overlay={menu} trigger={['click']} >
-                        <button className="flex items-center justify-center px-2 py-1 border rounded ">
-                            Actions <MoreOutlined className="ml-1" />
-                        </button>
-                    </Dropdown >
+                    <div className='flex items-center gap-2'>
+                        <Dropdown overlay={menu} trigger={['click']} >
+                            <ButtonAction
+                                color='primary'
+                                variant='filled'
+                                size="small"
+                                icon={MoreIcon}
+                            />
+                        </Dropdown >
+                        <ButtonAction
+                            color='danger'
+                            variant='filled'
+                            size="small"
+                            icon={TrashIconRed}
+                        // onClick={() => setOpenModalDelete(true)}
+                        />
+                    </div>
                 );
             }
         },
@@ -174,6 +203,9 @@ const index = ({ transactionData }: { transactionData?: any }) => {
     useEffect(() => {
         setData(transactionData)
     }, [transactionData])
+
+    console.log(selectedRowKeys.length > 0)
+
     return (
         <>
             {contextHolder}
@@ -187,17 +219,49 @@ const index = ({ transactionData }: { transactionData?: any }) => {
             </div>
             <Content className="mt-6 mx-4 mb-0">
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
-                    <div className='flex justify-end mb-4'>
+                    <div className='flex justify-between mb-4'>
                         <div className='flex items-center gap-2'>
-                            <SearchInput onSearch={handleSearch} />
+                            <ShowPageSize
+                                pageSize={pageSize}
+                                onChange={setPageSize}
+                            />
+
+                            <SearchTable
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                                onSearch={() => console.log('Searching for:', search)}
+                            />
                         </div>
+                        {
+                            selectedRowKeys.length > 0 && <ButtonDelete
+                                label='Delete All'
+                                icon={<Image
+                                    src={TrashIconRed}
+                                    alt='trash-icon'
+                                    width={10}
+                                    height={10}
+                                />}
+                                position='start'
+                                style={{ padding: '1.2rem 1.7rem' }}
+                                btnClassname='btn-delete-all'
+                            />
+                        }
 
                     </div>
                     <Table
                         columns={columns}
                         dataSource={data}
                         withSelectableRows
+                        selectedRowKeys={selectedRowKeys}
+                        onSelectChange={setSelectedRowKeys}
                     />
+                    <Pagination
+                        current={currentPage}
+                        total={data.length}
+                        pageSize={pageSize}
+                        onChange={(page) => setCurrentPage(page)}
+                    />
+
                 </div>
             </Content>
         </>

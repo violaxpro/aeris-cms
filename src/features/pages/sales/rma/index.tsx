@@ -25,6 +25,14 @@ import dayjs from 'dayjs';
 import DatePickerInput from '@/components/date-picker';
 import StatusTag from '@/components/tag'
 import { stripHTML } from '@/plugins/validators/common-rules'
+import Pagination from '@/components/pagination'
+import { MoreIcon, TrashIconRed, FilterIcon, AddIcon } from '@public/icon'
+import Image from 'next/image'
+import ButtonAction from '@/components/button/ButtonIcon'
+import SearchTable from '@/components/search/SearchTable'
+import ShowPageSize from '@/components/pagination/ShowPageSize'
+import ButtonDelete from '@/components/button/ButtonAction'
+import ButtonFilter from '@/components/button/ButtonAction'
 
 const index = ({ returnSales }: { returnSales?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
@@ -43,6 +51,9 @@ const index = ({ returnSales }: { returnSales?: any }) => {
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
     const [date, setDate] = useState<any | null>(null);
     const [currentOrder, setCurrentOrder] = useState<any>(null)
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
+
 
     const handleDateChange = (date: any, dateString: string | string[]) => {
         console.log('Selected date:', dateString);
@@ -200,10 +211,9 @@ const index = ({ returnSales }: { returnSales?: any }) => {
                 )
             },
             render: (val: any) => {
-                const status = stripHTML(val.toUpperCase())
-                return (
-                    <StatusTag status={status} />
-                );
+                const status = stripHTML(val);
+                const statusCapitalized = status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
+                return <StatusTag status={statusCapitalized} />
                 // kalau dia sudah bayar full baru bisa di lanjut ke processing
                 // kalau processing sudah beres bisa di klik dan lanjut ke proses awaiting stock
                 // awaiting beres -> packed
@@ -274,11 +284,23 @@ const index = ({ returnSales }: { returnSales?: any }) => {
                 );
 
                 return (
-                    <Dropdown overlay={menu} trigger={['click']} >
-                        <button className="flex items-center justify-center px-2 py-1 border rounded ">
-                            Actions <MoreOutlined className="ml-1" />
-                        </button>
-                    </Dropdown >
+                    <div className='flex items-center gap-2'>
+                        <Dropdown overlay={menu} trigger={['click']} >
+                            <ButtonAction
+                                color='primary'
+                                variant='filled'
+                                size="small"
+                                icon={MoreIcon}
+                            />
+                        </Dropdown >
+                        <ButtonAction
+                            color='danger'
+                            variant='filled'
+                            size="small"
+                            icon={TrashIconRed}
+                        // onClick={() => setOpenModalDelete(true)}
+                        />
+                    </div>
                 );
             }
         },
@@ -309,39 +331,88 @@ const index = ({ returnSales }: { returnSales?: any }) => {
         <>
             {contextHolder}
             <div className="mt-6 mx-4 mb-0">
-                <h1 className='text-xl font-bold'>
-                    Return Sales
-                </h1>
-                <Breadcrumb
-                    items={breadcrumb}
-                />
+                <div className='flex justify-between items-center'>
+                    <div>
+                        <h1 className='text-xl font-bold'>
+                            Return Sales
+                        </h1>
+                        <Breadcrumb
+                            items={breadcrumb}
+                        />
+                    </div>
+                    <Button
+                        icon={<Image
+                            src={AddIcon}
+                            alt='add-icon'
+                            width={15}
+                            height={15}
+                        />}
+                        label='Add Return'
+                        link={routes.eCommerce.createReturnSales}
+                    />
+                </div>
             </div>
             <Content className="mt-6 mx-4 mb-0">
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
-                    <div className='flex justify-end mb-4'>
+                    <div className='flex justify-between mb-4 gap-2'>
+                        {/* <Button
+                                       label='Add Payment'
+                                       onClick={handleClickModalPaid}
+                                   /> */}
+
                         <div className='flex items-center gap-2'>
-                            <SearchInput onSearch={handleSearch} />
-                            <Button
-                                label='Filter'
-                                icon={<FilterOutlined />}
-                                onClick={() => setisOpenModalFilter(true)}
-
+                            <ShowPageSize
+                                pageSize={pageSize}
+                                onChange={setPageSize}
                             />
-                            <Button
-
-                                icon={<PlusCircleOutlined />}
-                                label='Add Return'
-                                link={routes.eCommerce.createReturnSales}
+                            <ButtonFilter
+                                label='Filter by'
+                                icon={<Image
+                                    src={FilterIcon}
+                                    alt='filter-icon'
+                                    width={15}
+                                    height={15}
+                                />}
+                                onClick={() => setisOpenModalFilter(true)}
+                                position='end'
+                                style={{ padding: '1.2rem 1.7rem' }}
+                            />
+                            <SearchTable
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                                onSearch={() => console.log('Searching for:', search)}
                             />
                         </div>
+                        {
+                            selectedRowKeys.length > 0 && <ButtonDelete
+                                label='Delete All'
+                                icon={<Image
+                                    src={TrashIconRed}
+                                    alt='trash-icon'
+                                    width={10}
+                                    height={10}
+                                />}
+                                onClick={() => setisOpenModalFilter(true)}
+                                position='start'
+                                style={{ padding: '1.2rem 1.7rem' }}
+                                btnClassname='btn-delete-all'
+                            />
+                        }
                     </div>
                     <Table
                         columns={columns}
-                        dataSource={finalData}
+                        dataSource={data}
                         withSelectableRows
                         selectedRowKeys={selectedRowKeys}
                         onSelectChange={setSelectedRowKeys}
                     />
+                    <Pagination
+                        current={currentPage}
+                        total={data.length}
+                        pageSize={pageSize}
+                        onChange={(page) => setCurrentPage(page)}
+                    />
+
                 </div>
             </Content>
             <Modal

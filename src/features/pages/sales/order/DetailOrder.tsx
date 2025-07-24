@@ -23,14 +23,16 @@ import { statusMap } from '@/config/colors-status'
 import dayjs from 'dayjs'
 import { Card } from '@/components/card'
 import { InfoItem } from '@/components/card/InfoItem'
+import { useRouter } from 'next/navigation'
 
-const DetailQuote = ({ slug, data }: { slug?: string | number, data: any }) => {
+const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
+    const router = useRouter()
     const [profitHidden, setProfitHidden] = useState(true)
 
     const breadcrumb = [
         { title: 'Sales' },
         {
-            title: 'Quote', url: routes.eCommerce.quote
+            title: 'Order', url: routes.eCommerce.order
         },
         { title: 'Detail' },
     ];
@@ -137,6 +139,154 @@ const DetailQuote = ({ slug, data }: { slug?: string | number, data: any }) => {
         },
 
     ]
+
+    const columnsSerialNumber: TableColumnsType<any> = [
+        {
+            title: 'SKU',
+            dataIndex: 'sku',
+            sorter: (a: any, b: any) => {
+                return a?.sku.localeCompare(b?.sku)
+            },
+            render: (_: any, row: any) => {
+                return <div className="flex flex-col w-full">
+                    <div className="flex justify-start gap-1">
+                        <span>{row.sku}</span>
+                        {/* <span>{row.status !== 'Draft' ? row.po_number : '-'}</span> */}
+                    </div>
+                </div>
+            }
+        },
+        {
+            title: 'Name',
+            dataIndex: 'name',
+            sorter: (a: any, b: any) => {
+                return a?.name.localeCompare(b?.name)
+            },
+            render: (_: any, row: any) => {
+                return <div className="flex flex-col w-full">
+                    <div className="flex justify-start gap-1">
+                        <span>{row.name}</span>
+                    </div>
+                </div>
+            }
+        },
+        {
+            title: 'Serial Number',
+            dataIndex: 'serial_number',
+            sorter: (a: any, b: any) => {
+                return a?.serial_number.localeCompare(b?.serial_number)
+            },
+            render: (_: any, row: any) => {
+                return <div className="flex flex-col w-full">
+                    <div className="flex justify-start gap-1">
+                        <span>{row.serial_number}</span>
+                    </div>
+                </div>
+            }
+        },
+        {
+            title: 'Stock',
+            dataIndex: 'stock',
+            sorter: (a: any, b: any) => {
+                return a?.stock - b?.stock
+            },
+            render: (_: any, row: any) => {
+                return <div className="flex flex-col w-full">
+                    <div className="flex justify-start gap-1">
+                        <span>{row.stock}</span>
+                    </div>
+                </div>
+            }
+        },
+        {
+            title: 'Pick',
+            dataIndex: 'pick',
+            sorter: (a: any, b: any) => {
+                return a?.pick - b?.pick
+            },
+            render: (_: any, row: any) => {
+                return <div className="flex flex-col w-full">
+                    <div className="flex justify-start gap-1">
+                        <span>{row.pick}</span>
+                    </div>
+                </div>
+            }
+        },
+        {
+            title: 'Pack',
+            dataIndex: 'pack',
+            sorter: (a: any, b: any) => {
+                return a?.pack - b?.pack
+            },
+            render: (_: any, row: any) => {
+                return <div className="flex flex-col w-full">
+                    <div className="flex justify-start gap-1">
+                        <span>{row.pack}</span>
+                    </div>
+                </div>
+            }
+        },
+
+    ]
+
+    const columnLogs: TableColumnsType<any> = [
+        {
+            title: 'Staff',
+            dataIndex: 'staff',
+            sorter: (a: any, b: any) => {
+                return a?.staff.localeCompare(b?.staff)
+            },
+            render: (_: any, row: any) => {
+                return <div className="flex flex-col w-full">
+                    <div className="flex justify-start gap-1">
+                        <span>{row.staff}</span>
+                    </div>
+                </div>
+            }
+        },
+        {
+            title: 'Internal Notes',
+            dataIndex: 'internal_notes',
+            sorter: (a: any, b: any) => {
+                return a?.internal_notes.localeCompare(b?.internal_notes)
+            },
+            render: (_: any, row: any) => {
+                return <div className="flex flex-col w-full">
+                    <div className="flex justify-start gap-1">
+                        <span>{row.internal_notes}</span>
+                    </div>
+                </div>
+            }
+        },
+        {
+            title: 'Update',
+            dataIndex: 'update',
+            sorter: (a: any, b: any) => {
+                return a?.update.localeCompare(b?.update)
+            },
+            render: (_: any, row: any) => {
+                return <div className="flex flex-col w-full">
+                    <div className="flex justify-start gap-1">
+                        <span>{row.update}</span>
+                    </div>
+                </div>
+            }
+        },
+        {
+            title: 'Action',
+            dataIndex: 'action',
+            sorter: (a: any, b: any) => {
+                return a?.action.localeCompare(b?.action)
+            },
+            render: (_: any, row: any) => {
+                return <div className="flex flex-col w-full">
+                    <div className="flex justify-start gap-1">
+                        <span>{row.action}</span>
+                    </div>
+                </div>
+            }
+        },
+    ]
     console.log(data)
     return (
         <>
@@ -144,7 +294,7 @@ const DetailQuote = ({ slug, data }: { slug?: string | number, data: any }) => {
                 <div className='flex justify-between items-center'>
                     <div>
                         <h1 className='text-xl font-bold'>
-                            Quote Detail
+                            Order Detail
                         </h1>
                         <Breadcrumb
                             items={breadcrumb}
@@ -206,7 +356,7 @@ const DetailQuote = ({ slug, data }: { slug?: string | number, data: any }) => {
                                 height={15}
                             />}
                             label='Print'
-                        // link={routes.eCommerce.editQuote}
+                            onClick={() => router.push(routes.eCommerce.invoice(slug))}
                         />
                         <Button
                             icon={<Image
@@ -222,25 +372,43 @@ const DetailQuote = ({ slug, data }: { slug?: string | number, data: any }) => {
 
                 </div>
             </div>
-            <Content className="mb-0">
+            <Content className="mb-5">
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }} className='flex flex-col gap-6'>
                     <div className='grid grid-cols-12 gap-4'>
-                        <Card title='Quote Information' gridcols='grid-cols-3' className='col-span-8'>
-                            <InfoItem label='Quote Date' value='June 30, 2025' />
-                            <InfoItem label='Customer Phone' value='+628 63 8765 5589' />
-                            <InfoItem label='Customer Group' value='Distributor' />
+                        <Card title='Order Information' gridcols='grid-cols-4' className='col-span-8'>
+                            <InfoItem label='Order Date' value='June 30, 2025' />
+                            <InfoItem label='Shipping Method' value='Local Pickup' />
+                            <InfoItem label='Order Reference' value='ORD-0925' />
+                            <InfoItem label='Payment Method' value='Bank Transfer' />
                             <InfoItem label='PO Number' value='PO-2025-0034' />
                             <InfoItem label='Sales Person' value='Sales A' />
-                            <InfoItem label='Quote Status' value={data.status} textColor={statusMap[data?.status].textColor} />
+                            <InfoItem label='Order Status' value={data.status} textColor={statusMap[data?.status].textColor} />
+                            <InfoItem label='Payment Status' value='Unpaid' />
                         </Card>
 
                         <Card title='Account Information' className='col-span-4'>
                             <InfoItem label='Customer Name' value='Customer A' />
                             <InfoItem label='Customer Email' value='customer@gmail.com' />
-                            <InfoItem label='Order Reference' value='ORD-0925' />
+                            <InfoItem label='Customer Phone' value='+628 63 8765 5589' />
+                            <InfoItem label='Customer Group' value='Distributor' />
                         </Card>
                     </div>
-
+                    <div className='grid gap-4'>
+                        <Card title='Address Information'>
+                            <Card title='Billing Address'>
+                                <InfoItem label='Customer Name' value='James Smith' />
+                                <InfoItem label='Country' value='Australia' />
+                                <InfoItem label='Billing Address' value='12 Garden Street, Carlton VIC 3053' />
+                                <InfoItem label='City, State, Post Code' value='Carlton, Victoria, 3053' />
+                            </Card>
+                            <Card title='Shipping Address'>
+                                <InfoItem label='Customer Name' value='James Smith' />
+                                <InfoItem label='Country' value='Australia' />
+                                <InfoItem label='Billing Address' value='22 Oakridge Avenue, Glen Waverley VIC 3150' />
+                                <InfoItem label='City, State, Post Code' value='Glen Waverley, Victoria, 3150' />
+                            </Card>
+                        </Card>
+                    </div>
                     <div>
                         <h4 className='text-xl font-semibold'>Item Ordered</h4>
                         <Table
@@ -254,7 +422,6 @@ const DetailQuote = ({ slug, data }: { slug?: string | number, data: any }) => {
                             <InfoItem label='Delivery Notes' value='Picked 1 U-Prox Keyflo for Order #9821' />
                             <InfoItem label='Internal Notes' value='Picked 1 U-Prox Keyflo for Order #9821' />
                         </Card>
-
                         <div className='col-span-3 my-4'>
                             <OrderSummary
                                 profitHidden={profitHidden}
@@ -267,10 +434,57 @@ const DetailQuote = ({ slug, data }: { slug?: string | number, data: any }) => {
                             />
                         </div>
                     </div>
+                    <Divider />
+                    <div className='grid grid-cols-12 gap-4'>
+                        <div className='col-span-7'>
+                            <h4 className='text-xl font-semibold'> Serial Number</h4>
+                            <Table
+                                columns={columnsSerialNumber}
+                                dataSource={[
+                                    {
+                                        sku: '0317-8471',
+                                        name: 'U-Prox Keyfob - White SMART9412',
+                                        serial_number: 'SN-UPX-0001',
+                                        stock: 200,
+                                        pick: 3,
+                                        pack: 3
+                                    },
+                                    {
+                                        sku: '0317-8471',
+                                        name: 'U-Prox Keyfob - White SMART9412',
+                                        serial_number: 'SN-UPX-0002',
+                                        stock: 48,
+                                        pick: 3,
+                                        pack: 3
+                                    }
+                                ]}
+                            />
+                        </div>
+                        <div className='col-span-5'>
+                            <h4 className='text-xl font-semibold'>Last 5 Order Log</h4>
+                            <Table
+                                columns={columnLogs}
+                                dataSource={[
+                                    {
+                                        staff: 'Rina',
+                                        internal_notes: 'Picked 2 U-Prox Keyflo for Order #9821',
+                                        update: '17/07/2025 08:00 AM',
+                                        action: 'Pick'
+                                    },
+                                    {
+                                        staff: 'Budi',
+                                        internal_notes: 'Picked 2 U-Prox Keyflo for Order #9821',
+                                        update: '17/07/2025 08:20 AM',
+                                        action: 'Pack'
+                                    }
+                                ]}
+                            />
+                        </div>
+                    </div>
                 </div>
             </Content>
         </>
     )
 }
 
-export default DetailQuote
+export default DetailOrder

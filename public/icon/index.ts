@@ -18,6 +18,9 @@ export { default as ExportIcon } from './ExportIcon.svg'
 export { default as SentEmailIcon } from './SentEmailIcon.svg'
 export { default as ConvertIcon } from './ConvertIcon.svg'
 export { default as ApproveIcon } from './ApproveIcon.svg'
+export { default as MapsIcon } from './MapsIcon.svg'
+export { default as EmailIcon } from './EmailIcon.svg'
+export { default as TelephoneIcon } from './TelephoneIcon.svg'
 
 
 

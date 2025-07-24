@@ -349,6 +349,7 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                             productForm={item}
                                             onChange={(updateItem) => handleUpdateRow(index, updateItem)}
                                             onRemove={() => handleRemoveRow(index)}
+                                            length={productForm.length}
                                         />
 
                                     )

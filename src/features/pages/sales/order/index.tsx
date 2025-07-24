@@ -358,6 +358,11 @@ const index = ({ orderData }: { orderData?: any }) => {
                                 Edit
                             </Link>
                         </Menu.Item>
+                        <Menu.Item key="detail">
+                            <Link href={routes.eCommerce.detailOrder(row.id)}>
+                                Detail
+                            </Link>
+                        </Menu.Item>
                         <Menu.Item key="sendEmail">
                             <Link href={routes.eCommerce.sendEmail(row.id)}>
                                 Send Email
