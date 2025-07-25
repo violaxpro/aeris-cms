@@ -21,10 +21,11 @@ import dayjs from 'dayjs';
 import { attendanceData, AttendanceType } from '@/plugins/types/employee-management-type'
 import { Card } from '@/components/card'
 import SelectDatePicker from '@/components/date-picker/SelectDatePicker'
+import { Avatar } from 'antd'
+import AvatarImage from "public/social-avatar.webp"
 
 const index = ({ data }: { data?: any }) => {
     const today = dayjs(); // Hari ini
-    const [dayOffset, setDayOffset] = useState(0);
     const [activeDay, setActiveDay] = useState(today)
     const days = Array.from({ length: 9 }, (_, i) =>
         // today.add(dayOffset + i, 'day')
@@ -59,11 +60,10 @@ const index = ({ data }: { data?: any }) => {
                 //         {row.status !== 'Draft' ? row.employee_name : '-'}
                 //     </Link>
                 //     : <span>-</span>
-                return <div className="flex flex-col w-full">
-                    <div className="flex justify-start gap-1">
+                return <div className="flex w-full gap-1 items-center">
+                    <Avatar style={{ backgroundColor: '#87d068' }} src={AvatarImage.src} />
+                    <div className="flex flex-col justify-start gap-1">
                         <span>{row.employee_name}</span>
-                    </div>
-                    <div className="flex justify-start gap-1">
                         <span className=' text-gray-500'>{row.position}</span>
                     </div>
                 </div>

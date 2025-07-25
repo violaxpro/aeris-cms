@@ -18,6 +18,8 @@ export const statusMap: Record<string, { color: string; text: string, textColor:
     'On Time': { color: '#01933B1A', text: 'On Time', textColor: '#01933B' },
     Late: { color: '#FF9E021A', text: 'Late', textColor: '#FF9E02' },
     Absent: { color: '#C202051A', text: 'Absent', textColor: '#C20205' },
+    Pending: { color: '#4E4E4E1A', text: 'Pending', textColor: '#4E4E4ECC' },
+    Rejected: { color: '#C202051A', text: 'Rejected', textColor: '#C20205' },
 
 };
 

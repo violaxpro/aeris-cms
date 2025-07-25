@@ -25,6 +25,8 @@ export { default as EmployeeIcon } from './EmployeeIcon.svg'
 export { default as ArrowLeft } from './ArrowLeft.svg'
 export { default as ArrowRight } from './ArrowRight.svg'
 export { default as CalenderBlueIcon } from './CalenderBlueIcon.svg'
+export { default as EyeIcon } from './EyeIcon.svg'
+export { default as CancelIcon } from './CancelIcon.svg'
 
 
 

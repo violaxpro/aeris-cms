@@ -111,6 +111,12 @@ export const routes = {
     attendance: '/ecommerce/attendance',
     createAttendance: '/ecommerce/attendance/create',
     editAttendance: (slug: string) => `/ecommerce/attendance/${slug}/edit`,
+    detailAttendance: (slug: string) => `/ecommerce/attendance/${slug}/detail`,
+
+    overtime: '/ecommerce/overtime',
+    createOvertime: '/ecommerce/overtime/create',
+    editOvertime: (slug: string) => `/ecommerce/overtime/${slug}/edit`,
+    detailOvertime: (slug: string) => `/ecommerce/overtime/${slug}/detail`,
 
     generalSettings: '/ecommerce/general-settings',
 
