@@ -374,13 +374,13 @@ export const menuItems = [
             {
                 key: 'time-attendance',
                 label: 'Time & Attendance',
-                href: routes.eCommerce.products,
+                href: '#',
                 icon: ScheduleOutlined,
                 children: [
                     {
                         key: 'attendance',
                         label: 'Attendance',
-                        href: routes.eCommerce.products,
+                        href: routes.eCommerce.attendance,
                     },
                     {
                         key: 'timesheet',

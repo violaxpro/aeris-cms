@@ -108,6 +108,10 @@ export const routes = {
     createSubscribe: '/ecommerce/subscribe/create',
     editSubscribe: (slug: string) => `/ecommerce/subscribe/${slug}/edit`,
 
+    attendance: '/ecommerce/attendance',
+    createAttendance: '/ecommerce/attendance/create',
+    editAttendance: (slug: string) => `/ecommerce/attendance/${slug}/edit`,
+
     generalSettings: '/ecommerce/general-settings',
 
     shippingMethods: '/ecommerce/shipping-methods',

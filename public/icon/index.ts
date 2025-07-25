@@ -21,6 +21,10 @@ export { default as ApproveIcon } from './ApproveIcon.svg'
 export { default as MapsIcon } from './MapsIcon.svg'
 export { default as EmailIcon } from './EmailIcon.svg'
 export { default as TelephoneIcon } from './TelephoneIcon.svg'
+export { default as EmployeeIcon } from './EmployeeIcon.svg'
+export { default as ArrowLeft } from './ArrowLeft.svg'
+export { default as ArrowRight } from './ArrowRight.svg'
+export { default as CalenderBlueIcon } from './CalenderBlueIcon.svg'
 
 
 

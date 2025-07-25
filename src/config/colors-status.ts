@@ -15,6 +15,9 @@ export const statusMap: Record<string, { color: string; text: string, textColor:
     Delivered: { color: '#5C4AFF1A', text: 'Delivered', textColor: '#5C4AFF' },
     Completed: { color: '#01933B1A', text: 'Completed', textColor: '#01933B' },
     Refunded: { color: '#A329041A', text: 'Refunded', textColor: '#A32904' },
+    'On Time': { color: '#01933B1A', text: 'On Time', textColor: '#01933B' },
+    Late: { color: '#FF9E021A', text: 'Late', textColor: '#FF9E02' },
+    Absent: { color: '#C202051A', text: 'Absent', textColor: '#C20205' },
 
 };
 
