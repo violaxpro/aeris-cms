@@ -3,8 +3,8 @@ import { InvoicePDF } from '@/features/pages/sales/invoice';
 import { PDFViewer } from '@react-pdf/renderer';
 import { pdf } from '@react-pdf/renderer';
 
-export const downloadInvoicePDF = async (invoiceData: any) => {
-    const blob = await pdf(<InvoicePDF invoiceData={invoiceData} />).toBlob();
+export const downloadInvoicePDF = async (invoiceData: any, page: any) => {
+    const blob = await pdf(<InvoicePDF invoiceData={invoiceData} page={page} />).toBlob();
     const blobUrl = URL.createObjectURL(blob);
 
     const link = document.createElement('a');
@@ -16,8 +16,8 @@ export const downloadInvoicePDF = async (invoiceData: any) => {
     URL.revokeObjectURL(blobUrl); // cleanup
 };
 
-export const previewAndPrintPDF = async (invoiceData: any) => {
-    const blob = await pdf(<InvoicePDF invoiceData={invoiceData} />).toBlob();
+export const previewAndPrintPDF = async (invoiceData: any, page: any) => {
+    const blob = await pdf(<InvoicePDF invoiceData={invoiceData} page={page} />).toBlob();
     const blobUrl = URL.createObjectURL(blob);
 
     const newWindow = window.open(blobUrl);

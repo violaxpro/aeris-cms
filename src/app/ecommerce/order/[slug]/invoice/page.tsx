@@ -39,7 +39,7 @@ export default async function InvoicePage(props: { params: Params }) {
     //preview dulu baru cetak
     useEffect(() => {
         const generateAndPrint = async () => {
-            const blob = await pdf(<InvoicePDF invoiceData={invoiceData} />).toBlob();
+            const blob = await pdf(<InvoicePDF invoiceData={invoiceData} page='order' />).toBlob();
             const blobUrl = URL.createObjectURL(blob);
 
             // Buka di tab baru
@@ -78,7 +78,7 @@ export default async function InvoicePage(props: { params: Params }) {
     return (
         <div className="h-screen">
             <PDFViewer width="100%" height="100%">
-                <InvoicePDF invoiceData={invoiceData} />
+                <InvoicePDF invoiceData={invoiceData} page='order' />
             </PDFViewer>
         </div>
     );

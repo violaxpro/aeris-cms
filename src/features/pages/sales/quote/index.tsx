@@ -167,12 +167,12 @@ const index = ({ quoteData }: { quoteData?: any }) => {
     const columns: TableColumnsType<QuoteType> = [
         {
             title: 'Quote Number',
-            dataIndex: 'id',
-            sorter: (a: any, b: any) => a?.po_number.localeCompare(b?.po_number),
+            dataIndex: 'quote_number',
+            sorter: (a: any, b: any) => a?.quote_number.localeCompare(b?.quote_number),
             render: (_: any, row: any) => {
                 return row.status !== 'Draft'
-                    ? <Link href={routes.eCommerce.detailOrder(row.po_number)}>
-                        {row.status !== 'Draft' ? row.po_number : '-'}
+                    ? <Link href={routes.eCommerce.detailQuote(row.quote_number)}>
+                        {row.status !== 'Draft' ? row.quote_number : '-'}
                     </Link>
                     : <span>-</span>
             }
@@ -313,9 +313,9 @@ const index = ({ quoteData }: { quoteData?: any }) => {
                 const actionStatus = status[row.status] || ''
                 const menu = (
                     <Menu>
-                        <Menu.Item key="status" onClick={actionStatus}>
+                        {/* <Menu.Item key="status" onClick={actionStatus}>
                             {row?.status}
-                        </Menu.Item>
+                        </Menu.Item> */}
                         <Menu.Item key="detail">
                             <Link href={routes.eCommerce.detailQuote(row.id)}>
                                 Detail

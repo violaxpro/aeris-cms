@@ -23,6 +23,8 @@ import { statusMap } from '@/config/colors-status'
 import dayjs from 'dayjs'
 import { Card } from '@/components/card'
 import { InfoItem } from '@/components/card/InfoItem'
+import { downloadInvoicePDF } from '@/services/invoice-service'
+
 
 const DetailQuote = ({ slug, data }: { slug?: string | number, data: any }) => {
     const [profitHidden, setProfitHidden] = useState(true)
@@ -137,7 +139,24 @@ const DetailQuote = ({ slug, data }: { slug?: string | number, data: any }) => {
         },
 
     ]
-    console.log(data)
+    const quoteDetailData = {
+        invoiceNumber: 'INV9043',
+        customerName: 'John Doe',
+        customerEmail: 'john@example.com',
+        items: [
+            { sku: '0317-8471', name: 'U-Prox Keyfob - White SMART9412', quantity: 2, unit_price: 141.44 },
+            { sku: '0317-8471', name: 'Hikvision Wireless Repeater DS-PR1-WB', quantity: 3, unit_price: 235.36 },
+        ],
+        total: 250,
+        subtotal: 879.98,
+        gst: 56.00,
+        freight: 15.00,
+        unitPrice: 200,
+        quantity: 10
+    };
+    const handlePrint = async (data: any) => {
+        await downloadInvoicePDF(data, 'quote');
+    }
     return (
         <>
             <div className="mt-6 mx-5 mb-0">
@@ -206,7 +225,8 @@ const DetailQuote = ({ slug, data }: { slug?: string | number, data: any }) => {
                                 height={15}
                             />}
                             label='Print'
-                        // link={routes.eCommerce.editQuote}
+                            onClick={() => handlePrint(quoteDetailData)}
+
                         />
                         <Button
                             icon={<Image
@@ -231,7 +251,7 @@ const DetailQuote = ({ slug, data }: { slug?: string | number, data: any }) => {
                             <InfoItem label='Customer Group' value='Distributor' />
                             <InfoItem label='PO Number' value='PO-2025-0034' />
                             <InfoItem label='Sales Person' value='Sales A' />
-                            <InfoItem label='Quote Status' value={data.status} textColor={statusMap[data?.status].textColor} />
+                            <InfoItem label='Quote Status' value={data?.status} textColor={statusMap[data?.status]?.textColor || ''} />
                         </Card>
 
                         <Card title='Account Information' className='col-span-4'>

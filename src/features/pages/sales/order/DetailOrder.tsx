@@ -305,9 +305,8 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
         quantity: 10
     };
     const handlePrint = async (data: any) => {
-        await downloadInvoicePDF(data);
+        await downloadInvoicePDF(data, 'order');
     }
-    console.log(data)
     return (
         <>
             <div className="mt-6 mx-5 mb-0">

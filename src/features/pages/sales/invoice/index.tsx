@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
         padding: 30,
         fontSize: 12,
         fontFamily: 'Inter',
-        gap: 13,
+        gap: 10,
         flexGrow: 1,
         flexDirection: 'column',
         justifyContent: 'flex-start',
@@ -41,17 +41,23 @@ const styles = StyleSheet.create({
         marginBottom: 8,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'flex-end',
+        alignItems: 'flex-start',
         gap: 10,
     },
     fontHeader: {
         color: '#0A3353',
         fontSize: '2rem',
-        fontWeight: 700
+        fontWeight: 700,
+        textTransform: 'uppercase'
+    },
+    statusHeader: {
+        color: '#0A3353',
+        textAlign: 'right',
+        fontSize: '16px'
     },
     senderTitle: {
         fontWeight: 'bold',
-        fontSize: '1rem'
+        fontSize: '1rem',
     },
     line: {
         lineHeight: '1.5rem',
@@ -75,7 +81,8 @@ const styles = StyleSheet.create({
     },
     row: {
         flexDirection: 'row',
-        gap: '4'
+        gap: '4',
+        alignItems: 'flex-start',
         // fontSize: 10,
         // marginBottom: 4,
     },
@@ -84,7 +91,8 @@ const styles = StyleSheet.create({
         // fontWeight: 'bold',
     },
     value: {
-        // flex: 1, 
+        maxWidth: 160,
+        textAlign: 'left',
     },
     titleAddress: {
         fontSize: '0.7rem',
@@ -159,12 +167,12 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
         color: '#fff',
-        textTransform: 'uppercase'
+        textTransform: 'uppercase',
     },
 
     colSku: {
         width: '15%',
-        textAlign: 'left',
+        textAlign: 'center',
         paddingHorizontal: 4,
     },
 
@@ -176,23 +184,23 @@ const styles = StyleSheet.create({
 
     colUnitPrice: {
         width: '15%',
-        textAlign: 'right',
+        textAlign: 'center',
         paddingHorizontal: 4,
     },
 
     colQty: {
         width: '10%',
-        textAlign: 'right',
+        textAlign: 'center',
         paddingHorizontal: 4,
     },
 
     colTotal: {
         width: '25%',
-        textAlign: 'right',
+        textAlign: 'center',
         paddingHorizontal: 4,
     },
     footer: {
-        backgroundColor: '#0A3253', // warna biru tua
+        backgroundColor: '#0A3253',
         padding: 10,
         flexDirection: 'row',
         justifyContent: 'space-around',
@@ -221,7 +229,7 @@ const styles = StyleSheet.create({
 
 });
 
-export const InvoicePDF = ({ invoiceData }: { invoiceData: any }) => {
+export const InvoicePDF = ({ invoiceData, page }: { invoiceData: any, page: string }) => {
     return (
         <Document>
             <Page size="A4">
@@ -232,7 +240,14 @@ export const InvoicePDF = ({ invoiceData }: { invoiceData: any }) => {
                             src="/logo/Alarm Expert Logo.png"
                             style={{ width: 120, height: 'auto' }}
                         />
-                        <Text style={styles.fontHeader}>INVOICE</Text>
+                        <View style={{ width: 200, textAlign: 'right' }}>
+                            <Text style={styles.fontHeader}>Invoice</Text>
+                            {
+                                page == 'order' ? <Text style={styles.statusHeader}>Approved</Text>
+                                    : <Text style={[styles.statusHeader, { textTransform: 'uppercase' }]}>Draft</Text>
+                            }
+
+                        </View>
                     </View>
 
                     {/* Customer Info */}
@@ -241,30 +256,43 @@ export const InvoicePDF = ({ invoiceData }: { invoiceData: any }) => {
                             <Text style={styles.senderTitle}>Alarm Expert Australia</Text>
                             <div style={{ lineHeight: '1rem' }}>
                                 <Text>
-                                    Jl. Nangka, No. 234, Sydney, Australia
+                                    PO Box 1234 , Sydney, NSW, 2000
                                 </Text>
-                                <Text>(+62) 876 5468 9876, </Text>
-                                <Text>12 345 678 901</Text>
+                                <Text>Phone : (+62) 876 5468 9876 </Text>
+                                <Text>Email: admin@alarmexpert.com.au </Text>
+                                <Text>ABN : 12 345 678 901</Text>
                             </div>
                         </View>
-                        <View style={{ lineHeight: '1.3rem' }}>
+                        <View style={{ lineHeight: '1rem', maxWidth: 250, minHeight: 65 }}>
                             <View style={styles.row}>
-                                <Text style={styles.label}>Invoice ID</Text>
-                                <Text style={styles.value}>INV9043</Text>
+                                {
+                                    page == 'order' && <>
+                                        <Text style={styles.label}>Invoice ID</Text>
+                                        <Text style={styles.value}>{invoiceData.invoiceNumber}</Text></>
+                                }
+                                {
+                                    page == 'quote' && <>
+                                        <Text style={styles.label}>Quote No</Text>
+                                        <Text style={styles.value}>{invoiceData.invoiceNumber}</Text>
+                                    </>
+                                }
+
                             </View>
                             <View style={styles.row}>
                                 <Text style={styles.label}>Date</Text>
                                 <Text style={styles.value}>December 25, 2025</Text>
                             </View>
                             <View style={styles.row}>
-                                <Text style={styles.label}>Order Ref</Text>
-                                <Text style={styles.value}>ORD945-6CB-009</Text>
+                                <Text style={styles.label}>Customer</Text>
+                                <Text style={[styles.value, { maxWidth: 153 }]}>
+                                    Protech Security xxxxxxxxx
+                                </Text>
                             </View>
                         </View>
                     </View>
 
                     <View style={styles.section}>
-                        <div>
+                        <View>
                             <View style={{ lineHeight: '1rem' }}>
                                 <Text style={styles.titleAddress}>Shipping Address</Text>
                                 <Text>
@@ -273,8 +301,8 @@ export const InvoicePDF = ({ invoiceData }: { invoiceData: any }) => {
                                 <Text>Sydney, NSW, 2300</Text>
                                 <Text>Australia</Text>
                             </View>
-                        </div>
-                        <div>
+                        </View>
+                        <View>
                             <View style={{ lineHeight: '1rem' }}>
                                 <Text style={styles.titleAddress}>Billing Address</Text>
                                 {/* <Text>
@@ -286,21 +314,21 @@ export const InvoicePDF = ({ invoiceData }: { invoiceData: any }) => {
                                 <Text>Sydney, NSW, 2300</Text>
                                 <Text>Australia</Text>
                             </View>
-                        </div>
+                        </View>
 
 
                     </View>
 
                     <View style={styles.section}>
-                        <View style={styles.line}>
-                            <Text style={styles.titleAddress}>PO Number</Text>
-                            <Text>ORD897EH2025</Text>
-                        </View>
-                        <View style={styles.line}>
+                        <View style={{ lineHeight: 1 }}>
                             <Text style={styles.titleAddress}>Sales Number</Text>
                             <Text>Andri Setiawan</Text>
                         </View>
-                        <View style={styles.line}>
+                        <View style={{ lineHeight: 1, alignItems: 'center' }}>
+                            <Text style={styles.titleAddress}>PO Number</Text>
+                            <Text>ORD897EH2025</Text>
+                        </View>
+                        <View style={{ lineHeight: 1, alignItems: 'flex-end' }}>
                             <Text style={styles.titleAddress}>Payment Method</Text>
                             <Text>Credit Card</Text>
                         </View>
@@ -339,7 +367,7 @@ export const InvoicePDF = ({ invoiceData }: { invoiceData: any }) => {
 
                     <View style={styles.summary}>
                         {/* LEFT: Notes */}
-                        <View style={styles.summaryLeft}>
+                        <View style={[styles.summaryLeft, { maxWidth: 180 }]}>
                             <Text style={styles.noteTitle}>Delivery Notes</Text>
                             <Text style={styles.noteText}>
                                 Please deliver between 9 AM – 5 PM, and call before arriving.
@@ -371,7 +399,7 @@ export const InvoicePDF = ({ invoiceData }: { invoiceData: any }) => {
                         </View>
                     </View>
                 </View>
-                <View style={styles.footer} fixed>
+                {/* <View style={styles.footer} fixed>
                     <View style={styles.footerItem}>
                         <Image
                             src="/image/TelephoneImage.png"
@@ -395,7 +423,7 @@ export const InvoicePDF = ({ invoiceData }: { invoiceData: any }) => {
                         />
                         <Text style={styles.footerText}> Church Avenue, Mascot, NSW, 2020</Text>
                     </View>
-                </View>
+                </View> */}
             </Page>
         </Document>
     );
