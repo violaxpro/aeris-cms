@@ -14,6 +14,7 @@ import {
     ConvertIcon,
     ApproveIcon
 } from '@public/icon'
+import { DownloadOutlined } from '@ant-design/icons'
 import Button from '@/components/button'
 import Table from '@/components/table'
 import { QuoteType } from '@/plugins/types/sales-type'
@@ -23,8 +24,7 @@ import { statusMap } from '@/config/colors-status'
 import dayjs from 'dayjs'
 import { Card } from '@/components/card'
 import { InfoItem } from '@/components/card/InfoItem'
-import { downloadInvoicePDF } from '@/services/invoice-service'
-
+import { downloadInvoicePDF, previewAndPrintPDF } from '@/services/invoice-service'
 
 const DetailQuote = ({ slug, data }: { slug?: string | number, data: any }) => {
     const [profitHidden, setProfitHidden] = useState(true)
@@ -157,6 +157,10 @@ const DetailQuote = ({ slug, data }: { slug?: string | number, data: any }) => {
     const handlePrint = async (data: any) => {
         await downloadInvoicePDF(data, 'quote');
     }
+
+    const handlePreview = async (data: any) => {
+        await previewAndPrintPDF(data, 'quote');
+    }
     return (
         <>
             <div className="mt-6 mx-5 mb-0">
@@ -225,8 +229,12 @@ const DetailQuote = ({ slug, data }: { slug?: string | number, data: any }) => {
                                 height={15}
                             />}
                             label='Print'
+                            onClick={() => handlePreview(quoteDetailData)}
+                        />
+                        <ButtonAction
+                            icon={<DownloadOutlined />}
+                            label='Download PDF'
                             onClick={() => handlePrint(quoteDetailData)}
-
                         />
                         <Button
                             icon={<Image

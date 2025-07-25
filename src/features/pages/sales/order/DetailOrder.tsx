@@ -14,6 +14,7 @@ import {
     ConvertIcon,
     ApproveIcon
 } from '@public/icon'
+import { DownloadOutlined } from '@ant-design/icons'
 import Button from '@/components/button'
 import Table from '@/components/table'
 import { QuoteType } from '@/plugins/types/sales-type'
@@ -24,7 +25,7 @@ import dayjs from 'dayjs'
 import { Card } from '@/components/card'
 import { InfoItem } from '@/components/card/InfoItem'
 import { useRouter } from 'next/navigation'
-import { downloadInvoicePDF } from '@/services/invoice-service'
+import { downloadInvoicePDF, previewAndPrintPDF } from '@/services/invoice-service'
 
 const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
     const router = useRouter()
@@ -307,6 +308,10 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
     const handlePrint = async (data: any) => {
         await downloadInvoicePDF(data, 'order');
     }
+
+    const handlePreview = async (data: any) => {
+        await previewAndPrintPDF(data, 'order');
+    }
     return (
         <>
             <div className="mt-6 mx-5 mb-0">
@@ -375,6 +380,11 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
                                 height={15}
                             />}
                             label='Print'
+                            onClick={() => handlePreview(invoiceData)}
+                        />
+                        <ButtonAction
+                            icon={<DownloadOutlined />}
+                            label='Download PDF'
                             onClick={() => handlePrint(invoiceData)}
                         />
                         <Button
