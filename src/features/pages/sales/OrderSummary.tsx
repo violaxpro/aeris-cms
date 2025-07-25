@@ -22,7 +22,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
     discount,
     gstRate,
 }) => {
-    const gst = subtotal * gstRate;
+    const gst = subtotal * (gstRate / 100);
     const total = subtotal + shippingFee + gst - discount;
 
     return (
@@ -54,7 +54,8 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
             </div>
 
             <div className="flex justify-between mb-1">
-                <span>Tax ({(gstRate * 100).toFixed(0)}%)</span>
+                {/* <span>Tax ({(gstRate * 100).toFixed(0)}%)</span> */}
+                <span>Tax ({gstRate}%)</span>
                 <span>{formatCurrency(gst)}</span>
             </div>
 

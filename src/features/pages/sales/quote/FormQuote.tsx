@@ -50,12 +50,15 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         order_reference: initialValues ? initialValues.order_reference : '',
         subtotal: initialValues ? initialValues.subtotal : 0,
         product: initialValues ? initialValues.product : [],
-        discount: initialValues ? initialValues.discount : 0,
+        profit: initialValues ? initialValues.profit : 100,
         shipping_fee: initialValues ? initialValues.shipping_fee : '',
+        tax_rate: initialValues ? initialValues.tax_rate : '',
         gst: initialValues ? initialValues.gst : '',
         total: initialValues ? initialValues.total : '',
         coupon_apply: initialValues ? initialValues.coupon_apply : '',
-        discount_type: initialValues ? initialValues.discount_type : '',
+        discount_type: initialValues ? initialValues.discount_type : selectedDiscountType,
+        discount_value: initialValues ? initialValues.discount_value : 0,
+        discount_total: initialValues ? initialValues.discount_total : 0,
         shipping_method: initialValues ? initialValues.shipping_method : '',
         delivery_note: initialValues ? initialValues.delivery_note : '',
         internal_note: initialValues ? initialValues.internal_note : '',
@@ -173,7 +176,7 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                 order_reference: formData.order_reference,
                 product: productList,
                 subtotal: Number(formData.subtotal),
-                discount: Number(formData.discount),
+                discount: Number(formData.discount_total),
                 shipping_fee: Number(formData.shipping_fee),
                 gst: Number(formData.gst),
                 total: Number(formData.total)
@@ -229,8 +232,6 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         { label: 'RECEIVE', value: 'RECEIVE' }
     ]
 
-    console.log(formData, productForm, productForm?.reduce((acc, item) => acc + Number(item?.total || 0), 0))
-
     useEffect(() => {
         // const newSubtotal = productForm?.length > 0 && productForm?.reduce((acc, item) => {
         //     console.log(item)
@@ -240,22 +241,19 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
             ? productForm.reduce((acc, item) => acc + Number(item?.total || 0), 0)
             : 0;
 
-        console.log('ini subtotal baru', newSubtotal)
-        const discount = formData.discount_type == 'percent' ? (Number(formData.discount) / 100) : Number(formData.discount || 0)
-        console.log(discount, selectedDiscountType)
+        const discount_value = Number(formData.discount_value || 0)
         const shipping_fee = Number(formData.shipping_fee || 0)
-        const tax = Number(formData.gst || 0)
-        const total = newSubtotal - discount + shipping_fee + tax
+        const tax = Number(formData.tax_rate || 0)
+        const calculateDiscount = formData.discount_type == 'percent' ? (discount_value / 100 * newSubtotal) : discount_value
+        const total = newSubtotal - calculateDiscount + shipping_fee + tax
+
         setFormData(prev => ({
             ...prev,
             subtotal: newSubtotal.toString(),
-            discount: discount,
+            discount_total: calculateDiscount,
             total: total.toString()
         }));
-    }, [productForm, formData.discount, formData.shipping_fee, formData.gst]);
-
-    console.log(optionsTax, selectedDiscountType)
-
+    }, [productForm, formData.discount_type, formData.discount_value, formData.shipping_fee, formData.tax_rate]);
 
     return (
         <>
@@ -310,11 +308,11 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     required
                                 />
                                 <SelectInput
-                                    id='gst'
+                                    id='tax_rate'
                                     label='Tax Rate'
                                     placeholder='Select Tax Rate'
-                                    onChange={(selected) => handleChangeSelect('gst', selected)}
-                                    value={formData.gst}
+                                    onChange={(selected) => handleChangeSelect('tax_rate', selected)}
+                                    value={formData.tax_rate}
                                     options={optionsTax}
                                     required
                                 />
@@ -420,11 +418,11 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
                             />
                             <Input
-                                id='discount'
+                                id='discount_value'
                                 label='Discount Type'
                                 type='number'
                                 onChange={handleChange}
-                                value={formData.discount}
+                                value={formData.discount_value}
                                 suffix={
                                     selectedDiscountType == 'percent' && <PercentageOutlined />
                                 }
@@ -497,11 +495,11 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 <OrderSummary
                                     profitHidden={profitHidden}
                                     onReveal={() => setProfitHidden(false)}
-                                    profit={100}
-                                    subtotal={formData.subtotal}
+                                    profit={formData.profit}
+                                    subtotal={Number(formData.subtotal)}
                                     shippingFee={Number(formData.shipping_fee)}
-                                    discount={formData.discount}
-                                    gstRate={formData.gst}
+                                    discount={formData.discount_total}
+                                    gstRate={formData.tax_rate}
                                 />
                             </div>
 
