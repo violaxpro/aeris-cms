@@ -6,12 +6,14 @@ type DeleteConfirmModalProps = {
     open: boolean;
     onCancel: () => void;
     onDelete: (id: any) => void;
+    item?: string
 };
 
 const DeleteConfirmModal = ({
     open,
     onCancel,
     onDelete,
+    item = 'address'
 }: DeleteConfirmModalProps) => {
     return (
         <Modal
@@ -23,7 +25,7 @@ const DeleteConfirmModal = ({
             width={500}
         >
             <div className="text-center p-8">
-                <h2 className="text-lg font-semibold mb-2">Are you sure you want to delete this address?</h2>
+                <h2 className="text-lg font-semibold mb-2">Are you sure you want to delete this {item}?</h2>
                 <p className="text-gray-500 mb-6">This action cannot be undone.</p>
 
                 <div className="flex justify-center gap-4">
