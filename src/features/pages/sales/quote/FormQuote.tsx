@@ -35,7 +35,8 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         price: 0,
         buying_price: 0,
         qty: 0,
-        // tax: '',
+        tax_rate: '',
+        tax_amount: 0,
         total: 0,
     }]);
     const [editIndex, setEditIndex] = useState<number | null>(null)
@@ -209,7 +210,8 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                 price: 0,
                 buying_price: 0,
                 qty: 0,
-                // tax: '',
+                tax_rate: '',
+                tax_amount: 0,
                 total: 0,
             }
         ])
