@@ -1,5 +1,6 @@
 import { Tree } from 'antd';
 import type { GetProps, TreeDataNode } from 'antd';
+import { ReactNode } from 'react';
 
 export type FlatNode = categoriesType & {
     id: number | string;
@@ -10,10 +11,13 @@ export type FlatNode = categoriesType & {
 
 export type TreeNode = {
     key: number | string;
-    title: string;
-    text: string;
+    title: ReactNode;
+    text?: string;
     children?: TreeNode[];
     categoriesData?: categoriesType
+    isLeaf?: boolean
+    selectable?: boolean
+    icon?: any
 };
 
 export interface categoriesType {
@@ -28,7 +32,7 @@ export interface categoriesType {
     // meta: MetaNode;       // bisa nested object
     meta_description: string
     meta_title: string
-    page_decsription: string
+    page_description: string
     show_in_page: boolean
     show_in_search: boolean
     enabled: boolean

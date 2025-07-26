@@ -500,3 +500,19 @@ div {
 }
 
 /* styles/globals.css atau file CSS global kamu */
+
+/* Sembunyikan semua checkbox bawaan */
+.custom-hover-tree .ant-tree-checkbox {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+/* Tampilkan checkbox saat hover node */
+.custom-hover-tree .ant-tree-treenode:hover .ant-tree-checkbox {
+    opacity: 1;
+}
+
+/* Tetap tampilkan checkbox kalau sudah dicentang */
+.custom-hover-tree .ant-tree-checkbox-checked {
+    opacity: 1 !important;
+}

@@ -9,10 +9,10 @@ export default function buildTree(flatData: FlatNode[]): TreeNode[] {
         console.log(item)
         idMapping[item.id] = {
             key: item.id,
-            text: item.name,
+            // text: item.name,
             title: item.name,
             children: [],
-            categoriesData : item as categoriesType
+            categoriesData: item as categoriesType
         };
     });
 

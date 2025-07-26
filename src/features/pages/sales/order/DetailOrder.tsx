@@ -303,7 +303,7 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
             }
         },
         {
-            title: 'Supplier Name',
+            title: 'Supplier & Buying Price',
             dataIndex: 'supplier',
             sorter: (a: any, b: any) => {
                 const aName = a?.supplier?.[0]?.name || '';
@@ -315,14 +315,14 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
                 return <div className="flex flex-col w-full">
                     {
                         suppliers?.map((item: any, index: number) => (
-                            <div className="flex justify-start gap-1">
+                            <div key={index} className="flex justify-start gap-1">
                                 {/* <HoverPopover
                                     key={index}
                                     content={<p>Buying Price : {item?.buying_price}</p>}
                                 >
                                     <span>{item?.name}</span>
                                 </HoverPopover> */}
-                                <div key={index} className="flex justify-between w-full">
+                                <div className="flex justify-between w-full">
                                     <span className='w-25'>{item.name}</span>
                                     <span>:</span>
                                     <span className="whitespace-nowrap">${item.buying_price}</span>

@@ -34,7 +34,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
                         Reveal
                     </button>
                 ) : (
-                    <span>{formatCurrency(profit)}</span>
+                    <span onClick={onReveal} className='cursor-pointer'>{formatCurrency(profit)}</span>
                 )}
             </div>
 

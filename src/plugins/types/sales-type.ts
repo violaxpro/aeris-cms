@@ -164,6 +164,38 @@ export const orderDummyData = [
             {
                 sku: '459834',
                 name: 'Product A',
+                supplier: [
+                    {
+                        id: 1,
+                        name: 'Supplier ABC',
+                        buying_price: 600
+                    },
+                    {
+                        id: 2,
+                        name: 'CV ABD',
+                        buying_price: 700
+                    },
+                ],
+                price: 500,
+                buying_price: 600,
+                qty: 2,
+                total: 1200
+            },
+            {
+                sku: '459835',
+                name: 'Product B',
+                supplier: [
+                    {
+                        id: 3,
+                        name: 'Toko Abadi',
+                        buying_price: 600
+                    },
+                    {
+                        id: 4,
+                        name: 'Toko Cindai',
+                        buying_price: 700
+                    },
+                ],
                 price: 500,
                 buying_price: 600,
                 qty: 2,

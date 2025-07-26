@@ -1,10 +1,9 @@
 'use client'
 import React, { useState, useMemo, useEffect } from 'react';
-import { Tree } from 'antd';
 import { DirectoryTreeProps } from '@/plugins/types/treeTypes';
 import Breadcrumb from "@/components/breadcrumb";
 import { Content } from 'antd/es/layout/layout'
-import { Input } from 'antd';
+import { Input, Tree, TreeProps, Checkbox } from 'antd';
 import Button from "@/components/button"
 import { PlusCircleOutlined } from '@ant-design/icons';
 import buildTree from '@/plugins/utils/tree';
@@ -19,7 +18,7 @@ import { useNotificationAntd } from '@/components/toast';
 import { useRouter } from 'next/navigation';
 
 const { Search } = Input
-const { DirectoryTree } = Tree;
+// const { DirectoryTree } = Tree;
 
 const dummyTreeData = [
     {
@@ -73,6 +72,29 @@ const dummyTreeData = [
 
 ]
 
+const subCatArray1 = {
+    key: 32,
+    text: "Anak Door Control",
+    title: "Anak Door Control",
+    children: [],
+    categoriesData: {
+        "id": 32,
+        "name": "Anak Door Control",
+        "show_in_page": true,
+        "show_in_search": true,
+        "enabled": true,
+        "url_logo": "http://url.logo",
+        "url_banner": "http://url.banner",
+        "slug": "door-control",
+        "meta_title": "meta title",
+        "meta_description": "meta description<",
+        "page_description": "<p><span style=\"background-color: rgb(255, 255, 255); color: rgb(4, 81, 165);\">page description</span></p>",
+        "created_at": "2025-07-16T02:36:55.984Z",
+        "updated_at": "2025-07-16T02:36:55.984Z",
+        "children": []
+    }
+}
+
 const breadcrumb = [
     { title: 'Catalogue' },
     { title: 'Categories' }
@@ -87,10 +109,13 @@ const CategoriesPage = ({ categories }: { categories?: any }) => {
     const [parentId, setParentId] = useState<string | number | null>()
     const [categoryData, setCategoryData] = useAtom(categoryDataFetch)
     const { contextHolder, notifySuccess } = useNotificationAntd()
+    const [checkedKeys, setCheckedKeys] = useState<React.Key[]>([]);
+    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
+    const [hoveredKey, setHoveredKey] = useState<string | null>(null);
 
     // const treeData = buildTree(dummyTreeData)
     const handleCreateSubcategory = (node: TreeNode) => {
-        // console.log('Create subcategory for:', node);
+        console.log('Create subcategory for:', node);
         setParentId(node.key);
         setAddForm(true);
     };
@@ -114,27 +139,124 @@ const CategoriesPage = ({ categories }: { categories?: any }) => {
     };
 
     const mapTreeData = (data: any[]): TreeNode[] => {
-        console.log(data)
-        return data.map((item) => ({
-            ...item,
-            key: item.key,
-            title: (
-                <RenderMenu
-                    node={item}
-                    onCreateSubcategory={handleCreateSubcategory}
-                    onEditCategory={handleEditCategory}
-                    onDeleteCategory={handleDeleteCategory}
-                />
-            ),
-            text: item.text,
-            children: item.children ? mapTreeData(item.children) : [],
-            categoriesData: item
-        }));
+        return data.map((item) => {
+            const key = item.key || item.id;
+            // Ambil children mentahnya
+            // const childrenData = item?.children ? mapTreeData(item.children) : []
+            // Recursive dummy map children
+            const childrenData: TreeNode[] = [];
+            childrenData.push({
+                key: `dummy-child-${item.id || item.key}`,
+                title: <span>Anak Kategory</span>,
+                isLeaf: false,
+                selectable: true,
+                children: [
+                    {
+                        key: `subchild-${item.id || item.key}`,
+                        title: 'Sub Anak',
+                        isLeaf: true,
+                        selectable: true,
+                    },
+                    {
+                        key: `add-subchild-${item.id || item.key}`,
+                        title: (
+                            <span
+                                className="text-blue-500 hover:underline"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleCreateSubcategory(item);
+                                }}
+                            >
+                                + Add Subcategory
+                            </span>
+                        ),
+                        isLeaf: true,
+                        selectable: false,
+                    },
+                ],
+
+            })
+
+            if (!searchValue) {
+                childrenData.push({
+                    key: `add-${item.id || item.key}`,
+                    title: (
+                        <div>
+                            <span
+                                className="text-blue-500 hover:underline"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleCreateSubcategory(item);
+                                }}
+                            >
+                                + Add Subcategory
+                            </span>
+                        </div>
+
+                    ),
+                    isLeaf: true,
+                    selectable: false,
+                });
+            }
+
+
+            return {
+                key: item.key || item.id,
+                title: (
+                    <div
+                        onMouseEnter={() => setHoveredKey(key)}
+                        onMouseLeave={() => setHoveredKey(null)}
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                        }}
+                    >
+                        {/* Kiri: Checkbox + Title */}
+                        {/* <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                            {hoveredKey === key && (
+                                <Checkbox
+                                    checked={checkedKeys.includes(key)}
+                                    onChange={(e) => {
+                                        const checked = e.target.checked;
+                                        setCheckedKeys((prev) =>
+                                            checked ? [...prev, key] : prev.filter((k) => k !== key)
+                                        );
+                                    }}
+                                    onClick={(e) => e.stopPropagation()}
+                                />
+                            )}
+                            <span>{item.title || item.name}</span>
+                        </div> */}
+                        <span>{item.title || item.name}</span>
+
+                        {/* Kanan: Menu button (misal 3 titik) */}
+                        {/* <RenderMenu
+                            node={item}
+                            onCreateSubcategory={handleCreateSubcategory}
+                            onEditCategory={handleEditCategory}
+                            onDeleteCategory={handleDeleteCategory}
+                        /> */}
+                    </div>
+                ),
+
+                // text : item.title || item.name,
+                children: childrenData,
+                isLeaf: false,
+                categoriesData: item.categoriesData || item,
+            };
+        });
     };
+
+    console.log(hoveredKey)
+
+
     const treeData = useMemo(() => {
         const built = buildTree(categoryData);
         return mapTreeData(built);
-    }, [categoryData]);
+    }, [categoryData, hoveredKey]);
+
+    console.log(treeData)
 
     const searchCategory = (
         categories: TreeNode[],
@@ -176,8 +298,9 @@ const CategoriesPage = ({ categories }: { categories?: any }) => {
     )
 
 
-    const onSelect: DirectoryTreeProps['onSelect'] = (keys, info) => {
-        console.log('Trigger Select', keys, info);
+    const onSelect: TreeProps['onSelect'] = (selectedKeysValue, info) => {
+        console.log('onSelect', info);
+        setSelectedKeys(selectedKeysValue);
     };
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -190,6 +313,11 @@ const CategoriesPage = ({ categories }: { categories?: any }) => {
         setAutoExpandParent(false)
     };
 
+    const onCheck: TreeProps['onCheck'] = (checkedKeysValue) => {
+        console.log('onCheck', checkedKeysValue);
+        setCheckedKeys(checkedKeysValue as React.Key[]);
+    };
+
     const handleAdd = () => {
         setAddForm(!addForm)
     }
@@ -198,7 +326,63 @@ const CategoriesPage = ({ categories }: { categories?: any }) => {
         setCategoryData(categories)
     }, [categories])
 
-    console.log('ini sesuai node yg diklik', selectedParent?.categoriesData)
+
+    // const handleDrop: TreeProps['onDrop'] = (info) => {
+    //     console.log(info);
+    //     const dropKey = info.node.key;
+    //     const dragKey = info.dragNode.key;
+    //     const dropPos = info.node.pos.split('-');
+    //     const dropPosition = info.dropPosition - Number(dropPos[dropPos.length - 1]); // the drop position relative to the drop node, inside 0, top -1, bottom 1
+
+    //     const loop = (
+    //         data: TreeNode[],
+    //         key: React.Key,
+    //         callback: (node: TreeNode, i: number, data: TreeNode[]) => void,
+    //     ) => {
+    //         for (let i = 0; i < data.length; i++) {
+    //             if (data[i].key === key) {
+    //                 return callback(data[i], i, data);
+    //             }
+    //             if (data[i].children) {
+    //                 loop(data[i].children!, key, callback);
+    //             }
+    //         }
+    //     };
+    //     const data = [...categories];
+
+    //     // Find dragObject
+    //     let dragObj: TreeNode;
+    //     loop(data, dragKey, (item, index, arr) => {
+    //         arr.splice(index, 1);
+    //         dragObj = item;
+    //     });
+
+    //     if (!info.dropToGap) {
+    //         // Drop on the content
+    //         loop(data, dropKey, (item) => {
+    //             item.children = item.children || [];
+    //             // where to insert. New item was inserted to the start of the array in this example, but can be anywhere
+    //             item.children.unshift(dragObj);
+    //         });
+    //     } else {
+    //         let ar: TreeNode[] = [];
+    //         let i: number;
+    //         loop(data, dropKey, (_item, index, arr) => {
+    //             ar = arr;
+    //             i = index;
+    //         });
+    //         if (dropPosition === -1) {
+    //             // Drop on the top of the drop node
+    //             ar.splice(i!, 0, dragObj!);
+    //         } else {
+    //             // Drop on the bottom of the drop node
+    //             ar.splice(i! + 1, 0, dragObj!);
+    //         }
+    //     }
+    //     setCategoryData(data);
+    // };
+
+    // console.log('data woi', filteredTreeData)
 
     return (
         <>
@@ -227,14 +411,20 @@ const CategoriesPage = ({ categories }: { categories?: any }) => {
                             </div>
 
                             <div className='mt-2'>
-                                <DirectoryTree
+                                <Tree
                                     multiple
                                     draggable
+                                    checkable
+                                    onCheck={onCheck}
+                                    checkedKeys={checkedKeys}
                                     onSelect={onSelect}
+                                    selectedKeys={selectedKeys}
                                     onExpand={onExpand}
                                     treeData={filteredTreeData}
                                     expandedKeys={expandedKeys}
                                     autoExpandParent={autoExpandParent}
+                                    className="custom-hover-tree"
+                                // onDrop={handleDrop}
                                 />
                             </div>
 
