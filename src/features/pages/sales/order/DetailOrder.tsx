@@ -26,10 +26,14 @@ import { Card } from '@/components/card'
 import { InfoItem } from '@/components/card/InfoItem'
 import { useRouter } from 'next/navigation'
 import { downloadInvoicePDF, previewAndPrintPDF } from '@/services/invoice-service'
+import Modal from '@/components/modal'
+import HoverPopover from '@/components/popover/HoverPopover'
 
 const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
     const router = useRouter()
     const [profitHidden, setProfitHidden] = useState(true)
+    const [buyPriceHidden, setBuyPriceHidden] = useState(true)
+    const [isOpenModalSupplier, setIsOpenModalSupplier] = useState(false)
 
     const breadcrumb = [
         { title: 'Sales' },
@@ -56,7 +60,7 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
             }
         },
         {
-            title: 'Product',
+            title: 'Description',
             dataIndex: 'name',
             sorter: (a: any, b: any) => {
                 return a?.name.localeCompare(b?.name)
@@ -65,34 +69,6 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
                 return <div className="flex flex-col w-full">
                     <div className="flex justify-start gap-1">
                         <span>{row.name}</span>
-                    </div>
-                </div>
-            }
-        },
-        {
-            title: 'Buy Price',
-            dataIndex: 'price',
-            sorter: (a: any, b: any) => {
-                return a?.price.localeCompare(b?.price)
-            },
-            render: (_: any, row: any) => {
-                return <div className="flex flex-col w-full">
-                    <div className="flex justify-start gap-1">
-                        <span>{row.price}</span>
-                    </div>
-                </div>
-            }
-        },
-        {
-            title: 'Supplier',
-            dataIndex: 'supplier_name',
-            sorter: (a: any, b: any) => {
-                return a?.supplier_name.localeCompare(b?.supplier_name)
-            },
-            render: (_: any, row: any) => {
-                return <div className="flex flex-col w-full">
-                    <div className="flex justify-start gap-1">
-                        <span>{row.supplier_name}</span>
                     </div>
                 </div>
             }
@@ -107,6 +83,13 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
                 return <div className="flex flex-col w-full">
                     <div className="flex justify-start gap-1">
                         <span>${row.price}</span>
+                    </div>
+                    <div className="flex justify-start gap-1">
+                        {
+                            buyPriceHidden ? <button onClick={() => setBuyPriceHidden(false)} className="text-[#3666AA] font-medium cursor-pointer">
+                                Reveal
+                            </button> : <span onClick={() => setBuyPriceHidden(true)} className='cursor-pointer'>Buy Price : {row?.price?.buying_price || 100}</span>
+                        }
                     </div>
                 </div>
             }
@@ -290,6 +273,69 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
         },
     ]
 
+    const columnSuppliers: TableColumnsType<any> = [
+        {
+            title: 'SKU',
+            dataIndex: 'sku',
+            sorter: (a: any, b: any) => {
+                return a?.sku.localeCompare(b?.sku)
+            },
+            render: (_: any, row: any) => {
+                return <div className="flex flex-col w-full">
+                    <div className="flex justify-start gap-1">
+                        <span>{row.sku}</span>
+                    </div>
+                </div>
+            }
+        },
+        {
+            title: 'Description',
+            dataIndex: 'name',
+            sorter: (a: any, b: any) => {
+                return a?.name.localeCompare(b?.name)
+            },
+            render: (_: any, row: any) => {
+                return <div className="flex flex-col w-full">
+                    <div className="flex justify-start gap-1">
+                        <span>{row.name}</span>
+                    </div>
+                </div>
+            }
+        },
+        {
+            title: 'Supplier Name',
+            dataIndex: 'supplier',
+            sorter: (a: any, b: any) => {
+                const aName = a?.supplier?.[0]?.name || '';
+                const bName = b?.supplier?.[0]?.name || '';
+                return aName.localeCompare(bName);
+            },
+            render: (_: any, row: any) => {
+                const suppliers = row?.supplier || []
+                return <div className="flex flex-col w-full">
+                    {
+                        suppliers?.map((item: any, index: number) => (
+                            <div className="flex justify-start gap-1">
+                                {/* <HoverPopover
+                                    key={index}
+                                    content={<p>Buying Price : {item?.buying_price}</p>}
+                                >
+                                    <span>{item?.name}</span>
+                                </HoverPopover> */}
+                                <div key={index} className="flex justify-between w-full">
+                                    <span className='w-25'>{item.name}</span>
+                                    <span>:</span>
+                                    <span className="whitespace-nowrap">${item.buying_price}</span>
+                                </div>
+                            </div>
+                        ))
+                    }
+
+                </div>
+            }
+        },
+    ]
+
     const invoiceData = {
         invoiceNumber: 'INV-2025-001',
         customerName: 'John Doe',
@@ -314,6 +360,16 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
     }
     return (
         <>
+            <Modal
+                open={isOpenModalSupplier}
+                title='Supplier'
+                handleCancel={() => setIsOpenModalSupplier(false)}
+            >
+                <Table
+                    columns={columnSuppliers}
+                    dataSource={data?.product}
+                />
+            </Modal>
             <div className="mt-6 mx-5 mb-0">
                 <div className='flex justify-between items-center'>
                     <div>
@@ -439,7 +495,13 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
                         </Card>
                     </div>
                     <div>
-                        <h4 className='text-xl font-semibold'>Item Ordered</h4>
+                        <div className='flex justify-between my-2'>
+                            <h4 className='text-xl font-semibold'>Item Ordered</h4>
+                            <Button
+                                label='View Supplier'
+                                onClick={() => setIsOpenModalSupplier(true)}
+                            />
+                        </div>
                         <Table
                             columns={columns}
                             dataSource={data?.product}
@@ -464,8 +526,8 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
                         </div>
                     </div>
                     <Divider />
-                    <div className='grid grid-cols-12 gap-4'>
-                        <div className='col-span-7'>
+                    <div className='grid gap-4'>
+                        <div>
                             <h4 className='text-xl font-semibold'> Serial Number</h4>
                             <Table
                                 columns={columnsSerialNumber}
@@ -489,7 +551,7 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
                                 ]}
                             />
                         </div>
-                        <div className='col-span-5'>
+                        <div>
                             <h4 className='text-xl font-semibold'>Last 5 Order Log</h4>
                             <Table
                                 columns={columnLogs}

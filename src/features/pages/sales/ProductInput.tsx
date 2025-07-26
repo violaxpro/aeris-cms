@@ -8,6 +8,8 @@ import { taxSetAtom } from '@/store/DropdownItemStore';
 import { getProduct } from '@/services/products-service';
 import Image from 'next/image';
 import { TrashIcon, TrashIconRed } from '@public/icon';
+import Button from '@/components/button'
+import Modal from '@/components/modal'
 export interface ProductForm {
     sku: string
     name: string
@@ -15,7 +17,14 @@ export interface ProductForm {
     buying_price: number
     qty: number
     total: number
-    // tax: any;
+    tax_rate: string;
+    tax_amount: number;
+}
+
+export interface NewProductType {
+    sku: string
+    name: string
+    price: number
 }
 
 interface ProductInputProps {
@@ -39,6 +48,12 @@ const ProductInput = ({
     const [optionsTax] = useAtom(taxSetAtom)
     const [items, setItems] = useState([])
     const [taxError, setTaxError] = useState('');
+    const [openModal, setOpenModal] = useState(false)
+    const [newProduct, setNewProduct] = useState({
+        sku: '',
+        name: '',
+        price: 0
+    })
     const handleProductChange = (e: any) => {
         const { id, value } = e.target;
 
@@ -122,11 +137,57 @@ const ProductInput = ({
 
     }, [])
 
-
+    console.log(optionsTax)
     return (
         <div>
-            <div className='grid md:grid-cols-[1fr_3fr_1fr_1fr_70px_1fr_50px] items-center gap-4 mb-2'>
-                <Input
+            <Modal
+                open={openModal}
+                title='Create New Product'
+            >
+                <div className='flex flex-col gap-4'>
+                    <div className='flex flex-col gap-4'>
+                        <Input
+                            id='sku'
+                            type='text'
+                            label='Product SKU'
+                            value={newProduct.sku}
+                            onChange={handleProductChange}
+                            className='mb-1'
+                            required
+                        />
+                        <Input
+                            id='name'
+                            type='text'
+                            label='Product Name'
+                            value={newProduct.name}
+                            onChange={handleProductChange}
+                            className='mb-1'
+                            required
+                        />
+                        <Input
+                            id='price'
+                            type='number'
+                            label='Price'
+                            value={newProduct.price}
+                            onChange={handleProductChange}
+                            className='mb-1'
+                            required
+                        />
+                    </div>
+                    <div className='col-span-full flex justify-center'>
+                        <Button
+                            label='Save'
+                            onClick={() => console.log('hi')}
+                            style={{ padding: '1.2rem 2rem' }}
+                        />
+
+                    </div>
+                </div>
+
+
+            </Modal>
+            <div className='grid md:grid-cols-[2fr_2fr_1fr_1fr_1fr_1fr_1fr_50px] items-center gap-4 mb-2'>
+                {/* <Input
                     id='sku'
                     type='text'
                     label='Product SKU'
@@ -134,8 +195,44 @@ const ProductInput = ({
                     onChange={handleProductChange}
                     className='mb-1'
                     required
-                />
+                /> */}
                 <SelectInput
+                    id='sku'
+                    label='Product SKU'
+                    value={productForm.sku}
+                    onChange={(val) => handleChangeSelect('sku', val)}
+                    options={[
+                        ...items.map((item: any) => ({
+                            label: item.sku,
+                            value: item.sku,
+                        }))
+                    ]}
+                    popupRender={(options: any) => (
+                        <>
+                            {options}
+                            <div className='p-4'>
+                                <Button
+                                    label='Add New'
+                                    onClick={() => setOpenModal(true)}
+                                />
+                            </div>
+
+                        </>
+                    )}
+                    placeholder='Search or select SKU'
+                    required
+                />
+
+                <Input
+                    id='name'
+                    type='text'
+                    label='Product Name'
+                    value={productForm.name}
+                    onChange={handleProductChange}
+                    className='mb-1'
+                    required
+                />
+                {/* <SelectInput
                     id='name'
                     label='Product Name'
                     value={productForm.name}
@@ -145,8 +242,7 @@ const ProductInput = ({
                         value: p.name,
                     }))}
                     required
-                />
-
+                /> */}
                 <Input
                     id='price'
                     type='text'
@@ -157,8 +253,7 @@ const ProductInput = ({
                     required
 
                 />
-
-                <Input
+                {/* <Input
                     id='buying_price'
                     type='text'
                     label='Buying Price'
@@ -166,7 +261,7 @@ const ProductInput = ({
                     onChange={handleProductChange}
                     className='mb-1'
                     required
-                />
+                /> */}
                 <Input
                     id='qty'
                     type='text'
@@ -176,16 +271,24 @@ const ProductInput = ({
                     className='mb-1'
                     required
                 />
-                {/* <SelectInput
-                    id="tax"
-                    label="Tax Fee"
-                    placeholder="Select Tax Fee"
-                    value={productForm.tax}
-                    onChange={(val) => handleChangeSelect("tax", val)}
+                <SelectInput
+                    id="tax_rate"
+                    label="Tax Rate"
+                    placeholder="Select Tax Rate"
+                    value={productForm.tax_rate}
+                    onChange={(val) => handleChangeSelect("tax_rate", val)}
                     options={optionsTax}
                     error={taxError}
-                /> */}
-
+                />
+                <Input
+                    id='tax_amount'
+                    type='text'
+                    label='Tax Amount'
+                    value={productForm.tax_amount}
+                    onChange={handleProductChange}
+                    className='mb-1'
+                    required
+                />
                 <Input
                     id='total'
                     type='text'

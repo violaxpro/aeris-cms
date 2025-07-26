@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     },
     fontHeader: {
         color: '#0A3353',
-        fontSize: '2rem',
+        fontSize: '1.8rem',
         fontWeight: 700,
         textTransform: 'uppercase'
     },
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
         fontSize: '16px'
     },
     senderTitle: {
-        fontWeight: 'bold',
+        fontWeight: 500,
         fontSize: '1rem',
     },
     line: {
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
         // marginBottom: 4,
     },
     label: {
-        width: 70,
+        width: 100,
         // fontWeight: 'bold',
     },
     value: {
@@ -238,7 +238,7 @@ export const InvoicePDF = ({ invoiceData, page }: { invoiceData: any, page: stri
                     <View style={styles.header}>
                         <Image
                             src="/logo/Alarm Expert Logo.png"
-                            style={{ width: 120, height: 'auto' }}
+                            style={{ width: 170, height: 'auto' }}
                         />
                         <View style={{ width: 200, textAlign: 'right' }}>
                             <Text style={styles.fontHeader}>Invoice</Text>
@@ -252,8 +252,8 @@ export const InvoicePDF = ({ invoiceData, page }: { invoiceData: any, page: stri
 
                     {/* Customer Info */}
                     <View style={styles.section}>
-                        <View style={styles.line}>
-                            <Text style={styles.senderTitle}>Alarm Expert Australia</Text>
+                        <View style={[styles.line, { width: '50%' }]}>
+                            <Text style={styles.senderTitle}>Company Details</Text>
                             <div style={{ lineHeight: '1rem' }}>
                                 <Text>
                                     PO Box 1234 , Sydney, NSW, 2000
@@ -263,11 +263,12 @@ export const InvoicePDF = ({ invoiceData, page }: { invoiceData: any, page: stri
                                 <Text>ABN : 12 345 678 901</Text>
                             </div>
                         </View>
-                        <View style={{ lineHeight: '1rem', maxWidth: 250, minHeight: 65 }}>
+                        <View style={{ lineHeight: '1rem', width: '40%', minHeight: 65 }}>
+                            <Text style={[styles.senderTitle, { lineHeight: '1.5rem' }]}>Order Details</Text>
                             <View style={styles.row}>
                                 {
                                     page == 'order' && <>
-                                        <Text style={styles.label}>Invoice ID</Text>
+                                        <Text style={styles.label}>Invoice Number</Text>
                                         <Text style={styles.value}>{invoiceData.invoiceNumber}</Text></>
                                 }
                                 {
@@ -279,11 +280,11 @@ export const InvoicePDF = ({ invoiceData, page }: { invoiceData: any, page: stri
 
                             </View>
                             <View style={styles.row}>
-                                <Text style={styles.label}>Date</Text>
+                                <Text style={styles.label}>Invoice Date</Text>
                                 <Text style={styles.value}>December 25, 2025</Text>
                             </View>
                             <View style={styles.row}>
-                                <Text style={styles.label}>Customer</Text>
+                                <Text style={styles.label}>Customer Name</Text>
                                 <Text style={[styles.value, { maxWidth: 153 }]}>
                                     Protech Security xxxxxxxxx
                                 </Text>
@@ -292,7 +293,7 @@ export const InvoicePDF = ({ invoiceData, page }: { invoiceData: any, page: stri
                     </View>
 
                     <View style={styles.section}>
-                        <View>
+                        <View style={{ width: '50%' }}>
                             <View style={{ lineHeight: '1rem' }}>
                                 <Text style={styles.titleAddress}>Shipping Address</Text>
                                 <Text>
@@ -302,7 +303,7 @@ export const InvoicePDF = ({ invoiceData, page }: { invoiceData: any, page: stri
                                 <Text>Australia</Text>
                             </View>
                         </View>
-                        <View>
+                        <View style={{ width: '40%' }}>
                             <View style={{ lineHeight: '1rem' }}>
                                 <Text style={styles.titleAddress}>Billing Address</Text>
                                 {/* <Text>
@@ -398,6 +399,41 @@ export const InvoicePDF = ({ invoiceData, page }: { invoiceData: any, page: stri
                             </View>
                         </View>
                     </View>
+
+                    <View style={{ marginTop: 10 }}>
+                        <Text style={{ fontWeight: 500, fontSize: 12 }}>
+                            Due Date: 23 Jul 2025
+                        </Text>
+                        <Text style={{ fontSize: 10 }}>
+                            Please use the following details if payment is by direct debit.
+                        </Text>
+
+                        <View style={{ marginTop: 8, lineHeight: 1.2, fontSize: 10 }}>
+                            <Text>Account Name: Xpro Group Pty Ltd</Text>
+                            <Text>BSB: 112-879</Text>
+                            <Text>Account: 495-000-845</Text>
+                            <Text>Reference: Please use the invoice number as a payment reference.</Text>
+                        </View>
+
+                        <View style={{ flexDirection: 'row', gap: 10, marginTop: 12 }}>
+                            <Image src="/image/Visa.png" style={{ width: 30, height: 20 }} />
+                            <Image src="/image/MasterCard.png" style={{ width: 30, height: 20 }} />
+                            <Image src="/image/American_Express.png" style={{ width: 30, height: 20 }} />
+                            <Image src="/image/Paypal.png" style={{ width: 30, height: 20 }} />
+                        </View>
+
+                        <Text
+                            style={{
+                                color: '#1E90FF',
+                                marginTop: 6,
+                                fontSize: 10,
+                                textDecoration: 'underline',
+                            }}
+                        >
+                            View and pay online now
+                        </Text>
+                    </View>
+
                 </View>
                 {/* <View style={styles.footer} fixed>
                     <View style={styles.footerItem}>
