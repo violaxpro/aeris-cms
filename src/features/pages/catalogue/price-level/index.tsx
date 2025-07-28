@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import TableProduct from "@/components/table"
+import Table from "@/components/table"
 import type { TableColumnsType } from 'antd'
 import { PriceLevelType } from '@/data/price-level-data'
 import { Dropdown, Menu } from 'antd'
@@ -16,12 +16,29 @@ import { useNotificationAntd } from '@/components/toast'
 import { deletePriceLevel } from '@/services/price-level-service'
 import { priceLevelsAtom } from '@/store/PriceLevelAtomStore'
 import { useAtom } from 'jotai'
+import Image from 'next/image'
+import { AddIcon, FilterIcon, TrashIconRed, PencilIconBlue } from '@public/icon'
+import ButtonFilter from '@/components/button/ButtonAction'
+import ButtonDelete from '@/components/button/ButtonAction'
+import Pagination from '@/components/pagination'
+import ButtonIcon from '@/components/button/ButtonIcon'
+import SearchTable from '@/components/search/SearchTable'
+import ShowPageSize from '@/components/pagination/ShowPageSize'
+import ModalDelete from '@/components/modal/ModalDelete'
+import { useRouter } from 'next/navigation'
 
 const index = ({ priceLevels }: { priceLevels?: any }) => {
+    const router = useRouter()
     const { contextHolder, notifySuccess } = useNotificationAntd()
     const [data, setData] = useAtom(priceLevelsAtom)
     const [filteredData, setFilteredData] = useState<PriceLevelType[]>([]);
     const [search, setSearch] = useState('')
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
+    const [isOpenModalFilter, setisOpenModalFilter] = useState(false)
+    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+    const [openModalDelete, setOpenModalDelete] = useState(false)
+    const [deletedData, setDeletedData] = useState<any>(null)
 
     const handleDelete = async (id: any) => {
         try {
@@ -33,6 +50,11 @@ const index = ({ priceLevels }: { priceLevels?: any }) => {
         } catch (error) {
             console.error(error)
         }
+    }
+
+    const handleOpenModalDelete = (data: any) => {
+        setOpenModalDelete(true)
+        setDeletedData(data)
     }
 
     const breadcrumb = [
@@ -81,30 +103,23 @@ const index = ({ priceLevels }: { priceLevels?: any }) => {
             key: 'action',
             width: 120,
             render: (_: string, row: any) => {
-                const menu = (
-                    <Menu>
-                        <Menu.Item key="edit">
-                            <Link href={routes.eCommerce.editPriceLevel(row.id)}>
-                                Edit
-                            </Link>
-                        </Menu.Item>
-                        <Menu.Item key="delete">
-                            <Popover
-                                title='Delete Price Level'
-                                description='Are you sure to delete this data?'
-                                onDelete={() => handleDelete(row.id)}
-                                label='Delete'
-                            />
-                        </Menu.Item>
-                    </Menu>
-                );
-
                 return (
-                    <Dropdown overlay={menu} trigger={['click']} >
-                        <button className="flex items-center justify-center px-2 py-1 border rounded ">
-                            Actions <MoreOutlined className="ml-1" />
-                        </button>
-                    </Dropdown >
+                    <div className="flex items-center justify-end gap-3 pe-4">
+                        <ButtonIcon
+                            color='primary'
+                            variant='filled'
+                            size="small"
+                            icon={PencilIconBlue}
+                            onClick={() => router.push(routes.eCommerce.editPriceLevel(row.id))}
+                        />
+                        <ButtonIcon
+                            color='danger'
+                            variant='filled'
+                            size="small"
+                            icon={TrashIconRed}
+                            onClick={() => handleOpenModalDelete(row.id)}
+                        />
+                    </div >
                 );
             }
         },
@@ -132,32 +147,91 @@ const index = ({ priceLevels }: { priceLevels?: any }) => {
     return (
         <>
             {contextHolder}
+            <ModalDelete
+                open={openModalDelete}
+                onCancel={() => setOpenModalDelete(false)}
+                onDelete={handleDelete}
+            />
             <div className="mt-6 mx-4 mb-0">
-                <h1 className='text-xl font-bold'>
-                    Price Level
-                </h1>
-                <Breadcrumb
-                    items={breadcrumb}
-                />
-            </div>
-            <Content className="mt-6 mx-4 mb-0">
-                <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
-                    <div className='flex justify-end mb-4'>
-                        <div className='flex items-center gap-2'>
-                            <SearchInput onSearch={handleSearch} />
-                            <Button
+                <div className='flex justify-between items-center'>
+                    <div>
+                        <h1 className='text-xl font-bold'>
+                            Price Level
+                        </h1>
+                        <Breadcrumb
+                            items={breadcrumb}
+                        />
+                    </div>
+                    <Button
+                        icon={<Image
+                            src={AddIcon}
+                            alt='add-icon'
+                            width={15}
+                            height={15}
+                        />}
 
-                                icon={<PlusCircleOutlined />}
-                                label='Add Price Level'
-                                link={routes.eCommerce.createPriceLevel}
+                        label='Add Price Level'
+                        link={routes.eCommerce.createPriceLevel}
+
+                    />
+                </div>
+            </div>
+            <Content className="mb-0">
+                <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
+                    <div className='flex justify-between mb-4'>
+                        <div className='flex items-center gap-2'>
+                            <ShowPageSize
+                                pageSize={pageSize}
+                                onChange={setPageSize}
+                            />
+                            <ButtonFilter
+                                label='Filter by'
+                                icon={<Image
+                                    src={FilterIcon}
+                                    alt='filter-icon'
+                                    width={15}
+                                    height={15}
+                                />}
+                                onClick={() => setisOpenModalFilter(true)}
+                                position='end'
+                                style={{ padding: '1.2rem 1.7rem' }}
+                            />
+                            <SearchTable
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                                onSearch={() => console.log('Searching for:', search)}
                             />
                         </div>
+                        {
+                            selectedRowKeys.length > 0 && <ButtonDelete
+                                label='Delete All'
+                                icon={<Image
+                                    src={TrashIconRed}
+                                    alt='trash-icon'
+                                    width={10}
+                                    height={10}
+                                />}
+                                onClick={() => setisOpenModalFilter(true)}
+                                position='start'
+                                style={{ padding: '1.2rem 1.7rem' }}
+                                btnClassname='btn-delete-all'
+                            />
+                        }
+
 
                     </div>
-                    <TableProduct
+                    <Table
                         columns={columns}
                         dataSource={filteredData}
                         withSelectableRows
+                        selectedRowKeys={selectedRowKeys}
+                        onSelectChange={setSelectedRowKeys}
+                    />
+                    <Pagination
+                        current={currentPage}
+                        total={filteredData.length}
+                        pageSize={pageSize}
+                        onChange={(page) => setCurrentPage(page)}
                     />
                 </div>
             </Content>

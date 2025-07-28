@@ -5,7 +5,7 @@ import Breadcrumb from "@/components/breadcrumb";
 import { Content } from 'antd/es/layout/layout';
 import Button from '@/components/button'
 import { FormProps } from '@/plugins/types/form-type';
-import FormGroup from '@/components/form';
+import FormGroup from '@/components/form-group';
 import Input from "@/components/input"
 import SelectInput from '@/components/select';
 import { routes } from '@/config/routes';
@@ -19,7 +19,6 @@ const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const [optionBrands] = useAtom(brandsAtom)
     const router = useRouter()
     const { contextHolder, notifySuccess } = useNotificationAntd();
-
     const [optionsCategories] = useAtom(categoriesAtom)
     const [formData, setFormData] = useState({
         name: initialValues ? initialValues.name : '',
@@ -109,6 +108,7 @@ const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                         <FormGroup
                             title="Price"
                             description="Price information"
+                            childClassName='grid md:grid-cols-4 gap-4'
                         >
                             <Input
                                 id='name'
@@ -143,22 +143,25 @@ const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 options={optionsCategories}
                             />
 
-                            <Input
-                                id='rrp'
-                                label='RRP(%)'
-                                type='text'
-                                placeholder='Input RRP'
-                                onChange={handleChange}
-                                value={formData.rrp}
-                            />
-                            <Input
-                                id='trade'
-                                label='Trade(%)'
-                                type='text'
-                                placeholder='Input Trade'
-                                onChange={handleChange}
-                                value={formData.trade}
-                            />
+                            <div className='col-span-full grid grid-cols-2 gap-4'>
+                                <Input
+                                    id='rrp'
+                                    label='RRP(%)'
+                                    type='text'
+                                    placeholder='Input RRP'
+                                    onChange={handleChange}
+                                    value={formData.rrp}
+                                />
+                                <Input
+                                    id='trade'
+                                    label='Trade(%)'
+                                    type='text'
+                                    placeholder='Input Trade'
+                                    onChange={handleChange}
+                                    value={formData.trade}
+                                />
+                            </div>
+
                             <Input
                                 id='silver'
                                 label='Silver(%)'
