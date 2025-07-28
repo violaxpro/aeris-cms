@@ -43,8 +43,16 @@ const SEOForm = ({ data, parentId, onChange }: generalCategoriesForm) => {
         });
     };
 
+    const metaTitle = formData.metaTitle;
+    const titleLength = metaTitle.length;
+    const isTitleInvalid = titleLength > 65;
+
+    const metaDescription = formData.metaDescription;
+    const descLength = metaDescription.length;
+    const isDescInvalid = descLength > 165;
+
     return (
-        <div className='flex flex-col gap-2'>
+        <div className='flex flex-col gap-4'>
             <Input
                 id='url_logo'
                 label='URL Logo'
@@ -65,14 +73,22 @@ const SEOForm = ({ data, parentId, onChange }: generalCategoriesForm) => {
                 type='text'
                 value={formData.metaTitle}
                 onChange={handleChange}
-                notes='Character Count : 0'
+                notes={
+                    <span className={isTitleInvalid ? 'text-red-500' : 'text-gray-400'}>
+                        min.55 / max.65, Character {titleLength}
+                    </span>
+                }
             />
             <Textarea
                 id='metaDescription'
                 label='Meta Description'
                 value={formData.metaDescription}
                 onChange={handleChange}
-                notes='Character Count : 0'
+                notes={
+                    <span className={isDescInvalid ? 'text-red-500' : 'text-gray-400'}>
+                        min.145 / max.165, Character {descLength}
+                    </span>
+                }
             />
             <QuillInput
                 value={formData.pageDesc}

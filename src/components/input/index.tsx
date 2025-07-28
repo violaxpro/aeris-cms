@@ -7,7 +7,7 @@ type inputProps = {
     id: string
     value: string | number | string[]
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
-    notes?: string
+    notes?: any
     type: string
     style?: any
     readOnly?: boolean;
@@ -77,11 +77,7 @@ const index = ({ label,
                     <p className="text-red-500 text-xs mt-1">{errorMessage}</p>
                 )}
             </div>
-            {
-                notes && (
-                    <span>{notes}</span>
-                )
-            }
+            {notes && <div className='text-xs mt-1'>{notes}</div>}
         </div>
     );
 };

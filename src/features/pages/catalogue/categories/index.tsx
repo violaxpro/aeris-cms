@@ -299,8 +299,23 @@ const CategoriesPage = ({ categories }: { categories?: any }) => {
     )
 
     const onSelect: TreeProps['onSelect'] = (selectedKeysValue, info) => {
-        console.log('onSelect', info);
-        setSelectedKeys(selectedKeysValue);
+        // console.log('onSelect', info);
+        // setSelectedKeys(selectedKeysValue);
+
+        const selectedNode = info.node as TreeNode;
+        const isValidNode =
+            selectedNode.selectable !== false &&
+            !selectedNode.key.toString().startsWith('add') &&
+            !selectedNode.key.toString().startsWith('subchild') &&
+            !selectedNode.key.toString().startsWith('dummy-child');
+
+        if (isValidNode) {
+            setSelectedKeys([selectedNode.key]); // Hanya satu key aktif
+            handleEditCategory(selectedNode);
+        } else {
+            // Clear selection kalau yang diklik bukan node yang valid
+            setSelectedKeys([]);
+        }
     };
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
