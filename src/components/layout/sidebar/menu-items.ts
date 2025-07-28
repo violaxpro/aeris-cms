@@ -81,8 +81,13 @@ export const menuItems = [
                 icon: AppstoreOutlined,
                 children: [
                     {
-                        key: 'product',
-                        label: 'Product',
+                        key: 'products',
+                        label: 'Products',
+                        href: routes.eCommerce.products,
+                    },
+                    {
+                        key: 'services',
+                        label: 'Services',
                         href: routes.eCommerce.products,
                     },
                     {
@@ -364,6 +369,19 @@ export const menuItems = [
                     },
                 ]
             },
+        ]
+    },
+    {
+        key: 'group-accounting',
+        label: 'Accounting (Coming Soon)',
+        type: 'group',
+        children: [
+            {
+                key: 'chart-of-account',
+                label: 'Chart of Account (Comming Soon)',
+                href: '#',
+                icon: ScheduleOutlined
+            }
         ]
     },
     {

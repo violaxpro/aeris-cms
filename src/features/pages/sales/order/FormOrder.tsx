@@ -21,6 +21,10 @@ import Segmented from '@/components/segmented'
 import OrderSummary from '../OrderSummary';
 import Image from 'next/image';
 import ButtonCancel from '@/components/button/ButtonAction'
+import DatePickerInput from '@/components/date-picker';
+import dayjs from 'dayjs'
+import ModalAddress from './ModalAddress';
+import ModalCustomer from './ModalCustomer';
 
 const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const router = useRouter()
@@ -32,6 +36,11 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         name: '',
         price: 0,
         buying_price: 0,
+        trade: 0,
+        silver: 0,
+        gold: 0,
+        platinum: 0,
+        diamond: 0,
         qty: 0,
         tax_rate: '',
         tax_amount: 0,
@@ -43,6 +52,8 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         user: initialValues ? initialValues.user : '',
         payment_method: initialValues ? initialValues.payment_method : '',
         po_number: initialValues ? initialValues.po_number : '',
+        issues_date: initialValues ? initialValues.issues_date : '',
+        due_date: initialValues ? initialValues.due_date : '',
         billing_address: initialValues ? initialValues.billing_address : '',
         shipping_address: initialValues ? initialValues.shipping_address : '',
         order_reference: initialValues ? initialValues.order_reference : '',
@@ -50,6 +61,8 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         product: initialValues ? initialValues.product : [],
         discount: initialValues ? initialValues.discount : '',
         shipping_fee: initialValues ? initialValues.shipping_fee : '',
+        tax: initialValues ? initialValues.tax : '',
+        tax_rate: initialValues ? initialValues.tax_rate : '',
         gst: initialValues ? initialValues.gst : '',
         total: initialValues ? initialValues.total : '',
         coupon_apply: initialValues ? initialValues.coupon_apply : '',
@@ -71,6 +84,21 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     });
     const [selectedDiscountType, setSelectedDiscountType] = useState('percent')
     const [profitHidden, setProfitHidden] = useState(true)
+    const [openModal, setOpenModal] = useState(false)
+    const [modalType, setModalType] = useState<'billing' | 'shipping' | null>(null);
+    const [buttonType, setButtonType] = useState<'oneof' | 'new' | null>(null);
+    const [formAddress, setFormAddress] = useState({
+        address: '',
+        city: '',
+        state: '',
+        postcode: '',
+        country: '',
+    })
+    const [formCustomer, setFormCustomer] = useState({
+        name: '',
+
+    })
+    const [openModalCustomer, setOpenModalCustomer] = useState(false)
 
     const breadcrumb = [
         { title: 'Sales' },
@@ -79,6 +107,12 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         },
         { title: mode == 'create' ? 'Create' : 'Edit' },
     ];
+
+    const optionsTax = [
+        { label: 'Tax Exclusive', value: 'tax-exclusive' },
+        { label: 'Tax Inclusive', value: 'tax-inclusive' },
+        { label: 'No Tax', value: 'no-tax' }
+    ]
 
     const columns: TableColumnsType<ProductForm> = [
         {
@@ -255,6 +289,11 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                 name: '',
                 price: 0,
                 buying_price: 0,
+                trade: 0,
+                silver: 0,
+                gold: 0,
+                platinum: 0,
+                diamond: 0,
                 qty: 0,
                 tax_rate: '',
                 tax_amount: 0,
@@ -280,6 +319,34 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         { label: 'RECEIVE', value: 'RECEIVE' }
     ]
 
+    const handleDateChange = (field: string, value: any, dateString: string) => {
+        setFormData(prev => ({
+            ...prev,
+            [field]: dateString,
+        }));
+    };
+
+    const handleChangeAddress = (e: any) => {
+        const { id, value } = e.target;
+        setFormAddress((prev) => ({
+            ...prev,
+            [id]: value,
+        }));
+    };
+    const handleChangeCustomer = (e: any) => {
+        const { id, value } = e.target;
+        setFormCustomer((prev) => ({
+            ...prev,
+            [id]: value,
+        }));
+    };
+
+    const handleOpenModal = (btnType: 'oneof' | 'new', modalType: 'billing' | 'shipping') => {
+        setModalType(modalType);
+        setButtonType(btnType)
+        setOpenModal(true);
+    }
+
     console.log(formData, productForm)
 
     useEffect(() => {
@@ -299,6 +366,20 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     return (
         <>
             {contextHolder}
+            <ModalAddress
+                isModalOpen={openModal}
+                handleCancel={() => setOpenModal(false)}
+                handleChange={handleChangeAddress}
+                formData={formAddress}
+                modalType={modalType}
+                buttonType={buttonType}
+            />
+            <ModalCustomer
+                isModalOpen={openModalCustomer}
+                handleCancel={() => setOpenModalCustomer(false)}
+                handleChange={handleChangeCustomer}
+                formData={formCustomer}
+            />
             <div className="mt-6 mx-4 mb-0">
                 <h1 className="text-xl font-bold mb-4">{mode == 'create' ? 'Create Order' : 'Edit Order'}</h1>
                 <Breadcrumb items={breadcrumb} />
@@ -307,10 +388,36 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
             <Content className="mb-0">
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
-                    <div className='flex flex-col gap-5'>
+                    <div className='flex flex-col gap-1'>
+                        <h1 className='text-lg font-bold'>Customer Details</h1>
+                        <Divider />
                         <div className='grid gap-3'>
-                            <div className='grid md:grid-cols-4 gap-4 mt-2'>
-                                <Input
+                            <div className={`grid md:grid-cols-[2fr_1fr_repeat(3,1fr)] gap-4 mt-2`}>
+                                <SelectInput
+                                    id='customer_name'
+                                    label='Customer Name'
+                                    placeholder='Select Customer Name'
+                                    onChange={(selected) => handleChangeSelect('customer_name', selected)}
+                                    value={formData.customer_name}
+                                    options={[
+                                        { label: 'Customer Beli', value: 'Customer Beli' }
+                                    ]}
+                                    popupRender={(options: any) => (
+                                        <>
+                                            {options}
+                                            <div className='p-4 flex'>
+                                                <Button
+                                                    label='Add New Customer'
+                                                    onClick={() => setOpenModalCustomer(true)}
+                                                    btnClassname='w-full'
+                                                />
+                                            </div>
+
+                                        </>
+                                    )}
+                                    required
+                                />
+                                {/* <Input
                                     id='customer_name'
                                     label='Customer Name'
                                     type='text'
@@ -318,19 +425,20 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     onChange={handleChange}
                                     value={formData.customer_name}
                                     required
-                                />
-                                <SelectInput
-                                    id='payment_method'
-                                    label='Payment Method'
-                                    placeholder='Select Payment Method'
-                                    onChange={(selected) => handleChangeSelect('payment_method', selected)}
-                                    value={formData.payment_method}
-                                    options={[
-                                        { label: 'Paypal', value: 'Paypal' }
-                                    ]}
-                                    required
-                                />
-                                <Input
+                                /> */}
+                                {/* <SelectInput
+                                        id='payment_method'
+                                        label='Payment Method'
+                                        placeholder='Select Payment Method'
+                                        onChange={(selected) => handleChangeSelect('payment_method', selected)}
+                                        value={formData.payment_method}
+                                        options={[
+                                            { label: 'Paypal', value: 'Paypal' }
+                                        ]}
+                                        required
+                                    /> */}
+
+                                {/* <Input
                                     id='po_number'
                                     label='PO Number'
                                     type='text'
@@ -338,7 +446,7 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     onChange={handleChange}
                                     value={formData.po_number}
                                     required
-                                />
+                                /> */}
                                 <Input
                                     id='order_reference'
                                     label='Order Reference'
@@ -346,6 +454,27 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     placeholder='Input Order Reference'
                                     onChange={handleChange}
                                     value={formData.order_reference}
+                                    required
+                                />
+                                <DatePickerInput
+                                    id='issues_date'
+                                    label='Issues Date'
+                                    value={formData.issues_date ? dayjs(formData.issues_date) : null}
+                                    onChange={(value: any, dateString: any) => handleDateChange('issues_date', value, dateString)}
+                                />
+                                <DatePickerInput
+                                    id='due_date'
+                                    label='Due Date'
+                                    value={formData.due_date ? dayjs(formData.due_date) : null}
+                                    onChange={(value: any, dateString: any) => handleDateChange('issues_date', value, dateString)}
+                                />
+                                <SelectInput
+                                    id='tax'
+                                    label='Tax'
+                                    placeholder='Select Tax'
+                                    onChange={(selected) => handleChangeSelect('tax', selected)}
+                                    value={formData.tax}
+                                    options={optionsTax}
                                     required
                                 />
                             </div>
@@ -359,6 +488,24 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     options={[
                                         { label: 'Jl. Rambutan', value: 'Jl. Rambutan' }
                                     ]}
+                                    popupRender={(options: any) => (
+                                        <>
+                                            {options}
+                                            <div className='p-4 flex gap-3'>
+                                                <Button
+                                                    label='Add One of Billing Address'
+                                                    onClick={() => handleOpenModal('oneof', 'billing')}
+                                                    btnClassname='w-full'
+                                                />
+                                                <Button
+                                                    label='Add Billing Address'
+                                                    onClick={() => handleOpenModal('new', 'billing')}
+                                                    btnClassname='w-full'
+                                                />
+                                            </div>
+
+                                        </>
+                                    )}
                                     required
                                 />
                                 <SelectInput
@@ -370,6 +517,24 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     options={[
                                         { label: 'Jl. Rambutan', value: 'Jl. Rambutan' }
                                     ]}
+                                    popupRender={(options: any) => (
+                                        <>
+                                            {options}
+                                            <div className='p-4 flex gap-3'>
+                                                <Button
+                                                    label='Add One of Shipping Address'
+                                                    onClick={() => handleOpenModal('oneof', 'shipping')}
+                                                    btnClassname='w-full'
+                                                />
+                                                <Button
+                                                    label='Add Shipping Address'
+                                                    onClick={() => handleOpenModal('new', 'shipping')}
+                                                    btnClassname='w-full'
+                                                />
+                                            </div>
+
+                                        </>
+                                    )}
                                     required
                                 />
                                 {/* <Textarea
@@ -391,7 +556,7 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             </div>
                         </div>
 
-                        <div>
+                        <div className='md:my-10'>
                             <h1 className='text-lg font-bold'>Product List</h1>
                             <Divider />
                             {

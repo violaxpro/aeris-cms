@@ -197,16 +197,27 @@ const index = ({ orderData }: { orderData?: any }) => {
     ]
     const columns: TableColumnsType<OrderType> = [
         {
-            title: 'Number',
+            title: 'Invoice Number',
             dataIndex: 'id',
             sorter: (a: any, b: any) => a.po_number - b.po_number,
             render: (_: any, row: any) => {
-                return row.status !== 'Draft'
-                    ? <Link href={routes.eCommerce.detailOrder(row.po_number)}>
-                        {row.status !== 'Draft' ? row.po_number : '-'}
-                    </Link>
-                    : <span>-</span>
+                return <Link href={routes.eCommerce.detailOrder(row.po_number)}>
+                    {row.po_number}
+                </Link>
+                // return row.status !== 'Draft'
+                //     ? <Link href={routes.eCommerce.detailOrder(row.po_number)}>
+                //         {row.po_number}
+                //     </Link>
+                //     : <span>-</span>
 
+            }
+        },
+        {
+            title: 'Customer Name',
+            dataIndex: 'customer_name',
+            sorter: (a: any, b: any) => a.email.localeCompare(b.email),
+            render: (_: any, row: any) => {
+                return <span>Customer</span>
             }
         },
         {
@@ -222,6 +233,31 @@ const index = ({ orderData }: { orderData?: any }) => {
                         <span>{row.mobile_number}</span>
                     </div>
                 </div>
+            }
+        },
+        {
+            title: 'Status',
+            dataIndex: 'status',
+            sorter: (a: any, b: any) => {
+                const status = ['Draft', 'Approved', 'Processing', 'Awaiting Stock', 'Packed', 'Ready for Pickup', 'Shipped', 'In Transit',
+                    'Out of Delivery'
+                ];
+                return status.indexOf(a.status) - status.indexOf(b.status
+                )
+            },
+            render: (val: any) => {
+                const status = val
+                console.log(status)
+                return (
+                    <StatusTag status={status} type='order' />
+                );
+                // kalau dia sudah bayar full baru bisa di lanjut ke processing
+                // kalau processing sudah beres bisa di klik dan lanjut ke proses awaiting stock
+                // awaiting beres -> packed
+                // packed -> ready for pickup
+                // ready for pickup -> shipped
+                // shipping -> in transit
+                // out of delivey -> delivered
             }
         },
         {
@@ -254,31 +290,7 @@ const index = ({ orderData }: { orderData?: any }) => {
 
             }
         },
-        {
-            title: 'Status',
-            dataIndex: 'status',
-            sorter: (a: any, b: any) => {
-                const status = ['Draft', 'Approved', 'Processing', 'Awaiting Stock', 'Packed', 'Ready for Pickup', 'Shipped', 'In Transit',
-                    'Out of Delivery'
-                ];
-                return status.indexOf(a.status) - status.indexOf(b.status
-                )
-            },
-            render: (val: any) => {
-                const status = val
-                console.log(status)
-                return (
-                    <StatusTag status={status} type='order' />
-                );
-                // kalau dia sudah bayar full baru bisa di lanjut ke processing
-                // kalau processing sudah beres bisa di klik dan lanjut ke proses awaiting stock
-                // awaiting beres -> packed
-                // packed -> ready for pickup
-                // ready for pickup -> shipped
-                // shipping -> in transit
-                // out of delivey -> delivered
-            }
-        },
+
         {
             title: 'Total',
             dataIndex: 'total',

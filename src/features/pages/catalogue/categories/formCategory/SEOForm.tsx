@@ -44,11 +44,11 @@ const SEOForm = ({ data, parentId, onChange }: generalCategoriesForm) => {
     };
 
     const metaTitle = formData.metaTitle;
-    const titleLength = metaTitle.length;
+    const titleLength = metaTitle?.length || 0;
     const isTitleInvalid = titleLength > 65;
 
     const metaDescription = formData.metaDescription;
-    const descLength = metaDescription.length;
+    const descLength = metaDescription?.length || 0;
     const isDescInvalid = descLength > 165;
 
     return (

@@ -39,7 +39,7 @@ const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const breadcrumb = [
         { title: 'Catalogue' },
         { title: 'Price Level', url: routes.eCommerce.priceLevel },
-        { title: mode === 'create' ? 'Create Price Level' : 'Edit Price Level' },
+        { title: mode === 'create' ? 'Create' : 'Edit' },
     ];
 
     const handleChange = (e: any) => {

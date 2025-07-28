@@ -41,7 +41,7 @@ const StatusTag: React.FC<StatusTagProps> = ({ status, type = 'quote' }) => {
     }
 
     return <Tag color={config.color} bordered={false}>
-        <span style={{ color: config.textColor }}>{config.text}</span>
+        <span style={{ color: config.textColor }} className='font-semibold'>{config.text}</span>
     </Tag>;
 };
 

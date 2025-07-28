@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Input from "@/components/input"
 import Checkbox from "@/components/checkbox"
-import FormGroup from '@/components/form'
+import FormGroup from '@/components/form-group'
 import SelectInput from '@/components/select'
 import AttributeSetSection from './AttributeSetSection'
 import Button from '@/components/button'
@@ -98,6 +98,7 @@ const GeneralForm = ({ dataById, onChange }: ChildFormProps) => {
             <FormGroup
                 title="General Information"
                 description='General information about the attribute'
+                childClassName='grid md:grid-cols-2 gap-4'
             >
                 <Input
                     id='name'

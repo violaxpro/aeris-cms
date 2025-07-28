@@ -23,6 +23,11 @@ import OrderSummary from '../OrderSummary';
 import ButtonCancel from '@/components/button/ButtonAction'
 import { useAtom } from 'jotai';
 import { taxSetAtom } from '@/store/DropdownItemStore';
+import DatePickerInput from '@/components/date-picker';
+import dayjs from 'dayjs'
+import ModalAddress from '../order/ModalAddress';
+import ModalCustomer from '../order/ModalCustomer';
+
 
 const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const router = useRouter()
@@ -34,6 +39,11 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         name: '',
         price: 0,
         buying_price: 0,
+        trade: 0,
+        silver: 0,
+        gold: 0,
+        platinum: 0,
+        diamond: 0,
         qty: 0,
         tax_rate: '',
         tax_amount: 0,
@@ -46,6 +56,7 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         user: initialValues ? initialValues.user : '',
         payment_method: initialValues ? initialValues.payment_method : '',
         po_number: initialValues ? initialValues.po_number : '',
+        expiry_date: initialValues ? initialValues.expiry_date : '',
         billing_address: initialValues ? initialValues.billing_address : '',
         shipping_address: initialValues ? initialValues.shipping_address : '',
         order_reference: initialValues ? initialValues.order_reference : '',
@@ -54,6 +65,7 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         profit: initialValues ? initialValues.profit : 100,
         shipping_fee: initialValues ? initialValues.shipping_fee : '',
         tax_rate: initialValues ? initialValues.tax_rate : '',
+        tax: initialValues ? initialValues.tax : '',
         gst: initialValues ? initialValues.gst : '',
         total: initialValues ? initialValues.total : '',
         coupon_apply: initialValues ? initialValues.coupon_apply : '',
@@ -66,7 +78,28 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
     });
     const [profitHidden, setProfitHidden] = useState(true)
-    const [optionsTax] = useAtom(taxSetAtom)
+    const [optionsTaxRate] = useAtom(taxSetAtom)
+    const [openModal, setOpenModal] = useState(false)
+
+    const [modalType, setModalType] = useState<'billing' | 'shipping' | null>(null);
+    const [buttonType, setButtonType] = useState<'oneof' | 'new' | null>(null);
+    const [formAddress, setFormAddress] = useState({
+        address: '',
+        city: '',
+        state: '',
+        postcode: '',
+        country: '',
+    })
+    const [formCustomer, setFormCustomer] = useState({
+        name: '',
+
+    })
+    const [openModalCustomer, setOpenModalCustomer] = useState(false)
+    const optionsTax = [
+        { label: 'Tax Exclusive', value: 'tax-exclusive' },
+        { label: 'Tax Inclusive', value: 'tax-inclusive' },
+        { label: 'No Tax', value: 'no-tax' }
+    ]
 
     const breadcrumb = [
         { title: 'Sales' },
@@ -167,6 +200,13 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         }));
     };
 
+    const handleDateChange = (field: string, value: any, dateString: string) => {
+        setFormData(prev => ({
+            ...prev,
+            [field]: dateString,
+        }));
+    };
+
     const handleSubmit = async () => {
         try {
             const submitData = {
@@ -209,6 +249,11 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                 name: '',
                 price: 0,
                 buying_price: 0,
+                trade: 0,
+                silver: 0,
+                gold: 0,
+                platinum: 0,
+                diamond: 0,
                 qty: 0,
                 tax_rate: '',
                 tax_amount: 0,
@@ -228,6 +273,28 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         updated[index] = updatedForm;
         setProductForm(updated);
     };
+
+    const handleChangeAddress = (e: any) => {
+        const { id, value } = e.target;
+        setFormAddress((prev) => ({
+            ...prev,
+            [id]: value,
+        }));
+    };
+
+    const handleChangeCustomer = (e: any) => {
+        const { id, value } = e.target;
+        setFormCustomer((prev) => ({
+            ...prev,
+            [id]: value,
+        }));
+    };
+
+    const handleOpenModal = (btnType: 'oneof' | 'new', modalType: 'billing' | 'shipping') => {
+        setModalType(modalType);
+        setButtonType(btnType)
+        setOpenModal(true);
+    }
 
     const options = [
         { label: 'WAITING', value: 'WAITING' },
@@ -260,6 +327,20 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     return (
         <>
             {contextHolder}
+            <ModalAddress
+                isModalOpen={openModal}
+                handleCancel={() => setOpenModal(false)}
+                handleChange={handleChangeAddress}
+                formData={formAddress}
+                modalType={modalType}
+                buttonType={buttonType}
+            />
+            <ModalCustomer
+                isModalOpen={openModalCustomer}
+                handleCancel={() => setOpenModalCustomer(false)}
+                handleChange={handleChangeCustomer}
+                formData={formCustomer}
+            />
             <div className="mt-6 mx-5 mb-0">
                 <h1 className="text-xl font-bold mb-4">{mode == 'create' ? 'Create Quotes' : 'Edit Quotes'}</h1>
                 <Breadcrumb items={breadcrumb} />
@@ -268,16 +349,33 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
             <Content className="mb-0">
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
-                    <div className='flex flex-col gap-5'>
+                    <div className='flex flex-col gap-1'>
+                        <h1 className='text-lg font-bold'>Customer Details</h1>
+                        <Divider />
                         <div className='grid gap-3'>
-                            <div className='grid md:grid-cols-[2fr_1fr_1fr_2fr] gap-4 mt-2'>
-                                <Input
+                            <div className='grid md:grid-cols-[3fr_repeat(3,1fr)] gap-4 mt-2'>
+                                <SelectInput
                                     id='customer_name'
                                     label='Customer Name'
-                                    type='text'
-                                    placeholder='Input Customer Name'
-                                    onChange={handleChange}
+                                    placeholder='Select Customer Name'
+                                    onChange={(selected) => handleChangeSelect('customer_name', selected)}
                                     value={formData.customer_name}
+                                    options={[
+                                        { label: 'Customer Beli', value: 'Customer Beli' }
+                                    ]}
+                                    popupRender={(options: any) => (
+                                        <>
+                                            {options}
+                                            <div className='p-4 flex'>
+                                                <Button
+                                                    label='Add New Customer'
+                                                    onClick={() => setOpenModalCustomer(true)}
+                                                    btnClassname='w-full'
+                                                />
+                                            </div>
+
+                                        </>
+                                    )}
                                     required
                                 />
                                 {/* <SelectInput
@@ -292,15 +390,6 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     required
                                 /> */}
                                 <Input
-                                    id='po_number'
-                                    label='PO Number'
-                                    type='text'
-                                    placeholder='Input PO Number'
-                                    onChange={handleChange}
-                                    value={formData.po_number}
-                                    required
-                                />
-                                <Input
                                     id='order_reference'
                                     label='Order Reference'
                                     type='text'
@@ -309,12 +398,18 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     value={formData.order_reference}
                                     required
                                 />
+                                <DatePickerInput
+                                    id='expiry_date'
+                                    label='Expiry Date'
+                                    value={formData.expiry_date ? dayjs(formData.expiry_date) : null}
+                                    onChange={(value: any, dateString: any) => handleDateChange('expiry_date', value, dateString)}
+                                />
                                 <SelectInput
-                                    id='tax_rate'
-                                    label='Tax Rate'
-                                    placeholder='Select Tax Rate'
-                                    onChange={(selected) => handleChangeSelect('tax_rate', selected)}
-                                    value={formData.tax_rate}
+                                    id='tax'
+                                    label='Tax'
+                                    placeholder='Select Tax'
+                                    onChange={(selected) => handleChangeSelect('tax', selected)}
+                                    value={formData.tax}
                                     options={optionsTax}
                                     required
                                 />
@@ -329,6 +424,24 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     options={[
                                         { label: 'Jl. Rambutan', value: 'Jl. Rambutan' }
                                     ]}
+                                    popupRender={(options: any) => (
+                                        <>
+                                            {options}
+                                            <div className='p-4 flex gap-3'>
+                                                <Button
+                                                    label='Add One of Billing Address'
+                                                    onClick={() => handleOpenModal('oneof', 'billing')}
+                                                    btnClassname='w-full'
+                                                />
+                                                <Button
+                                                    label='Add Billing Address'
+                                                    onClick={() => handleOpenModal('new', 'billing')}
+                                                    btnClassname='w-full'
+                                                />
+                                            </div>
+
+                                        </>
+                                    )}
                                     required
                                 />
                                 <SelectInput
@@ -340,28 +453,31 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     options={[
                                         { label: 'Jl. Rambutan', value: 'Jl. Rambutan' }
                                     ]}
+                                    popupRender={(options: any) => (
+                                        <>
+                                            {options}
+                                            <div className='p-4 flex gap-3'>
+                                                <Button
+                                                    label='Add One of Shipping Address'
+                                                    onClick={() => handleOpenModal('oneof', 'shipping')}
+                                                    btnClassname='w-full'
+                                                />
+                                                <Button
+                                                    label='Add Shipping Address'
+                                                    onClick={() => handleOpenModal('new', 'shipping')}
+                                                    btnClassname='w-full'
+                                                />
+                                            </div>
+
+                                        </>
+                                    )}
                                     required
                                 />
-                                {/* <Textarea
-                                    id='billing_address'
-                                    label='Biiling Address'
-                                    value={formData.billing_address}
-                                    onChange={handleChange}
-                                    textareaClassname='!h-20'
-                                    required
-                                />
-                                <Textarea
-                                    id='shipping_address'
-                                    label='Shipping Address'
-                                    value={formData.shipping_address}
-                                    onChange={handleChange}
-                                    textareaClassname='!h-20'
-                                    required
-                                /> */}
+
                             </div>
                         </div>
 
-                        <div >
+                        <div className='md:my-10'>
                             <h1 className='text-lg font-bold'>Product List</h1>
                             <Divider />
                             {

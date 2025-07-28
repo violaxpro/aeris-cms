@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import Input from "@/components/input"
-import FormGroup from '@/components/form'
+import FormGroup from '@/components/form-group'
 import { PlusOutlined, MinusCircleOutlined } from '@ant-design/icons'
-import { Button } from 'antd'
+import { Button, Divider } from 'antd'
 import { ChildFormProps } from '@/plugins/types/form-type'
+import ButtonIcon from '@/components/button/ButtonIcon';
+import { TrashIcon, TrashIconRed } from '@public/icon';
 
 type formProps = {
     data?: any
@@ -13,7 +15,9 @@ type itemInputType = {
     value: string[]
 };
 const ValuesForm = ({ dataById, onChange }: ChildFormProps) => {
-    const [items, setItems] = useState<itemInputType[]>([])
+    const [items, setItems] = useState<itemInputType[]>([
+        { value: [] }
+    ])
 
     const handleChange = (updateItem: itemInputType[]) => {
         setItems(updateItem)
@@ -71,16 +75,29 @@ const ValuesForm = ({ dataById, onChange }: ChildFormProps) => {
                                         onChange={(e) => updateItem(index, 'value', e.target.value)}
                                     />
                                 </div>
-                                <div className='pt-4'>
-                                    <MinusCircleOutlined
-                                        onClick={() => removeItem(index)}
-                                        style={{ color: 'red', fontSize: '18px', cursor: 'pointer' }}
-                                    />
+                                <div className="pt-5">
+                                    {
+                                        items.length <= 1 ? <ButtonIcon
+                                            icon={TrashIcon}
+                                            width={20}
+                                            height={20}
+                                            className='btn-trash-item !h-10 !w-15'
+                                        /> : <ButtonIcon
+                                            color='danger'
+                                            variant='filled'
+                                            size="small"
+                                            icon={TrashIconRed}
+                                            width={15}
+                                            height={15}
+                                            className='!h-10 !w-15'
+                                            onClick={() => removeItem(index)}
+                                        />
+                                    }
                                 </div>
                             </div>
                         })
                     }
-
+                    <Divider />
                     <div className="flex justify-end">
                         <Button
                             type="dashed"
@@ -92,13 +109,7 @@ const ValuesForm = ({ dataById, onChange }: ChildFormProps) => {
                         </Button>
                     </div>
                 </div>
-
-
-
             </FormGroup>
-
-            <hr style={{ borderColor: '#E5E7EB', marginTop: '1rem', marginBottom: '1rem' }} />
-
         </div>
     )
 }

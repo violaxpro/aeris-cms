@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Input from "@/components/input"
 import SelectInput from '@/components/select';
+import Textarea from '@/components/textarea'
 import CheckboxInput from '@/components/checkbox';
 import ButtonAction from '@/components/button/ButtonIcon';
 import { useAtom } from 'jotai';
@@ -10,11 +11,17 @@ import Image from 'next/image';
 import { TrashIcon, TrashIconRed } from '@public/icon';
 import Button from '@/components/button'
 import Modal from '@/components/modal'
+import { CalculatorOutlined } from '@ant-design/icons';
 export interface ProductForm {
     sku: string
     name: string
     price: number
     buying_price: number
+    trade: number
+    silver: number
+    gold: number
+    platinum: number
+    diamond: number
     qty: number
     total: number
     tax_rate: string;
@@ -25,6 +32,8 @@ export interface NewProductType {
     sku: string
     name: string
     price: number
+    buy_price: number
+    short_desc: string
 }
 
 interface ProductInputProps {
@@ -52,7 +61,14 @@ const ProductInput = ({
     const [newProduct, setNewProduct] = useState({
         sku: '',
         name: '',
-        price: 0
+        short_desc: '',
+        price: 0,
+        buy_price: 0,
+        trade: 0,
+        silver: 0,
+        gold: 0,
+        platinum: 0,
+        diamond: 0,
     })
     const handleProductChange = (e: any) => {
         const { id, value } = e.target;
@@ -70,6 +86,20 @@ const ProductInput = ({
         }
 
         onChange(updatedProductForm);
+    };
+
+    const handleNewProduct = (e: any) => {
+        const { id, value } = e.target;
+
+        if (id === 'name') {
+            newProduct.short_desc = value
+        }
+
+        let newProductForm = {
+            ...newProduct,
+            [id]: value
+        };
+        setNewProduct(newProductForm)
     };
 
     const handleChangeSelect = (id: string, value: any) => {
@@ -143,36 +173,106 @@ const ProductInput = ({
             <Modal
                 open={openModal}
                 title='Create New Product'
+                handleCancel={() => setOpenModal(false)}
             >
                 <div className='flex flex-col gap-4'>
                     <div className='flex flex-col gap-4'>
                         <Input
                             id='sku'
                             type='text'
-                            label='Product SKU'
+                            label='SKU'
                             value={newProduct.sku}
-                            onChange={handleProductChange}
+                            onChange={handleNewProduct}
                             className='mb-1'
                             required
                         />
                         <Input
                             id='name'
                             type='text'
-                            label='Product Name'
+                            label='Title'
                             value={newProduct.name}
-                            onChange={handleProductChange}
+                            onChange={handleNewProduct}
                             className='mb-1'
                             required
                         />
-                        <Input
-                            id='price'
-                            type='number'
-                            label='Price'
-                            value={newProduct.price}
-                            onChange={handleProductChange}
+                        <Textarea
+                            id='short_desc'
+                            label='Short Description'
+                            value={newProduct.short_desc}
+                            onChange={handleNewProduct}
                             className='mb-1'
                             required
                         />
+                        <div className='grid md:grid-cols-4 gap-3'>
+                            <Input
+                                id='buy_price'
+                                type='number'
+                                label='Buy Price'
+                                value={newProduct.buy_price}
+                                onChange={handleNewProduct}
+                                className='mb-1'
+                                required
+                            />
+                            <Input
+                                id='price'
+                                type='number'
+                                label='Price'
+                                value={newProduct.price}
+                                onChange={handleNewProduct}
+                                className='mb-1'
+                                required
+                            />
+                            <Input
+                                id='trade'
+                                label='Trade'
+                                type='text'
+                                placeholder='Input Trade'
+                                onChange={handleNewProduct}
+                                value={newProduct?.trade}
+                            />
+
+                            <Input
+                                id='silver'
+                                label='Silver'
+                                type='text'
+                                placeholder='Input Silver'
+                                onChange={handleNewProduct}
+                                value={newProduct?.silver}
+                            />
+                            <Input
+                                id='gold'
+                                label='Gold'
+                                type='text'
+                                placeholder='Input Gold'
+                                onChange={handleNewProduct}
+                                value={newProduct?.gold}
+                            />
+                            <Input
+                                id='platinum'
+                                label='Platinum'
+                                type='text'
+                                placeholder='Input Platinum'
+                                onChange={handleNewProduct}
+                                value={newProduct?.platinum}
+                            />
+                            <Input
+                                id='diamond'
+                                label='Diamond'
+                                type='text'
+                                placeholder='Input Diamond'
+                                onChange={handleNewProduct}
+                                value={newProduct?.diamond}
+                            />
+                            <div className='flex justify-start items-center pt-4'>
+                                <Button
+                                    label='Calculate'
+                                    icon={<CalculatorOutlined />}
+                                    onClick={() => console.log('calculate')}
+                                    style={{ padding: '1.2rem 1rem' }}
+                                />
+                            </div>
+                        </div>
+
                     </div>
                     <div className='col-span-full flex justify-center'>
                         <Button
@@ -185,7 +285,7 @@ const ProductInput = ({
                 </div>
 
 
-            </Modal>
+            </Modal >
             <div className='grid md:grid-cols-[2fr_2fr_1fr_1fr_1fr_1fr_1fr_50px] items-center gap-4 mb-2'>
                 {/* <Input
                     id='sku'
@@ -198,7 +298,7 @@ const ProductInput = ({
                 /> */}
                 <SelectInput
                     id='sku'
-                    label='Product SKU'
+                    label='SKU'
                     value={productForm.sku}
                     onChange={(val) => handleChangeSelect('sku', val)}
                     options={[
@@ -210,10 +310,11 @@ const ProductInput = ({
                     popupRender={(options: any) => (
                         <>
                             {options}
-                            <div className='p-4'>
+                            <div className='p-4 flex'>
                                 <Button
-                                    label='Add New'
+                                    label='Add New Product'
                                     onClick={() => setOpenModal(true)}
+                                    btnClassname='w-full'
                                 />
                             </div>
 
@@ -226,7 +327,7 @@ const ProductInput = ({
                 <Input
                     id='name'
                     type='text'
-                    label='Product Name'
+                    label='Title'
                     value={productForm.name}
                     onChange={handleProductChange}
                     className='mb-1'
@@ -324,7 +425,7 @@ const ProductInput = ({
                     </div>
                 }
             </div>
-        </div>
+        </div >
 
     )
 }

@@ -16,7 +16,7 @@ export default async function QuotePage() {
     }
     return (
         <div>
-            <QuoteList quoteData={data} />
+            <QuoteList quoteData={quoteDummyData} />
         </div>
     )
 }

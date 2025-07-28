@@ -26,7 +26,7 @@ const DatePickerInput: React.FC<DatePickerInputProps> = ({
             {label && (
                 <label
                     htmlFor={id}
-                    className={`block mb-1 text-sm font-medium text-gray-700 ${labelClassName}`}
+                    className={`block text-sm font-medium text-gray-700 ${labelClassName}`}
                 >
                     {label}
                 </label>
@@ -38,6 +38,7 @@ const DatePickerInput: React.FC<DatePickerInputProps> = ({
                 placeholder={placeholder}
                 disabled={disabled}
                 style={{ width: '100%' }}
+                className='h-10'
             />
         </div>
     );

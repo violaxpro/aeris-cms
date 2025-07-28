@@ -34,7 +34,7 @@ const FormAttributes: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const breadcrumb = [
         { title: 'Catalogue' },
         { title: 'Attributes', url: routes.eCommerce.attributes },
-        { title: mode === 'create' ? 'Create Attributes' : 'Edit Attributes' },
+        { title: mode === 'create' ? 'Create' : 'Edit' },
     ];
 
     const handleGeneralChange = (updatedGeneral: any) => {
@@ -117,7 +117,7 @@ const FormAttributes: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                 borderClass='w-full'
             />
 
-            <Content className="mt-4 mx-4 mb-0">
+            <Content className="mx-4 mb-0">
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
 
                     {/* Tab Content */}

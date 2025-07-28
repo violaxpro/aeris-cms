@@ -62,7 +62,7 @@ const index = ({ products }: { products?: any }) => {
             title: 'Catalogue',
         },
         {
-            title: 'Products',
+            title: 'Products & Services',
         },
     ]
 

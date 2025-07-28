@@ -40,17 +40,21 @@ const index = ({ priceLevels }: { priceLevels?: any }) => {
     const [openModalDelete, setOpenModalDelete] = useState(false)
     const [deletedData, setDeletedData] = useState<any>(null)
 
-    const handleDelete = async (id: any) => {
+    const handleDelete = async (id?: any) => {
+        if (!deletedData) return;
         try {
-            const res = await deletePriceLevel(id)
-            if (res.success == true) {
-                notifySuccess(res.message)
-                setData(prev => prev.filter(item => item.id !== id))
+            const res = await deletePriceLevel(deletedData);
+            if (res.success) {
+                notifySuccess(res.message);
+                setData(prev => prev.filter(item => item.id !== deletedData));
             }
         } catch (error) {
-            console.error(error)
+            console.error(error);
+        } finally {
+            setOpenModalDelete(false);
+            setDeletedData(null);
         }
-    }
+    };
 
     const handleOpenModalDelete = (data: any) => {
         setOpenModalDelete(true)
@@ -151,6 +155,7 @@ const index = ({ priceLevels }: { priceLevels?: any }) => {
                 open={openModalDelete}
                 onCancel={() => setOpenModalDelete(false)}
                 onDelete={handleDelete}
+                item='price level'
             />
             <div className="mt-6 mx-4 mb-0">
                 <div className='flex justify-between items-center'>

@@ -44,7 +44,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const optionsDate = [
         { label: "of the following month", value: 'of the following month' },
         { label: "day(s) after the invoice date", value: 'day(s) after the invoice date' },
-        { label: "day(s) after the end the invoice date", value: 'day(s) after the end the invoice date' },
+        { label: "day(s) after the end of the invoice month", value: 'day(s) after the end of the invoice month' },
         { label: "of the current month", value: 'of the current month' }
     ]
 
@@ -143,33 +143,8 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             title="Default Setting"
                             description="Default Setting"
                         >
-                            <div className='grid md:grid-cols-2 col-span-full gap-3'>
-                                <div>
-                                    <label>Bills Default Due Date (Optional)</label>
-                                    <div className='flex items-center gap-3'>
-                                        <div className='flex gap-3 items-center w-26'>
-                                            <label>Due</label>
-                                            <Input
-                                                id='bills_default_due_int'
-                                                label=''
-                                                type='number'
-                                                placeholder='Due'
-                                                onChange={handleChange}
-                                                value={formData.bills_default_due_int}
-                                            />
-                                        </div>
-                                        <div className='flex-1'>
-                                            <SelectInput
-                                                id='bills_default_due_date'
-                                                value={formData.bills_default_due_date}
-                                                onChange={(selected) => handleChangeSelect(' bills_default_due_date', selected)}
-                                                options={optionsDate}
-                                                className='w-full'
-                                            />
-                                        </div>
 
-                                    </div>
-                                </div>
+                            <div className='grid md:grid-cols-2 col-span-full gap-3'>
                                 <div>
                                     <label>Sales Invoices Default Due Date (Optional)</label>
                                     <div className='flex items-center gap-3'>
@@ -196,6 +171,33 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
                                     </div>
                                 </div>
+                                <div>
+                                    <label>Bills Default Due Date (Optional)</label>
+                                    <div className='flex items-center gap-3'>
+                                        <div className='flex gap-3 items-center w-26'>
+                                            <label>Due</label>
+                                            <Input
+                                                id='bills_default_due_int'
+                                                label=''
+                                                type='number'
+                                                placeholder='Due'
+                                                onChange={handleChange}
+                                                value={formData.bills_default_due_int}
+                                            />
+                                        </div>
+                                        <div className='flex-1'>
+                                            <SelectInput
+                                                id='bills_default_due_date'
+                                                value={formData.bills_default_due_date}
+                                                onChange={(selected) => handleChangeSelect(' bills_default_due_date', selected)}
+                                                options={optionsDate}
+                                                className='w-full'
+                                            />
+                                        </div>
+
+                                    </div>
+                                </div>
+
 
                             </div>
 

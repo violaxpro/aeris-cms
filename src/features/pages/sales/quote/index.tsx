@@ -201,36 +201,6 @@ const index = ({ quoteData }: { quoteData?: any }) => {
             }
         },
         {
-            title: 'Payment',
-            dataIndex: 'payment_method',
-            sorter: (a: any, b: any) => {
-                const paymentMethod = ['Bank Transfer', 'Credit Card', 'Paypal'];
-                return paymentMethod.indexOf(a.payment_method) - paymentMethod.indexOf(b.payment_method)
-
-            },
-            render: (_: any, row: any) => {
-                let payment_status: any = ''
-                if (row.paid_amount === 0) {
-                    payment_status = 'Waiting for Payment'
-                } else if (row.paid_amount < row.total) {
-                    payment_status = 'Partially Paid'
-                } else if (row.paid_amount >= row.total) {
-                    payment_status = 'Paid'
-                }
-                return (
-                    <div className="flex flex-col w-full">
-                        <div className="flex justify-start gap-1">
-                            <span>{row.payment_method}</span>
-                        </div>
-                        <div className="flex justify-start gap-1">
-                            <StatusBadge status={payment_status} />
-                        </div>
-                    </div>
-                )
-
-            }
-        },
-        {
             title: 'Status',
             dataIndex: 'status',
             sorter: (a: any, b: any) => {
@@ -255,7 +225,22 @@ const index = ({ quoteData }: { quoteData?: any }) => {
             }
         },
         {
-            title: 'Created',
+            title: 'Expiry Date',
+            dataIndex: 'expiry_date',
+            sorter: (a: any, b: any) => {
+                return new Date(a?.expiry_date).getTime() - new Date(b?.expiry_date).getTime()
+            },
+            render: (_: any, row: any) => {
+                const date = dayjs(row.expiry_date).format("DD/MM/YYYY")
+                return <div className="flex flex-col w-full">
+                    <div className="flex justify-start gap-1">
+                        <span>{date}</span>
+                    </div>
+                </div>
+            }
+        },
+        {
+            title: 'Issue Date',
             dataIndex: 'date',
             sorter: (a: any, b: any) => {
                 return new Date(a?.date).getTime() - new Date(b?.date).getTime()
