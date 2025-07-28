@@ -35,6 +35,7 @@ import SelectDatePicker from '@/components/date-picker/SelectDatePicker'
 import { Avatar } from 'antd'
 import AvatarImage from "public/social-avatar.webp"
 import ButtonTab from '@/components/tab/ButtonTab'
+import ModalOvertime from './ModalOvertime'
 
 const index = ({ data }: { data?: any }) => {
     const [activeTab, setActiveTab] = useState('recap');
@@ -44,6 +45,15 @@ const index = ({ data }: { data?: any }) => {
     const [isOpenModalFilter, setisOpenModalFilter] = useState(false)
     const [search, setSearch] = useState('')
     const [selectedMonth, setSelectedMonth] = useState(0)
+    const [openModalForm, setOpenModalForm] = useState(false)
+    const [formData, setFormData] = useState({
+        full_name: '',
+        overtime_date: '',
+        start_time: '',
+        end_time: '',
+        description: '',
+        file_attachment: [],
+    })
     const breadcrumb = [
         {
             title: 'Employee Management',
@@ -199,11 +209,39 @@ const index = ({ data }: { data?: any }) => {
         { key: 'requested', label: 'Requested', badgeCount: overtimeData?.filter((item, index) => item.status === 'Pending').length },
     ];
 
+    const handleChange = (field: string) => (
+        e: any
+    ) => {
+        let value
+        if (dayjs.isDayjs(e) || e === null) {
+            value = e ? e.format('YYYY-MM-DD') : '';
+        }
+        // Jika event input biasa
+        else if (e && typeof e === 'object' && 'target' in e) {
+            value = e.target.value;
+        }
+        // Jika string langsung dari Select
+        else {
+            value = e;
+        }
+        setFormData((prev) => ({
+            ...prev,
+            [field]: value,
+        }));
+    };
+
 
 
     return (
         <>
             {contextHolder}
+            <ModalOvertime
+                open={openModalForm}
+                handleChange={handleChange}
+                formData={formData}
+                handleCancel={() => setOpenModalForm(false)}
+                handleSubmit={() => setOpenModalForm(false)}
+            />
             <div className="mt-6 mx-4 mb-0">
                 <div className='flex justify-between items-center'>
                     <div>
@@ -222,7 +260,7 @@ const index = ({ data }: { data?: any }) => {
                             height={15}
                         />}
                         label='Add Request'
-                        link={routes.eCommerce.createOvertime}
+                        onClick={() => setOpenModalForm(true)}
                     />
                 </div>
             </div>

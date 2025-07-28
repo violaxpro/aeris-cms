@@ -23,6 +23,7 @@ import { Card } from '@/components/card'
 import SelectDatePicker from '@/components/date-picker/SelectDatePicker'
 import { Avatar } from 'antd'
 import AvatarImage from "public/social-avatar.webp"
+import ModalAttendance from './ModalAttendance'
 
 const index = ({ data }: { data?: any }) => {
     const today = dayjs(); // Hari ini
@@ -37,6 +38,13 @@ const index = ({ data }: { data?: any }) => {
     const [isOpenModalFilter, setisOpenModalFilter] = useState(false)
     const [search, setSearch] = useState('')
     const [selectedMonth, setSelectedMonth] = useState(0)
+    const [openModalForm, setOpenModalForm] = useState(false)
+    const [formData, setFormData] = useState({
+        name: '',
+        attendance_type: '',
+        status_type: '',
+        explain_reason: ''
+    })
     const breadcrumb = [
         {
             title: 'Employee Management',
@@ -157,10 +165,31 @@ const index = ({ data }: { data?: any }) => {
         // dst...
     ];
 
+    const handleChange = (field: string) => (
+        e: any | React.ChangeEvent<HTMLTextAreaElement>
+    ) => {
+        const value = typeof e === 'string' || Array.isArray(e)
+            ? e
+            : e.target.value;
+
+        setFormData((prev) => ({
+            ...prev,
+            [field]: value,
+        }));
+    };
+
+
 
     return (
         <>
             {contextHolder}
+            <ModalAttendance
+                open={openModalForm}
+                handleChange={handleChange}
+                formData={formData}
+                handleCancel={() => setOpenModalForm(false)}
+                handleSubmit={() => setOpenModalForm(false)}
+            />
             <div className="mt-6 mx-4 mb-0">
                 <div className='flex justify-between items-center'>
                     <div>
@@ -179,7 +208,7 @@ const index = ({ data }: { data?: any }) => {
                             height={15}
                         />}
                         label='Add Attendance'
-                        link={routes.eCommerce.createAttendance}
+                        onClick={() => setOpenModalForm(true)}
                     />
                 </div>
             </div>
