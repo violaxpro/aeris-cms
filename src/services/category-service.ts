@@ -9,6 +9,13 @@ export async function getCategories(param?: string | number[]) {
     return res.data
 }
 
+export async function getCategorybyId(id?: string | number[]) {
+    const url = id ? `${apiCategories}/${id}` : apiCategories
+    const res = await baseService(url)
+    return res.data
+}
+
+
 export async function addCategory(params: CategoryType) {
     try {
         const res = await baseService.post(apiCategories, params)

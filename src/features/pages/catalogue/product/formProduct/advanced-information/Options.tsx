@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import FormGroup from '@/components/form';
+import FormGroup from '@/components/form-group';
 import Button from '@/components/button'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import SelectInput from '@/components/select';
 import Input from "@/components/input"
 import CheckboxInput from '@/components/checkbox';
+import ButtonIcon from '@/components/button/ButtonIcon';
+import { TrashIcon, TrashIconRed } from '@public/icon';
+import { Divider } from 'antd';
 
 type ListItem = {
     name: string;
@@ -14,7 +17,9 @@ type ListItem = {
 };
 
 const OptionsInformation = ({ className }: { className?: string }) => {
-    const [items, setItems] = useState<ListItem[]>([]);
+    const [items, setItems] = useState<ListItem[]>([
+        { name: '', type: [], optRequired: false, globalOption: [] }
+    ]);
 
     const handleChange = (updatedItems: ListItem[]) => {
         setItems(updatedItems);
@@ -62,9 +67,9 @@ const OptionsInformation = ({ className }: { className?: string }) => {
             <FormGroup title="Options" description="Options information about the product">
                 <div className="space-y-4 col-span-full">
                     {items.map((item, index) => (
-                        <div key={index} className="flex flex-col gap-3 mb-6 w-full border-b pb-4">
+                        <div key={index} className="flex flex-col gap-3 mb-6 w-full pb-4">
                             {/* Baris 1: Name dan Option Type */}
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-[1fr_1fr_170px_50px] gap-4">
                                 <Input
                                     id='name'
                                     label='Name'
@@ -86,6 +91,34 @@ const OptionsInformation = ({ className }: { className?: string }) => {
                                     value={item.type}
                                     options={options}
                                 />
+                                <div className='flex items-center justify-center pt-5'>
+                                    <Button
+                                        label=' Add Global Options'
+                                        icon={<PlusOutlined />}
+                                        onClick={() => addGlobalOption(index)}
+                                        style={{ padding: '1.2rem 1rem' }}
+                                    />
+                                </div>
+
+                                <div className="pt-5">
+                                    {
+                                        items.length <= 1 ? <ButtonIcon
+                                            icon={TrashIcon}
+                                            width={20}
+                                            height={20}
+                                            className='btn-trash-item !h-10 !w-15'
+                                        /> : <ButtonIcon
+                                            color='danger'
+                                            variant='filled'
+                                            size="small"
+                                            icon={TrashIconRed}
+                                            width={15}
+                                            height={15}
+                                            className='!h-10 !w-15'
+                                            onClick={() => removeItem(index)}
+                                        />
+                                    }
+                                </div>
                             </div>
 
                             {/* Baris 2: Required, Add Global Option, Delete */}
@@ -95,19 +128,7 @@ const OptionsInformation = ({ className }: { className?: string }) => {
                                     checked={item.optRequired}
                                     onChange={(checked: boolean) => updateItem(index, 'optRequired', checked)}
                                 />
-
-                                <Button
-                                    label=' Add Global Options'
-
-                                    icon={<PlusOutlined />}
-                                    onClick={() => addGlobalOption(index)}
-                                />
-                                <MinusCircleOutlined
-                                    onClick={() => removeItem(index)}
-                                    style={{ color: 'red', fontSize: '18px', cursor: 'pointer' }}
-                                />
                             </div>
-
                             {/* Baris 3 dst: Global Option dropdown */}
                             < div className="flex flex-col w-full" >
                                 {
@@ -127,13 +148,18 @@ const OptionsInformation = ({ className }: { className?: string }) => {
                                                     options={options}
                                                     className='w-full'
                                                 />
-                                                <div className='pt-6'>
-                                                    <MinusCircleOutlined
+                                                <div className="pt-5">
+                                                    <ButtonIcon
+                                                        color='danger'
+                                                        variant='filled'
+                                                        size="small"
+                                                        icon={TrashIconRed}
+                                                        width={15}
+                                                        height={15}
+                                                        className='!h-10 !w-15'
                                                         onClick={() => removeGlobalOption(index, gIdx)}
-                                                        style={{ color: 'red', fontSize: '18px', cursor: 'pointer' }}
                                                     />
                                                 </div>
-
                                             </div>
 
                                         </div>
@@ -145,11 +171,10 @@ const OptionsInformation = ({ className }: { className?: string }) => {
                     ))
                     }
 
-
+                    <Divider />
                     <div className="flex justify-end mt-4">
                         <Button
                             label=' Add  Options'
-
                             icon={<PlusOutlined />}
                             onClick={addItem}
                         />
@@ -157,14 +182,6 @@ const OptionsInformation = ({ className }: { className?: string }) => {
                     </div>
                 </div >
             </FormGroup >
-
-            <hr
-                style={{
-                    borderColor: '#E5E7EB',
-                    marginTop: '1rem',
-                    marginBottom: '1rem',
-                }}
-            />
         </div >
     );
 };

@@ -41,7 +41,6 @@ const index = ({ products }: { products?: any }) => {
     const [openModalDelete, setOpenModalDelete] = useState(false)
     const [deletedData, setDeletedData] = useState<any>(null)
 
-
     const handleDelete = async (id?: any) => {
         if (!deletedData) return;
         try {
@@ -274,7 +273,7 @@ const index = ({ products }: { products?: any }) => {
                     />
                 </div>
             </div>
-            <Content className="mt-6 mx-4 mb-0 ">
+            <Content className="mb-0 ">
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
                     <div className='flex justify-between mb-4 gap-2'>
                         {/* <Button

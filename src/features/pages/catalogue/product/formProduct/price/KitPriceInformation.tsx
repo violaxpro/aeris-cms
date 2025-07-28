@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
-import FormGroup from '@/components/form';
+import FormGroup from '@/components/form-group';
 import Button from '@/components/button'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import SelectInput from '@/components/select';
 import { ChildFormProps } from '@/plugins/types/form-type';
 import { useAtom } from 'jotai';
 import { productSetAtom } from '@/store/DropdownItemStore';
+import ButtonIcon from '@/components/button/ButtonIcon';
+import { TrashIcon, TrashIconRed } from '@public/icon';
+import { Divider } from 'antd';
 
 type ListItem = {
     productName: string[];
@@ -14,7 +17,9 @@ type ListItem = {
 
 const KitPriceInformation = ({ dataById, onChange }: ChildFormProps) => {
     const [optionsProduct] = useAtom(productSetAtom)
-    const [items, setItems] = useState<ListItem[]>([]);
+    const [items, setItems] = useState<ListItem[]>([
+        { productName: [], value: '' }
+    ]);
 
     const handleChange = (updatedItems: ListItem[]) => {
         setItems(updatedItems);
@@ -68,19 +73,32 @@ const KitPriceInformation = ({ dataById, onChange }: ChildFormProps) => {
                                     options={optionsProduct}
                                 />
                             </div>
-                            <div className="pt-6">
-                                <MinusCircleOutlined
-                                    onClick={() => removeItem(index)}
-                                    style={{ color: 'red', fontSize: '18px', cursor: 'pointer' }}
-                                />
+                            <div className="pt-5">
+                                {
+                                    items.length <= 1 ? <ButtonIcon
+                                        icon={TrashIcon}
+                                        width={20}
+                                        height={20}
+                                        className='btn-trash-item !h-10 !w-15'
+                                    /> : <ButtonIcon
+                                        color='danger'
+                                        variant='filled'
+                                        size="small"
+                                        icon={TrashIconRed}
+                                        width={15}
+                                        height={15}
+                                        className='!h-10 !w-15'
+                                        onClick={() => removeItem(index)}
+                                    />
+                                }
                             </div>
                         </div>
                     ))}
+                    <Divider />
 
                     <div className="flex justify-end">
                         <Button
                             label='Add Kit Price Product'
-
                             icon={<PlusOutlined />}
                             onClick={addItem}
                         />
@@ -88,13 +106,6 @@ const KitPriceInformation = ({ dataById, onChange }: ChildFormProps) => {
                 </div>
             </FormGroup>
 
-            <hr
-                style={{
-                    borderColor: '#E5E7EB',
-                    marginTop: '1rem',
-                    marginBottom: '1rem',
-                }}
-            />
         </div>
     );
 };

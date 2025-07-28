@@ -68,8 +68,8 @@ const ProductForm: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
     const breadcrumb = [
         { title: 'Catalogue' },
-        { title: 'Products', url: routes.eCommerce.products },
-        { title: mode === 'create' ? 'Create Product' : 'Edit Product' },
+        { title: 'Product', url: routes.eCommerce.products },
+        { title: mode === 'create' ? 'Create' : 'Edit' },
     ];
 
     const handleChange = (section: string, updatedData: any) => {

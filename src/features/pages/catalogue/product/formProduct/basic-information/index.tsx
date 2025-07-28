@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import FormGroup from '@/components/form'
+import FormGroup from '@/components/form-group'
 import Input from "@/components/input"
 import Select from "@/components/select"
 import TextArea from "@/components/textarea"
@@ -112,51 +112,63 @@ const BasicInformationProduct = ({ dataById, onChange, formDataCreate }: ChildFo
         { value: '4', label: 'Out of Stock' },
     ]
 
+    const metaTitle = formDataCreate.tab_basic_information.metaTitle;
+    const titleLength = metaTitle.length;
+    const isTitleInvalid = titleLength > 65;
+
+    const metaDescription = formDataCreate.tab_basic_information.metaDescription;
+    const descLength = metaDescription.length;
+    const isDescInvalid = descLength > 165;
+
     return (
-        <div>
+        <div className='flex flex-col'>
             <FormGroup
                 title="General"
                 description="General information about the product."
+                childClassName='flex flex-col gap-4'
             >
-                <Input
-                    id='productName'
-                    label='Name'
-                    type='text'
-                    placeholder='Product Name'
-                    // onChange={handleChange}
-                    // value={formData.productName}
-                    onChange={handleChange}
-                    value={formDataCreate.tab_basic_information.productName}
+                <div className='grid md:grid-cols-4 gap-4'>
+                    <Input
+                        id='productName'
+                        label='Name'
+                        type='text'
+                        placeholder='Product Name'
+                        // onChange={handleChange}
+                        // value={formData.productName}
+                        onChange={handleChange}
+                        value={formDataCreate.tab_basic_information.productName}
 
-                />
-                <Input
-                    id='slug'
-                    label='Slug'
-                    type='text'
-                    placeholder='Slug'
-                    // onChange={handleChange}
-                    // value={formData.slug}
-                    onChange={handleChange}
-                    value={formDataCreate.tab_basic_information.slug}
-                />
-                <Select
-                    id="brand"
-                    label="Brand"
-                    placeholder="Select Brand"
-                    // value={formData.brand}
-                    value={formDataCreate.tab_basic_information.brand}
-                    onChange={(val) => handleChangeSelect("brand", val)}
-                    options={optionBrands}
-                />
-                <Select
-                    id="categories"
-                    label="Categories"
-                    placeholder="Select Categories"
-                    // value={formData.categories}
-                    value={formDataCreate.tab_basic_information.categories}
-                    onChange={(val) => handleChangeSelect("categories", val)}
-                    options={optionCategories}
-                />
+                    />
+                    <Input
+                        id='slug'
+                        label='Slug'
+                        type='text'
+                        placeholder='Slug'
+                        // onChange={handleChange}
+                        // value={formData.slug}
+                        onChange={handleChange}
+                        value={formDataCreate.tab_basic_information.slug}
+                    />
+                    <Select
+                        id="brand"
+                        label="Brand"
+                        placeholder="Select Brand"
+                        // value={formData.brand}
+                        value={formDataCreate.tab_basic_information.brand}
+                        onChange={(val) => handleChangeSelect("brand", val)}
+                        options={optionBrands}
+                    />
+                    <Select
+                        id="categories"
+                        label="Categories"
+                        placeholder="Select Categories"
+                        // value={formData.categories}
+                        value={formDataCreate.tab_basic_information.categories}
+                        onChange={(val) => handleChangeSelect("categories", val)}
+                        options={optionCategories}
+                    />
+                </div>
+
                 <div className='col-span-full w-full'>
                     <QuillInput
                         // value={formData.description}
@@ -167,20 +179,22 @@ const BasicInformationProduct = ({ dataById, onChange, formDataCreate }: ChildFo
                         labelClassName="font-medium text-gray-700 dark:text-gray-600 mb-1.5"
                     />
                 </div>
-                <div className='col-span-full w-full'>
-                    <Input
+                <div className='grid md:grid-cols-2 gap-4'>
+                    <TextArea
                         id='metaTitle'
                         label='Meta Title'
-                        type='text'
                         placeholder='Input Meta Title'
                         // onChange={handleChange}
                         // value={formData.metaTitle}
                         onChange={handleChange}
                         value={formDataCreate.tab_basic_information.metaTitle}
-                        notes='min.50 / max.65, Character 0'
+                        notes={
+                            <span className={isTitleInvalid ? 'text-red-500' : 'text-gray-400'}>
+                                min.55 / max.65, Character {titleLength}
+                            </span>
+                        }
+                        textareaClassname='!h-20'
                     />
-                </div>
-                <div className='col-span-full w-full'>
                     <TextArea
                         id='metaDescription'
                         label='Meta Description'
@@ -189,67 +203,77 @@ const BasicInformationProduct = ({ dataById, onChange, formDataCreate }: ChildFo
                         // value={formData.metaDescription}
                         onChange={handleChange}
                         value={formDataCreate.tab_basic_information.metaDescription}
-                        notes='min.50 / max.65, Character 0'
+                        notes={
+                            <span className={isDescInvalid ? 'text-red-500' : 'text-gray-400'}>
+                                min.145 / max.165, Character {descLength}
+                            </span>
+                        }
+                        textareaClassname='!h-20'
                     />
                 </div>
-                <Select
-                    id="taxClass"
-                    label="Tax Class"
-                    placeholder="Select Tax Class"
-                    value={formDataCreate.tab_basic_information.taxClass}
-                    // value={formData.taxClass}
-                    onChange={(val) => handleChangeSelect("taxClass", val)}
-                    options={optionsTaxClass}
-                />
-                <Select
-                    id="tags"
-                    modeType='tags'
-                    label="Tags"
-                    placeholder="Select Tags"
-                    onChange={(val) => handleChangeSelect("tags", val)}
-                    // value={formData.tags}
-                    value={formDataCreate.tab_basic_information.tags}
-                    options={optionsTagClass}
-                />
-                <Input
-                    id='manualUrl'
-                    label='Manual URL'
-                    type='text'
-                    placeholder='Input Manual URL'
-                    // onChange={handleChange}
-                    // value={formData.manualUrl}
-                    onChange={handleChange}
-                    value={formDataCreate.tab_basic_information.manualUrl}
-                />
-                <Input
-                    id='warranty'
-                    label='Warranty (month)'
-                    type='number'
-                    placeholder='Warranty (month)'
-                    // onChange={handleChange}
-                    // value={formData.warranty}
-                    onChange={handleChange}
-                    value={formDataCreate.tab_basic_information.warranty}
-                />
-                <CheckboxInput
-                    label='Status'
-                    text="Check this to enable this product"
-                    // checked={formData.status}
-                    checked={formDataCreate.tab_basic_information.status}
-                    onChange={(val) => handleCheckbox('status', val)}
-                />
-
+                <div className='grid md:grid-cols-2 gap-4'>
+                    <Select
+                        id="taxClass"
+                        label="Tax Class"
+                        placeholder="Select Tax Class"
+                        value={formDataCreate.tab_basic_information.taxClass}
+                        // value={formData.taxClass}
+                        onChange={(val) => handleChangeSelect("taxClass", val)}
+                        options={optionsTaxClass}
+                    />
+                    <Select
+                        id="tags"
+                        modeType='tags'
+                        label="Tags"
+                        placeholder="Select Tags"
+                        onChange={(val) => handleChangeSelect("tags", val)}
+                        // value={formData.tags}
+                        value={formDataCreate.tab_basic_information.tags}
+                        options={optionsTagClass}
+                    />
+                </div>
+                <div className='grid md:grid-cols-3 gap-4'>
+                    <Input
+                        id='manualUrl'
+                        label='Manual URL'
+                        type='text'
+                        placeholder='Input Manual URL'
+                        // onChange={handleChange}
+                        // value={formData.manualUrl}
+                        onChange={handleChange}
+                        value={formDataCreate.tab_basic_information.manualUrl}
+                    />
+                    <Input
+                        id='warranty'
+                        label='Warranty (month)'
+                        type='number'
+                        placeholder='Warranty (month)'
+                        // onChange={handleChange}
+                        // value={formData.warranty}
+                        onChange={handleChange}
+                        value={formDataCreate.tab_basic_information.warranty}
+                    />
+                    <div className='md:my-2'>
+                        <CheckboxInput
+                            label='Status'
+                            text="Check this to enable this product"
+                            // checked={formData.status}
+                            checked={formDataCreate.tab_basic_information.status}
+                            onChange={(val) => handleCheckbox('status', val)}
+                        />
+                    </div>
+                    <div className='col-span-full flex justify-end'>
+                        <Button
+                            label='Save'
+                        />
+                    </div>
+                </div>
             </FormGroup>
-            <div className='flex justify-end'>
-                <Button
-                    label='Save'
 
-                />
-            </div>
-            <hr style={{ borderColor: '#E5E7EB', marginTop: '1rem', marginBottom: '1rem' }} />
             <FormGroup
                 title="Inventory"
                 description="Add your product inventory info here for the product."
+                childClassName='grid md:grid-cols-2 gap-4'
             >
                 <Input
                     id='sku'
@@ -303,22 +327,26 @@ const BasicInformationProduct = ({ dataById, onChange, formDataCreate }: ChildFo
                     />
                 }
             </FormGroup>
-            <hr style={{ borderColor: '#E5E7EB', marginTop: '1rem', marginBottom: '1rem' }} />
 
             <FormGroup
                 title="Stock Availability"
                 description="Add your stock info here"
+                childClassName='grid md:grid-cols-12 gap-4'
+                className='md:my-12'
             >
-                <Select
-                    id="stock"
-                    label="Stock Availability"
-                    placeholder="Select Stock Availability"
-                    // value={formData.stock}
-                    value={formDataCreate.tab_basic_information.stock}
-                    onChange={(val) => handleChangeSelect("stock", val)}
-                    options={options}
-                />
-                <div className='flex col-span-full w-full gap-2'>
+                <div className='col-span-8'>
+                    <Select
+                        id="stock"
+                        label="Stock Availability"
+                        placeholder="Select Stock Availability"
+                        // value={formData.stock}
+                        value={formDataCreate.tab_basic_information.stock}
+                        onChange={(val) => handleChangeSelect("stock", val)}
+                        options={options}
+                    />
+                </div>
+
+                <div className='flex col-span-4 w-full gap-2 items-center justify-start'>
                     <CheckboxInput
                         text="Best Seller"
                         checked={formDataCreate.tab_basic_information.isBestSeller}
@@ -330,8 +358,8 @@ const BasicInformationProduct = ({ dataById, onChange, formDataCreate }: ChildFo
                         onChange={(val) => handleCheckbox('isBackOrder', val)}
                     />
                 </div>
+
             </FormGroup>
-            <hr style={{ borderColor: '#E5E7EB', marginTop: '1rem', marginBottom: '1rem' }} />
 
             <FormGroup
                 title="Images"

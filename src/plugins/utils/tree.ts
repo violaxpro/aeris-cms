@@ -1,6 +1,6 @@
 import { FlatNode, TreeNode, categoriesType } from "../types/treeTypes";
 
-export default function buildTree(flatData: FlatNode[]): TreeNode[] {
+export const buildTree = (flatData: FlatNode[]): TreeNode[] => {
     const idMapping: Record<string | number, TreeNode> = {};
     const tree: TreeNode[] = [];
 
@@ -32,3 +32,24 @@ export default function buildTree(flatData: FlatNode[]): TreeNode[] {
 
     return tree;
 }
+
+// flattenTree.ts
+export const flattenTree = (tree: any[], parentId = "#") => {
+    let result: any[] = [];
+
+    for (const node of tree) {
+        const { children, ...rest } = node;
+
+        result.push({
+            ...rest,
+            parent: parentId
+        });
+
+        if (children && children.length > 0) {
+            result = result.concat(flattenTree(children, node.key || node.id));
+        }
+    }
+
+    return result;
+};
+

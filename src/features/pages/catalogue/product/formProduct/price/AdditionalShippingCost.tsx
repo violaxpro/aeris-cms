@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import FormGroup from '@/components/form'
+import FormGroup from '@/components/form-group'
 import Input from "@/components/input"
 import { ChildFormProps } from '@/plugins/types/form-type'
 

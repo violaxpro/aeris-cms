@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import FormGroup from '@/components/form'
+import FormGroup from '@/components/form-group'
 import Input from "@/components/input"
 import Select from "@/components/select"
 import TextArea from "@/components/textarea"

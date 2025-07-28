@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import FormGroup from '@/components/form';
+import FormGroup from '@/components/form-group';
 import Button from '@/components/button'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import SelectInput from '@/components/select';
+import ButtonIcon from '@/components/button/ButtonIcon';
+import { TrashIcon, TrashIconRed } from '@public/icon';
+import { Divider } from 'antd';
 
 type ListItem = {
     name: string[];
@@ -10,7 +13,9 @@ type ListItem = {
 };
 
 const AttributeInformation = ({ className }: { className?: string }) => {
-    const [items, setItems] = useState<ListItem[]>([]);
+    const [items, setItems] = useState<ListItem[]>([
+        { name: [], value: [] }
+    ]);
 
     const handleChange = (updatedItems: ListItem[]) => {
         setItems(updatedItems);
@@ -73,33 +78,37 @@ const AttributeInformation = ({ className }: { className?: string }) => {
                                 />
                             </div>
 
-                            <div className="pt-6">
-                                <MinusCircleOutlined
-                                    onClick={() => removeItem(index)}
-                                    style={{ color: 'red', fontSize: '18px', cursor: 'pointer' }}
-                                />
+                            <div className="pt-5">
+                                {
+                                    items.length <= 1 ? <ButtonIcon
+                                        icon={TrashIcon}
+                                        width={20}
+                                        height={20}
+                                        className='btn-trash-item !h-10 !w-15'
+                                    /> : <ButtonIcon
+                                        color='danger'
+                                        variant='filled'
+                                        size="small"
+                                        icon={TrashIconRed}
+                                        width={15}
+                                        height={15}
+                                        className='!h-10 !w-15'
+                                        onClick={() => removeItem(index)}
+                                    />
+                                }
                             </div>
                         </div>
                     ))}
-
+                    <Divider />
                     <div className="flex justify-end mt-4">
                         <Button
                             label='Add Attribute'
-
                             icon={<PlusOutlined />}
                             onClick={addItem}
                         />
                     </div>
                 </div>
             </FormGroup>
-
-            <hr
-                style={{
-                    borderColor: '#E5E7EB',
-                    marginTop: '1rem',
-                    marginBottom: '1rem',
-                }}
-            />
         </div>
     );
 };

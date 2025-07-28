@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import FormGroup from '@/components/form';
+import FormGroup from '@/components/form-group';
 import Button from '@/components/button'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import Input from "@/components/input"
 import SelectInput from '@/components/select';
 import { ChildFormProps } from '@/plugins/types/form-type';
-import { getSupplier } from '@/services/supplier-list-service'
+import ButtonIcon from '@/components/button/ButtonIcon';
+import { TrashIcon, TrashIconRed } from '@public/icon';
+import { getSupplier } from '@/services/supplier-list-service';
+import { Divider } from 'antd';
 
 type ListItem = {
     supplierName: string;
@@ -13,7 +16,9 @@ type ListItem = {
 };
 
 const SupplierInformation = ({ onChange, dataById }: ChildFormProps) => {
-    const [items, setItems] = useState<ListItem[]>([]);
+    const [items, setItems] = useState<ListItem[]>([
+        { supplierName: '', buyPrice: '' }
+    ]);
     const [optionSupplier, setOptionSupplier] = useState([])
 
     const handleChange = (updatedItems: ListItem[]) => {
@@ -43,6 +48,7 @@ const SupplierInformation = ({ onChange, dataById }: ChildFormProps) => {
     };
 
     const removeItem = (index: number) => {
+        //  if (items.length <= 1) return; 
         const updated = items.filter((_, i) => i !== index);
         handleChange(updated);
     };
@@ -95,19 +101,31 @@ const SupplierInformation = ({ onChange, dataById }: ChildFormProps) => {
                                 />
                             </div>
 
-                            <div className="pt-6">
-                                <MinusCircleOutlined
-                                    onClick={() => removeItem(index)}
-                                    style={{ color: 'red', fontSize: '18px', cursor: 'pointer' }}
-                                />
+                            <div className="pt-5">
+                                {
+                                    items.length <= 1 ? <ButtonIcon
+                                        icon={TrashIcon}
+                                        width={20}
+                                        height={20}
+                                        className='btn-trash-item !h-10 !w-15'
+                                    /> : <ButtonIcon
+                                        color='danger'
+                                        variant='filled'
+                                        size="small"
+                                        icon={TrashIconRed}
+                                        width={15}
+                                        height={15}
+                                        className='!h-10 !w-15'
+                                        onClick={() => removeItem(index)}
+                                    />
+                                }
                             </div>
                         </div>
                     ))}
-
+                    <Divider />
                     <div className="flex justify-end mt-4">
                         <Button
                             label='Add Supplier'
-
                             icon={<PlusOutlined />}
                             onClick={addItem}
                         />
@@ -117,7 +135,6 @@ const SupplierInformation = ({ onChange, dataById }: ChildFormProps) => {
 
             </FormGroup>
 
-            <hr style={{ borderColor: '#E5E7EB', marginTop: '1rem', marginBottom: '1rem' }} />
         </div>
     );
 };
