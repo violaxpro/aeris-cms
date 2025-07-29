@@ -26,7 +26,6 @@ import { useNotificationAntd } from '@/components/toast'
 
 const index = ({ optionsData }: { optionsData?: any }) => {
     const router = useRouter()
-
     const { contextHolder, notifySuccess } = useNotificationAntd()
     const [filteredData, setFilteredData] = useState<OptionsType[]>([])
     const [search, setSearch] = useState('')

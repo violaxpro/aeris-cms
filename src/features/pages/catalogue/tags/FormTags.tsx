@@ -4,7 +4,7 @@ import Breadcrumb from "@/components/breadcrumb";
 import { Content } from 'antd/es/layout/layout';
 import Button from '@/components/button'
 import { FormProps } from '@/plugins/types/form-type';
-import FormGroup from '@/components/form';
+import FormGroup from '@/components/form-group';
 import Input from "@/components/input"
 import SelectInput from '@/components/select';
 import { routes } from '@/config/routes';
@@ -28,7 +28,7 @@ const FormTags: React.FC<FormProps> = ({ mode, initialValues }) => {
     const breadcrumb = [
         { title: 'Catalogue' },
         { title: 'Tags', url: routes.eCommerce.tags },
-        { title: mode === 'create' ? 'Create Tags' : 'Edit Tags' },
+        { title: mode === 'create' ? 'Create' : 'Edit' },
     ];
 
     const handleChange = (e: any) => {
