@@ -1,9 +1,12 @@
 import React from 'react'
 import Input from "@/components/input"
-import { PlusOutlined, MinusCircleOutlined } from '@ant-design/icons'
-import { Button } from 'antd'
+import { PlusOutlined } from '@ant-design/icons'
+import Button from '@/components/button'
 import SelectInput from '@/components/select'
 import { itemInputType } from '../ValuesForm'
+import { TrashIcon, TrashIconRed } from '@public/icon'
+import ButtonIcon from '@/components/button/ButtonIcon'
+import { Divider } from 'antd'
 
 type fieldTypeInput = {
     items: itemInputType[];
@@ -50,24 +53,37 @@ const FieldTypeInput = ({
                                 placeholder='Select Price Type'
                             />
                         </div>
-                        <div className='pt-4'>
-                            <MinusCircleOutlined
-                                onClick={() => removeItem(index)}
-                                style={{ color: 'red', fontSize: '18px', cursor: 'pointer' }}
-                            />
+                        <div className='pt-5'>
+                            {items.length <= 1 ?
+                                <ButtonIcon
+                                    icon={TrashIcon}
+                                    width={20}
+                                    height={20}
+                                    className='btn-trash-item !h-10 !w-15'
+                                /> :
+                                <ButtonIcon
+                                    color='danger'
+                                    variant='filled'
+                                    size="small"
+                                    icon={TrashIconRed}
+                                    width={15}
+                                    height={15}
+                                    className='!h-10 !w-15'
+
+                                    onClick={() => removeItem(index)}
+                                />
+                            }
                         </div>
                     </div>
                 ))
             }
-            <div className="flex justify-end">
+            <Divider />
+            <div className="flex justify-end my-6">
                 <Button
-                    type="dashed"
                     onClick={addItem}
                     icon={<PlusOutlined />}
-                    style={{ marginTop: 12 }}
-                >
-                    Add New Row
-                </Button>
+                    label='Add Value'
+                />
             </div>
         </div>
     )

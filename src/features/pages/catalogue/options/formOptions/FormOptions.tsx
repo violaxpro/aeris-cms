@@ -13,17 +13,17 @@ const FormOptions: React.FC<FormProps> = ({ mode, initialValues }) => {
     const breadcrumb = [
         { title: 'Catalogue' },
         { title: 'Options', url: routes.eCommerce.options },
-        { title: mode === 'create' ? 'Create Options' : 'Edit Options' },
+        { title: mode === 'create' ? 'Create' : 'Edit' },
     ];
 
     return (
         <>
-            <div className="mt-6 mx-4 mb-0">
+            <div className="mt-6 mx-6 mb-0">
                 <h1 className="text-xl font-bold mb-4">{mode === 'create' ? 'Create Options' : 'Edit Options'}</h1>
                 <Breadcrumb items={breadcrumb} />
             </div>
 
-            <Content className="mt-4 mx-4 mb-0">
+            <Content className="mb-0">
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
 
                     {/* Tab Content */}
@@ -36,7 +36,6 @@ const FormOptions: React.FC<FormProps> = ({ mode, initialValues }) => {
                     {/* Submit */}
                     <div className="mt-6 flex justify-end">
                         <Button
-
                             label={mode === 'create' ? 'Create Options' : 'Edit Options'}
                         />
                     </div>

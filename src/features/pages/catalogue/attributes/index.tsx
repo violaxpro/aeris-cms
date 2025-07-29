@@ -105,24 +105,6 @@ const index = ({ attributesData }: { attributesData?: any }) => {
             key: 'action',
             width: 120,
             render: (_: string, row: any) => {
-                const menu = (
-                    <Menu>
-                        <Menu.Item key="edit">
-                            <Link href={routes.eCommerce.editAttributes(row.id)}>
-                                Edit
-                            </Link>
-                        </Menu.Item>
-                        <Menu.Item key="delete">
-                            <Popover
-                                title='Delete Attributes'
-                                description='Are you sure to delete this data?'
-                                onDelete={() => handleDelete(row.id)}
-                                label='Delete'
-                            />
-                        </Menu.Item>
-                    </Menu>
-                );
-
                 return (
                     <div className="flex items-center justify-end gap-3 pe-4">
                         <ButtonIcon
@@ -130,7 +112,7 @@ const index = ({ attributesData }: { attributesData?: any }) => {
                             variant='filled'
                             size="small"
                             icon={PencilIconBlue}
-                            onClick={() => router.push(routes.eCommerce.editBrands(row.id))}
+                            onClick={() => router.push(routes.eCommerce.editAttributes(row.id))}
                         />
                         <ButtonIcon
                             color='danger'
@@ -178,7 +160,7 @@ const index = ({ attributesData }: { attributesData?: any }) => {
                 item='attribute'
             />
             {contextHolder}
-            <div className="mt-6 mx-4 mb-0">
+            <div className="mt-6 mx-6 mb-0">
                 <div className='flex justify-between items-center'>
                     <div>
                         <h1 className='text-xl font-bold'>
@@ -202,7 +184,7 @@ const index = ({ attributesData }: { attributesData?: any }) => {
                     />
                 </div>
             </div>
-            <Content className="mt-6 mx-4 mb-0">
+            <Content className="mb-0">
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
 
                     <div className='flex justify-between mb-4'>

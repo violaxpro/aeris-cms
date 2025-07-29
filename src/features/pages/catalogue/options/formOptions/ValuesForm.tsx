@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import FormGroup from '@/components/form'
+import FormGroup from '@/components/form-group'
 import SelectTypeInput from './ValuesInputType.tsx/SelectTypeInput'
 import FieldTypeInput from './ValuesInputType.tsx/FieldTypeInput'
 import { Alert } from 'antd'
@@ -96,7 +96,7 @@ const ValuesForm = ({ data, type }: formProps) => {
                         :
                         type == null ?
                             <div>
-                                <Alert message="Please select an option type." type="info" />
+                                <Alert message="Please select an option type." type="info" showIcon style={{ color: '#307BC3' }} />
                             </div>
                             : <FieldTypeInput
                                 items={items}
