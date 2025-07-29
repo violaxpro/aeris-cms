@@ -33,7 +33,9 @@ import {
     PrintIconBlack,
     EmailBlackIcon,
     StatusIcon,
-    CopyPasteIcon
+    CopyPasteIcon,
+    DuplicateIcon,
+    WalletIcon
 } from '@public/icon'
 import Image from 'next/image'
 import ButtonIcon from '@/components/button/ButtonIcon'
@@ -584,11 +586,22 @@ const index = ({ orderData }: { orderData?: any }) => {
                                     style={{ padding: '1.2rem 1.7rem' }}
                                     onClick={() => console.log('hi')}
                                 />
+                                <ButtonAction
+                                    icon={<Image
+                                        src={DuplicateIcon}
+                                        alt='duplicate-icon'
+                                        width={15}
+                                        height={15}
+                                    />}
+                                    label='Duplicate'
+                                    style={{ padding: '1.2rem 1.7rem' }}
+                                    onClick={() => console.log('hi')}
+                                />
                                 {
                                     selectedRowKeys.length == 1 &&
                                     <ButtonAction
                                         icon={<Image
-                                            src={StatusIcon}
+                                            src={WalletIcon}
                                             alt='paynow-icon'
                                             width={15}
                                             height={15}

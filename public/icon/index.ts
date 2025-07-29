@@ -31,6 +31,8 @@ export { default as CancelIcon } from './CancelIcon.svg'
 export { default as StatusIcon } from './StatusIcon.svg'
 export { default as CopyPasteIcon } from './CopyPasteIcon.svg'
 export { default as DownloadIcon } from './DownloadIcon.svg'
+export { default as WalletIcon } from './WalletIcon.svg'
+export { default as DuplicateIcon } from './DuplicateIcon.svg'
 
 
 

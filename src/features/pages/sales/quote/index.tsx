@@ -31,7 +31,7 @@ import StatusBadge from '@/components/badge/badge-status'
 import ButtonFilter from '@/components/button/ButtonAction'
 import ButtonDelete from '@/components/button/ButtonAction'
 import Pagination from '@/components/pagination'
-import { MoreIcon, TrashIconRed, PrintIconBlack, EmailBlackIcon, StatusIcon } from '@public/icon'
+import { MoreIcon, TrashIconRed, PrintIconBlack, EmailBlackIcon, StatusIcon, DuplicateIcon } from '@public/icon'
 import ButtonAction from '@/components/button/ButtonAction'
 
 const index = ({ quoteData }: { quoteData?: any }) => {
@@ -478,6 +478,17 @@ const index = ({ quoteData }: { quoteData?: any }) => {
                                         height={15}
                                     />}
                                     label='Status'
+                                    style={{ padding: '1.2rem 1.7rem' }}
+                                    onClick={() => console.log('hi')}
+                                />
+                                <ButtonAction
+                                    icon={<Image
+                                        src={DuplicateIcon}
+                                        alt='duplicate-icon'
+                                        width={15}
+                                        height={15}
+                                    />}
+                                    label='Duplicate'
                                     style={{ padding: '1.2rem 1.7rem' }}
                                     onClick={() => console.log('hi')}
                                 />
