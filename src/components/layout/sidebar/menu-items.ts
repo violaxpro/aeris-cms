@@ -425,7 +425,7 @@ export const menuItems = [
             {
                 key: 'employee',
                 label: 'Employee',
-                href: routes.eCommerce.products,
+                href: routes.eCommerce.employee,
                 icon: UsergroupAddOutlined
             },
             {

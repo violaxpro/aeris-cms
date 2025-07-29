@@ -123,6 +123,12 @@ export const routes = {
     editLeavePermit: (slug: string) => `/ecommerce/leave-permit/${slug}/edit`,
     detailLeavePermit: (slug: string) => `/ecommerce/leave-permit/${slug}/detail`,
 
+    employee: '/ecommerce/employee',
+    createEmployee: '/ecommerce/employee/create',
+    editEmployee: (slug: string) => `/ecommerce/employee/${slug}/edit`,
+    detailEmployee: (slug: string) => `/ecommerce/employee/${slug}/detail`,
+
+
     generalSettings: '/ecommerce/general-settings',
 
     shippingMethods: '/ecommerce/shipping-methods',

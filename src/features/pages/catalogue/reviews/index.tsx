@@ -58,7 +58,7 @@ const index = ({ reviewsData }: { reviewsData?: any }) => {
             dataIndex: 'product',
         },
         {
-            title: 'Review Name',
+            title: 'Reviewer Name',
             dataIndex: 'reviewName',
         },
         {

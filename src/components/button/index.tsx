@@ -15,13 +15,13 @@ type buttonProps = {
     style?: any
     position?: 'start' | 'end'
 }
-const index = ({ btnClassname, icon, label, link, type, onClick, shape, style, position = 'start' }: buttonProps) => {
+const index = ({ btnClassname = 'w-auto !bg-[var(--default-color)]', icon, label, link, type, onClick, shape, style, position = 'start' }: buttonProps) => {
     // hover:!bg-inherit hover:!text-inherit hover:!border-inherit
     const button = (
         <Button
-            className={`!text-white w-auto !bg-[var(--default-color)] hover:!border-inherit ${btnClassname}`}
-            {...(type ? { type } : {})}
-            {...(onClick ? { onClick } : {})}
+            className={`!text-white hover:!border-inherit ${btnClassname}`}
+            type={type}
+            onClick={onClick}
             shape={shape}
             style={style}
             iconPosition={position}

@@ -39,6 +39,16 @@ export type LeavePermitType = {
     attachment: string
 }
 
+export type EmployeeType = {
+    id?: string | number | undefined
+    employee_id: string
+    employee_name: string
+    email: string
+    role: string
+    joining_date: string
+    status: string
+}
+
 export const attendanceData = [
     {
         id: 1,
@@ -149,5 +159,35 @@ export const leavePermitData: LeavePermitType[] = [
         duration: '4h 00m',
         description: 'Prepare Desain',
         attachment: ''
+    }
+]
+
+export const employeeData = [
+    {
+        id: 1,
+        employee_id: '2198087',
+        employee_name: 'Marcella Indarwati',
+        role: 'UI/UX Designer',
+        email: 'marcella@gmail.com',
+        joining_date: 'June 02, 2025',
+        status: 'Active',
+    },
+    {
+        id: 2,
+        employee_id: '2198088',
+        employee_name: 'Yuliana Dwi',
+        role: 'Front End Developer',
+        email: 'yuliana@gmail.com',
+        joining_date: 'June 02, 2025',
+        status: 'Leave',
+    },
+    {
+        id: 3,
+        employee_id: '2198089',
+        employee_name: 'Lili Purnama',
+        role: 'Back End Developer',
+        email: 'lili@gmail.com',
+        joining_date: 'June 02, 2025',
+        status: 'Resign',
     }
 ]

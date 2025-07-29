@@ -74,10 +74,6 @@ const index = () => {
             dataIndex: 'name',
         },
         {
-            title: 'Status',
-            dataIndex: 'status',
-        },
-        {
             title: 'Created At',
             dataIndex: 'created_at',
             render: (created_at: string) => {

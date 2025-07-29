@@ -1,13 +1,13 @@
-type Mode = 'create' | 'edit'
+type Mode = 'create' | 'edit' | 'detail'
 export type FormProps = {
     mode: Mode;
     initialValues?: any;
     slug?: string | number
-    dataTable? : any;
+    dataTable?: any;
 }
 
 export type ChildFormProps = {
-    formDataCreate? : any
+    formDataCreate?: any
     onChange: (params: any) => void
     dataById: any
     parentId?: string | number | null

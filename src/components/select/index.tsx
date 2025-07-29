@@ -59,9 +59,9 @@ const SelectInput: React.FC<SelectInputProps> = ({
                     value={value}
                     onChange={onChange}
                     options={options}
-                    filterSort={(a, b) =>
-                        (a?.label ?? '').toLowerCase().localeCompare((b?.label ?? '').toLowerCase())
-                    }
+                    // filterSort={(a, b) =>
+                    //     (a?.label ?? '').toLowerCase().localeCompare((b?.label ?? '').toLowerCase())
+                    // }
                     mode={modeType}
                     popupRender={popupRender}
                 />
