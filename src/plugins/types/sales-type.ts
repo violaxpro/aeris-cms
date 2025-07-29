@@ -639,7 +639,7 @@ export const quoteDummyData = [
         email: 'user@gmail.com',
         mobile_number: '628229019021203',
         payment_method: 'Bank Transfer',
-        status: 'Approved',
+        status: 'Accepted',
         payment_status: 'Waiting for Payment',
         paid_amount: 400,
         total: 400,
