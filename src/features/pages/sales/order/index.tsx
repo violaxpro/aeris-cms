@@ -24,12 +24,20 @@ import dayjs from 'dayjs';
 import DatePickerInput from '@/components/date-picker';
 import StatusTag from '@/components/tag'
 import StatusBadge from '@/components/badge/badge-status'
-import ButtonFilter from '@/components/button/ButtonAction'
-import ButtonDelete from '@/components/button/ButtonAction'
 import Pagination from '@/components/pagination'
-import { MoreIcon, TrashIconRed, FilterIcon, AddIcon } from '@public/icon'
+import {
+    MoreIcon,
+    TrashIconRed,
+    FilterIcon,
+    AddIcon,
+    PrintIconBlack,
+    EmailBlackIcon,
+    StatusIcon,
+    CopyPasteIcon
+} from '@public/icon'
 import Image from 'next/image'
-import ButtonAction from '@/components/button/ButtonIcon'
+import ButtonIcon from '@/components/button/ButtonIcon'
+import ButtonAction from '@/components/button/ButtonAction'
 import SearchTable from '@/components/search/SearchTable'
 import ShowPageSize from '@/components/pagination/ShowPageSize'
 
@@ -228,9 +236,21 @@ const index = ({ orderData }: { orderData?: any }) => {
                 return <div className="flex flex-col w-full">
                     <div className="flex justify-start gap-1">
                         <span>{row.email}</span>
+                        <Image
+                            src={CopyPasteIcon}
+                            alt='copypaste-icon'
+                            width={10}
+                            height={10}
+                        />
                     </div>
                     <div className="flex justify-start gap-1">
                         <span>{row.mobile_number}</span>
+                        <Image
+                            src={CopyPasteIcon}
+                            alt='copypaste-icon'
+                            width={10}
+                            height={10}
+                        />
                     </div>
                 </div>
             }
@@ -410,14 +430,14 @@ const index = ({ orderData }: { orderData?: any }) => {
                 return (
                     <div className='flex items-center gap-2'>
                         <Dropdown overlay={menu} trigger={['click']} >
-                            <ButtonAction
+                            <ButtonIcon
                                 color='primary'
                                 variant='filled'
                                 size="small"
                                 icon={MoreIcon}
                             />
                         </Dropdown >
-                        <ButtonAction
+                        <ButtonIcon
                             color='danger'
                             variant='filled'
                             size="small"
@@ -505,17 +525,12 @@ const index = ({ orderData }: { orderData?: any }) => {
             <Content className="mb-0">
                 <div style={{ padding: 24, minHeight: 360 }}>
                     <div className='flex justify-between mb-4 gap-2'>
-                        {/* <Button
-                                       label='Add Payment'
-                                       onClick={handleClickModalPaid}
-                                   /> */}
-
                         <div className='flex items-center gap-2'>
                             <ShowPageSize
                                 pageSize={pageSize}
                                 onChange={setPageSize}
                             />
-                            <ButtonFilter
+                            <ButtonAction
                                 label='Filter by'
                                 icon={<Image
                                     src={FilterIcon}
@@ -534,19 +549,69 @@ const index = ({ orderData }: { orderData?: any }) => {
                             />
                         </div>
                         {
-                            selectedRowKeys.length > 0 && <ButtonDelete
-                                label='Delete All'
-                                icon={<Image
-                                    src={TrashIconRed}
-                                    alt='trash-icon'
-                                    width={10}
-                                    height={10}
-                                />}
-                                onClick={() => setisOpenModalFilter(true)}
-                                position='start'
-                                style={{ padding: '1.2rem 1.7rem' }}
-                                btnClassname='btn-delete-all'
-                            />
+                            selectedRowKeys.length > 0 &&
+                            <div className='flex  gap-3'>
+                                <ButtonAction
+                                    icon={<Image
+                                        src={PrintIconBlack}
+                                        alt='print-icon'
+                                        width={15}
+                                        height={15}
+                                    />}
+                                    label='Print'
+                                    style={{ padding: '1.2rem 1.7rem' }}
+                                    onClick={() => console.log('hi')}
+                                />
+                                <ButtonAction
+                                    icon={<Image
+                                        src={EmailBlackIcon}
+                                        alt='email-icon'
+                                        width={15}
+                                        height={15}
+                                    />}
+                                    label='Email'
+                                    style={{ padding: '1.2rem 1.7rem' }}
+                                    onClick={() => console.log('hi')}
+                                />
+                                <ButtonAction
+                                    icon={<Image
+                                        src={StatusIcon}
+                                        alt='status-icon'
+                                        width={15}
+                                        height={15}
+                                    />}
+                                    label='Status'
+                                    style={{ padding: '1.2rem 1.7rem' }}
+                                    onClick={() => console.log('hi')}
+                                />
+                                {
+                                    selectedRowKeys.length == 1 &&
+                                    <ButtonAction
+                                        icon={<Image
+                                            src={StatusIcon}
+                                            alt='paynow-icon'
+                                            width={15}
+                                            height={15}
+                                        />}
+                                        label='Pay Now'
+                                        style={{ padding: '1.2rem 1.7rem' }}
+                                        onClick={() => console.log('hi')}
+                                    />
+                                }
+                                <ButtonAction
+                                    label='Delete All'
+                                    icon={<Image
+                                        src={TrashIconRed}
+                                        alt='trash-icon'
+                                        width={10}
+                                        height={10}
+                                    />}
+                                    onClick={() => setisOpenModalFilter(true)}
+                                    position='start'
+                                    style={{ padding: '1.2rem 1.7rem' }}
+                                    btnClassname='btn-delete-all'
+                                />
+                            </div>
                         }
                     </div>
                     <Table

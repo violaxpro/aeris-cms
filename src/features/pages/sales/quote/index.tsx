@@ -13,7 +13,7 @@ import Breadcrumb from "@/components/breadcrumb"
 import Input from '@/components/input'
 import { Content } from 'antd/es/layout/layout'
 import Button from "@/components/button"
-import ButtonAction from '@/components/button/ButtonIcon'
+import ButtonIcon from '@/components/button/ButtonIcon'
 import SelectInput from '@/components/select'
 import SearchInput from '@/components/search';
 import SearchTable from '@/components/search/SearchTable'
@@ -31,7 +31,8 @@ import StatusBadge from '@/components/badge/badge-status'
 import ButtonFilter from '@/components/button/ButtonAction'
 import ButtonDelete from '@/components/button/ButtonAction'
 import Pagination from '@/components/pagination'
-import { MoreIcon, TrashIconRed } from '@public/icon'
+import { MoreIcon, TrashIconRed, PrintIconBlack, EmailBlackIcon, StatusIcon } from '@public/icon'
+import ButtonAction from '@/components/button/ButtonAction'
 
 const index = ({ quoteData }: { quoteData?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
@@ -345,14 +346,14 @@ const index = ({ quoteData }: { quoteData?: any }) => {
                 return (
                     <div className='flex items-center gap-2'>
                         <Dropdown overlay={menu} trigger={['click']} >
-                            <ButtonAction
+                            <ButtonIcon
                                 color='primary'
                                 variant='filled'
                                 size="small"
                                 icon={MoreIcon}
                             />
                         </Dropdown >
-                        <ButtonAction
+                        <ButtonIcon
                             color='danger'
                             variant='filled'
                             size="small"
@@ -445,19 +446,55 @@ const index = ({ quoteData }: { quoteData?: any }) => {
                             />
                         </div>
                         {
-                            selectedRowKeys.length > 0 && <ButtonDelete
-                                label='Delete All'
-                                icon={<Image
-                                    src={TrashIconRed}
-                                    alt='trash-icon'
-                                    width={10}
-                                    height={10}
-                                />}
-                                onClick={() => setisOpenModalFilter(true)}
-                                position='start'
-                                style={{ padding: '1.2rem 1.7rem' }}
-                                btnClassname='btn-delete-all'
-                            />
+                            selectedRowKeys.length > 0 &&
+                            <div className='flex gap-3'>
+                                <ButtonAction
+                                    icon={<Image
+                                        src={PrintIconBlack}
+                                        alt='print-icon'
+                                        width={15}
+                                        height={15}
+                                    />}
+                                    label='Print'
+                                    style={{ padding: '1.2rem 1.7rem' }}
+                                    onClick={() => console.log('hi')}
+                                />
+                                <ButtonAction
+                                    icon={<Image
+                                        src={EmailBlackIcon}
+                                        alt='email-icon'
+                                        width={15}
+                                        height={15}
+                                    />}
+                                    label='Email'
+                                    style={{ padding: '1.2rem 1.7rem' }}
+                                    onClick={() => console.log('hi')}
+                                />
+                                <ButtonAction
+                                    icon={<Image
+                                        src={StatusIcon}
+                                        alt='status-icon'
+                                        width={15}
+                                        height={15}
+                                    />}
+                                    label='Status'
+                                    style={{ padding: '1.2rem 1.7rem' }}
+                                    onClick={() => console.log('hi')}
+                                />
+                                <ButtonDelete
+                                    label='Delete All'
+                                    icon={<Image
+                                        src={TrashIconRed}
+                                        alt='trash-icon'
+                                        width={10}
+                                        height={10}
+                                    />}
+                                    onClick={() => setisOpenModalFilter(true)}
+                                    position='start'
+                                    style={{ padding: '1.2rem 1.7rem' }}
+                                    btnClassname='btn-delete-all'
+                                />
+                            </div>
                         }
                     </div>
                     <Table

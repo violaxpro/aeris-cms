@@ -58,6 +58,7 @@ const ProductInput = ({
     const [items, setItems] = useState([])
     const [taxError, setTaxError] = useState('');
     const [openModal, setOpenModal] = useState(false)
+    const [modalType, setModalType] = useState<'product' | 'service' | null>(null)
     const [newProduct, setNewProduct] = useState({
         sku: '',
         name: '',
@@ -138,6 +139,11 @@ const ProductInput = ({
         }
     };
 
+    const handleOpenModal = (type: 'product' | 'service') => {
+        setModalType(type)
+        setOpenModal(true)
+    }
+
 
     // const handleAddProduct = () => {
     //     if (!productForm.tax) {
@@ -172,29 +178,32 @@ const ProductInput = ({
         <div>
             <Modal
                 open={openModal}
-                title='Create New Product'
+                title={`Create New ${modalType == 'product' ? 'Product' : 'Service'}`}
                 handleCancel={() => setOpenModal(false)}
             >
                 <div className='flex flex-col gap-4'>
                     <div className='flex flex-col gap-4'>
-                        <Input
-                            id='sku'
-                            type='text'
-                            label='SKU'
-                            value={newProduct.sku}
-                            onChange={handleNewProduct}
-                            className='mb-1'
-                            required
-                        />
-                        <Input
-                            id='name'
-                            type='text'
-                            label='Title'
-                            value={newProduct.name}
-                            onChange={handleNewProduct}
-                            className='mb-1'
-                            required
-                        />
+                        <div className='grid grid-cols-2 gap-3'>
+                            <Input
+                                id='sku'
+                                type='text'
+                                label='SKU'
+                                value={newProduct.sku}
+                                onChange={handleNewProduct}
+                                className='mb-1'
+                                required
+                            />
+                            <Input
+                                id='name'
+                                type='text'
+                                label='Title'
+                                value={newProduct.name}
+                                onChange={handleNewProduct}
+                                className='mb-1'
+                                required
+                            />
+                        </div>
+
                         <Textarea
                             id='short_desc'
                             label='Short Description'
@@ -203,7 +212,7 @@ const ProductInput = ({
                             className='mb-1'
                             required
                         />
-                        <div className='grid md:grid-cols-4 gap-3'>
+                        <div className={`grid ${modalType == 'product' ? 'grid-cols-4' : 'grid-cols-2'} gap-3`}>
                             <Input
                                 id='buy_price'
                                 type='number'
@@ -222,55 +231,61 @@ const ProductInput = ({
                                 className='mb-1'
                                 required
                             />
-                            <Input
-                                id='trade'
-                                label='Trade'
-                                type='text'
-                                placeholder='Input Trade'
-                                onChange={handleNewProduct}
-                                value={newProduct?.trade}
-                            />
+                            {
+                                modalType == 'product' &&
+                                <>
+                                    <Input
+                                        id='trade'
+                                        label='Trade'
+                                        type='text'
+                                        placeholder='Input Trade'
+                                        onChange={handleNewProduct}
+                                        value={newProduct?.trade}
+                                    />
 
-                            <Input
-                                id='silver'
-                                label='Silver'
-                                type='text'
-                                placeholder='Input Silver'
-                                onChange={handleNewProduct}
-                                value={newProduct?.silver}
-                            />
-                            <Input
-                                id='gold'
-                                label='Gold'
-                                type='text'
-                                placeholder='Input Gold'
-                                onChange={handleNewProduct}
-                                value={newProduct?.gold}
-                            />
-                            <Input
-                                id='platinum'
-                                label='Platinum'
-                                type='text'
-                                placeholder='Input Platinum'
-                                onChange={handleNewProduct}
-                                value={newProduct?.platinum}
-                            />
-                            <Input
-                                id='diamond'
-                                label='Diamond'
-                                type='text'
-                                placeholder='Input Diamond'
-                                onChange={handleNewProduct}
-                                value={newProduct?.diamond}
-                            />
-                            <div className='flex justify-start items-center pt-4'>
-                                <Button
-                                    label='Calculate'
-                                    icon={<CalculatorOutlined />}
-                                    onClick={() => console.log('calculate')}
-                                    style={{ padding: '1.2rem 1rem' }}
-                                />
-                            </div>
+                                    <Input
+                                        id='silver'
+                                        label='Silver'
+                                        type='text'
+                                        placeholder='Input Silver'
+                                        onChange={handleNewProduct}
+                                        value={newProduct?.silver}
+                                    />
+                                    <Input
+                                        id='gold'
+                                        label='Gold'
+                                        type='text'
+                                        placeholder='Input Gold'
+                                        onChange={handleNewProduct}
+                                        value={newProduct?.gold}
+                                    />
+                                    <Input
+                                        id='platinum'
+                                        label='Platinum'
+                                        type='text'
+                                        placeholder='Input Platinum'
+                                        onChange={handleNewProduct}
+                                        value={newProduct?.platinum}
+                                    />
+                                    <Input
+                                        id='diamond'
+                                        label='Diamond'
+                                        type='text'
+                                        placeholder='Input Diamond'
+                                        onChange={handleNewProduct}
+                                        value={newProduct?.diamond}
+                                    />
+                                    <div className='flex justify-start items-center pt-4'>
+                                        <Button
+                                            label='Calculate'
+                                            icon={<CalculatorOutlined />}
+                                            onClick={() => console.log('calculate')}
+                                            style={{ padding: '1.2rem 1rem' }}
+                                        />
+                                    </div>
+                                </>
+                            }
+
                         </div>
 
                     </div>
@@ -287,15 +302,6 @@ const ProductInput = ({
 
             </Modal >
             <div className='grid md:grid-cols-[2fr_2fr_1fr_1fr_1fr_1fr_1fr_50px] items-center gap-4 mb-2'>
-                {/* <Input
-                    id='sku'
-                    type='text'
-                    label='Product SKU'
-                    value={productForm.sku}
-                    onChange={handleProductChange}
-                    className='mb-1'
-                    required
-                /> */}
                 <SelectInput
                     id='sku'
                     label='SKU'
@@ -310,11 +316,16 @@ const ProductInput = ({
                     popupRender={(options: any) => (
                         <>
                             {options}
-                            <div className='p-4 flex'>
+                            <div className='p-4 flex gap-3'>
                                 <Button
-                                    label='Add New Product'
-                                    onClick={() => setOpenModal(true)}
-                                    btnClassname='w-full'
+                                    label='Add Product'
+                                    onClick={() => handleOpenModal('product')}
+                                    btnClassname='w-auto'
+                                />
+                                <Button
+                                    label='Add Service'
+                                    onClick={() => handleOpenModal('service')}
+                                    btnClassname='w-auto'
                                 />
                             </div>
 

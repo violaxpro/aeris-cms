@@ -20,6 +20,7 @@ export { default as ConvertIcon } from './ConvertIcon.svg'
 export { default as ApproveIcon } from './ApproveIcon.svg'
 export { default as MapsIcon } from './MapsIcon.svg'
 export { default as EmailIcon } from './EmailIcon.svg'
+export { default as EmailBlackIcon } from './EmailBlackIcon.svg'
 export { default as TelephoneIcon } from './TelephoneIcon.svg'
 export { default as EmployeeIcon } from './EmployeeIcon.svg'
 export { default as ArrowLeft } from './ArrowLeft.svg'
@@ -27,6 +28,9 @@ export { default as ArrowRight } from './ArrowRight.svg'
 export { default as CalenderBlueIcon } from './CalenderBlueIcon.svg'
 export { default as EyeIcon } from './EyeIcon.svg'
 export { default as CancelIcon } from './CancelIcon.svg'
+export { default as StatusIcon } from './StatusIcon.svg'
+export { default as CopyPasteIcon } from './CopyPasteIcon.svg'
+export { default as DownloadIcon } from './DownloadIcon.svg'
 
 
 

@@ -12,9 +12,9 @@ import {
     ExportIcon,
     SentEmailIcon,
     ConvertIcon,
-    ApproveIcon
+    ApproveIcon,
+    DownloadIcon
 } from '@public/icon'
-import { DownloadOutlined } from '@ant-design/icons'
 import Button from '@/components/button'
 import Table from '@/components/table'
 import { QuoteType } from '@/plugins/types/sales-type'
@@ -439,7 +439,12 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
                             onClick={() => handlePreview(invoiceData)}
                         />
                         <ButtonAction
-                            icon={<DownloadOutlined />}
+                            icon={<Image
+                                src={DownloadIcon}
+                                alt='download-icon'
+                                width={15}
+                                height={15}
+                            />}
                             label='Download PDF'
                             onClick={() => handlePrint(invoiceData)}
                         />
