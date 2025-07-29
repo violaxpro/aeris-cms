@@ -22,8 +22,7 @@ export const statusMap: Record<string, { color: string; text: string, textColor:
     Rejected: { color: '#C202051A', text: 'Rejected', textColor: '#C20205' },
     Declined: { color: '#EA00001A', text: 'Declined', textColor: '#EA0000' },
     Accepted: { color: '#3666AA1A', text: 'Accepted', textColor: '#3666AA' },
-
-
+    'Approved Permit': { color: '#01933B1A', text: 'Approved', textColor: '#01933B' },
 
 };
 

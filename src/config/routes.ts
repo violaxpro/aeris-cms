@@ -118,6 +118,11 @@ export const routes = {
     editOvertime: (slug: string) => `/ecommerce/overtime/${slug}/edit`,
     detailOvertime: (slug: string) => `/ecommerce/overtime/${slug}/detail`,
 
+    leavePermit: '/ecommerce/leave-permit',
+    creatLeavePermit: '/ecommerce/leave-permit/create',
+    editLeavePermit: (slug: string) => `/ecommerce/leave-permit/${slug}/edit`,
+    detailLeavePermit: (slug: string) => `/ecommerce/leave-permit/${slug}/detail`,
+
     generalSettings: '/ecommerce/general-settings',
 
     shippingMethods: '/ecommerce/shipping-methods',

@@ -29,13 +29,14 @@ import type { TableColumnsType } from 'antd'
 import Link from 'next/link'
 import StatusTag from '@/components/tag'
 import dayjs from 'dayjs';
-import { OvertimeType, overtimeData } from '@/plugins/types/employee-management-type'
+import { LeavePermitType, leavePermitData } from '@/plugins/types/employee-management-type'
 import { Card } from '@/components/card'
 import SelectDatePicker from '@/components/date-picker/SelectDatePicker'
 import { Avatar } from 'antd'
 import AvatarImage from "public/social-avatar.webp"
 import ButtonTab from '@/components/tab/ButtonTab'
-import ModalOvertime from './ModalOvertime'
+import ModalLeavePermit from './ModalLeavePermit'
+import CalendarComponent from '@/components/calendar'
 
 const index = ({ data }: { data?: any }) => {
     const [activeTab, setActiveTab] = useState('recap');
@@ -48,13 +49,17 @@ const index = ({ data }: { data?: any }) => {
     const [openModalForm, setOpenModalForm] = useState(false)
     const [formData, setFormData] = useState({
         full_name: '',
-        overtime_date: '',
         start_time: '',
         end_time: '',
         description: '',
         file_attachment: [],
+        leave_type: '',
+        start_date: '',
+        end_date: '',
+        date: '',
     })
-    const dataPending = overtimeData?.filter((item, index) => item.status === 'Pending')
+    const dataPending = leavePermitData?.filter((item, index) => item.status === 'Pending')
+
     const breadcrumb = [
         {
             title: 'Employee Management',
@@ -63,66 +68,64 @@ const index = ({ data }: { data?: any }) => {
             title: 'Time & Attendance',
         },
         {
-            title: 'Overtime',
+            title: 'Leave & Permit',
         },
     ]
 
-    const columns: TableColumnsType<OvertimeType> = [
-        {
-            title: 'Overtime Date',
-            dataIndex: 'overtime_date',
-            sorter: (a: any, b: any) => {
-                return new Date(a.overtime_date).getTime() - new Date(b.overtime_date).getTime()
-            },
-            render: (_: any, row: any) => {
-                return <div className="flex flex-col w-full">
-                    <div className="flex justify-start gap-1">
-                        <span>{row.overtime_date}</span>
-                    </div>
-                </div>
-
-            }
-        },
+    const columns: TableColumnsType<LeavePermitType> = [
         {
             title: 'Employee Name',
             dataIndex: 'employee_name',
             sorter: (a: any, b: any) => a.employee_name.localeCompare().b.employee_name,
             render: (_: any, row: any) => {
-                // return row.status !== 'Draft'
-                //     ? <Link href={routes.eCommerce.detailOrder(row.employee_name)}>
-                //         {row.status !== 'Draft' ? row.employee_name : '-'}
-                //     </Link>
-                //     : <span>-</span>
                 return <div className="flex w-full gap-1 items-center">
                     <Avatar style={{ backgroundColor: '#87d068' }} src={AvatarImage.src} />
                     <div className="flex flex-col justify-start gap-1">
                         <span>{row.employee_name}</span>
-                        <span className=' text-gray-500'>{row.position}</span>
+                        <span className=' text-gray-500'>{row.email}</span>
                     </div>
                 </div>
 
             }
         },
         {
-            title: 'Start Time',
-            dataIndex: 'start_time',
-            sorter: (a: any, b: any) => a.start_time.localeCompare(b.start_time),
+            title: 'Role',
+            dataIndex: 'role',
+            sorter: (a: any, b: any) => a.role.localeCompare().b.role,
+            render: (_: any, row: any) => {
+                return <span>{row.role}</span>
+
+            }
+        },
+        {
+            title: 'Leave Type',
+            dataIndex: 'leave_type',
+            sorter: (a: any, b: any) => a.leave_type.localeCompare().b.leave_type,
+            render: (_: any, row: any) => {
+                return <span>{row.leave_type}</span>
+
+            }
+        },
+        {
+            title: 'Start Date',
+            dataIndex: 'start_date',
+            sorter: (a: any, b: any) => a.start_date.localeCompare(b.start_date),
             render: (_: any, row: any) => {
                 return <div className="flex flex-col w-full">
                     <div className="flex justify-start gap-1">
-                        <span>{row.start_time}</span>
+                        <span>{row.start_date}</span>
                     </div>
                 </div>
             }
         },
         {
-            title: 'End Time',
-            dataIndex: 'end_time',
-            sorter: (a: any, b: any) => a.end_time.localeCompare(b.end_time),
+            title: 'End Date',
+            dataIndex: 'end_date',
+            sorter: (a: any, b: any) => a.end_date.localeCompare(b.end_date),
             render: (_: any, row: any) => {
                 return <div className="flex flex-col w-full">
                     <div className="flex justify-start gap-1">
-                        <span>{row.end_time}</span>
+                        <span>{row.end_date}</span>
                     </div>
                 </div>
             }
@@ -208,6 +211,8 @@ const index = ({ data }: { data?: any }) => {
     const tabs = [
         { key: 'recap', label: 'Recap' },
         { key: 'requested', label: 'Requested', badgeCount: dataPending.length },
+        { key: 'calendar', label: 'Calendar' },
+
     ];
 
     const handleChange = (field: string) => (
@@ -236,7 +241,7 @@ const index = ({ data }: { data?: any }) => {
     return (
         <>
             {contextHolder}
-            <ModalOvertime
+            <ModalLeavePermit
                 open={openModalForm}
                 handleChange={handleChange}
                 formData={formData}
@@ -247,7 +252,7 @@ const index = ({ data }: { data?: any }) => {
                 <div className='flex justify-between items-center'>
                     <div>
                         <h1 className='text-xl font-bold'>
-                            Overtime
+                            Leave & Permit
                         </h1>
                         <Breadcrumb
                             items={breadcrumb}
@@ -304,16 +309,24 @@ const index = ({ data }: { data?: any }) => {
                             </div>
 
                         </div>
-                        <Table
-                            columns={columns}
-                            dataSource={activeTab == 'recap' ? overtimeData : dataPending}
-                        />
-                        <Pagination
-                            current={currentPage}
-                            total={activeTab == 'recap' ? overtimeData.length : dataPending.length}
-                            pageSize={pageSize}
-                            onChange={(page) => setCurrentPage(page)}
-                        />
+                        {
+                            activeTab == 'calendar'
+                                ? <CalendarComponent />
+                                :
+                                <>
+                                    <Table
+                                        columns={columns}
+                                        dataSource={activeTab == 'recap' ? leavePermitData : dataPending}
+                                    />
+                                    <Pagination
+                                        current={currentPage}
+                                        total={activeTab == 'recap' ? leavePermitData.length : dataPending.length}
+                                        pageSize={pageSize}
+                                        onChange={(page) => setCurrentPage(page)}
+                                    />
+                                </>
+                        }
+
                     </div>
 
                 </div>

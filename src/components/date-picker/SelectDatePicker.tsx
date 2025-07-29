@@ -6,12 +6,14 @@ type SelectDatePickerProps = {
     value: any;
     onChange: (val: any) => void;
     options: { value: any; label: string }[];
+    width?: string
 };
 
 const SelectDatePicker: React.FC<SelectDatePickerProps> = ({
     value,
     onChange,
-    options
+    options,
+    width = '!w-30'
 }) => {
     const formattedOptions = options.map((opt) => ({
         value: opt.value,
@@ -28,7 +30,7 @@ const SelectDatePicker: React.FC<SelectDatePickerProps> = ({
             <Select
                 size="middle"
                 value={value}
-                className="w-auto !h-10"
+                className={`${width} !h-10`}
                 options={formattedOptions}
                 onChange={onChange}
             />

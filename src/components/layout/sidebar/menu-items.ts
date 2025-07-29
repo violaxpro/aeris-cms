@@ -413,7 +413,7 @@ export const menuItems = [
                     {
                         key: 'leave-permit',
                         label: 'Leave & Permit',
-                        href: routes.eCommerce.products,
+                        href: routes.eCommerce.leavePermit,
                     },
                     {
                         key: 'overtime',

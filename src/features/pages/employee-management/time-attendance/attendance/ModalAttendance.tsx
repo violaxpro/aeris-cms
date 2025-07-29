@@ -42,7 +42,10 @@ const ModalAttendance = ({ open, handleChange, formData, handleCancel, handleSub
                         placeholder='Select Attendance Type'
                         onChange={handleChange('attendance_type')}
                         options={[
-                            { label: 'Type 1', value: '1' }
+                            { label: 'Check In', value: 'Check In' },
+                            { label: 'Break', value: 'Break' },
+                            { label: 'Finish Break', value: 'Finish Break' },
+                            { label: 'Check Out', value: 'Check Out' },
                         ]}
                         value={formData.attendance_type}
                     />

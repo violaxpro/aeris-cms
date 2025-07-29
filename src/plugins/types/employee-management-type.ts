@@ -25,6 +25,20 @@ export type OvertimeType = {
     attachment: string
 }
 
+export type LeavePermitType = {
+    id?: string | number | undefined
+    employee_name: string
+    role: string
+    leave_type: string
+    email: string
+    status: string
+    start_date: string
+    end_date: string
+    duration: string
+    description: string
+    attachment: string
+}
+
 export const attendanceData = [
     {
         id: 1,
@@ -64,6 +78,74 @@ export const overtimeData = [
         status: 'Rejected',
         start_time: '07:56 AM',
         end_time: '12:03 PM',
+        duration: '4h 00m',
+        description: 'Prepare Desain',
+        attachment: ''
+    }
+]
+
+export const leavePermitData: LeavePermitType[] = [
+    {
+        id: 1,
+        employee_name: 'Marcella Indarwati',
+        role: 'UI/UX Designer',
+        leave_type: 'Annual Leave',
+        email: 'marcella@gmail.com',
+        status: 'Pending',
+        start_date: '07:56 AM',
+        end_date: '12:03 PM',
+        duration: '4h 00m',
+        description: 'Prepare Report',
+        attachment: ''
+    },
+    {
+        id: 2,
+        employee_name: 'Marcella Indarwati',
+        role: 'UI/UX Designer',
+        leave_type: 'Sick Permit',
+        email: 'marcella@gmail.com',
+        status: 'Rejected',
+        start_date: '07:56 AM',
+        end_date: '12:03 PM',
+        duration: '4h 00m',
+        description: 'Prepare Desain',
+        attachment: ''
+    },
+    {
+        id: 3,
+        employee_name: 'Marcella Indarwati',
+        role: 'UI/UX Designer',
+        leave_type: 'Early Leave',
+        email: 'marcella@gmail.com',
+        status: 'Approved',
+        start_date: '07:56 AM',
+        end_date: '12:03 PM',
+        duration: '4h 00m',
+        description: 'Prepare Desain',
+        attachment: ''
+    },
+    {
+        id: 4,
+        employee_name: 'Marcella Indarwati',
+        role: 'UI/UX Designer',
+        leave_type: 'Bereavement Leave',
+        email: 'marcella@gmail.com',
+        status: 'Approved',
+        start_date: '07:56 AM',
+        end_date: '12:03 PM',
+        duration: '4h 00m',
+        description: 'Prepare Desain',
+        attachment: ''
+    },
+    {
+        id: 5,
+        employee_name: 'Marcella Indarwati',
+        role: 'UI/UX Designer',
+        leave_type: 'Personal Permit',
+        email: 'marcella@gmail.com',
+        status: 'Approved',
+        start_date: '07:56 AM',
+        end_date: '12:03 PM',
         duration: '4h 00m',
         description: 'Prepare Desain',
         attachment: ''
