@@ -1,5 +1,5 @@
 import React from 'react'
-import FormEmployee from '@/features/pages/employee-management/employee/FormEmployee';
+import FormEmployee from '@/features/pages/employee-management/employee/FormEmployee/FormEmployee';
 import { Params } from '@/plugins/types'
 
 export default async function FormEmployeePage(props: { params: Params }) {

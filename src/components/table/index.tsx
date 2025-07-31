@@ -11,9 +11,10 @@ type tableProps<data> = {
     selectedRowKeys?: React.Key[]
     onSelectChange?: (keys: React.Key[]) => void
     pagination?: TablePaginationConfig
+    scroll?: any
 }
 
-const index = <data extends object>({ columns, dataSource, withSelectableRows = false, selectedRowKeys, onSelectChange, pagination }: tableProps<data>) => {
+const index = <data extends object>({ columns, dataSource, withSelectableRows = false, selectedRowKeys, onSelectChange, pagination, scroll = { x: 'max-content' } }: tableProps<data>) => {
     const [selectRowKeys, setSelectRowKey] = useState<React.Key[]>([]);
 
     const keys = selectedRowKeys ?? selectRowKeys;
@@ -50,7 +51,7 @@ const index = <data extends object>({ columns, dataSource, withSelectableRows = 
         rowSelection={withSelectableRows ? rowSelection : undefined}
         columns={columns}
         dataSource={dataSource}
-        scroll={{ x: 'max-content' }}
+        scroll={scroll}
         // pagination={{
         //     position: ['bottomCenter'],
         //     ...pagination,

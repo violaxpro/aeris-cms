@@ -35,9 +35,11 @@ export { default as WalletIcon } from './WalletIcon.svg'
 export { default as DuplicateIcon } from './DuplicateIcon.svg'
 export { default as MoreBlackIcon } from './MoreBlackIcon.svg'
 export { default as ChevronLeftBlackIcon } from './ChevronLeftBlackIcon.svg'
+export { default as ChevronRightBlackIcon } from './ChevronRightBlackIcon.svg'
 export { default as TelephoneGrayIcon } from './TelephoneGrayIcon.svg'
 export { default as EmailGrayIcon } from './EmailGrayIcon.svg'
 export { default as PinMapGrayIcon } from './PinMapGrayIcon.svg'
+export { default as PencilBoxIcon } from './PencilBoxIcon.svg'
 
 
 

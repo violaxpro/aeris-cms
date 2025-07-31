@@ -25,6 +25,8 @@ import AvatarImage from "public/social-avatar.webp"
 import { Divider } from 'antd';
 import EmployeeItem from '@/components/card/EmployeeItem';
 import { useRouter } from 'next/navigation';
+import EditInformation from './EditInformation';
+import DetailInformation from './DetailInformation';
 
 const FormEmployee: React.FC<FormProps> = ({ mode, initialValues }) => {
     const router = useRouter()
@@ -61,7 +63,7 @@ const FormEmployee: React.FC<FormProps> = ({ mode, initialValues }) => {
     return (
         <>
             <div className="mt-6 mx-6 mb-0">
-                <div className='flex justify-between items-center'>
+                <div className='flex md:flex-row flex-col md:justify-between md:items-center items-start'>
                     <div>
                         <h1 className='text-xl font-bold'>
                             Employee
@@ -84,8 +86,8 @@ const FormEmployee: React.FC<FormProps> = ({ mode, initialValues }) => {
 
             <Content className="mb-0">
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
-                    <div className='grid grid-cols-12 gap-4'>
-                        <div className='flex flex-col gap-3 col-span-4'>
+                    <div className='grid grid-cols-1 md:grid-cols-12 gap-4'>
+                        <div className='flex flex-col gap-3 md:col-span-4'>
                             <div className='flex items-center gap-4'>
                                 <ButtonIcon
                                     icon={ChevronLeftBlackIcon}
@@ -138,7 +140,7 @@ const FormEmployee: React.FC<FormProps> = ({ mode, initialValues }) => {
                                     <div className='flex flex-col gap-3'>
                                         <EmployeeItem label='Hired Since' value='-' />
                                         <EmployeeItem label='Employee ID' value='2198087' />
-                                        <label>Contact Information</label>
+                                        <label className='text-[#787878]'>Contact Information</label>
                                         <EmployeeItem label='Email' value='marcella29@gmail.com' />
                                         <EmployeeItem label='Phone Number' value='+62876 7654 0092' />
                                         <EmployeeItem label='Location' value='-' />
@@ -168,9 +170,12 @@ const FormEmployee: React.FC<FormProps> = ({ mode, initialValues }) => {
                                 </div>
                             </div>
                         </div>
-                        <div className='rounded-lg border border-[#E5E7EB] col-span-8'>
+                        {
+                            mode == 'edit'
+                                ? <EditInformation />
+                                : <DetailInformation />
+                        }
 
-                        </div>
                     </div>
 
                 </div>

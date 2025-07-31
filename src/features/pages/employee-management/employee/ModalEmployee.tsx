@@ -96,7 +96,7 @@ const ModalEmployee = ({ open, handleChange, formData, handleCancel, handleSubmi
                         value={formData.employee_type}
                     />
                     <SelectInput
-                        id='role/Division'
+                        id='role'
                         label='Role/Division'
                         placeholder='Select Role'
                         onChange={handleChange('role')}
