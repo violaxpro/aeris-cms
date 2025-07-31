@@ -70,11 +70,7 @@ const index = ({ returnSupplierData }: { returnSupplierData?: any }) => {
     ]
     const columns: TableColumnsType<ReturnSupplierType> = [
         {
-            title: 'ID',
-            dataIndex: 'id',
-        },
-        {
-            title: 'Purchase Id',
+            title: 'Purchase ID',
             dataIndex: 'purchase_id',
         },
         {
@@ -84,6 +80,9 @@ const index = ({ returnSupplierData }: { returnSupplierData?: any }) => {
         {
             title: 'Total',
             dataIndex: 'total',
+            render: (val) => {
+                return <span>${val}</span>
+            }
         },
         {
             title: 'Status',

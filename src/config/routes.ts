@@ -7,6 +7,12 @@ export const routes = {
     editProduct: (slug: string) => `/ecommerce/products/${slug}/edit`,
     detailProduct: (slug: string) => `/ecommerce/products/${slug}/detail`,
 
+    services: '/ecommerce/services',
+    createService: '/ecommerce/services/create',
+    serviceDetails: (slug: string) => `/ecommerce/services/${slug}`,
+    editService: (slug: string) => `/ecommerce/services/${slug}/edit`,
+    detailService: (slug: string) => `/ecommerce/services/${slug}/detail`,
+
     priceLevel: '/ecommerce/price-level',
     createPriceLevel: '/ecommerce/price-level/create',
     editPriceLevel: (slug: string) => `/ecommerce/price-level/${slug}/edit`,

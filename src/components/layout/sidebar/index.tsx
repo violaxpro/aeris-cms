@@ -114,7 +114,7 @@ const Sidebar = () => {
             className="sidebar !bg-background"
             breakpoint="lg"
             collapsedWidth="0"
-            width={250}
+            width={280}
             onBreakpoint={(broken) => {
                 console.log(broken);
             }}
@@ -135,7 +135,7 @@ const Sidebar = () => {
                 mode="inline"
                 defaultSelectedKeys={['1']}
                 items={items}
-                style={{ ...scrollAreaStyle, width: 250 }}
+                style={{ ...scrollAreaStyle, width: 280 }}
                 className="!bg-background"
             />
         </Sider>

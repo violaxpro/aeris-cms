@@ -43,6 +43,7 @@ export { default as PencilBoxIcon } from './PencilBoxIcon.svg'
 export { default as BellBlackIcon } from './BellBlackIcon.svg'
 export { default as GearBlackIcon } from './GearBlackIcon.svg'
 export { default as HeadphoneIcon } from './HeadphoneIcon.svg'
+export { default as SearchIcon } from './SearchIcon.svg'
 
 
 

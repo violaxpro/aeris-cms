@@ -90,7 +90,7 @@ const index = ({ purchasesData }: { purchasesData?: any }) => {
     ]
     const columns: TableColumnsType<PurchasesType> = [
         {
-            title: 'Order Id',
+            title: 'Order ID',
             dataIndex: 'order_id',
         },
         {
@@ -100,6 +100,9 @@ const index = ({ purchasesData }: { purchasesData?: any }) => {
         {
             title: 'Total',
             dataIndex: 'total',
+            render: (val) => {
+                return <span>${val}</span>
+            }
         },
         {
             title: 'Status',

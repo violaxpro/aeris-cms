@@ -88,7 +88,7 @@ export const menuItems = [
                     {
                         key: 'services',
                         label: 'Services',
-                        href: routes.eCommerce.products,
+                        href: routes.eCommerce.services,
                     },
                     {
                         key: 'price-level',

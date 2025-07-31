@@ -70,11 +70,7 @@ const index = ({ creditSuppliersData }: { creditSuppliersData?: any }) => {
     ]
     const columns: TableColumnsType<CreditSupplierType> = [
         {
-            title: 'ID',
-            dataIndex: 'id',
-        },
-        {
-            title: 'Purchase Id',
+            title: 'Purchase ID',
             dataIndex: 'purchase_id',
         },
         {

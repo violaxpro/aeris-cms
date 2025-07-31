@@ -69,10 +69,6 @@ const index = ({ suppliersData }: { suppliersData?: any }) => {
     ]
     const columns: TableColumnsType<SupplierListType> = [
         {
-            title: 'ID',
-            dataIndex: 'id',
-        },
-        {
             title: 'Name',
             dataIndex: 'name',
         },
