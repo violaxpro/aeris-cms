@@ -3,6 +3,8 @@ import Input from "@/components/input"
 import SelectInput from '@/components/select';
 import CheckboxInput from '@/components/checkbox';
 import Button from '@/components/button'
+import { TrashIcon, TrashIconRed } from '@public/icon';
+import ButtonIcon from '@/components/button/ButtonIcon';
 
 export interface ProductForm {
     sku: string
@@ -15,14 +17,17 @@ export interface ProductForm {
 
 interface ProductInputProps {
     productForm: ProductForm
-    setProductForm: React.Dispatch<React.SetStateAction<ProductForm>>
-    onAddProduct: () => void
+    onChange: (form: ProductForm) => void;
+    onRemove?: () => void;
+    index: number;
+    length?: number
 }
 
 const ProductInput = ({
     productForm,
-    setProductForm,
-    onAddProduct
+    onRemove,
+    onChange,
+    length
 }: ProductInputProps) => {
     const handleProductChange = (e: any) => {
         const { id, value } = e.target;
@@ -39,12 +44,12 @@ const ProductInput = ({
             updatedProductForm.total = Number(total.toFixed(2))
         }
 
-        setProductForm(updatedProductForm);
+        onChange(updatedProductForm);
     };
 
-    const handleAddProduct = () => {
-        onAddProduct()
-    };
+    // const handleAddProduct = () => {
+    //     onAddProduct()
+    // };
 
     return (
         <div>
@@ -52,7 +57,7 @@ const ProductInput = ({
                 <Input
                     id='sku'
                     type='text'
-                    label='Product SKU'
+                    label='SKU'
                     value={productForm.sku}
                     onChange={handleProductChange}
                     className='mb-1'
@@ -60,7 +65,7 @@ const ProductInput = ({
                 <Input
                     id='name'
                     type='text'
-                    label='Product Name'
+                    label='Name'
                     value={productForm.name}
                     onChange={handleProductChange}
                     className='mb-1'
@@ -99,13 +104,32 @@ const ProductInput = ({
                     onChange={handleProductChange}
                     className='mb-1'
                 />
+                {
+                    onRemove && <div className='flex item-ends justify-center mt-4 '>
+                        {
+                            length && length <= 1 ?
+                                <ButtonIcon
+                                    icon={TrashIcon}
+                                    width={20}
+                                    height={20}
+                                    className='btn-trash-item !h-10 !w-15'
+                                /> :
+                                <ButtonIcon
+                                    color='danger'
+                                    variant='filled'
+                                    size="small"
+                                    icon={TrashIconRed}
+                                    width={15}
+                                    height={15}
+                                    className='!h-10 !w-15'
+
+                                    onClick={onRemove}
+                                />
+                        }
+
+                    </div>
+                }
             </div>
-
-            <Button
-                label='Save'
-
-                onClick={handleAddProduct}
-            />
         </div>
 
     )

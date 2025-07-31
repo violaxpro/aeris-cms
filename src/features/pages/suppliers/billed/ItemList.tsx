@@ -20,14 +20,20 @@ export interface ItemListProps {
 
 interface ItemInputProps {
     itemForm: ItemListProps
-    setItemForm: React.Dispatch<React.SetStateAction<ItemListProps>>
-    onAddItem: () => void
+    // setItemForm: React.Dispatch<React.SetStateAction<ItemListProps>>
+    // onAddItem: () => void
+    onChange: (form: ItemListProps) => void;
+    onRemove?: () => void;
+    index: number;
+    length?: number
 }
 
 const ItemList = ({
     itemForm,
-    setItemForm,
-    onAddItem
+    onChange,
+    onRemove,
+    index,
+    length,
 }: ItemInputProps) => {
     const [optionsTax] = useAtom(taxSetAtom)
     const [items, setItems] = useState([])
@@ -49,7 +55,7 @@ const ItemList = ({
             updatedForm.amount = Number(total.toFixed(2))
         }
 
-        setItemForm(updatedForm);
+        onChange(updatedForm);
     };
 
     const handleChangeSelect = (id: string, value: any) => {
@@ -72,28 +78,29 @@ const ItemList = ({
 
         updateItem.amount = Number((baseTotal + taxAmount).toFixed(2));
 
-        setItemForm(updateItem);
+        onChange(updateItem);
     };
 
     const handleSelectProduct = (productName: string) => {
         const selectedProduct: any = items.find((p: any) => p.name === productName);
         if (selectedProduct) {
-            setItemForm(prev => ({
-                ...prev,
+            const updatedForm = {
+                ...itemForm,
                 item: selectedProduct.name,
-            }));
+            };
+            onChange(updatedForm);
         }
     };
 
-    const handleAddItem = () => {
-        if (!itemForm.tax_rate) {
-            setTaxError('Tax Rate is required');
-            return;
-        } else {
-            setTaxError('');
-        }
-        onAddItem()
-    };
+    // const handleAddItem = () => {
+    //     if (!itemForm.tax_rate) {
+    //         setTaxError('Tax Rate is required');
+    //         return;
+    //     } else {
+    //         setTaxError('');
+    //     }
+    //     onAddItem()
+    // };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -184,11 +191,6 @@ const ItemList = ({
                     className='mb-1'
                 />
             </div>
-            <Button
-                label='Save'
-
-                onClick={handleAddItem}
-            />
         </div>
 
     )

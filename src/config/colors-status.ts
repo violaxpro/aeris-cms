@@ -26,6 +26,11 @@ export const statusMap: Record<string, { color: string; text: string, textColor:
     'Active': { color: '#01933B1A', text: 'Active', textColor: '#01933B' },
     'Leave': { color: '#FF9E021A', text: 'Leave', textColor: '#FF9E02' },
     'Resign': { color: '#C2020514', text: 'Resign', textColor: '#C20205' },
+    'Waiting for Approval': { color: '#FF9E021A', text: 'Waiting for Approval', textColor: '#FF9E02' },
+    Paid: { color: '#01933B1A', text: 'Paid', textColor: '#01933B' },
+    'Not yet Sent': { color: '#FF9E021A', text: 'Not yet Sent', textColor: '#FF9E02' },
+    'Sent Email': { color: '#01933B1A', text: 'Sent', textColor: '#01933B' },
+
 
 };
 

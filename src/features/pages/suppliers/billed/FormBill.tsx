@@ -17,6 +17,9 @@ import ItemList, { ItemListProps } from './ItemList';
 import { getSupplier } from '@/services/supplier-list-service';
 import DatePickerInput from '@/components/date-picker';
 import dayjs from 'dayjs'
+import { Divider } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
+import OrderSummary from '../../sales/OrderSummary';
 
 const FormBilled: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const router = useRouter()
@@ -25,7 +28,7 @@ const FormBilled: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const [showAddItem, setShowAddItem] = useState(false)
     const [date, setDate] = useState<any | null>(null);
     const [itemList, setItemList] = useState<any[]>([]);
-    const [itemForm, setItemForm] = useState({
+    const [itemForm, setItemForm] = useState([{
         item: '',
         description: '',
         qty: 0,
@@ -34,7 +37,7 @@ const FormBilled: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         tax_rate: '',
         region: '',
         amount: 0
-    });
+    }]);
     const [editIndex, setEditIndex] = useState<number | null>(null)
     const [formData, setFormData] = useState({
         from: initialValues ? initialValues.from : '',
@@ -48,13 +51,14 @@ const FormBilled: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         gst: initialValues ? initialValues.gst : '',
         total: initialValues ? initialValues.total : '',
     });
+    const [profitHidden, setProfitHidden] = useState(true)
 
     const breadcrumb = [
         { title: 'Supplier' },
         {
             title: 'Bill', url: routes.eCommerce.bill
         },
-        { title: mode == 'create' ? 'Create Bill' : 'Edit Bill' },
+        { title: mode == 'create' ? 'Create' : 'Edit' },
     ];
 
     const columns: TableColumnsType<ItemListProps> = [
@@ -122,27 +126,27 @@ const FormBilled: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         setItemList(prev => prev.filter((_, i) => i !== index));
     };
 
-    const handleAddProduct = () => {
-        if (editIndex !== null) {
-            const updatedList = [...itemList];
-            updatedList[editIndex] = itemForm;
-            setItemList(updatedList);
-            setEditIndex(null);
-        } else {
-            setItemList([...itemList, itemForm]);
+    // const handleAddProduct = () => {
+    //     if (editIndex !== null) {
+    //         const updatedList = [...itemList];
+    //         updatedList[editIndex] = itemForm;
+    //         setItemList(updatedList);
+    //         setEditIndex(null);
+    //     } else {
+    //         setItemList([...itemList, itemForm]);
 
-        }
-        setItemForm({
-            item: '',
-            description: '',
-            qty: 0,
-            unit_price: 0,
-            account: '',
-            tax_rate: '',
-            region: '',
-            amount: 0
-        });
-    };
+    //     }
+    //     setItemForm({
+    //         item: '',
+    //         description: '',
+    //         qty: 0,
+    //         unit_price: 0,
+    //         account: '',
+    //         tax_rate: '',
+    //         region: '',
+    //         amount: 0
+    //     });
+    // };
     const handleChange = (e: any) => {
         const { id, value } = e.target;
         setFormData((prev) => ({
@@ -198,6 +202,34 @@ const FormBilled: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
     }
 
+    const addItem = () => {
+        setItemForm([
+            ...itemForm,
+            {
+                item: '',
+                description: '',
+                qty: 0,
+                unit_price: 0,
+                account: '',
+                tax_rate: '',
+                region: '',
+                amount: 0
+            }
+        ])
+    }
+
+    const handleRemoveRow = (index: number) => {
+        const updated = [...itemForm];
+        updated.splice(index, 1);
+        setItemForm(updated);
+    };
+
+    const handleUpdateRow = (index: number, updatedForm: ItemListProps) => {
+        const updated = [...itemForm];
+        updated[index] = updatedForm;
+        setItemForm(updated);
+    };
+
     const options = [
         { label: 'WAITING', value: 'WAITING' },
         { label: 'RECEIVE', value: 'RECEIVE' }
@@ -240,16 +272,16 @@ const FormBilled: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     return (
         <>
             {contextHolder}
-            <div className="mt-6 mx-4 mb-0">
+            <div className="mt-6 mx-6 mb-0">
                 <h1 className="text-xl font-bold mb-4">{mode == 'create' ? 'Create Bill' : 'Edit Bill'}</h1>
                 <Breadcrumb items={breadcrumb} />
             </div>
 
-            <Content className="mt-4 mx-4 mb-0">
+            <Content className="mb-0">
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
                     <div>
                         <div className='grid grid-cols-2 gap-3'>
-                            <div className='flex flex-col gap-2 mt-2'>
+                            <div className='flex flex-col gap-2'>
                                 <Input
                                     id='from'
                                     label='From'
@@ -258,6 +290,14 @@ const FormBilled: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     onChange={handleChange}
                                     value={formData.from}
                                 />
+                                <DatePickerInput
+                                    id='date'
+                                    label='Date '
+                                    value={formData.date ? dayjs(formData.date) : null}
+                                    onChange={(value: any, dateString: any) => handleDateChange('date', value, dateString)}
+                                />
+                            </div>
+                            <div className='flex flex-col gap-2'>
                                 <Input
                                     id='reference'
                                     label='Reference'
@@ -265,15 +305,6 @@ const FormBilled: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     placeholder='Input Reference'
                                     onChange={handleChange}
                                     value={formData.reference}
-                                />
-
-                            </div>
-                            <div className='flex flex-col gap-1 mt-1'>
-                                <DatePickerInput
-                                    id='date'
-                                    label='Date '
-                                    value={formData.date ? dayjs(formData.date) : null}
-                                    onChange={(value: any, dateString: any) => handleDateChange('date', value, dateString)}
                                 />
                                 <DatePickerInput
                                     id='dueDate'
@@ -284,9 +315,33 @@ const FormBilled: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             </div>
                         </div>
 
-                        <div className='mt-4'>
+                        <div className='md:my-10'>
                             <h1 className='text-lg font-bold'>Item List</h1>
-                            <Button
+                            <Divider />
+                            {
+                                itemForm.map((item, index) => {
+                                    return (
+                                        <ItemList
+                                            key={index}
+                                            index={index}
+                                            itemForm={item}
+                                            onChange={(updateItem) => handleUpdateRow(index, updateItem)}
+                                            onRemove={() => handleRemoveRow(index)}
+                                            length={itemForm.length}
+                                        />
+
+                                    )
+                                })
+                            }
+                            <Divider />
+                            <div className='flex justify-end'>
+                                <Button
+                                    label='Add Item'
+                                    icon={<PlusOutlined />}
+                                    onClick={addItem}
+                                />
+                            </div>
+                            {/* <Button
                                 label='Add Item'
                                 btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788] mt-3"
                                 onClick={() => setShowAddItem(!showAddItem)}
@@ -295,8 +350,8 @@ const FormBilled: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 showAddItem &&
                                 <ItemList
                                     itemForm={itemForm}
-                                    setItemForm={setItemForm}
-                                    onAddItem={handleAddProduct}
+                                // setItemForm={setItemForm}
+                                // onAddItem={handleAddProduct}
                                 />
                             }
                             <div className='mt-2'>
@@ -304,62 +359,21 @@ const FormBilled: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     columns={columns}
                                     dataSource={itemList}
                                 />
-                            </div>
-
+                            </div> */}
                         </div>
 
-                        <div className='flex justify-end gap-2 mt-2'>
-                            <div className='flex flex-col gap-1'>
-                                <Input
-                                    id='subtotal'
-                                    label='Subtotal'
-                                    type='number'
-                                    onChange={handleChange}
-                                    value={Number(formData.subtotal).toFixed(2)}
-                                    disabled
-                                    divClassName='flex gap-3 items-center'
-                                    className='w-full'
-                                />
-                                <Input
-                                    id='discount'
-                                    label='Discount'
-                                    type='number'
-                                    onChange={handleChange}
-                                    value={formData.discount}
-                                    divClassName='flex gap-3 items-center'
-                                    className='w-full'
-
-                                />
-                                <Input
-                                    id='shipping_fee'
-                                    label='Shipping Fee'
-                                    type='number'
-                                    onChange={handleChange}
-                                    value={formData.shipping_fee}
-                                    divClassName='flex gap-3 items-center'
-                                    className='w-full'
-                                />
-                                <Input
-                                    id='gst'
-                                    label='GST or Tax'
-                                    type='number'
-                                    onChange={handleChange}
-                                    value={formData.gst}
-                                    divClassName='flex gap-3 items-center'
-                                    className='w-full'
-                                />
-                                <Input
-                                    id='total'
-                                    label='Total'
-                                    type='number'
-                                    onChange={handleChange}
-                                    value={Number(formData.total).toFixed(2)}
-                                    disabled
-                                    divClassName='flex gap-3 items-center'
-                                    className='w-full'
+                        <div className='flex justify-end'>
+                            <div className='md:w-[20%]'>
+                                <OrderSummary
+                                    profitHidden={profitHidden}
+                                    onReveal={() => setProfitHidden(false)}
+                                    profit={100}
+                                    subtotal={1130.4}
+                                    shippingFee={50}
+                                    discount={5}
+                                    gstRate={0.1}
                                 />
                             </div>
-
                         </div>
 
                     </div>

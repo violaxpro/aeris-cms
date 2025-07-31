@@ -129,7 +129,7 @@ export const menuItems = [
             },
             {
                 key: 'supplier',
-                label: 'Supplier',
+                label: 'Suppliers',
                 href: '#',
                 icon: ShoppingOutlined,
                 children: [
@@ -139,23 +139,23 @@ export const menuItems = [
                         href: routes.eCommerce.bill,
                     },
                     {
-                        key: 'purchase',
-                        label: 'Purchase',
+                        key: 'purchases',
+                        label: 'Purchases',
                         href: routes.eCommerce.purchases,
                     },
                     {
-                        key: 'rma-supplier',
-                        label: 'RMA Supplier',
+                        key: 'rma-suppliers',
+                        label: 'RMA Suppliers',
                         href: routes.eCommerce.returnSupplier,
                     },
                     {
-                        key: 'credit-supplier',
-                        label: 'Credit Supplier',
+                        key: 'credit-suppliers',
+                        label: 'Credit Suppliers',
                         href: routes.eCommerce.creditSupplierList,
                     },
                     {
-                        key: 'supplier-list',
-                        label: 'Supplier List',
+                        key: 'supplier-lists',
+                        label: 'Supplier Lists',
                         href: routes.eCommerce.supplierList,
                     },
                 ],

@@ -17,6 +17,8 @@ import ProductInput, { ProductForm } from './ProductInput';
 import { getSupplier } from '@/services/supplier-list-service';
 import DatePickerInput from '@/components/date-picker';
 import dayjs from 'dayjs'
+import { Divider } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 
 const FormPurchases: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const router = useRouter()
@@ -25,20 +27,20 @@ const FormPurchases: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const [showAddProduct, setShowAddProduct] = useState(false)
     const [date, setDate] = useState<any | null>(null);
     const [productList, setProductList] = useState<any[]>([]);
-    const [productForm, setProductForm] = useState({
+    const [productForm, setProductForm] = useState([{
         sku: '',
         name: '',
         price: 0,
         buying_price: 0,
         qty: 0,
         total: 0,
-    });
+    }]);
     const [editIndex, setEditIndex] = useState<number | null>(null)
     const [formData, setFormData] = useState({
-        purchaseId: initialValues ? initialValues.purchase_id : '',
+        purchase_number: initialValues ? initialValues.purchase_number : '',
         user: initialValues ? initialValues.user : '',
         reference: initialValues ? initialValues.reference : '',
-        order_id: initialValues ? initialValues.order_id : '',
+        order_number: initialValues ? initialValues.order_number : '',
         supplierName: initialValues ? initialValues.supplier_name : '',
         deliveryMethod: initialValues ? initialValues.delivery_method : '',
         paymentMethod: initialValues ? initialValues.payment_method : '',
@@ -50,6 +52,9 @@ const FormPurchases: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         order_reference: initialValues ? initialValues.order_reference : '',
         delivery_note: initialValues ? initialValues.delivery_note : '',
         internal_note: initialValues ? initialValues.internal_note : '',
+        delivery_instruction: initialValues ? initialValues.delivery_instruction : '',
+        telephone: initialValues ? initialValues.telephone : '',
+        note: initialValues ? initialValues.note : '',
         subtotal: initialValues ? initialValues.subtotal : '',
         product: initialValues ? initialValues.product : [],
         discount: initialValues ? initialValues.discount : '',
@@ -63,7 +68,7 @@ const FormPurchases: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         {
             title: 'Purchases', url: routes.eCommerce.purchases
         },
-        { title: mode == 'create' ? 'Create Purchases' : 'Edit Purchases' },
+        { title: mode == 'create' ? 'Create' : 'Edit' },
     ];
 
     const columns: TableColumnsType<ProductForm> = [
@@ -112,25 +117,25 @@ const FormPurchases: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         setShowAddProduct(true);
     }
 
-    const handleAddProduct = () => {
-        if (editIndex !== null) {
-            const updatedList = [...productList];
-            updatedList[editIndex] = productForm;
-            setProductList(updatedList);
-            setEditIndex(null);
-        } else {
-            setProductList([...productList, productForm]);
+    // const handleAddProduct = () => {
+    //     if (editIndex !== null) {
+    //         const updatedList = [...productList];
+    //         updatedList[editIndex] = productForm;
+    //         setProductList(updatedList);
+    //         setEditIndex(null);
+    //     } else {
+    //         setProductList([...productList, productForm]);
 
-        }
-        setProductForm({
-            sku: '',
-            name: '',
-            price: 0,
-            buying_price: 0,
-            qty: 0,
-            total: 0,
-        });
-    };
+    //     }
+    //     setProductForm({
+    //         sku: '',
+    //         name: '',
+    //         price: 0,
+    //         buying_price: 0,
+    //         qty: 0,
+    //         total: 0,
+    //     });
+    // };
     const handleChange = (e: any) => {
         const { id, value } = e.target;
         setFormData((prev) => ({
@@ -190,9 +195,51 @@ const FormPurchases: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
     }
 
-    const options = [
-        { label: 'WAITING', value: 'WAITING' },
-        { label: 'RECEIVE', value: 'RECEIVE' }
+    const addItem = () => {
+        setProductForm([
+            ...productForm,
+            {
+                sku: '',
+                name: '',
+                price: 0,
+                buying_price: 0,
+                // trade: 0,
+                // silver: 0,
+                // gold: 0,
+                // platinum: 0,
+                // diamond: 0,
+                qty: 0,
+                // tax_rate: '',
+                // tax_amount: 0,
+                total: 0,
+            }
+        ])
+    }
+
+    const handleRemoveRow = (index: number) => {
+        const updated = [...productForm];
+        updated.splice(index, 1);
+        setProductForm(updated);
+    };
+
+    const handleUpdateRow = (index: number, updatedForm: ProductForm) => {
+        const updated = [...productForm];
+        updated[index] = updatedForm;
+        setProductForm(updated);
+    };
+
+    const optionsPaymentMethod = [
+        { label: 'Bank Transfer', value: 'Bank Transfer' },
+        { label: 'Credit Card', value: 'Credit Card' },
+        { label: 'Debit Card', value: 'Debit Card' },
+        { label: 'Cheque', value: 'Cheque' },
+        { label: 'Paypal', value: 'Paypal' },
+        { label: 'Cash', value: 'Cash' },
+    ]
+
+    const optionsDeliveryMethod = [
+        { label: 'Dropship', value: 'Dropship' },
+        { label: 'Ship to Warehouse', value: 'Ship to Warehouse' },
     ]
 
     console.log(formData, productForm)
@@ -232,107 +279,150 @@ const FormPurchases: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     return (
         <>
             {contextHolder}
-            <div className="mt-6 mx-4 mb-0">
+            <div className="mt-6 mx-6 mb-0">
                 <h1 className="text-xl font-bold mb-4">{mode == 'create' ? 'Create Purchases' : 'Edit Purchases'}</h1>
                 <Breadcrumb items={breadcrumb} />
             </div>
 
-            <Content className="mt-4 mx-4 mb-0">
+            <Content className=" mb-0">
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
                     <div>
-                        <div className='grid grid-cols-2 gap-3'>
-                            <div className='flex flex-col gap-2 mt-2'>
-                                <Input
-                                    id='purchaseId'
-                                    label='Purchase ID'
-                                    type='text'
-                                    placeholder='Input Purchase Id'
-                                    onChange={handleChange}
-                                    value={formData.purchaseId}
-                                />
-                                <Input
-                                    id='order_id'
-                                    label='Order ID'
-                                    type='text'
-                                    placeholder='Input Order ID'
-                                    onChange={handleChange}
-                                    value={formData.order_id}
-                                />
-                                <Input
-                                    id='reference'
-                                    label='Reference'
-                                    type='text'
-                                    placeholder='Input Reference'
-                                    onChange={handleChange}
-                                    value={formData.reference}
-                                />
-                                <SelectInput
-                                    id='supplierName'
-                                    label='Supplier Name'
-                                    placeholder="Select Supplier"
-                                    onChange={(val) => handleChangeSelect('supplierName', val)}
-                                    value={formData.supplierName}
-                                    options={optionSupplier}
-                                />
-                            </div>
-                            <div>
-                                <SelectInput
-                                    id='paymentMethod'
-                                    label='Payment Method'
-                                    placeholder="Select Payment Method"
-                                    onChange={(val) => handleChangeSelect('paymentMethod', val)}
-                                    value={formData.paymentMethod}
-                                    options={optionSupplier}
-                                />
-                                <SelectInput
-                                    id='deliveryMethod'
-                                    label='Delivery Method'
-                                    placeholder="Select Delivery Method"
-                                    onChange={(val) => handleChangeSelect('deliveryMethod', val)}
-                                    value={formData.deliveryMethod}
-                                    options={optionSupplier}
-                                />
-                                <DatePickerInput
-                                    id='date'
-                                    label='Date '
-                                    value={formData.date ? dayjs(formData.date) : null}
-                                    onChange={(value: any, dateString: any) => handleDateChange('date', value, dateString)}
-                                />
-                                <DatePickerInput
-                                    id='deliveryDate'
-                                    label='Delivery Date '
-                                    value={formData.deliveryDate ? dayjs(formData.deliveryDate) : null}
-                                    onChange={(value: any, dateString: any) => handleDateChange('deliveryDate', value, dateString)}
-                                />
-                            </div>
-                        </div>
-
-                        <div className='mt-4'>
-                            <h1 className='text-lg font-bold'>Product List</h1>
-                            <Button
-                                label='Add Product'
-                                btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788] mt-3"
-                                onClick={() => setShowAddProduct(!showAddProduct)}
+                        <div className='grid grid-cols-4 gap-3'>
+                            <SelectInput
+                                id='supplierName'
+                                label='Supplier Name'
+                                placeholder="Select Supplier"
+                                onChange={(val) => handleChangeSelect('supplierName', val)}
+                                value={formData.supplierName}
+                                options={optionSupplier}
                             />
-                            {
-                                showAddProduct &&
-                                <ProductInput
-                                    productForm={productForm}
-                                    setProductForm={setProductForm}
-                                    onAddProduct={handleAddProduct}
-                                />
-                            }
-                            <div className='mt-2'>
-                                <Table
-                                    columns={columns}
-                                    dataSource={productList}
-                                />
-                            </div>
-
+                            <DatePickerInput
+                                id='date'
+                                label='Date '
+                                value={formData.date ? dayjs(formData.date) : null}
+                                onChange={(value: any, dateString: any) => handleDateChange('date', value, dateString)}
+                            />
+                            <DatePickerInput
+                                id='deliveryDate'
+                                label='Delivery Date '
+                                value={formData.deliveryDate ? dayjs(formData.deliveryDate) : null}
+                                onChange={(value: any, dateString: any) => handleDateChange('deliveryDate', value, dateString)}
+                            />
+                            <Input
+                                id='reference'
+                                label='Reference'
+                                type='text'
+                                placeholder='Input Reference'
+                                onChange={handleChange}
+                                value={formData.reference}
+                            />
+                            <Input
+                                id='purchase_number'
+                                label='Purchase Number'
+                                type='text'
+                                placeholder='Input Purchase Number'
+                                onChange={handleChange}
+                                value={formData.purchase_number}
+                            />
+                            <Input
+                                id='order_number'
+                                label='Order Number'
+                                type='text'
+                                placeholder='Input Order Number'
+                                onChange={handleChange}
+                                value={formData.order_number}
+                            />
+                            <SelectInput
+                                id='paymentMethod'
+                                label='Payment Method'
+                                placeholder="Select Payment Method"
+                                onChange={(val) => handleChangeSelect('paymentMethod', val)}
+                                value={formData.paymentMethod}
+                                options={optionsPaymentMethod}
+                            />
+                            <SelectInput
+                                id='deliveryMethod'
+                                label='Delivery Method'
+                                placeholder="Select Delivery Method"
+                                onChange={(val) => handleChangeSelect('deliveryMethod', val)}
+                                value={formData.deliveryMethod}
+                                options={optionsDeliveryMethod}
+                            />
                         </div>
 
-                        <div className='flex justify-end gap-2 mt-2'>
-                            <div className='flex flex-col gap-1'>
+                        <div className='md:my-10'>
+                            <h1 className='text-lg font-bold'>Product List</h1>
+                            <Divider />
+                            {
+                                productForm.map((item, index) => {
+                                    return (
+                                        <ProductInput
+                                            key={index}
+                                            index={index}
+                                            productForm={item}
+                                            onChange={(updateItem) => handleUpdateRow(index, updateItem)}
+                                            onRemove={() => handleRemoveRow(index)}
+                                            length={productForm.length}
+                                        />
+
+                                    )
+                                })
+                            }
+                            <Divider />
+                            <div className='flex justify-end'>
+                                <Button
+                                    label='Add Product'
+                                    icon={<PlusOutlined />}
+                                    onClick={addItem}
+                                />
+                            </div>
+                        </div>
+
+                        ` <div className='grid grid-cols-[4fr_1fr] gap-4 mt-2'>
+                            <div className='grid md:grid-cols-2 gap-2'>
+                                <Textarea
+                                    id='delivery_note'
+                                    label='Delivery Address'
+                                    value={formData.delivery_note}
+                                    onChange={handleChange}
+                                />
+
+                                <Textarea
+                                    id='internal_note'
+                                    label='Attention'
+                                    value={formData.internal_note}
+                                    onChange={handleChange}
+                                />
+                                <div className='grid grid-flow-col grid-rows-3 col-span-full gap-2'>
+                                    <div className='col-span-2'>
+                                        <Input
+                                            id='telephone'
+                                            label='Telephone'
+                                            type='text'
+                                            onChange={handleChange}
+                                            value={formData.telephone}
+                                        />
+                                    </div>
+                                    <div className='col-span-2 row-span-2'>
+                                        <Textarea
+                                            id='delivery_instruction'
+                                            label='Delivery Instruction'
+                                            value={formData.delivery_instruction}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+                                    <div className='row-span-3'>
+                                        <Textarea
+                                            id='note'
+                                            label='Note'
+                                            value={formData.note}
+                                            onChange={handleChange}
+                                            textareaClassname='!h-30'
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className='grid'>
                                 <Input
                                     id='subtotal'
                                     label='Subtotal'
@@ -382,61 +472,7 @@ const FormPurchases: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     className='w-full'
                                 />
                             </div>
-
-                        </div>
-
-
-                        <div className='grid  gap-3 mt-2'>
-                            <div className='grid md:grid-cols-2 gap-2'>
-                                <div>
-                                    <Textarea
-                                        id='delivery_note'
-                                        label='Delivery Address'
-                                        value={formData.delivery_note}
-                                        onChange={handleChange}
-                                    />
-                                </div>
-                                <div>
-                                    <Textarea
-                                        id='internal_note'
-                                        label='Attention'
-                                        value={formData.internal_note}
-                                        onChange={handleChange}
-                                    />
-                                </div>
-                                <Input
-                                    id='reference'
-                                    label='Telephone'
-                                    type='text'
-                                    onChange={handleChange}
-                                    value={formData.reference}
-                                />
-                                <div>
-                                    <Textarea
-                                        id='internal_note'
-                                        label='Delivery Instruction'
-                                        value={formData.internal_note}
-                                        onChange={handleChange}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div className='grid  gap-3 mt-2'>
-                            <h1 className='text-lg font-bold'>Notes</h1>
-                            <div className='grid md:grid-cols-2 gap-2'>
-                                <div>
-                                    <Textarea
-                                        id='delivery_note'
-                                        label='Note'
-                                        value={formData.delivery_note}
-                                        onChange={handleChange}
-                                    />
-                                </div>
-
-                            </div>
-
-                        </div>
-
+                        </div>`
 
                     </div>
 
