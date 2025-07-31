@@ -38,7 +38,8 @@ export const menuItems = [
             {
                 key: 'dashboard',
                 label: 'Dashboard',
-                href: routes.eCommerce.dashboard,
+                // href: routes.eCommerce.dashboard,
+                href: '#',
                 icon: DashboardOutlined,
             },
             {

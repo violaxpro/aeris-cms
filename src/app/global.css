@@ -261,12 +261,19 @@
     /* default, kalau mau bisa dibiarkan */
 }
 
-/* Umum: styling selected item di Menu light */
-.ant-menu-light .ant-menu-item-selected {
+
+/* 1. Styling untuk root menu item yang selected */
+.ant-menu-light>.ant-menu-item-selected {
     background-color: #103654;
-    /* default Ant warna biru muda */
     color: #fff;
-    /* primary color */
+    font-weight: 600;
+}
+
+/* 2. Styling untuk submenu item yang selected */
+.ant-menu-light .ant-menu-sub .ant-menu-item-selected {
+    background-color: transparent !important;
+    color: #103654 !important;
+    font-weight: 700 !important;
 }
 
 
@@ -274,7 +281,6 @@
 .ant-menu-submenu-selected>.ant-menu-submenu-title {
     background-color: #103654 !important;
     color: #fff !important;
-
     /* color: #103654 !important;
     font-weight: 700; */
 
@@ -408,7 +414,7 @@ div {
 }
 
 .ant-menu-item-selected .bullet {
-    color: #fff !important;
+    color: #103654 !important;
 }
 
 .ant-layout {
