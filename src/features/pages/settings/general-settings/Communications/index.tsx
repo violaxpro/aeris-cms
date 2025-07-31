@@ -224,7 +224,6 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                 height={15}
                                             />}
                                             shape='round'
-                                            btnClassname='!text-white'
                                         />
                                         <SwitchInput
                                             label='Enable'
@@ -251,7 +250,6 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                 height={15}
                                             />}
                                             shape='round'
-                                            btnClassname='!text-white'
                                         />
                                         <SwitchInput
                                             label='Enable'
@@ -279,7 +277,6 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                 height={15}
                                             />}
                                             shape='round'
-                                            btnClassname='!text-white'
                                         />
 
                                         <SwitchInput
@@ -312,7 +309,6 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                     height={15}
                                                 />}
                                                 shape='round'
-                                                btnClassname='!text-white'
                                             />
 
                                             <SwitchInput
@@ -340,7 +336,6 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                     height={15}
                                                 />}
                                                 shape='round'
-                                                btnClassname='!text-white'
                                             />
 
                                             <SwitchInput
@@ -368,7 +363,6 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                 height={15}
                                             />}
                                             shape='round'
-                                            btnClassname='!text-white'
                                         />
 
                                         <SwitchInput

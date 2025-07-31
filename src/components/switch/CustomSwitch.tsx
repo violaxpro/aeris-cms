@@ -73,7 +73,7 @@ const CustomSwitch: React.FC<CustomSwitchProps> = ({
         <button
             onClick={handleToggle}
             className={`relative inline-flex items-center rounded-full px-1 transition-colors duration-300
-        ${container} ${enabled ? 'bg-[#103654]' : 'bg-[#3666AA]'} ${className}`}
+        ${container} ${enabled ? 'inset-shadow-xl inset-shadow-[#103654] bg-[#103654]' : 'inset-shadow-xl inset-shadow-[#3666AA] bg-[#3666AA]'} ${className}`}
         >
             {/* Label Aktif */}
             <span

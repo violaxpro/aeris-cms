@@ -178,7 +178,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             description="Company details information"
                             childClassName='grid md:grid-cols-3 gap-4'
                         >
-                            <div className='grid gap-4 md:h-[220px]'>
+                            <div className='md:grid gap-4 md:h-[220px]'>
                                 <FileUploader
                                     label='Logo'
                                     action="https://api-dev.alarmexpert.com.au/admin/product/cdn/upload"
@@ -278,9 +278,9 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     <div className='flex w-32'>
                                         <Button
                                             label='Add Another Address'
-                                            btnClassname="!text-white !h-10 md:mt-5"
                                             icon={<PlusOutlined />}
                                             onClick={() => setIsModalOpen(true)}
+                                            style={{ height: '5vh' }}
                                         />
                                     </div>
                                 </div>
@@ -307,7 +307,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                             <Button
                                                 icon={<PlusOutlined />}
                                                 onClick={() => addDynamicItem('phone_number')}
-                                                btnClassname='!h-10 md:mt-5'
+                                                style={{ height: '5vh', marginTop: '1.2rem' }}
                                             />
 
                                         </div>
@@ -327,7 +327,6 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                         <DeleteOutlined className='!text-inherit' />
                                                     }
                                                     onClick={() => removeDynamicItem('phone_number', index)}
-                                                    btnClassname='!h-10 md:mt-5'
                                                 />
                                             </div>
 
@@ -387,7 +386,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             title="SEO"
                             description="SEO information"
                         >
-                            <div className='flex gap-4'>
+                            <div className='flex flex-col md:flex-row gap-4'>
                                 <TextArea id='meta_title'
                                     label='Meta Title'
                                     placeholder='Input Meta Title'

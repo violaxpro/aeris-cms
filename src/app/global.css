@@ -327,6 +327,10 @@ div {
     font-family: 'Inter', sans-serif !important;
 }
 
+/* .ant-layout-content {
+    height: 100vh;
+} */
+
 /* Styling untuk bullet di child item */
 .ant-menu .menu-item-bullet::before {
     content: '•';
