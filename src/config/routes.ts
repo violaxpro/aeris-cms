@@ -134,6 +134,9 @@ export const routes = {
     editEmployee: (slug: string) => `/ecommerce/employee/${slug}/edit`,
     detailEmployee: (slug: string) => `/ecommerce/employee/${slug}/detail`,
 
+    performance: '/ecommerce/performance',
+    detailPerformance: (slug: string) => `/ecommerce/performance/${slug}/detail`,
+
     benefit: '/ecommerce/benefit',
 
     generalSettings: '/ecommerce/general-settings',

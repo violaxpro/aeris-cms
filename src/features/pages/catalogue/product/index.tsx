@@ -149,14 +149,14 @@ const index = ({ products }: { products?: any }) => {
         //     title: 'Rating',
         //     dataIndex: 'rating',
         //     render: (value: number[]) => {
-        //         // if (!value.length) return '-'
-        //         // const average = value.reduce((a, b) => a + b, 0);
-        //         // return (
-        //         //     <>
-        //         //         <Rate disabled allowHalf defaultValue={average} />
-        //         //         <span className='ms-6 text-sm'>({average.toFixed(1)})</span>
-        //         //     </>
-        //         // );
+        //         if (!value.length) return '-'
+        //         const average = value.reduce((a, b) => a + b, 0);
+        //         return (
+        //             <>
+        //                 <Rate disabled allowHalf defaultValue={average} />
+        //                 <span className='ms-6 text-sm'>({average.toFixed(1)})</span>
+        //             </>
+        //         );
         //         return value
 
         //     },

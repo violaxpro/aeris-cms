@@ -39,7 +39,7 @@ const EditInformation = () => {
     };
 
     return (
-        <div className='rounded-lg border border-[#E5E7EB] md:col-span-8 md:max-h-150'>
+        <div className='rounded-lg border border-[#E5E7EB] md:col-span-9'>
             <div className='p-6 grid md:grid-cols-2 gap-4'>
                 <div className='col-span-full'>
                     <h4 className='text-lg font-semibold'>General Information</h4>

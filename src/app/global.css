@@ -533,3 +533,14 @@ div {
 .custom-hover-tree .ant-tree-checkbox-checked {
     opacity: 1 !important;
 }
+
+/* Ganti warna bintang penuh dan setengah */
+.ant-rate-star-full,
+.ant-rate-star-half .ant-rate-star-first {
+    color: #3666AA !important;
+}
+
+/* Bagian kosong dari bintang setengah */
+.ant-rate-star-half .ant-rate-star-second>.anticon {
+    border: 10px #3666AA !important;
+}

@@ -87,7 +87,7 @@ const FormEmployee: React.FC<FormProps> = ({ mode, initialValues }) => {
             <Content className="mb-0">
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
                     <div className='grid grid-cols-1 md:grid-cols-12 gap-4'>
-                        <div className='flex flex-col gap-3 md:col-span-4'>
+                        <div className='flex flex-col gap-3 md:col-span-3'>
                             <div className='flex items-center gap-4'>
                                 <ButtonIcon
                                     icon={ChevronLeftBlackIcon}

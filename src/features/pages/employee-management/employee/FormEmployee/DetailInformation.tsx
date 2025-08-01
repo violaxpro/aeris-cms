@@ -69,7 +69,7 @@ const DetailInformation = () => {
     ];
 
     return (
-        <div className='flex flex-col md:col-span-8 gap-3'>
+        <div className='flex flex-col md:col-span-9 gap-3'>
             <div className='rounded-lg border border-[#E5E7EB] md:h-100'>
                 <div className='p-6 flex flex-col gap-4'>
                     <h4 className='text-lg font-semibold'>Employee Information</h4>

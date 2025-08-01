@@ -7,12 +7,14 @@ type ButtonActionProps = {
     onClick?: () => void
     width?: number
     height?: number
+    className?: string
 } & ButtonProps
 const ButtonAction = ({
     icon,
     onClick,
     width = 10,
     height = 10,
+    className,
     ...props
 }: ButtonActionProps) => {
     return (
@@ -28,6 +30,7 @@ const ButtonAction = ({
                     />
                 )
             }
+            className={className}
             {...props}
         />
     )

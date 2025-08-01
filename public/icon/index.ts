@@ -47,6 +47,8 @@ export { default as SearchIcon } from './SearchIcon.svg'
 export { default as AddBlackIcon } from './AddBlackIcon.svg'
 export { default as EmployeeOrangeIcon } from './EmployeeOrangeIcon.svg'
 export { default as PencilOutlineBlueIcon } from './PencilOutlineBlueIcon.svg'
+export { default as PlusFilledIcon } from './PlusFilledIcon.svg'
+export { default as MoreVerticalIcon } from './MoreVerticalIcon.svg'
 
 
 

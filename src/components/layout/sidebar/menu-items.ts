@@ -432,7 +432,7 @@ export const menuItems = [
             {
                 key: 'performance',
                 label: 'Performance',
-                href: routes.eCommerce.products,
+                href: routes.eCommerce.performance,
                 icon: TrophyOutlined
             },
             {
