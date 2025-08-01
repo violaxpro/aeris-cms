@@ -10,6 +10,7 @@ type DatePickerInputProps = {
     onChange?: DatePickerProps['onChange'];
     placeholder?: string;
     disabled?: boolean;
+    required?: boolean;
 };
 
 const DatePickerInput: React.FC<DatePickerInputProps> = ({
@@ -20,17 +21,18 @@ const DatePickerInput: React.FC<DatePickerInputProps> = ({
     onChange,
     placeholder = 'Select date',
     disabled = false,
+    required
 }) => {
     return (
         <div className="w-full">
-            {label && (
-                <label
-                    htmlFor={id}
-                    className={`block text-sm font-medium text-gray-700 ${labelClassName}`}
-                >
-                    {label}
-                </label>
-            )}
+            {
+                label && (<label htmlFor={id} className="flex justify-between items-center text-sm font-medium text-gray-700">
+                    <div>
+                        {label}
+                        {required && <span className="text-red-500 ml-1">*</span>}
+                    </div>
+                </label>)
+            }
             <DatePicker
                 id={id}
                 value={value}

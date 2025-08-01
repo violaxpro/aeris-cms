@@ -444,7 +444,7 @@ export const menuItems = [
             {
                 key: 'benefit',
                 label: 'Benefit',
-                href: routes.eCommerce.brands,
+                href: routes.eCommerce.benefit,
                 icon: GiftOutlined
             },
             {

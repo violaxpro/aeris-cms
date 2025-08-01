@@ -42,11 +42,11 @@ const StatusTag: React.FC<StatusTagProps> = ({ status, type = 'quote' }) => {
         config = statusMap['Approved Permit'];
     }
     else {
-        config = statusMap[status] || { color: 'default', text: status, textColor: 'inherit' };
+        config = statusMap[status] || { color: '#D9D9D980', text: status, textColor: '#505050' };
     }
 
     return <Tag color={config.color} bordered={false}>
-        <span style={{ color: config.textColor }} className='font-semibold'>{config.text}</span>
+        <span style={{ color: config.textColor }} className='font-semibold text-sm'>{config.text}</span>
     </Tag>;
 };
 

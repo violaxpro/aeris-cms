@@ -44,6 +44,9 @@ export { default as BellBlackIcon } from './BellBlackIcon.svg'
 export { default as GearBlackIcon } from './GearBlackIcon.svg'
 export { default as HeadphoneIcon } from './HeadphoneIcon.svg'
 export { default as SearchIcon } from './SearchIcon.svg'
+export { default as AddBlackIcon } from './AddBlackIcon.svg'
+export { default as EmployeeOrangeIcon } from './EmployeeOrangeIcon.svg'
+export { default as PencilOutlineBlueIcon } from './PencilOutlineBlueIcon.svg'
 
 
 

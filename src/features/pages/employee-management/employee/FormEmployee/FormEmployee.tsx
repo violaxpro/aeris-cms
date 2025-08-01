@@ -23,7 +23,7 @@ import ButtonIcon from '@/components/button/ButtonIcon';
 import Avatar from '@/components/avatar'
 import AvatarImage from "public/social-avatar.webp"
 import { Divider } from 'antd';
-import EmployeeItem from '@/components/card/EmployeeItem';
+import EmployeeItem from '@/components/card/DetailItem';
 import { useRouter } from 'next/navigation';
 import EditInformation from './EditInformation';
 import DetailInformation from './DetailInformation';

@@ -270,20 +270,15 @@
 }
 
 /* 2. Styling untuk submenu item yang selected */
+:where(.css-dev-only-do-not-override-pjilya).ant-menu-light .ant-menu-item-selected {
+    background-color: #103654 !important;
+    color: #fff !important;
+}
+
 .ant-menu-light .ant-menu-sub .ant-menu-item-selected {
     background-color: transparent !important;
     color: #103654 !important;
     font-weight: 700 !important;
-}
-
-
-/* Untuk parent submenu yang sedang terbuka & salah satu child-nya aktif */
-.ant-menu-submenu-selected>.ant-menu-submenu-title {
-    background-color: #103654 !important;
-    color: #fff !important;
-    /* color: #103654 !important;
-    font-weight: 700; */
-
 }
 
 

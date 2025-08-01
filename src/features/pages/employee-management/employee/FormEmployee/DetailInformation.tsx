@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import EmployeeItem from '@/components/card/EmployeeItem'
+import EmployeeItem from '@/components/card/DetailItem'
 import { Divider } from 'antd'
 import Table from '@/components/table'
 import type { TableColumnsType } from 'antd'

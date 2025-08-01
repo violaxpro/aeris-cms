@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Header } from 'antd/es/layout/layout';
 import { BellOutlined } from '@ant-design/icons';
 import Avatar from '@/components/avatar'
-import { Badge, Dropdown } from 'antd';
+import { Badge, Dropdown, Menu } from 'antd';
 import AvatarImage from "public/social-avatar.webp"
 import Image from 'next/image';
 // import logoImg from '@public/logo/Alarm Expert Logo.webp';
@@ -13,6 +13,9 @@ import SettingsDrawer from '@/components/drawer'
 import { Button } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
 import { BellBlackIcon, GearBlackIcon, HeadphoneIcon } from '@public/icon';
+import { MoreOutlined } from '@ant-design/icons';
+import { useWindowWidth } from '@react-hook/window-size';
+
 
 export default function HeaderLayout() {
     const [isScrolled, setIsScrolled] = useState(false);
@@ -34,6 +37,35 @@ export default function HeaderLayout() {
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
+
+    const onlyWidth = useWindowWidth();
+
+    const mobileMenu = (
+        <Menu
+            items={[
+                {
+                    key: 'support',
+                    label: <Button type="text" icon={<Image src={HeadphoneIcon} alt="support-icon" width={15} />}>Support</Button>
+                },
+                {
+                    key: 'notification',
+                    label: <Button type="text" icon={<Image src={BellBlackIcon} alt="bell-icon" width={15} />}>Notifications</Button>
+                },
+                {
+                    key: 'settings',
+                    label: <Button type="text" icon={<Image src={GearBlackIcon} alt="gear-icon" width={15} />} onClick={showDrawer}>Settings</Button>
+                },
+                {
+                    key: 'profile',
+                    label: <Button type="text" icon={<Image src={GearBlackIcon} alt="gear-icon" width={15} />}>Profile</Button>
+                },
+                {
+                    key: 'logout',
+                    label: <Button type="text" icon={<Image src={GearBlackIcon} alt="gear-icon" width={15} />}>Logout</Button>
+                },
+            ]}
+        />
+    );
     return (
         <Header className={`
             flex justify-between items-center
@@ -51,7 +83,7 @@ export default function HeaderLayout() {
                 />
             </div>
 
-            <div className="flex justify-between items-center gap-4 mx-6">
+            <div className="md:flex justify-between items-center gap-4 mx-6 hidden">
                 <Button className='!border-none !shadow-none'>
                     <Image
                         src={HeadphoneIcon}
@@ -91,9 +123,13 @@ export default function HeaderLayout() {
                     </div>
                 </Dropdown>
             </div>
-            <SettingsDrawer open={open} onClose={onClose}>
-                <p>content</p>
-            </SettingsDrawer>
+
+            <div className="md:hidden pr-4">
+                <Dropdown overlay={mobileMenu} placement="bottomRight" trigger={['click']}>
+                    <Button icon={<MoreOutlined />} />
+                </Dropdown>
+            </div>
+            <SettingsDrawer open={open} onClose={onClose} />
         </Header>
     );
 }
