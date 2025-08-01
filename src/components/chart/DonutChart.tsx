@@ -32,6 +32,7 @@ const DonutChart: React.FC<DonutChartProps> = ({
                 borderWidth: 15, // Bisa di-style buat tebal
                 borderRadius: 50, // Rounded edge donut
                 cutout: '75%', // Buat efek donut
+                hoverOffset: 8,
             },
         ],
     };
@@ -54,6 +55,12 @@ const DonutChart: React.FC<DonutChartProps> = ({
             },
             tooltip: {
                 enabled: true,
+                padding: 10,
+                backgroundColor: '#ffffff',
+                titleColor: '#000000',
+                bodyColor: '#000000',
+                borderColor: '#ccc',
+                borderWidth: 1,
             },
         },
         responsive: true,
@@ -61,12 +68,12 @@ const DonutChart: React.FC<DonutChartProps> = ({
     };
 
     return (
-        <div style={{ position: 'relative', width: '100%', height: 300 }}>
+        <div style={{ position: 'relative', width: '100%', height: 300 }} className='z-20'>
             <Doughnut data={data} options={options} />
             <div
                 style={{
                     position: 'absolute',
-                    top: '40%',
+                    top: '45%',
                     left: '50%',
                     transform: 'translate(-50%, -50%)',
                     textAlign: 'center',

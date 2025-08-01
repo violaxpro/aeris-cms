@@ -484,7 +484,7 @@ const index = ({ data }: { data?: any }) => {
                                     </div>
                                     <div className='w-full max-w-[320px] mx-auto'>
                                         <DonutChart
-                                            series={[1, 1, 1]} // jumlah per kategori
+                                            series={[10, 9, 8]} // jumlah per kategori
                                             labels={['Insurance', 'Allowance', 'Scholarship']}
                                         />
                                     </div>
