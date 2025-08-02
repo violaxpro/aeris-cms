@@ -4,11 +4,13 @@ const Chart = dynamic(() => import('react-apexcharts'), { ssr: false })
 
 type BarChartProps = {
     categories: string[]
-    data: number[]
+    data: number[] | number[][]
     title?: string
-    seriesName?: string
+    seriesName?: string | string[]
     color?: string
     height?: number
+    type?: string
+    columnWidth?: string
 }
 
 const BarChart: React.FC<BarChartProps> = ({
@@ -18,7 +20,23 @@ const BarChart: React.FC<BarChartProps> = ({
     seriesName = 'Data',
     color = '#3666AA',
     height = 300,
+    type = 'single',
+    columnWidth = '40%'
 }) => {
+    const isMultipleSeries = Array.isArray(seriesName) && Array.isArray(data[0])
+    const series: any = isMultipleSeries
+        ? (seriesName as string[]).map((name, index) => ({
+            name,
+            data: (data as number[][])[index],
+        }))
+        : [
+            {
+                name: seriesName as string,
+                data: data as number[],
+            },
+        ]
+
+    console.log(series, type == 'group', typeof series)
     const options: ApexCharts.ApexOptions = {
         chart: {
             type: 'bar',
@@ -42,7 +60,7 @@ const BarChart: React.FC<BarChartProps> = ({
         },
         plotOptions: {
             bar: {
-                columnWidth: '40%',
+                columnWidth: columnWidth,
                 borderRadius: 0,
             },
         },
@@ -72,7 +90,7 @@ const BarChart: React.FC<BarChartProps> = ({
             },
         },
         legend: {
-            show: true,
+            show: type == 'group' ? false : true,
             markers: {
                 fillColors: [color],
             },
@@ -82,13 +100,6 @@ const BarChart: React.FC<BarChartProps> = ({
             enabled: true,
         },
     }
-
-    const series = [
-        {
-            name: seriesName,
-            data: data,
-        },
-    ]
 
     return <Chart options={options} series={series} type="bar" height={height} />
 }

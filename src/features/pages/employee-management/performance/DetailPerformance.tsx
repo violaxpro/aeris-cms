@@ -6,13 +6,16 @@ import Table from '@/components/table'
 import type { TableColumnsType } from 'antd'
 import ButtonIcon from '@/components/button/ButtonIcon'
 import {
-    PencilBoxIcon,
     ChevronLeftBlackIcon,
-    ChevronRightBlackIcon,
     ExportIcon,
     ChevronLeftIcon,
     ChevronRightIcon,
-    ArrowRight
+    ArrowRight,
+    SquareFill,
+    LegendBlueIcon,
+    LegendPurpleIcon,
+    LegendOrangeIcon,
+    ScoreIcon
 } from '@public/icon'
 import ButtonTab from '@/components/tab/ButtonTab'
 import BarChart from '@/components/chart/BarChart'
@@ -26,13 +29,35 @@ import Image from 'next/image'
 import Breadcrumb from '@/components/breadcrumb'
 import SelectRangePicker from '@/components/date-picker/SelectRangePicker'
 import Rate from '@/components/rate'
+import Progress from '@/components/progress'
+import AreaChart from '@/components/chart/AreaChart'
 
 const DetailPerformance = ({ slug }: { slug?: any }) => {
     const router = useRouter()
     const [activeTab, setActiveTab] = useState('week');
-    const categories = ['Week 1', 'Week 2', 'Week 3', 'Week 4']
-    const data_chart = [80, 98, 100, 95]
-
+    const categories = ['January', 'Februari', 'March', 'April']
+    const series: any = [
+        {
+            name: 'On Time',
+            data: [70, 90, 85]
+        },
+        {
+            name: 'Late',
+            data: [30, 15, 5]
+        },
+        {
+            name: 'Absent',
+            data: [10, 5, 15]
+        }
+    ];
+    const seriesName = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
+    const data_chart = [
+        [44, 55, 41, 64],
+        [53, 32, 33, 52],
+        [50, 20, 60, 70],
+        [20, 45, 55, 76],
+    ];
+    console.log('ini detail', data_chart)
 
     const breadcrumb = [
         {
@@ -150,7 +175,7 @@ const DetailPerformance = ({ slug }: { slug?: any }) => {
                                 />
                                 <span className='text-lg font-semibold'>Performance Details</span>
                             </div>
-                            <div className='rounded-lg border border-[#E5E7EB] p-4'>
+                            <div className='rounded-lg border border-[#E5E7EB] p-4 md:h-167'>
                                 <div className='flex flex-col gap-4'>
                                     <div className='flex flex-col items-center gap-3'>
                                         <Avatar
@@ -178,6 +203,17 @@ const DetailPerformance = ({ slug }: { slug?: any }) => {
                                         <EmployeeItem label='Dicipline & Compliance' value='9' />
                                         <EmployeeItem label='Evaluation Notes' value='Marcella performs excellently with strong discipline and teamwork. Refining design details can further improve her output.' />
                                     </div>
+                                    <Button
+                                        label='Final Score'
+                                        icon={<Image
+                                            src={ScoreIcon}
+                                            alt='score-icon'
+                                            width={15}
+                                            height={15}
+                                        />}
+                                        btnClassname='!flex !justify-between !bg-[#0A33531A] !h-10 !hover:border-none'
+                                        labelEnd='8.8'
+                                    />
 
                                 </div>
                             </div>
@@ -200,65 +236,87 @@ const DetailPerformance = ({ slug }: { slug?: any }) => {
                                         categories={categories}
                                         data={data_chart}
                                         title=""
-                                        seriesName="June 2025"
+                                        seriesName={seriesName}
                                         color="#3666AA"
                                         height={300}
+                                        type='group'
+                                        columnWidth='100%'
                                     />
+                                    <div className='flex gap-3 justify-center items-center'>
+                                        <Image
+                                            src={SquareFill}
+                                            alt='square-icon'
+                                        />
+                                        <span className='text-sm'> Quartal 1 2025</span>
+                                    </div>
                                 </div>
                             </div>
                             <div className='md:grid md:grid-cols-[2fr_1fr] flex flex-col gap-3'>
                                 <div className='rounded-lg border border-[#E5E7EB] md:h-75 p-5'>
-                                    <div className='flex justify-between items-center mb-3'>
-                                        <h4 className='text-lg font-semibold'>Activity Chart</h4>
-                                        <ButtonTab
-                                            tabs={tabs}
-                                            activeKey={activeTab}
-                                            onTabClick={setActiveTab}
-                                        />
-                                        <Image
-                                            src={ArrowRight}
-                                            alt='arrow-right'
-                                        />
-                                        <label>9.5/10</label>
-                                    </div>
+                                    <h4 className='text-lg font-semibold'>Attendance Overview</h4>
                                     <div className='overflow-y-auto md:h-[200px]'>
-                                        <BarChart
+                                        <AreaChart
                                             categories={categories}
-                                            data={data_chart}
-                                            title=""
-                                            seriesName="June 2025"
-                                            color="#3666AA"
-                                            height={300}
+                                            series={series}
+                                            showLegend={false}
                                         />
+                                        <div className='flex gap-4 justify-center'>
+                                            <div className='flex gap-2'>
+                                                <Image
+                                                    src={LegendPurpleIcon}
+                                                    alt='legend-icon'
+                                                />
+                                                <span>On Time</span>
+                                            </div>
+                                            <div className='flex gap-2'>
+                                                <Image
+                                                    src={LegendOrangeIcon}
+                                                    alt='legend-icon'
+                                                />
+                                                <span>Late</span>
+
+                                            </div>
+                                            <div className='flex gap-2'>
+                                                <Image
+                                                    src={LegendBlueIcon}
+                                                    alt='legend-icon'
+                                                />
+                                                <span>Absent</span>
+                                            </div>
+                                        </div>
                                     </div>
 
                                 </div>
                                 <div className='rounded-lg border border-[#E5E7EB] md:h-[300px] p-5'>
-                                    <div className='flex justify-between items-center mb-3'>
-                                        <h4 className='text-lg font-semibold'>Payroll History</h4>
-                                        <ButtonIcon
-                                            icon={PencilBoxIcon}
-                                            color='primary'
-                                            variant='filled'
-                                            size="small"
-                                            width={15}
-                                        />
-
-
+                                    <div className='flex flex-col mb-3'>
+                                        <h4 className='text-lg font-semibold'>Task Completion Rate</h4>
+                                        <h4 className='md:text-xl text-lg font-semibold'>95%</h4>
+                                        <span className='text-[#A19F9F]'><b className='text-black'>20</b> Total Task Assigment </span>
                                     </div>
                                     <div className='overflow-y-auto md:h-[200px]'>
-                                        <Table
-                                            columns={columns}
-                                            dataSource={data}
-                                        />
-                                        <div className='flex justify-between mt-2'>
-                                            <ButtonIcon
-                                                icon={ChevronLeftBlackIcon}
-                                                width={8}
+                                        <div className='flex flex-col mt-2'>
+                                            <div className='flex flex-col mb-3'>
+                                                <span>18</span>
+                                                <span>Task Completed</span>
+                                            </div>
+
+                                            <Progress
+                                                completed={18}
+                                                total={20}
+                                                size={[300, 20]}
+                                                strokeColor="#3666AA"
                                             />
-                                            <ButtonIcon
-                                                icon={ChevronRightBlackIcon}
-                                                width={15}
+                                        </div>
+                                        <div className='flex flex-col mt-2'>
+                                            <div className='flex flex-col mb-3'>
+                                                <span>2</span>
+                                                <span>Remaining Task</span>
+                                            </div>
+                                            <Progress
+                                                completed={2}
+                                                total={20}
+                                                size={[300, 20]}
+                                                strokeColor="#F55053"
                                             />
                                         </div>
                                     </div>

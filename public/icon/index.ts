@@ -49,6 +49,11 @@ export { default as EmployeeOrangeIcon } from './EmployeeOrangeIcon.svg'
 export { default as PencilOutlineBlueIcon } from './PencilOutlineBlueIcon.svg'
 export { default as PlusFilledIcon } from './PlusFilledIcon.svg'
 export { default as MoreVerticalIcon } from './MoreVerticalIcon.svg'
+export { default as SquareFill } from './SquareFill.svg'
+export { default as LegendBlueIcon } from './LegendBlueIcon.svg'
+export { default as LegendOrangeIcon } from './LegendOrangeIcon.svg'
+export { default as LegendPurpleIcon } from './LegendPurpleIcon.svg'
+export { default as ScoreIcon } from './ScoreIcon.svg'
 
 
 

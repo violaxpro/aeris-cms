@@ -14,24 +14,42 @@ type buttonProps = {
     shape?: any
     style?: any
     position?: 'start' | 'end'
+    labelEnd?: string
 }
-const index = ({ btnClassname = '!w-auto !bg-[var(--default-color)] !text-white', icon, label, link, type, onClick, shape, style, position = 'start' }: buttonProps) => {
+const index = ({
+    btnClassname = '!w-auto !bg-[var(--default-color)] !text-white hover:!border-inherit',
+    icon,
+    label,
+    link,
+    type,
+    onClick,
+    shape,
+    style,
+    position = 'start',
+    labelEnd
+}: buttonProps) => {
     // hover:!bg-inherit hover:!text-inherit hover:!border-inherit
     const button = (
         <Button
-            className={`${btnClassname}  hover:!border-inherit`}
+            className={`${btnClassname}`}
             type={type}
             onClick={onClick}
             shape={shape}
             style={style}
             iconPosition={position}
         >
-            {icon ?? icon}
-            {label && <span>
-                {label}
-            </span>
+            <div className='flex gap-2'>
+                {icon ?? icon}
+                {label && <span className={`${labelEnd && 'text-[#3666AA] hover:text-[#3666AA]'}`}>
+                    {label}
+                </span>
+                }
+            </div>
+            {
+                labelEnd && <span className='text-[#3666AA] hover:text-[#3666AA]'>
+                    {labelEnd}
+                </span>
             }
-
         </Button>
     )
     return link ? (

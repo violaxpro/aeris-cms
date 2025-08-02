@@ -394,7 +394,7 @@ const index = ({ data }: { data?: any }) => {
                                             variant='filled'
                                         />
                                     </div>
-                                    <div className='w-full max-w-[320px] mx-auto flex flex-col gap-4'>
+                                    <div className='w-full flex flex-col gap-4'>
                                         <CardEmployee name='Marcella Indarwati' role='UI/UX Designer' score={4.5} />
                                         <CardEmployee name='Viola Yosevi' role='Front End Developer' score={4} />
                                     </div>

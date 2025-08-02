@@ -10,8 +10,11 @@ import BarChart from '@/components/chart/BarChart'
 
 const DetailInformation = () => {
     const [activeTab, setActiveTab] = useState('week');
-    const categories = ['Week 1', 'Week 2', 'Week 3', 'Week 4']
-    const data_chart = [80, 98, 100, 95]
+    const categoriesMonth = ['Week 1', 'Week 2', 'Week 3', 'Week 4']
+    const categoriesWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', "Friday", "Saturday"]
+
+    const data_chart_month = [80, 98, 100, 95]
+    const data_chart_week = [90, 90, 100, 95, 100, 98]
 
     const columns: TableColumnsType<any> = [
         {
@@ -118,10 +121,10 @@ const DetailInformation = () => {
                     </div>
                     <div className='overflow-y-auto md:h-[200px]'>
                         <BarChart
-                            categories={categories}
-                            data={data_chart}
+                            categories={activeTab == 'week' ? categoriesWeek : categoriesMonth}
+                            data={activeTab == 'week' ? data_chart_week : data_chart_month}
                             title=""
-                            seriesName="June 2025"
+                            seriesName={activeTab == 'week' ? 'Week 1' : 'June 2025'}
                             color="#3666AA"
                             height={300}
                         />
