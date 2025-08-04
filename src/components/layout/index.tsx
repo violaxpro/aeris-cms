@@ -1,10 +1,10 @@
 // DashboardLayout.tsx
 'use client';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Sidebar from './sidebar';
 import HeaderLayout from './header';
 import Layout from 'antd/es/layout/layout';
-import { Content, Footer } from 'antd/es/layout/layout';
+import { Grid, Drawer } from 'antd';
 import { getBrands } from '@/services/brands-service'
 import { getCategories } from '@/services/category-service'
 import { getAttributeSet } from '@/services/attribute-set-service';
@@ -13,7 +13,12 @@ import { getTaxes } from '@/services/settings-service';
 import { useAtom } from 'jotai'
 import { brandsAtom, categoriesAtom, attributeSetAtom, productSetAtom, taxSetAtom } from '@/store/DropdownItemStore'
 
+const { useBreakpoint } = Grid;
+
 export default function MainLayout({ children }: { children: React.ReactNode }) {
+    const [drawerOpen, setDrawerOpen] = useState(false);
+    const screens = useBreakpoint();
+    const isMobile = !screens.lg;
     const [optionBrands, setOptionBrands] = useAtom(brandsAtom)
     const [optionCategories, setOptionCategories] = useAtom(categoriesAtom)
     const [optionAttributeSet, setOptionAttributeSet] = useAtom(attributeSetAtom)
@@ -73,11 +78,22 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     //     </Layout>
     return (
         <Layout hasSider>
-            <Sidebar />
+            {!isMobile && <Sidebar />}
             <Layout >
-                <HeaderLayout />
+                <HeaderLayout onOpenDrawer={() => setDrawerOpen(true)} />
                 {children}
             </Layout>
+            {isMobile && (
+                <Drawer
+                    open={drawerOpen}
+                    onClose={() => setDrawerOpen(false)}
+                    placement="left"
+                    width={280}
+                    bodyStyle={{ padding: 0 }}
+                >
+                    <Sidebar onClose={() => setDrawerOpen(false)} isMobile />
+                </Drawer>
+            )}
         </Layout>
     );
 }

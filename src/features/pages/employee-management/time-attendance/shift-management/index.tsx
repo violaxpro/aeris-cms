@@ -46,7 +46,9 @@ import DonutChart from '@/components/chart/DonutChart'
 import { MoreOutlined } from '@ant-design/icons'
 import CardEmployee from '@/components/card/CardEmployee'
 import SelectRangePicker from '@/components/date-picker/SelectRangePicker'
-import ShiftSchedulerAntd from '@/components/scheduler'
+import ShiftScheduler from '@/components/scheduler'
+import ModalShift from './ModalShift'
+import ScheduleTable from '@/components/scheduler/SchedulerShift'
 
 const index = ({ data }: { data?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
@@ -58,13 +60,13 @@ const index = ({ data }: { data?: any }) => {
     const [openModalForm, setOpenModalForm] = useState(false)
     const [openModalDetail, setOpenModalDetail] = useState(false)
     const [formData, setFormData] = useState({
-        employee_name: [],
-        benefit_name: '',
-        start_date: '',
-        end_date: '',
-        description: '',
-        benefit_type: '',
-        tags: []
+        shift_type: '',
+        start_time: '',
+        end_time: '',
+        apply_on_days: [],
+        apply_on_weeks_of_month: [],
+        assign_to: [],
+        repeat_weekly: false
     })
     const [modalType, setModalType] = useState('employee-benefit')
     const [formMode, setFormMode] = useState('create')
@@ -73,7 +75,7 @@ const index = ({ data }: { data?: any }) => {
             title: 'Employee Management',
         },
         {
-            title: 'Performance',
+            title: 'Shift Management',
         },
     ]
 
@@ -187,9 +189,17 @@ const index = ({ data }: { data?: any }) => {
     const handleChange = (field: string) => (
         e: any | React.ChangeEvent<HTMLTextAreaElement>
     ) => {
-        const value = typeof e === 'string' || Array.isArray(e)
-            ? e
-            : e.target.value;
+        let value;
+
+        if (typeof e === 'string' || Array.isArray(e)) {
+            value = e;
+        } else if (typeof e === 'boolean') {
+            value = e;
+        } else if (e?.target?.type === 'checkbox') {
+            value = e.target.checked;
+        } else {
+            value = e.target.value;
+        }
 
         setFormData((prev) => ({
             ...prev,
@@ -258,68 +268,82 @@ const index = ({ data }: { data?: any }) => {
         </Menu>
     );
 
+    const employeeData = [
+        {
+            key: '1',
+            name: 'Marcella Indarwati',
+            role: 'UI/UX Designer',
+            avatar: 'https://via.placeholder.com/40',
+            start_time: ['08:00 AM'],
+            end_time: ['04:00 PM'],
+            apply_on_days: ['Monday', 'Tuesday'],
+            apply_on_week_of_mont: ['Week 1', 'Week 2'],
+            type: 'Shift 1'
+            // Monday: [{ type: 'Shift 1', time: '08:00 AM - 04:00 PM' }],
+            // Friday: [{ type: 'Shift 1', time: '08:00 AM - 04:00 PM' }],
+        },
+        {
+            key: '2',
+            name: 'Yuliana Dwi',
+            role: 'Front End Developer',
+            avatar: 'https://via.placeholder.com/40',
+            start_time: ['12:00 AM'],
+            end_time: ['08:00 AM'],
+            apply_on_days: ['Wednesday', 'Thursday'],
+            apply_on_week_of_mont: ['Week 1', 'Week 4'],
+            type: 'Shift 2'
+        },
+        {
+            key: '3',
+            name: 'Cahyo Nur',
+            role: 'Back End Developer',
+            avatar: 'https://via.placeholder.com/40',
+            start_time: ['04:00 PM'],
+            end_time: ['12:00 AM'],
+            apply_on_days: ['Thursday', 'Friday'],
+            apply_on_week_of_mont: ['Week 1', 'Week 4'],
+            type: 'Shift 3'
+        },
+        // Tambahkan lainnya sesuai kebutuhan
+    ];
+
     return (
         <>
             {contextHolder}
-            {/* <FormBenefit
+            <ModalShift
                 open={openModalForm}
                 handleChange={handleChange}
                 formData={formData}
                 handleCancel={() => setOpenModalForm(false)}
                 handleSubmit={() => setOpenModalForm(false)}
-                modalType={modalType}
-                formMode={formMode}
             />
-            <DetailBenefit
-                open={openModalDetail}
-                handleCancel={() => setOpenModalDetail(false)}
-            /> */}
             <div className="mt-6 mx-6 mb-0">
                 <div className='flex md:flex-row flex-col md:justify-between md:items-center items-start'>
                     <div>
                         <h1 className='text-xl font-bold'>
-                            Performance
+                            Shift Management
                         </h1>
                         <Breadcrumb
                             items={breadcrumb}
                         />
                     </div>
-                    <div className='flex gap-4 items-center'>
-                        <ButtonIcon
-                            icon={ChevronLeftIcon}
-                            className='cursor-pointer p-4'
-                            width={8}
-                        />
-                        <SelectRangePicker />
-                        <ButtonIcon
-                            icon={ChevronRightIcon}
-                            className='cursor-pointer'
-                            width={8}
-                        />
-                    </div>
-
+                    <Button
+                        icon={<Image
+                            src={AddIcon}
+                            alt='add-icon'
+                            width={15}
+                            height={15}
+                        />}
+                        label='Create New Shift'
+                        style={{ padding: '1.2rem' }}
+                        onClick={() => setOpenModalForm(true)}
+                    />
                 </div>
             </div>
             <Content className="mb-0">
                 <div style={{ padding: 24, minHeight: 360 }}>
                     <div className='flex flex-col gap-4'>
-                        <div className='grid md:grid-cols-4 gap-4'>
-                            <Card title='Employee Evaluated' icon={EmployeeIcon}>
-                                <span className='text-4xl font-semibold text-[#0A3353]'>53</span>
-                            </Card>
-                            <Card title='Pending Evaluations' icon={EmployeeIcon}>
-                                <span className='text-4xl font-semibold text-[#0A3353]'>14</span>
-                            </Card>
-                            <Card title='Employee Productivity' icon={EmployeeIcon}>
-                                <span className='text-4xl font-semibold text-[#0A3353]'>82%</span>
-                            </Card>
-                            <Card title='Avg. Score' icon={EmployeeIcon}>
-                                <span className='text-4xl font-semibold text-[#0A3353]'>82,6</span>
-                            </Card>
-
-                        </div>
-
-                        <div className='grid md:grid-cols-[2fr_1fr] grid-cols-1 gap-4 items-start'>
+                        <div className=' gap-4 items-start'>
                             <div className='flex flex-col justify-between mb-4 gap-2'>
                                 <div className="flex gap-2 items-center justify-between md:hidden">
                                     <SearchTable
@@ -335,10 +359,6 @@ const index = ({ data }: { data?: any }) => {
                                 </div>
                                 <div className='md:flex flex-col md:flex-row items-start md:items-center justify-between gap-4 hidden'>
                                     <div className='flex items-center gap-2'>
-                                        <ShowPageSize
-                                            pageSize={pageSize}
-                                            onChange={setPageSize}
-                                        />
                                         <ButtonFilter
                                             label='Filter by'
                                             icon={<Image
@@ -358,47 +378,21 @@ const index = ({ data }: { data?: any }) => {
                                         />
                                     </div>
 
-                                    <div className='flex items-center gap-2'>
-                                        <Button
-                                            icon={<Image
-                                                src={ExportIcon}
-                                                alt='export-icon'
-                                                width={15}
-                                                height={15}
-                                            />}
-                                            label='Export'
-                                            style={{ padding: '1.2rem' }}
-                                        // link={routes.eCommerce.editQuote}
-                                        />
-                                    </div>
-                                </div>
-                                <Table
-                                    columns={columnsBenefitEmployee}
-                                    dataSource={dataBenefitEmployee}
-                                />
-                                <Pagination
-                                    current={currentPage}
-                                    total={dataBenefitEmployee.length}
-                                    pageSize={pageSize}
-                                    onChange={(page) => setCurrentPage(page)}
-                                />
-                            </div>
-                            <div>
-                                <div className='rounded-lg border border-[#E5E7EB] md:h-[auto] p-5 flex flex-col gap-3 overflow-auto'>
-                                    <div className='flex justify-between items-center mb-3'>
-                                        <h4 className='text-lg font-semibold'>Top Performance</h4>
+                                    <div className='flex gap-4 items-center'>
                                         <ButtonIcon
-                                            icon={EmployeeOrangeIcon}
-                                            width={15}
-                                            color='orange'
-                                            variant='filled'
+                                            icon={ChevronLeftIcon}
+                                            className='cursor-pointer p-4'
+                                            width={8}
+                                        />
+                                        <SelectRangePicker />
+                                        <ButtonIcon
+                                            icon={ChevronRightIcon}
+                                            className='cursor-pointer'
+                                            width={8}
                                         />
                                     </div>
-                                    <div className='w-full flex flex-col gap-4'>
-                                        <CardEmployee name='Marcella Indarwati' role='UI/UX Designer' score={4.5} />
-                                        <CardEmployee name='Viola Yosevi' role='Front End Developer' score={4} />
-                                    </div>
                                 </div>
+                                <ShiftScheduler data={employeeData} />
                             </div>
                         </div>
                     </div>

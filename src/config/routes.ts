@@ -119,6 +119,8 @@ export const routes = {
     editAttendance: (slug: string) => `/ecommerce/attendance/${slug}/edit`,
     detailAttendance: (slug: string) => `/ecommerce/attendance/${slug}/detail`,
 
+    shiftManagement: '/ecommerce/shift-management',
+
     overtime: '/ecommerce/overtime',
     createOvertime: '/ecommerce/overtime/create',
     editOvertime: (slug: string) => `/ecommerce/overtime/${slug}/edit`,

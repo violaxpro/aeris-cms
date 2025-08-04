@@ -14,7 +14,7 @@ const style: React.CSSProperties = {
     scrollbarWidth: 'thin',
     scrollbarGutter: 'stable',
 }
-const Sidebar = () => {
+const Sidebar = ({ isMobile = false, onClose }: { isMobile?: boolean; onClose?: () => void }) => {
     const [isHovered, setIsHovered] = useState(false);
     const siderStyle: React.CSSProperties = {
         ...style,
@@ -106,22 +106,9 @@ const Sidebar = () => {
     };
 
     const items = renderMenuItems(menuItems);
-    return (
-        <Sider
-            style={siderStyle}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-            className="sidebar !bg-background"
-            breakpoint="lg"
-            collapsedWidth="0"
-            width={280}
-            onBreakpoint={(broken) => {
-                console.log('ini borken', broken);
-            }}
-            onCollapse={(collapsed, type) => {
-                console.log('ini coolapset', collapsed, type);
-            }}
-        >
+
+    const sidebarContent = (
+        <>
             <div className="logo-header">
                 <Image
                     src={logoImg}
@@ -138,6 +125,28 @@ const Sidebar = () => {
                 style={{ ...scrollAreaStyle, width: 280 }}
                 className="!bg-background"
             />
+        </>
+    )
+
+
+    return (
+        <Sider
+            style={siderStyle}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            className="sidebar !bg-background"
+            breakpoint="lg"
+            collapsedWidth="0"
+            width={280}
+            onBreakpoint={(broken) => {
+                console.log('ini borken', broken);
+            }}
+            onCollapse={(collapsed, type) => {
+                console.log('ini coolapset', collapsed, type);
+
+            }}
+        >
+            {sidebarContent}
         </Sider>
     )
 }

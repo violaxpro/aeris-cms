@@ -31,8 +31,12 @@ export const statusMap: Record<string, { color: string; text: string, textColor:
     'Not yet Sent': { color: '#FF9E021A', text: 'Not yet Sent', textColor: '#FF9E02' },
     'Sent Email': { color: '#01933B1A', text: 'Sent', textColor: '#01933B' },
     Done: { color: '#01933B1A', text: 'Done', textColor: '#01933B' },
-
-
-
 };
+
+export const colorMap: Record<string, any> = {
+    'Shift 1': { box: '#F5F7FB', border: '#3666AA' },
+    'Shift 2': { box: '#FFF8F2', border: '#FF7601' },
+    'Shift 3': { box: '#FEF6F6', border: '#F55053' },
+};
+
 

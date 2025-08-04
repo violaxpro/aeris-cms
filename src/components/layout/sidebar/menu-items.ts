@@ -409,7 +409,7 @@ export const menuItems = [
                     {
                         key: 'shift-management',
                         label: 'Shif Management',
-                        href: routes.eCommerce.products,
+                        href: routes.eCommerce.shiftManagement,
                     },
                     {
                         key: 'leave-permit',
@@ -424,35 +424,44 @@ export const menuItems = [
                 ]
             },
             {
-                key: 'employee',
-                label: 'Employee',
+                key: 'employee-management',
+                label: 'Employee Management',
                 href: routes.eCommerce.employee,
-                icon: UsergroupAddOutlined
+                icon: UsergroupAddOutlined,
+                children: [
+                    {
+                        key: 'employee',
+                        label: 'Employee',
+                        href: routes.eCommerce.employee,
+                        // icon: UsergroupAddOutlined,
+                    },
+                    {
+                        key: 'performance',
+                        label: 'Performance',
+                        href: routes.eCommerce.performance,
+                        // icon: TrophyOutlined
+                    },
+                    {
+                        key: 'report',
+                        label: 'Report',
+                        href: routes.eCommerce.report,
+                        // icon: FileTextOutlined
+                    },
+                    {
+                        key: 'benefit',
+                        label: 'Benefit',
+                        href: routes.eCommerce.benefit,
+                        // icon: GiftOutlined
+                    },
+                    {
+                        key: 'organizational',
+                        label: 'Organizational',
+                        href: routes.eCommerce.attributes,
+                        // icon: ApartmentOutlined
+                    },
+                ]
             },
-            {
-                key: 'performance',
-                label: 'Performance',
-                href: routes.eCommerce.performance,
-                icon: TrophyOutlined
-            },
-            {
-                key: 'report',
-                label: 'Report',
-                href: routes.eCommerce.report,
-                icon: FileTextOutlined
-            },
-            {
-                key: 'benefit',
-                label: 'Benefit',
-                href: routes.eCommerce.benefit,
-                icon: GiftOutlined
-            },
-            {
-                key: 'organizational',
-                label: 'Organizational',
-                href: routes.eCommerce.attributes,
-                icon: ApartmentOutlined
-            },
+
 
         ]
     },

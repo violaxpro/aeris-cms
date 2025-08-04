@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Header } from 'antd/es/layout/layout';
 import Avatar from '@/components/avatar'
-import { Badge, Dropdown, Menu } from 'antd';
+import { Badge, Dropdown, Menu, Grid, Drawer } from 'antd';
 import AvatarImage from "public/social-avatar.webp"
 import Image from 'next/image';
 // import logoImg from '@public/logo/Alarm Expert Logo.webp';
@@ -21,11 +21,14 @@ import {
     HamburgerIcon
 } from '@public/icon';
 import { MoreOutlined } from '@ant-design/icons';
-// import { useWindowWidth } from '@react-hook/window-size';
 
-export default function HeaderLayout() {
+const { useBreakpoint } = Grid;
+
+export default function HeaderLayout({ onOpenDrawer }: { onOpenDrawer?: () => void }) {
     const [isScrolled, setIsScrolled] = useState(false);
     const [open, setOpen] = useState(false);
+    const screens = useBreakpoint();
+    const isMobile = !screens.lg;
 
     const showDrawer = () => {
         setOpen(true);
@@ -44,7 +47,6 @@ export default function HeaderLayout() {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    // const onlyWidth = useWindowWidth();
 
     const mobileMenu = (
         <Menu
@@ -82,6 +84,17 @@ export default function HeaderLayout() {
         `}
             style={{ padding: '2.2rem 0' }}
         >
+            {
+                isMobile &&
+                <div className="p-4 bg-white flex items-center justify-between sticky top-0 z-100">
+                    <Image
+                        src={HamburgerIcon}
+                        alt='hamburger-icon'
+                        onClick={onOpenDrawer}
+                    />
+                    {/* <Image src={logoImg} alt="logo" width={120} height={40} /> */}
+                </div>
+            }
             <div className="flex items-center demo-logo-vertical my-2 gap-6 ml-2">
                 <SearchInput
                     placeholder="Search..."
