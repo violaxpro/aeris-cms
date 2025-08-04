@@ -1,5 +1,5 @@
 import React from 'react'
-import ReportView from '@/features/pages/employee-management/report'
+import ReportList from '@/features/pages/employee-management/report'
 // import { getAttributes } from '@/services/attributes-service'
 
 export default async function ReportPage() {
@@ -12,7 +12,7 @@ export default async function ReportPage() {
     // }
     return (
         <div>
-            <ReportView data={data} />
+            <ReportList data={data} />
         </div>
     )
 }

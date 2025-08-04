@@ -21,8 +21,7 @@ import {
     HamburgerIcon
 } from '@public/icon';
 import { MoreOutlined } from '@ant-design/icons';
-import { useWindowWidth } from '@react-hook/window-size';
-
+// import { useWindowWidth } from '@react-hook/window-size';
 
 export default function HeaderLayout() {
     const [isScrolled, setIsScrolled] = useState(false);
@@ -45,7 +44,7 @@ export default function HeaderLayout() {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    const onlyWidth = useWindowWidth();
+    // const onlyWidth = useWindowWidth();
 
     const mobileMenu = (
         <Menu
