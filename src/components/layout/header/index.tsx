@@ -2,7 +2,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { Header } from 'antd/es/layout/layout';
-import { BellOutlined } from '@ant-design/icons';
 import Avatar from '@/components/avatar'
 import { Badge, Dropdown, Menu } from 'antd';
 import AvatarImage from "public/social-avatar.webp"
@@ -11,8 +10,16 @@ import Image from 'next/image';
 import SearchInput from '@/components/search';
 import SettingsDrawer from '@/components/drawer'
 import { Button } from 'antd';
-import { SettingOutlined } from '@ant-design/icons';
-import { BellBlackIcon, GearBlackIcon, HeadphoneIcon } from '@public/icon';
+import {
+    BellBlackIcon,
+    GearBlackIcon,
+    HeadphoneIcon,
+    BellOutlinedIcon,
+    GearOutlinedIcon,
+    LogoutIcon,
+    UserIcon,
+    HamburgerIcon
+} from '@public/icon';
 import { MoreOutlined } from '@ant-design/icons';
 import { useWindowWidth } from '@react-hook/window-size';
 
@@ -49,19 +56,19 @@ export default function HeaderLayout() {
                 },
                 {
                     key: 'notification',
-                    label: <Button type="text" icon={<Image src={BellBlackIcon} alt="bell-icon" width={15} />}>Notifications</Button>
+                    label: <Button type="text" icon={<Image src={BellOutlinedIcon} alt="bell-icon" width={15} />}>Notifications</Button>
                 },
                 {
                     key: 'settings',
-                    label: <Button type="text" icon={<Image src={GearBlackIcon} alt="gear-icon" width={15} />} onClick={showDrawer}>Settings</Button>
+                    label: <Button type="text" icon={<Image src={GearOutlinedIcon} alt="gear-icon" width={15} />} onClick={showDrawer}>Settings</Button>
                 },
                 {
                     key: 'profile',
-                    label: <Button type="text" icon={<Image src={GearBlackIcon} alt="gear-icon" width={15} />}>Profile</Button>
+                    label: <Button type="text" icon={<Image src={UserIcon} alt="gear-icon" width={15} />}>Profile</Button>
                 },
                 {
                     key: 'logout',
-                    label: <Button type="text" icon={<Image src={GearBlackIcon} alt="gear-icon" width={15} />}>Logout</Button>
+                    label: <Button type="text" icon={<Image src={LogoutIcon} alt="gear-icon" width={15} />}>Logout</Button>
                 },
             ]}
         />

@@ -54,6 +54,11 @@ export { default as LegendBlueIcon } from './LegendBlueIcon.svg'
 export { default as LegendOrangeIcon } from './LegendOrangeIcon.svg'
 export { default as LegendPurpleIcon } from './LegendPurpleIcon.svg'
 export { default as ScoreIcon } from './ScoreIcon.svg'
+export { default as BellOutlinedIcon } from './BellOutlinedIcon.svg'
+export { default as GearOutlinedIcon } from './GearOutlinedIcon.svg'
+export { default as LogoutIcon } from './LogoutIcon.svg'
+export { default as HamburgerIcon } from './HamburgerIcon.svg'
+export { default as UserIcon } from './UserIcon.svg'
 
 
 

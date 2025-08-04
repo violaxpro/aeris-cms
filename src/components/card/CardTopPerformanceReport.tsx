@@ -20,7 +20,7 @@ const CardTopPerformanceReport = ({
 }: CardTopPerformanceReportType) => {
     return (
         <Card>
-            <div className='flex gap-4 items-center'>
+            <div className='flex md:flex-row flex-col gap-4 md:items-center'>
                 <div className='flex gap-3 items-center'>
                     <Avatar url={avatar} size='default' style={{ backgroundColor: '#87d068' }} />
                     <div className='flex flex-col'>

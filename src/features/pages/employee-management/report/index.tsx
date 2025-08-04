@@ -317,18 +317,18 @@ const index = ({ data }: { data?: any }) => {
                             <div className='rounded-lg border border-[#E5E7EB] md:max-h-160 overflow-auto p-6'>
                                 <div className='flex flex-col mb-3'>
                                     <h4 className='text-lg font-semibold'>Attendance Analytics</h4>
-                                    <div className='flex justify-between items-center mt-2'>
+                                    <div className='flex md:flex-row flex-col md:justify-between md:items-center mt-2'>
                                         <div className='flex gap-4 items-center'>
-                                            <h4 className='text-3xl text-[#0A3353]'>60
+                                            <h4 className='md:text-3xl text-[#0A3353]'>60
                                                 <span className='text-[#9D9D9D] text-sm'> On Time</span>
                                             </h4>
-                                            <h4 className='text-3xl text-[#0A3353]'>5
+                                            <h4 className='md:text-3xl text-[#0A3353]'>5
                                                 <span className='text-[#9D9D9D] text-sm'> Late</span>
                                             </h4>
-                                            <h4 className='text-3xl text-[#0A3353]'>2
+                                            <h4 className='md:text-3xl text-[#0A3353]'>2
                                                 <span className='text-[#9D9D9D] text-sm'> Absent</span>
                                             </h4>
-                                            <h4 className='text-3xl text-[#0A3353]'>8
+                                            <h4 className='md:text-3xl text-[#0A3353]'>8
                                                 <span className='text-[#9D9D9D] text-sm'> On Leave</span>
                                             </h4>
                                         </div>

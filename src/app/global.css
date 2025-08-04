@@ -264,16 +264,18 @@
 
 /* 1. Styling untuk root menu item yang selected */
 .ant-menu-light>.ant-menu-item-selected {
-    background-color: #103654;
-    color: #fff;
-    font-weight: 600;
+    background-color: #103654 !important;
+    color: #fff !important;
+    font-weight: 600 !important;
 }
 
 /* 2. Styling untuk submenu item yang selected */
-:where(.css-dev-only-do-not-override-pjilya).ant-menu-light .ant-menu-item-selected {
+:where(.css-dev-only-do-not-override-pjilya).ant-menu-light .ant-menu-item-selected,
+:where(.css-dev-only-do-not-override-pjilya).ant-menu-light .ant-menu-submenu-selected>.ant-menu-submenu-title {
     background-color: #103654 !important;
     color: #fff !important;
 }
+
 
 .ant-menu-light .ant-menu-sub .ant-menu-item-selected {
     background-color: transparent !important;
