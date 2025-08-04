@@ -270,8 +270,8 @@
 }
 
 /* 2. Styling untuk submenu item yang selected */
-:where(.css-dev-only-do-not-override-pjilya).ant-menu-light .ant-menu-item-selected,
-:where(.css-dev-only-do-not-override-pjilya).ant-menu-light .ant-menu-submenu-selected>.ant-menu-submenu-title {
+.ant-menu-light .ant-menu-item-selected,
+.ant-menu-light .ant-menu-submenu-selected>.ant-menu-submenu-title {
     background-color: #103654 !important;
     color: #fff !important;
 }
