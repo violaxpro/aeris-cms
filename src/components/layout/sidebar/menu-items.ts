@@ -438,7 +438,7 @@ export const menuItems = [
             {
                 key: 'report',
                 label: 'Report',
-                href: routes.eCommerce.categories,
+                href: routes.eCommerce.report,
                 icon: FileTextOutlined
             },
             {

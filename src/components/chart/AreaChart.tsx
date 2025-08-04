@@ -19,6 +19,8 @@ const index: React.FC<AreaProps> = ({
     showLegend = true,
     type = 'single',
 }) => {
+    const colors = Array.isArray(color) ? color : [color]
+
     const options: ApexCharts.ApexOptions = {
         chart: {
             type: 'area',
@@ -70,7 +72,7 @@ const index: React.FC<AreaProps> = ({
             horizontalAlign: 'center',
             fontSize: '12px',
         },
-        colors: color,
+        colors: colors,
     };
 
 

@@ -116,10 +116,10 @@ const Sidebar = () => {
             collapsedWidth="0"
             width={280}
             onBreakpoint={(broken) => {
-                console.log(broken);
+                console.log('ini borken', broken);
             }}
             onCollapse={(collapsed, type) => {
-                console.log(collapsed, type);
+                console.log('ini coolapset', collapsed, type);
             }}
         >
             <div className="logo-header">

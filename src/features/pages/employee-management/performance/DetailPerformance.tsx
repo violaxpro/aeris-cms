@@ -170,7 +170,7 @@ const DetailPerformance = ({ slug }: { slug?: any }) => {
                                 <ButtonIcon
                                     icon={ChevronLeftBlackIcon}
                                     shape='circle'
-                                    onClick={() => router.push(routes.eCommerce.employee)}
+                                    onClick={() => router.push(routes.eCommerce.performance)}
                                     className='cursor-pointer'
                                 />
                                 <span className='text-lg font-semibold'>Performance Details</span>
@@ -299,12 +299,12 @@ const DetailPerformance = ({ slug }: { slug?: any }) => {
                                                 <span>18</span>
                                                 <span>Task Completed</span>
                                             </div>
-
                                             <Progress
                                                 completed={18}
                                                 total={20}
                                                 size={[300, 20]}
                                                 strokeColor="#3666AA"
+                                                isShowLabelProgress={true}
                                             />
                                         </div>
                                         <div className='flex flex-col mt-2'>

@@ -7,10 +7,11 @@ type BarChartProps = {
     data: number[] | number[][]
     title?: string
     seriesName?: string | string[]
-    color?: string
+    color?: string | string[]
     height?: number
     type?: string
     columnWidth?: string
+    fill_type?: string
 }
 
 const BarChart: React.FC<BarChartProps> = ({
@@ -21,7 +22,8 @@ const BarChart: React.FC<BarChartProps> = ({
     color = '#3666AA',
     height = 300,
     type = 'single',
-    columnWidth = '40%'
+    columnWidth = '40%',
+    fill_type = 'gradient'
 }) => {
     const isMultipleSeries = Array.isArray(seriesName) && Array.isArray(data[0])
     const series: any = isMultipleSeries
@@ -36,7 +38,9 @@ const BarChart: React.FC<BarChartProps> = ({
             },
         ]
 
-    console.log(series, type == 'group', typeof series)
+    const colors = Array.isArray(color) ? color : [color]
+
+    // console.log(series, type == 'group', typeof series)
     const options: ApexCharts.ApexOptions = {
         chart: {
             type: 'bar',
@@ -65,19 +69,20 @@ const BarChart: React.FC<BarChartProps> = ({
             },
         },
         fill: {
-            type: 'gradient',
+            type: fill_type,
             gradient: {
                 shade: 'light',
                 type: 'vertical',
                 shadeIntensity: 0.4,
-                gradientToColors: [color],
+                gradientToColors: colors,
                 inverseColors: false,
                 opacityFrom: 0.8,
                 opacityTo: 0.1,
                 stops: [0, 100],
             },
-            colors: ['#3666AA']
+            colors: colors
         },
+        colors,
         dataLabels: {
             enabled: false,
         },
@@ -92,7 +97,7 @@ const BarChart: React.FC<BarChartProps> = ({
         legend: {
             show: type == 'group' ? false : true,
             markers: {
-                fillColors: [color],
+                fillColors: colors,
             },
             showForSingleSeries: true,
         },

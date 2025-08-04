@@ -137,6 +137,8 @@ export const routes = {
     performance: '/ecommerce/performance',
     detailPerformance: (slug: string) => `/ecommerce/performance/${slug}/detail`,
 
+    report: '/ecommerce/report',
+
     benefit: '/ecommerce/benefit',
 
     generalSettings: '/ecommerce/general-settings',
