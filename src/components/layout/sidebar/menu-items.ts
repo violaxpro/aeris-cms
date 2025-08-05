@@ -404,11 +404,11 @@ export const menuItems = [
                     {
                         key: 'timesheet',
                         label: 'Timesheet',
-                        href: routes.eCommerce.products,
+                        href: routes.eCommerce.timesheet,
                     },
                     {
                         key: 'shift-management',
-                        label: 'Shif Management',
+                        label: 'Shift Management',
                         href: routes.eCommerce.shiftManagement,
                     },
                     {
@@ -433,31 +433,26 @@ export const menuItems = [
                         key: 'employee',
                         label: 'Employee',
                         href: routes.eCommerce.employee,
-                        // icon: UsergroupAddOutlined,
                     },
                     {
                         key: 'performance',
                         label: 'Performance',
                         href: routes.eCommerce.performance,
-                        // icon: TrophyOutlined
                     },
                     {
                         key: 'report',
                         label: 'Report',
                         href: routes.eCommerce.report,
-                        // icon: FileTextOutlined
                     },
                     {
                         key: 'benefit',
                         label: 'Benefit',
                         href: routes.eCommerce.benefit,
-                        // icon: GiftOutlined
                     },
                     {
                         key: 'organizational',
                         label: 'Organizational',
-                        href: routes.eCommerce.attributes,
-                        // icon: ApartmentOutlined
+                        href: routes.eCommerce.organizational,
                     },
                 ]
             },

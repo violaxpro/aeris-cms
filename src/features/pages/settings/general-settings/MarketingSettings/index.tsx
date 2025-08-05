@@ -89,9 +89,9 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                     <div className='col-span-full w-full grid gap-4'>
                         <Input
                             id='mailchimp_api_key'
-                            label='Mailchim API KEY'
+                            label='Mailchimp API KEY'
                             type='text'
-                            placeholder='Mailchim API KEY'
+                            placeholder='Mailchimp API KEY'
                             onChange={handleChange}
                             value={formData.mailchimp_api_key}
                         />

@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { PlusFilledIcon } from '@public/icon';
 import Table from '@/components/table'
 import { colorMap } from '@/config/colors-status';
+import { mapShiftsToDays } from '@/plugins/utils/utils';
 
 const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
@@ -28,45 +29,6 @@ const ShiftBox = ({ shift }: { shift: any }) => {
         </div>
     );
 };
-
-
-// Fungsi untuk mengonversi apply_on_days menjadi shift map + colSpan
-const mapShiftsToDays = (record: any) => {
-    const mapped: Record<string, any> = {};
-    const { apply_on_days, type, start_time, end_time } = record;
-
-    for (let i = 0; i < days.length; i++) {
-        const day = days[i];
-
-        if (apply_on_days.includes(day)) {
-            let colSpan = 1;
-            // Hitung span jika hari berikutnya juga termasuk
-            while (
-                i + colSpan < days.length &&
-                apply_on_days.includes(days[i + colSpan])
-            ) {
-                colSpan++;
-            }
-
-            mapped[day] = {
-                type,
-                time: `${start_time[0]} - ${end_time[0]}`, // gunakan jam pertama
-                colSpan,
-            };
-
-            // tandai hari setelahnya untuk diskip
-            for (let j = 1; j < colSpan; j++) {
-                mapped[days[i + j]] = { skip: true };
-            }
-
-            i += colSpan - 1; // lewati yang sudah masuk span
-        }
-    }
-
-    return mapped;
-};
-
-
 
 const ShiftScheduler = ({ data }: { data: any[] }) => {
     const columns: TableColumnsType<any> = [
@@ -140,7 +102,7 @@ const ShiftScheduler = ({ data }: { data: any[] }) => {
     // Mapkan setiap data ke shiftsMapped
     const processedData = data.map((item) => ({
         ...item,
-        shiftsMapped: mapShiftsToDays(item),
+        shiftsMapped: mapShiftsToDays(days, item),
     }));
 
     return (

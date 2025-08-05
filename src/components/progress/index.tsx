@@ -5,17 +5,19 @@ type ProgressPropsType = {
     completed: number
     total: number
     isShowLabelProgress?: boolean
+    width?: number
 } & ProgressProps
 const index = ({
     completed,
     total,
     isShowLabelProgress = true,
+    width = 300,
     ...props
 }: ProgressPropsType) => {
     const percent = (completed / total) * 100;
 
     return (
-        <div style={{ position: 'relative', width: 300 }}>
+        <div style={{ position: 'relative', width: width }}>
             <Progress
                 percent={percent}
                 showInfo={false}

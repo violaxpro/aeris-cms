@@ -11,6 +11,7 @@ type DatePickerInputProps = {
     placeholder?: string;
     disabled?: boolean;
     required?: boolean;
+    showTime?: boolean
 };
 
 const DatePickerInput: React.FC<DatePickerInputProps> = ({
@@ -21,7 +22,8 @@ const DatePickerInput: React.FC<DatePickerInputProps> = ({
     onChange,
     placeholder = 'Select date',
     disabled = false,
-    required
+    required,
+    showTime = false
 }) => {
     return (
         <div className="w-full">
@@ -41,6 +43,7 @@ const DatePickerInput: React.FC<DatePickerInputProps> = ({
                 disabled={disabled}
                 style={{ width: '100%' }}
                 className='h-10'
+                showTime={showTime}
             />
         </div>
     );

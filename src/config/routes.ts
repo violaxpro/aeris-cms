@@ -119,6 +119,8 @@ export const routes = {
     editAttendance: (slug: string) => `/ecommerce/attendance/${slug}/edit`,
     detailAttendance: (slug: string) => `/ecommerce/attendance/${slug}/detail`,
 
+    timesheet: '/ecommerce/timesheet',
+
     shiftManagement: '/ecommerce/shift-management',
 
     overtime: '/ecommerce/overtime',
@@ -142,6 +144,9 @@ export const routes = {
     report: '/ecommerce/report',
 
     benefit: '/ecommerce/benefit',
+
+    organizational: '/ecommerce/organizational',
+
 
     generalSettings: '/ecommerce/general-settings',
 
