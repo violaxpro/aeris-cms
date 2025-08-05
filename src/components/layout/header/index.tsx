@@ -84,7 +84,7 @@ export default function HeaderLayout({ onOpenDrawer }: { onOpenDrawer?: () => vo
         `}
             style={{ padding: '2.2rem 0' }}
         >
-            {
+            {/* {
                 isMobile &&
                 <div className="p-4 bg-white flex items-center justify-between sticky top-0 z-100">
                     <Image
@@ -92,9 +92,9 @@ export default function HeaderLayout({ onOpenDrawer }: { onOpenDrawer?: () => vo
                         alt='hamburger-icon'
                         onClick={onOpenDrawer}
                     />
-                    {/* <Image src={logoImg} alt="logo" width={120} height={40} /> */}
+                    <Image src={logoImg} alt="logo" width={120} height={40} />
                 </div>
-            }
+            } */}
             <div className="flex items-center demo-logo-vertical my-2 gap-6 ml-2">
                 <SearchInput
                     placeholder="Search..."

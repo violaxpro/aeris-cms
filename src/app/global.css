@@ -546,3 +546,7 @@ div {
 .ant-rate-star-half .ant-rate-star-second>.anticon {
     border: 10px #3666AA !important;
 }
+
+.ant-layout-sider .ant-layout-sider-zero-width-trigger {
+    background-color: var(--default-color) !important;
+}

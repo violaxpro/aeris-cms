@@ -5,16 +5,16 @@ import Button from '@/components/button'
 import Image from 'next/image'
 import {
     AddIcon,
-    MoreIcon,
-    TrashIconRed,
     FilterIcon,
     EmployeeIcon,
-    ArrowLeft,
-    ArrowRight,
     ExportIcon,
     MoreBlackIcon,
     AddBlackIcon,
-    EmployeeOrangeIcon
+    EmployeeOrangeIcon,
+    ClockExpireIcon,
+    TotalBenefitIcon,
+    FolderActiveIcon,
+    EmployeeYellowIcon
 } from '@public/icon'
 import { routes } from '@/config/routes'
 import { useNotificationAntd } from '@/components/toast'
@@ -390,16 +390,16 @@ const index = ({ data }: { data?: any }) => {
                 <div style={{ padding: 24, minHeight: 360 }}>
                     <div className='flex flex-col gap-4'>
                         <div className='grid md:grid-cols-4 gap-4'>
-                            <Card title='Total Benefit' icon={EmployeeIcon}>
+                            <Card title='Total Benefit' icon={TotalBenefitIcon}>
                                 <span className='text-2xl font-bold'>12</span>
                             </Card>
-                            <Card title='Benefit Activated' icon={EmployeeIcon}>
+                            <Card title='Benefit Activated' icon={FolderActiveIcon} bgIcon='bg-[#01933B1A]'>
                                 <span className='text-2xl font-bold'>10</span>
                             </Card>
-                            <Card title='Covered Employees' icon={EmployeeIcon}>
+                            <Card title='Covered Employees' icon={EmployeeYellowIcon} bgIcon='bg-[#FF9E021A]'>
                                 <span className='text-2xl font-bold'>13</span>
                             </Card>
-                            <Card title='Benefits Expiring Soon' icon={EmployeeIcon}>
+                            <Card title='Benefits Expiring Soon' icon={ClockExpireIcon} bgIcon='bg-[#EA00001A]'>
                                 <span className='text-2xl font-bold'>17</span>
                             </Card>
 

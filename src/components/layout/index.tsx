@@ -78,12 +78,13 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     //     </Layout>
     return (
         <Layout hasSider>
-            {!isMobile && <Sidebar />}
+            {/* {!isMobile && <Sidebar />} */}
+            <Sidebar />
             <Layout >
                 <HeaderLayout onOpenDrawer={() => setDrawerOpen(true)} />
                 {children}
             </Layout>
-            {isMobile && (
+            {/* {isMobile && (
                 <Drawer
                     open={drawerOpen}
                     onClose={() => setDrawerOpen(false)}
@@ -93,7 +94,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                 >
                     <Sidebar onClose={() => setDrawerOpen(false)} isMobile />
                 </Drawer>
-            )}
+            )} */}
         </Layout>
     );
 }

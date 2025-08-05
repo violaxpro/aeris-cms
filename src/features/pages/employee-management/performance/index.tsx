@@ -17,7 +17,10 @@ import {
     EmployeeOrangeIcon,
     PlusFilledIcon,
     ChevronLeftIcon,
-    ChevronRightIcon
+    ChevronRightIcon,
+    ClipboardPendingIcon,
+    ProductivityIcon,
+    ChartAverageIcon
 } from '@public/icon'
 import { routes } from '@/config/routes'
 import { useNotificationAntd } from '@/components/toast'
@@ -307,13 +310,13 @@ const index = ({ data }: { data?: any }) => {
                             <Card title='Employee Evaluated' icon={EmployeeIcon}>
                                 <span className='text-4xl font-semibold text-[#0A3353]'>53</span>
                             </Card>
-                            <Card title='Pending Evaluations' icon={EmployeeIcon}>
+                            <Card title='Pending Evaluations' icon={ClipboardPendingIcon} bgIcon='bg-[#FF9E021A]' width={20}>
                                 <span className='text-4xl font-semibold text-[#0A3353]'>14</span>
                             </Card>
-                            <Card title='Employee Productivity' icon={EmployeeIcon}>
+                            <Card title='Employee Productivity' icon={ProductivityIcon} bgIcon='bg-[#01933B1A]' width={20}>
                                 <span className='text-4xl font-semibold text-[#0A3353]'>82%</span>
                             </Card>
-                            <Card title='Avg. Score' icon={EmployeeIcon}>
+                            <Card title='Avg. Score' icon={ChartAverageIcon} bgIcon='bg-[#A329041A]'>
                                 <span className='text-4xl font-semibold text-[#0A3353]'>82,6</span>
                             </Card>
 

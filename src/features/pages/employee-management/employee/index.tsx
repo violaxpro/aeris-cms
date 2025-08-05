@@ -12,7 +12,10 @@ import {
     ArrowLeft,
     ArrowRight,
     ExportIcon,
-    MoreBlackIcon
+    MoreBlackIcon,
+    UserNewIcon,
+    MaleIcon,
+    FemaleIcon
 } from '@public/icon'
 import { routes } from '@/config/routes'
 import { useNotificationAntd } from '@/components/toast'
@@ -236,13 +239,13 @@ const index = ({ data }: { data?: any }) => {
                             <Card title='Total Employees' icon={EmployeeIcon}>
                                 <span className='text-2xl font-bold'>60</span>
                             </Card>
-                            <Card title='New Employees' icon={EmployeeIcon}>
+                            <Card title='New Employees' icon={UserNewIcon}>
                                 <span className='text-2xl font-bold'>3</span>
                             </Card>
-                            <Card title='Male Employees' icon={EmployeeIcon}>
+                            <Card title='Male Employees' icon={MaleIcon} width={20}>
                                 <span className='text-2xl font-bold'>2</span>
                             </Card>
-                            <Card title='Female Employees' icon={EmployeeIcon}>
+                            <Card title='Female Employees' icon={FemaleIcon}>
                                 <span className='text-2xl font-bold'>1</span>
                             </Card>
 

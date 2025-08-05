@@ -18,7 +18,7 @@ const Sidebar = ({ isMobile = false, onClose }: { isMobile?: boolean; onClose?: 
     const [isHovered, setIsHovered] = useState(false);
     const siderStyle: React.CSSProperties = {
         ...style,
-        overflowY: 'hidden',
+        // overflowY: 'hidden',
         height: '100vh',
         // borderRight: '1px solid #e5e7eb',
     };

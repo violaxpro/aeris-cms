@@ -3,7 +3,17 @@ import React, { useState } from 'react'
 import Breadcrumb from '@/components/breadcrumb'
 import Button from '@/components/button'
 import Image from 'next/image'
-import { AddIcon, MoreIcon, TrashIconRed, FilterIcon, EmployeeIcon, ArrowLeft, ArrowRight, ExportIcon } from '@public/icon'
+import {
+    AddIcon,
+    FilterIcon,
+    ArrowLeft,
+    ArrowRight,
+    ExportIcon,
+    ClockOutlineBlueIcon,
+    ClockOutlineGreenIcon,
+    ClockOutlineOrangeIcon,
+    ClockOutlineRedIcon
+} from '@public/icon'
 import { routes } from '@/config/routes'
 import { useNotificationAntd } from '@/components/toast'
 import { Content } from 'antd/es/layout/layout'
@@ -216,16 +226,16 @@ const index = ({ data }: { data?: any }) => {
                 <div style={{ padding: 24, minHeight: 360 }}>
                     <div className='flex flex-col gap-4'>
                         <div className='grid md:grid-cols-4 gap-4'>
-                            <Card title='On Time' icon={EmployeeIcon}>
+                            <Card title='On Time' icon={ClockOutlineGreenIcon} bgIcon='bg-[#01933B1A]'>
                                 <span className='text-2xl font-bold'>60</span>
                             </Card>
-                            <Card title='Late' icon={EmployeeIcon}>
+                            <Card title='Late' icon={ClockOutlineOrangeIcon} bgIcon='bg-[#FF9E021A]'>
                                 <span className='text-2xl font-bold'>3</span>
                             </Card>
-                            <Card title='Absent' icon={EmployeeIcon}>
+                            <Card title='Absent' icon={ClockOutlineBlueIcon}>
                                 <span className='text-2xl font-bold'>2</span>
                             </Card>
-                            <Card title='On Leave' icon={EmployeeIcon}>
+                            <Card title='On Leave' icon={ClockOutlineRedIcon} bgIcon='bg-[#EA00001A]'>
                                 <span className='text-2xl font-bold'>1</span>
                             </Card>
 
