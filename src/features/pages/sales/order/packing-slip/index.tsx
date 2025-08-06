@@ -69,7 +69,7 @@ const index = ({ slug, detailOrder }: { slug?: any, detailOrder: any }) => {
             title: 'Order', url: routes.eCommerce.order,
         },
         {
-            title: 'Packing Slip',
+            title: 'Packing Slip Detail',
         },
     ]
     const columns: TableColumnsType<OrderType> = [
@@ -144,7 +144,7 @@ const index = ({ slug, detailOrder }: { slug?: any, detailOrder: any }) => {
                 <div className='flex justify-between items-center'>
                     <div>
                         <h1 className='text-xl font-bold'>
-                            Packing Slip
+                            Packing Slip Detail
                         </h1>
                         <Breadcrumb
                             items={breadcrumb}
