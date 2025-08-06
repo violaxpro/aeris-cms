@@ -11,14 +11,14 @@ import { Divider } from 'antd';
 
 type ListItem = {
     name: string;
-    type: string[];
+    type: string;
     optRequired: boolean;
-    globalOption: string[];
+    values: string[];
 };
 
 const OptionsInformation = ({ className }: { className?: string }) => {
     const [items, setItems] = useState<ListItem[]>([
-        { name: '', type: [], optRequired: false, globalOption: [] }
+        { name: '', type: '', optRequired: false, values: [] }
     ]);
 
     const handleChange = (updatedItems: ListItem[]) => {
@@ -33,20 +33,20 @@ const OptionsInformation = ({ className }: { className?: string }) => {
     };
 
     const addItem = () => {
-        const updated = [{ name: '', type: [], optRequired: false, globalOption: [], }, ...items];
+        const updated = [{ name: '', type: '', optRequired: false, values: [], }, ...items];
         handleChange(updated);
     };
 
     const addGlobalOption = (index: number) => {
         const updated = [...items];
-        const current = updated[index].globalOption || [];
-        updated[index].globalOption = [...current, '']; // tambahkan satu opsi kosong
+        const current = updated[index].values || [];
+        updated[index].values = [...current, '']; // tambahkan satu opsi kosong
         setItems(updated);
     };
 
     const removeGlobalOption = (index: number, gIdx: number) => {
         const updated = [...items];
-        updated[index].globalOption.splice(gIdx, 1);
+        updated[index].values.splice(gIdx, 1);
         handleChange(updated);
     };
 
@@ -62,6 +62,35 @@ const OptionsInformation = ({ className }: { className?: string }) => {
         { value: '3', label: 'Product C' },
     ];
 
+    const optionsType = [
+        {
+            label: 'Text',
+            options: [
+                { label: 'Field', value: 'field' },
+                { label: 'Textarea', value: 'textarea' },
+            ],
+        },
+        {
+            label: 'Select',
+            options: [
+                { label: 'Dropdown', value: 'dropdown' },
+                { label: 'Checkbox', value: 'checkbox' },
+                { label: 'Custom Checkbox', value: 'custom_checkbox' },
+                { label: 'Radio Button', value: 'radio_button' },
+                { label: 'Custom Radio Button', value: 'custom_radio_button' },
+                { label: 'Multiple Select', value: 'multiple_select' },
+            ],
+        },
+        {
+            label: 'Date',
+            options: [
+                { label: 'Date', value: 'date' },
+                { label: 'Date & Time', value: 'date_time' },
+                { label: 'Time', value: 'time' },
+            ],
+        },
+    ];
+
     return (
         <div>
             <FormGroup title="Options" description="Options information about the product">
@@ -69,7 +98,7 @@ const OptionsInformation = ({ className }: { className?: string }) => {
                     {items.map((item, index) => (
                         <div key={index} className="flex flex-col gap-3 mb-6 w-full pb-4">
                             {/* Baris 1: Name dan Option Type */}
-                            <div className="grid grid-cols-[1fr_1fr_170px_50px] gap-4">
+                            <div className="grid grid-cols-[1fr_1fr_120px_50px] gap-4">
                                 <Input
                                     id='name'
                                     label='Name'
@@ -81,19 +110,21 @@ const OptionsInformation = ({ className }: { className?: string }) => {
                                     id={`optionType-${index}`}
                                     label="Option Type"
                                     placeholder="Select Option Type"
-                                    modeType="multiple"
+                                    // onChange={(selectedOptions) =>
+                                    //     updateItem(index, 'type', Array.isArray(selectedOptions)
+                                    //         ? selectedOptions.map((opt: any) => opt)
+                                    //         : []
+                                    //     )
+                                    // }
                                     onChange={(selectedOptions) =>
-                                        updateItem(index, 'type', Array.isArray(selectedOptions)
-                                            ? selectedOptions.map((opt: any) => opt)
-                                            : []
-                                        )
+                                        updateItem(index, 'type', selectedOptions)
                                     }
                                     value={item.type}
-                                    options={options}
+                                    options={optionsType}
                                 />
                                 <div className='flex items-center justify-center pt-5'>
                                     <Button
-                                        label=' Add Global Options'
+                                        label=' Add Values'
                                         icon={<PlusOutlined />}
                                         onClick={() => addGlobalOption(index)}
                                         style={{ padding: '1.2rem 1rem' }}
@@ -132,10 +163,10 @@ const OptionsInformation = ({ className }: { className?: string }) => {
                             {/* Baris 3 dst: Global Option dropdown */}
                             < div className="flex flex-col w-full" >
                                 {
-                                    item.globalOption?.map((optValue, gIdx) => (
+                                    item.values?.map((optValue, gIdx) => (
                                         <div key={gIdx}>
                                             <div className="flex gap-2">
-                                                <SelectInput
+                                                {/* <SelectInput
                                                     id='globalOption'
                                                     label={`Product Name ${gIdx + 1}`}
                                                     placeholder="Select Product Name"
@@ -147,6 +178,19 @@ const OptionsInformation = ({ className }: { className?: string }) => {
                                                     value={optValue}
                                                     options={options}
                                                     className='w-full'
+                                                /> */}
+
+                                                <Input
+                                                    id='values'
+                                                    label='Values'
+                                                    type='text'
+                                                    value={optValue}
+                                                    onChange={(e: any) => {
+                                                        const updated = [...items];
+                                                        updated[index].values[gIdx] = e.target.value;
+                                                        handleChange(updated);
+                                                    }}
+                                                    divClassName='w-full'
                                                 />
                                                 <div className="pt-5">
                                                     <ButtonIcon

@@ -52,7 +52,7 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         user: initialValues ? initialValues.user : '',
         payment_method: initialValues ? initialValues.payment_method : '',
         po_number: initialValues ? initialValues.po_number : '',
-        issues_date: initialValues ? initialValues.issues_date : '',
+        issues_date: initialValues ? initialValues.issues_date : dayjs().format('DD-MM-YYYY'),
         due_date: initialValues ? initialValues.due_date : '',
         billing_address: initialValues ? initialValues.billing_address : '',
         shipping_address: initialValues ? initialValues.shipping_address : '',
@@ -362,6 +362,20 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         }));
     }, [productList, formData.discount, formData.shipping_fee, formData.gst]);
 
+    const dataCustomer = [
+        {
+            name: 'Ola',
+            billing_address: 'Jl.Rambutan',
+            shipping_address: 'Jl. Cempaka'
+        }
+    ]
+
+    const optionsCustomer = dataCustomer.map((customer) => ({
+        label: customer.name,
+        value: customer.name,
+        billing_address: customer.billing_address,
+        shipping_address: customer.shipping_address
+    }));
 
     return (
         <>
@@ -397,11 +411,23 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     id='customer_name'
                                     label='Customer Name'
                                     placeholder='Select Customer Name'
-                                    onChange={(selected) => handleChangeSelect('customer_name', selected)}
+                                    onChange={(selected) => {
+                                        handleChangeSelect('customer_name', selected);
+
+                                        // cari data lengkap customer yang dipilih
+                                        const selectedCustomer = optionsCustomer.find((item) => item.value === selected);
+
+                                        if (selectedCustomer) {
+                                            setFormData((prev) => ({
+                                                ...prev,
+                                                customer_name: selectedCustomer.value,
+                                                billing_address: selectedCustomer.billing_address,
+                                                shipping_address: selectedCustomer.shipping_address
+                                            }));
+                                        }
+                                    }}
                                     value={formData.customer_name}
-                                    options={[
-                                        { label: 'Customer Beli', value: 'Customer Beli' }
-                                    ]}
+                                    options={optionsCustomer}
                                     popupRender={(options: any) => (
                                         <>
                                             {options}
@@ -459,14 +485,14 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 <DatePickerInput
                                     id='issues_date'
                                     label='Issues Date'
-                                    value={formData.issues_date ? dayjs(formData.issues_date) : null}
+                                    value={formData.issues_date ? dayjs(formData.issues_date, 'DD-MM-YYYY') : null}
                                     onChange={(value: any, dateString: any) => handleDateChange('issues_date', value, dateString)}
                                 />
                                 <DatePickerInput
                                     id='due_date'
                                     label='Due Date'
-                                    value={formData.due_date ? dayjs(formData.due_date) : null}
-                                    onChange={(value: any, dateString: any) => handleDateChange('issues_date', value, dateString)}
+                                    value={formData.due_date ? dayjs(formData.due_date, 'DD-MM-YYYY') : null}
+                                    onChange={(value: any, dateString: any) => handleDateChange('due_date', value, dateString)}
                                 />
                                 <SelectInput
                                     id='tax'

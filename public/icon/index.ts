@@ -79,6 +79,10 @@ export { default as CalendarMonthIcon } from './CalendarMonthIcon.svg'
 export { default as CalendarWeekIcon } from './CalendarWeekIcon.svg'
 export { default as PersonIcon } from './PersonIcon.svg'
 export { default as CheckboxIcon } from './CheckboxIcon.svg'
+export { default as LightIcon } from './LightIcon.svg'
+export { default as DarkIcon } from './DarkIcon.svg'
+export { default as IndonesianFlagIcon } from './IndonesianFlagIcon.svg'
+export { default as EnglishFlagIcon } from './EnglishFlagIcon.svg'
 
 
 

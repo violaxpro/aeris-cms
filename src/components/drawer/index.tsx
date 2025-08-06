@@ -3,6 +3,9 @@ import React from 'react';
 import { Drawer, Button, Space } from 'antd';
 import { useTheme } from '@/context/ThemeContext';
 import { CloseOutlined } from '@ant-design/icons';
+import { DarkIcon, LightIcon, IndonesianFlagIcon, EnglishFlagIcon } from '@public/icon';
+import Image from 'next/image';
+import CustomSwitch from '../switch/CustomSwitch';
 
 type SettingsDrawerProps = {
     open: boolean;
@@ -13,7 +16,7 @@ type SettingsDrawerProps = {
 const colors = ['Default', 'Blue', 'Black', 'Teal', 'Violet', 'Rose', 'Yellow'];
 
 const SettingsDrawer: React.FC<SettingsDrawerProps> = ({ open, onClose }) => {
-    const { mode, setMode, color, setColor } = useTheme();
+    const { mode, setMode, color, setColor, language, setLanguage } = useTheme();
 
     return (
         <Drawer
@@ -35,10 +38,51 @@ const SettingsDrawer: React.FC<SettingsDrawerProps> = ({ open, onClose }) => {
                 }
             }}
         >
+
+            <div className="mb-6">
+                <h4 className="text-base font-semibold mb-3">Languages</h4>
+                <div className="flex gap-4">
+                    {['id', 'en'].map((lang) => {
+                        const isSelected = language === lang;
+                        console.log(lang, language)
+                        return (
+                            <div
+                                key={lang}
+                                onClick={() => setLanguage(lang as 'id' | 'en')}
+                                className={`
+                                w-16 h-16 rounded-md cursor-pointer transition-all duration-200
+                                flex items-center justify-center text-xs font-medium uppercase
+                                border-2
+                                ${isSelected ? 'border-[var(--default-color)]' : 'border-gray-300'}
+                            `}
+                                style={{
+                                    backgroundColor: '#f1f5f9',
+                                    color: '#000'
+                                }}
+                            >
+                                <Image
+                                    src={lang == 'id' ? IndonesianFlagIcon : EnglishFlagIcon}
+                                    alt='flag-icon'
+                                    width={20}
+                                />
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+
+
             <div className="mb-6">
                 <h4 className="text-base font-semibold mb-3">Appearance</h4>
                 <div className="flex gap-4">
-                    {['light', 'dark'].map((m) => {
+                    <CustomSwitch
+                        labelOn='Dark Mode'
+                        labelOff='Light Mode'
+                        iconOn={DarkIcon}
+                        iconOff={LightIcon}
+                        onToggle={(state) => setMode(state ? 'dark' : 'light')}
+                    />
+                    {/* {['light', 'dark'].map((m) => {
                         const isSelected = mode === m;
                         return (
                             <div
@@ -57,8 +101,9 @@ const SettingsDrawer: React.FC<SettingsDrawerProps> = ({ open, onClose }) => {
                             >
                                 {m}
                             </div>
+                            
                         );
-                    })}
+                    })} */}
                 </div>
             </div>
 
