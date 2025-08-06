@@ -28,7 +28,6 @@ import Table from '@/components/table'
 import type { TableColumnsType } from 'antd'
 import Link from 'next/link'
 import StatusTag from '@/components/tag'
-import dayjs from 'dayjs';
 import { LeavePermitType, leavePermitData } from '@/plugins/types/employee-management-type'
 import { Card } from '@/components/card'
 import SelectDatePicker from '@/components/date-picker/SelectDatePicker'
@@ -37,6 +36,7 @@ import AvatarImage from "public/social-avatar.webp"
 import ButtonTab from '@/components/tab/ButtonTab'
 import ModalLeavePermit from './ModalLeavePermit'
 import CalendarComponent from '@/components/calendar'
+import dayjs, { Dayjs } from 'dayjs';
 
 const index = ({ data }: { data?: any }) => {
     const [activeTab, setActiveTab] = useState('recap');
@@ -45,7 +45,8 @@ const index = ({ data }: { data?: any }) => {
     const [pageSize, setPageSize] = useState(10);
     const [isOpenModalFilter, setisOpenModalFilter] = useState(false)
     const [search, setSearch] = useState('')
-    const [selectedMonth, setSelectedMonth] = useState(0)
+    const [selectedMonth, setSelectedMonth] = useState<Dayjs>(dayjs());
+
     const [openModalForm, setOpenModalForm] = useState(false)
     const [formData, setFormData] = useState({
         full_name: '',
@@ -289,8 +290,7 @@ const index = ({ data }: { data?: any }) => {
                                 />
                                 <SelectDatePicker
                                     value={selectedMonth}
-                                    onChange={(selected) => setSelectedMonth(selected)}
-                                    options={months}
+                                    onChange={(val) => setSelectedMonth(val || dayjs())}
                                 />
                                 {
                                     activeTab == 'recap' && <Button

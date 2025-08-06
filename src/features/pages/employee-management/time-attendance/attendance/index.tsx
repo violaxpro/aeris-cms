@@ -27,7 +27,7 @@ import Table from '@/components/table'
 import type { TableColumnsType } from 'antd'
 import Link from 'next/link'
 import StatusTag from '@/components/tag'
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import { attendanceData, AttendanceType } from '@/plugins/types/employee-management-type'
 import { Card } from '@/components/card'
 import SelectDatePicker from '@/components/date-picker/SelectDatePicker'
@@ -47,7 +47,8 @@ const index = ({ data }: { data?: any }) => {
     const [pageSize, setPageSize] = useState(10);
     const [isOpenModalFilter, setisOpenModalFilter] = useState(false)
     const [search, setSearch] = useState('')
-    const [selectedMonth, setSelectedMonth] = useState(0)
+    const [selectedMonth, setSelectedMonth] = useState<Dayjs>(dayjs());
+
     const [openModalForm, setOpenModalForm] = useState(false)
     const [formData, setFormData] = useState({
         name: '',
@@ -329,8 +330,7 @@ const index = ({ data }: { data?: any }) => {
                             <div className='flex items-center gap-2'>
                                 <SelectDatePicker
                                     value={selectedMonth}
-                                    onChange={(selected) => setSelectedMonth(selected)}
-                                    options={months}
+                                    onChange={(val) => setSelectedMonth(val || dayjs())}
                                 />
                                 <Button
                                     icon={<Image

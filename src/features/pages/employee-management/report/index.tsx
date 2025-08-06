@@ -29,6 +29,7 @@ import Progress from '@/components/progress'
 import ButtonTab from '@/components/tab/ButtonTab'
 import BarChart from '@/components/chart/BarChart'
 import AreaChart from '@/components/chart/AreaChart'
+import dayjs, { Dayjs } from 'dayjs'
 
 const index = ({ data }: { data?: any }) => {
     const [attendanceTab, setAttendanceTab] = useState('week');
@@ -38,7 +39,7 @@ const index = ({ data }: { data?: any }) => {
     const [pageSize, setPageSize] = useState(10);
     const [isOpenModalFilter, setisOpenModalFilter] = useState(false)
     const [search, setSearch] = useState('')
-    const [selectedMonth, setSelectedMonth] = useState(0)
+    const [selectedMonth, setSelectedMonth] = useState<Dayjs>(dayjs());
     const [openModalForm, setOpenModalForm] = useState(false)
     const [openModalDetail, setOpenModalDetail] = useState(false)
     const [formData, setFormData] = useState({
@@ -290,8 +291,7 @@ const index = ({ data }: { data?: any }) => {
                     <div className='flex gap-4 items-center'>
                         <SelectDatePicker
                             value={selectedMonth}
-                            onChange={(selected) => setSelectedMonth(selected)}
-                            options={months}
+                            onChange={(val) => setSelectedMonth(val || dayjs())}
                         />
                         <div className='flex items-center gap-2'>
                             <Button
