@@ -326,12 +326,14 @@ export const menuItems = [
                     {
                         key: 'roles',
                         label: 'Roles',
-                        href: routes.eCommerce.roles,
+                        // href: routes.eCommerce.roles,
+                        href: '#'
                     },
                     {
                         key: 'subscribe',
                         label: 'Subscribe',
-                        href: routes.eCommerce.subscribe,
+                        // href: routes.eCommerce.subscribe,
+                        href: '#'
                     },
                 ],
             },
@@ -351,22 +353,28 @@ export const menuItems = [
                     {
                         key: 'flash-sale',
                         label: 'Flash Sale',
-                        href: routes.eCommerce.products,
+                        // href: routes.eCommerce.products,
+                        href: '#'
                     },
                     {
                         key: 'coupon',
                         label: 'Coupon',
-                        href: routes.eCommerce.products,
+                        // href: routes.eCommerce.products,
+                        href: '#'
+
                     },
                     {
                         key: 'email-marketing',
                         label: 'Email Marketing',
-                        href: routes.eCommerce.products,
+                        // href: routes.eCommerce.products,
+                        href: '#'
+
                     },
                     {
                         key: 'sms-marketing',
                         label: 'SMS Marketing',
-                        href: routes.eCommerce.products,
+                        // href: routes.eCommerce.products,
+                        href: '#'
                     },
                 ]
             },

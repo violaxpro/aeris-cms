@@ -48,7 +48,8 @@ const styles = StyleSheet.create({
         color: '#0A3353',
         fontSize: '1.8rem',
         fontWeight: 700,
-        textTransform: 'uppercase'
+        textTransform: 'uppercase',
+        letterSpacing: '0.2rem'
     },
     statusHeader: {
         color: '#0A3353',

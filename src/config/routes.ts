@@ -60,6 +60,7 @@ export const routes = {
     createOrder: '/ecommerce/order/create',
     editOrder: (slug: string) => `/ecommerce/order/${slug}/edit`,
     detailOrder: (slug: string) => `/ecommerce/order/${slug}/detail`,
+    detailPackingSlip: (slug: string) => `/ecommerce/order/${slug}/packing-slip`,
 
     quote: '/ecommerce/quote',
     createQuote: '/ecommerce/quote/create',

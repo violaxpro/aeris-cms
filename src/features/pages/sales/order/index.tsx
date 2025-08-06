@@ -209,10 +209,10 @@ const index = ({ orderData }: { orderData?: any }) => {
         {
             title: 'Invoice Number',
             dataIndex: 'id',
-            sorter: (a: any, b: any) => a.po_number - b.po_number,
+            sorter: (a: any, b: any) => a.invoice_number.localeCompare(b.invoice_number),
             render: (_: any, row: any) => {
-                return <Link href={routes.eCommerce.detailOrder(row.po_number)}>
-                    {row.po_number}
+                return <Link href={routes.eCommerce.detailOrder(row.invoice_number)}>
+                    {row.invoice_number}
                 </Link>
                 // return row.status !== 'Draft'
                 //     ? <Link href={routes.eCommerce.detailOrder(row.po_number)}>
@@ -404,7 +404,7 @@ const index = ({ orderData }: { orderData?: any }) => {
                             </Link>
                         </Menu.Item>
                         <Menu.Item key="print">
-                            <Link href={routes.eCommerce.print(row.id)}>
+                            <Link href={routes.eCommerce.detailPackingSlip(row.invoice_number)}>
                                 Packing Slip
                             </Link>
                         </Menu.Item>

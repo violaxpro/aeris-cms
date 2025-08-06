@@ -78,6 +78,7 @@ export { default as CalendarTodayIcon } from './CalendarTodayIcon.svg'
 export { default as CalendarMonthIcon } from './CalendarMonthIcon.svg'
 export { default as CalendarWeekIcon } from './CalendarWeekIcon.svg'
 export { default as PersonIcon } from './PersonIcon.svg'
+export { default as CheckboxIcon } from './CheckboxIcon.svg'
 
 
 

@@ -10,7 +10,7 @@ type CheckboxInputProps = {
     checked: boolean;
     onChange: (checked: boolean) => void;
     disabled?: boolean;
-    text: string
+    text?: string
     className?: string
     required?: boolean;
 

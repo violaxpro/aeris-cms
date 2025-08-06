@@ -56,6 +56,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'isomorphic-furyroad.vercel.app',
       },
+      {
+        protocol: 'https',
+        hostname: 'cdn.alarmexpert.com.au',
+      },
     ],
   },
   reactStrictMode: true,

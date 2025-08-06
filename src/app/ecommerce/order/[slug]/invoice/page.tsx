@@ -1,7 +1,8 @@
 
 'use client'
 import React, { useEffect } from 'react'
-import { InvoicePDF } from '@/features/pages/sales/invoice';
+import { InvoicePDF } from '@/features/pages/sales/pdf/Invoice';
+import { PackingSlipPDF } from '@/features/pages/sales/pdf/PackingSlip';
 import { Params } from '@/plugins/types'
 import { orderDummyData } from '@/plugins/types/sales-type';
 import { PDFViewer } from '@react-pdf/renderer';
@@ -79,6 +80,9 @@ export default async function InvoicePage(props: { params: Params }) {
         <div className="h-screen">
             <PDFViewer width="100%" height="100%">
                 <InvoicePDF invoiceData={invoiceData} page='order' />
+            </PDFViewer>
+            <PDFViewer width="100%" height="100%">
+                <PackingSlipPDF orderData={invoiceData} page='order' />
             </PDFViewer>
         </div>
     );
