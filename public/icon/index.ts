@@ -74,6 +74,10 @@ export { default as ChartAverageIcon } from './ChartAverageIcon.svg'
 export { default as UserNewIcon } from './UserNewIcon.svg'
 export { default as MaleIcon } from './MaleIcon.svg'
 export { default as FemaleIcon } from './FemaleIcon.svg'
+export { default as CalendarTodayIcon } from './CalendarTodayIcon.svg'
+export { default as CalendarMonthIcon } from './CalendarMonthIcon.svg'
+export { default as CalendarWeekIcon } from './CalendarWeekIcon.svg'
+export { default as PersonIcon } from './PersonIcon.svg'
 
 
 

@@ -1,38 +1,33 @@
+'use client';
+
+import { DatePicker } from 'antd';
+import type { DatePickerProps } from 'antd';
+import dayjs, { Dayjs } from 'dayjs';
 import Image from 'next/image';
-import { Select } from 'antd';
 import { CalenderBlueIcon } from '@public/icon';
 
-type SelectDatePickerProps = {
-    value: any;
-    onChange: (val: any) => void;
-    options: { value: any; label: string }[];
-    width?: string
+type Props = {
+    value?: Dayjs;
+    onChange: (val: Dayjs | null) => void;
+    width?: string;
+    picker?: any
+    format?: any
 };
 
-const SelectDatePicker: React.FC<SelectDatePickerProps> = ({
-    value,
-    onChange,
-    options,
-    width = '!w-30'
-}) => {
-    const formattedOptions = options.map((opt) => ({
-        value: opt.value,
-        label: (
-            <div className="flex items-center gap-2 text-[#3666AA]">
-                <Image src={CalenderBlueIcon} alt="calendar" width={16} height={16} />
-                <span>{opt.label}</span>
-            </div>
-        ),
-    }));
-
+const SelectDatePicker: React.FC<Props> = ({ value, onChange, width = '!w-35', picker = 'month',
+    format = 'MMMM', }) => {
     return (
         <div className="flex items-center gap-2">
-            <Select
+            <DatePicker
                 size="middle"
+                className={`${width} !h-10 !text-[#3666AA] [&>input]:!text-[#3666AA] !border !border-[#3666AA] !rounded-lg`}
                 value={value}
-                className={`${width} !h-10`}
-                options={formattedOptions}
                 onChange={onChange}
+                suffixIcon={
+                    <Image src={CalenderBlueIcon} alt="calendar" width={16} height={16} />
+                }
+                format={format}
+                picker={picker}
             />
         </div>
     );
