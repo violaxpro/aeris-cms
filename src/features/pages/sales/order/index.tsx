@@ -332,9 +332,9 @@ const index = ({ orderData }: { orderData?: any }) => {
             sorter: (a: any, b: any) => {
                 return new Date(a.created_by).getTime() - new Date(b.created_by).getTime()
             },
-            render: (val: any) => {
-                const date = dayjs(val.date).format("DD/MM/YYYY")
-                const user = val.name
+            render: (_: any, row: any) => {
+                const date = dayjs(row.date).format("DD/MM/YYYY")
+                const user = row.name
                 return <div className="flex flex-col w-full">
                     <div className="flex justify-start gap-1">
                         <span>{date}</span>
@@ -385,9 +385,9 @@ const index = ({ orderData }: { orderData?: any }) => {
                 const actionStatus = status[row.status] || ''
                 const menu = (
                     <Menu>
-                        <Menu.Item key="status" onClick={actionStatus}>
+                        {/* <Menu.Item key="status" onClick={actionStatus}>
                             {row?.status}
-                        </Menu.Item>
+                        </Menu.Item> */}
                         <Menu.Item key="edit">
                             <Link href={routes.eCommerce.editOrder(row.id)}>
                                 Edit
@@ -398,9 +398,14 @@ const index = ({ orderData }: { orderData?: any }) => {
                                 Detail
                             </Link>
                         </Menu.Item>
-                        <Menu.Item key="sendEmail">
+                        {/* <Menu.Item key="sendEmail">
                             <Link href={routes.eCommerce.sendEmail(row.id)}>
                                 Send Email
+                            </Link>
+                        </Menu.Item> */}
+                        <Menu.Item key="createPO">
+                            <Link href={routes.eCommerce.createPurchases}>
+                                Create PO
                             </Link>
                         </Menu.Item>
                         <Menu.Item key="print">
