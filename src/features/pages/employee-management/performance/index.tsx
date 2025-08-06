@@ -40,7 +40,6 @@ import { Card } from '@/components/card'
 import SelectDatePicker from '@/components/date-picker/SelectDatePicker'
 import { Avatar } from 'antd'
 import AvatarImage from "public/social-avatar.webp"
-// import FormBenefit from './FormBenefit'
 import { Dropdown, Menu } from 'antd'
 import ButtonIcon from '@/components/button/ButtonIcon'
 import BenefitItem from '@/components/card/DetailItem'
@@ -50,6 +49,7 @@ import { MoreOutlined } from '@ant-design/icons'
 import CardEmployee from '@/components/card/CardEmployee'
 import SelectRangePicker from '@/components/date-picker/SelectRangePicker'
 import ShiftSchedulerAntd from '@/components/scheduler'
+import ModalPerformance from './ModalPerformance'
 
 const index = ({ data }: { data?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
@@ -61,13 +61,14 @@ const index = ({ data }: { data?: any }) => {
     const [openModalForm, setOpenModalForm] = useState(false)
     const [openModalDetail, setOpenModalDetail] = useState(false)
     const [formData, setFormData] = useState({
-        employee_name: [],
-        benefit_name: '',
-        start_date: '',
-        end_date: '',
-        description: '',
-        benefit_type: '',
-        tags: []
+        employee_name: '',
+        role: '',
+        kpi_score: '',
+        attendance_score: '',
+        work_quality: '',
+        teamwork_communication: '',
+        dicipline_compliance: '',
+        evaluation_notes: ''
     })
     const [modalType, setModalType] = useState('employee-benefit')
     const [formMode, setFormMode] = useState('create')
@@ -134,10 +135,8 @@ const index = ({ data }: { data?: any }) => {
                 const isStatusPending = row.status == 'Pending'
                 const menu = (
                     <Menu>
-                        <Menu.Item key="edit">
-                            <Link href={routes.eCommerce.editEmployee(row.employee_id)}>
-                                Edit
-                            </Link>
+                        <Menu.Item key="edit" onClick={() => handleOpenModal('edit')}>
+                            Edit
                         </Menu.Item>
                         <Menu.Item key="detail">
                             <Link href={routes.eCommerce.detailPerformance(row.employee_id)}>
@@ -149,7 +148,7 @@ const index = ({ data }: { data?: any }) => {
 
                 if (isStatusPending) {
                     return (
-                        <div className='flex items-center gap-2 cursor-pointer'>
+                        <div className='flex items-center gap-2 cursor-pointer' onClick={() => handleOpenModal('create')}>
                             <Image
                                 src={PlusFilledIcon}
                                 alt='plus-icon'
@@ -200,10 +199,10 @@ const index = ({ data }: { data?: any }) => {
         }));
     };
 
-    const handleOpenModal = (type: string, mode: string) => {
+    const handleOpenModal = (type: string) => {
         setOpenModalForm(true)
         setModalType(type)
-        setFormMode(mode)
+        // setFormMode(mode)
     }
 
     const dataChart = [
@@ -264,19 +263,16 @@ const index = ({ data }: { data?: any }) => {
     return (
         <>
             {contextHolder}
-            {/* <FormBenefit
+            <ModalPerformance
                 open={openModalForm}
                 handleChange={handleChange}
                 formData={formData}
                 handleCancel={() => setOpenModalForm(false)}
                 handleSubmit={() => setOpenModalForm(false)}
                 modalType={modalType}
-                formMode={formMode}
+            // formMode={formMode}
             />
-            <DetailBenefit
-                open={openModalDetail}
-                handleCancel={() => setOpenModalDetail(false)}
-            /> */}
+
             <div className="mt-6 mx-6 mb-0">
                 <div className='flex md:flex-row flex-col md:justify-between md:items-center items-start'>
                     <div>
