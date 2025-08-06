@@ -4,7 +4,7 @@ import Sider from 'antd/es/layout/Sider';
 import { menuItems } from './menu-items';
 import Link from 'next/link';
 import Image from 'next/image';
-import logoImg from '@public/logo/Alarm Expert Logo.webp';
+import logoImg from '@public/logo/Logo Xpro Group.png';
 
 const style: React.CSSProperties = {
     position: 'sticky',
@@ -109,13 +109,17 @@ const Sidebar = ({ isMobile = false, onClose }: { isMobile?: boolean; onClose?: 
 
     const sidebarContent = (
         <>
-            <div className="logo-header">
-                <Image
-                    src={logoImg}
-                    alt='logo'
-                    width={240}
-                    height={50}
-                />
+            <div className="flex items-center justify-center py-1">
+                <div className="w-full max-w-[200px]">
+                    <Image
+                        src={logoImg}
+                        alt="logo"
+                        width={0}
+                        height={0}
+                        sizes="100vw"
+                        className="w-full h-auto object-contain max-h-[80px]"
+                    />
+                </div>
             </div>
             <Menu
                 theme="light"
@@ -123,7 +127,7 @@ const Sidebar = ({ isMobile = false, onClose }: { isMobile?: boolean; onClose?: 
                 defaultSelectedKeys={['1']}
                 items={items}
                 style={{ ...scrollAreaStyle, width: 280 }}
-                className="!bg-background"
+                className="!bg-background my-4"
             />
         </>
     )

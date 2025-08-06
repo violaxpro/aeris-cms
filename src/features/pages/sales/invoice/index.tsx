@@ -237,7 +237,7 @@ export const InvoicePDF = ({ invoiceData, page }: { invoiceData: any, page: stri
                     {/* Header */}
                     <View style={styles.header}>
                         <Image
-                            src="/logo/Alarm Expert Logo.png"
+                            src="/logo/Logo Xpro Group.png"
                             style={{ width: 170, height: 'auto' }}
                         />
                         <View style={{ width: 200, textAlign: 'right' }}>
