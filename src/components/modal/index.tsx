@@ -18,6 +18,7 @@ type ModalProps = {
     isBtnReset?: boolean
     handleDelete?: () => void
     rightButton?: any
+    date?: any
 }
 
 const index = ({
@@ -35,7 +36,8 @@ const index = ({
     subtitle,
     isBtnReset = false,
     handleDelete,
-    rightButton
+    rightButton,
+    date
 }: ModalProps) => {
 
     return (
@@ -45,6 +47,9 @@ const index = ({
                     <div className='flex justify-between items-center my-5  mx-5'>
                         <div className='flex flex-col'>
                             <span className='text-2xl font-semibold'>{title}</span>
+                            {
+                                date && <span className='text-sm font-normal'>{date}</span>
+                            }
                             <span className='text-sm text-gray-300 font-normal'>{subtitle}</span>
                         </div>
                         {

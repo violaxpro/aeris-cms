@@ -5,7 +5,11 @@ import ShowPageSize from '@/components/pagination/ShowPageSize'
 import AvatarImage from "public/social-avatar.webp"
 import { Dropdown, Menu } from 'antd'
 import dayjs, { Dayjs } from 'dayjs'
-import OrganizationalChart from '@/components/chart/OrganizationalChart'
+import dynamic from 'next/dynamic'
+
+const OrganizationalChart = dynamic(() => import('@/components/chart/OrganizationalChart'), {
+    ssr: false,
+});
 
 const index = ({ data }: { data?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()

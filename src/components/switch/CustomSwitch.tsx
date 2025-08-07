@@ -93,7 +93,7 @@ const CustomSwitch: React.FC<CustomSwitchProps> = ({
 
             {/* Bulatan */}
             <span
-                className={`inline-block transform rounded-full bg-white shadow-md transition-transform duration-300 flex items-center justify-center
+                className={`transform rounded-full bg-white shadow-md transition-transform duration-300 flex items-center justify-center
             ${circle} ${enabled ? translate : ''}`}
             >
                 <div className={`flex justify-center items-center ${circle}`}>

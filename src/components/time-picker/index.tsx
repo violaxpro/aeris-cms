@@ -9,6 +9,7 @@ type TimePickerInputProps = {
     value: string; // format 'HH:mm'
     onChange: (value: string) => void;
     disabled?: boolean;
+    style?: any
 };
 
 const format = 'HH:mm';
@@ -19,6 +20,7 @@ const TimePickerInput: React.FC<TimePickerInputProps> = ({
     value,
     onChange,
     disabled = false,
+    style
 }) => {
     return (
         <div className='flex flex-col gap-1'>
@@ -35,7 +37,8 @@ const TimePickerInput: React.FC<TimePickerInputProps> = ({
                     onChange(time ? time.format(format) : '');
                 }}
                 disabled={disabled}
-                className='w-full'
+                className='w-full h-10'
+                style={style}
             />
         </div>
     );

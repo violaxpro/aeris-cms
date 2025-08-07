@@ -443,6 +443,12 @@ export const menuItems = [
                         href: routes.eCommerce.employee,
                     },
                     {
+                        key: 'pay-slip',
+                        label: 'Pay Slip',
+                        // href: routes.eCommerce.employee,
+                        href: '#'
+                    },
+                    {
                         key: 'performance',
                         label: 'Performance',
                         href: routes.eCommerce.performance,

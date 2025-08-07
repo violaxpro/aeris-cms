@@ -12,19 +12,20 @@ import {
     ClockOutlineBlueIcon,
     ClockOutlineGreenIcon,
     ClockOutlineOrangeIcon,
-    ClockOutlineRedIcon
+    ClockOutlineRedIcon,
+    MoreIcon
 } from '@public/icon'
 import { routes } from '@/config/routes'
 import { useNotificationAntd } from '@/components/toast'
 import { Content } from 'antd/es/layout/layout'
 import ButtonFilter from '@/components/button/ButtonAction'
-import ButtonDelete from '@/components/button/ButtonAction'
 import Pagination from '@/components/pagination'
-import ButtonAction from '@/components/button/ButtonIcon'
+import ButtonIcon from '@/components/button/ButtonIcon'
 import SearchTable from '@/components/search/SearchTable'
 import ShowPageSize from '@/components/pagination/ShowPageSize'
 import Table from '@/components/table'
 import type { TableColumnsType } from 'antd'
+import { Dropdown, Menu } from 'antd'
 import Link from 'next/link'
 import StatusTag from '@/components/tag'
 import dayjs, { Dayjs } from 'dayjs';
@@ -34,6 +35,9 @@ import SelectDatePicker from '@/components/date-picker/SelectDatePicker'
 import { Avatar } from 'antd'
 import AvatarImage from "public/social-avatar.webp"
 import ModalAttendance from './ModalAttendance'
+import ModalDelete from '@/components/modal/ModalDelete'
+import ModalDetailAttendance from './ModalDetailAttendance'
+import ConfirmModal from '@/components/modal/ConfirmModal'
 
 const index = ({ data }: { data?: any }) => {
     const today = dayjs(); // Hari ini
@@ -48,13 +52,27 @@ const index = ({ data }: { data?: any }) => {
     const [isOpenModalFilter, setisOpenModalFilter] = useState(false)
     const [search, setSearch] = useState('')
     const [selectedMonth, setSelectedMonth] = useState<Dayjs>(dayjs());
-
+    const [openModalDelete, setOpenModalDelete] = useState(false)
+    const [openModalCheckout, setOpenModalCheckout] = useState(false)
     const [openModalForm, setOpenModalForm] = useState(false)
+    const [openModalDetail, setOpenModalDetail] = useState(false)
+    const [deletedData, setDeletedData] = useState<any>(null)
+    const [formMode, setFormMode] = useState('create')
     const [formData, setFormData] = useState({
         name: '',
         attendance_type: '',
+        date: '',
         status_type: '',
-        explain_reason: ''
+        start_time: '',
+        end_time: '',
+        explain_reason: '',
+        check_in: '',
+        start_break: '',
+        finish_break: '',
+        check_out: '',
+        is_claim_overtime: '',
+        overtime_reason: '',
+        internal_notes: '',
     })
     const breadcrumb = [
         {
@@ -156,33 +174,66 @@ const index = ({ data }: { data?: any }) => {
             }
         },
         {
-            title: 'Notes',
-            dataIndex: 'note',
-            sorter: (a: any, b: any) => a.note.localeCompare(b.note),
+            title: 'Total Hours',
+            dataIndex: 'total_hours',
+            sorter: (a: any, b: any) => a.total_hours - b.total_hours,
             render: (_: any, row: any) => {
                 return <div className="flex flex-col w-full">
                     <div className="flex justify-start gap-1">
-                        <span>{row.note || '-'}</span>
+                        <span>{row.total_hours || '-'}</span>
                     </div>
                 </div>
             }
         },
+        {
+            title: 'Action',
+            dataIndex: 'action',
+            key: 'action',
+            width: 120,
+            render: (_: string, row: any) => {
+
+                const menu = (
+                    <Menu>
+                        <Menu.Item key="detail" onClick={() => setOpenModalDetail(true)}>
+                            Detail
+                        </Menu.Item>
+                        <Menu.Item key="delete" onClick={() => handleOpenModalDelete(row.id)}>
+                            Delete
+                        </Menu.Item>
+                    </Menu>
+                );
+
+                return (
+                    <div className='flex items-center gap-2'>
+                        <Dropdown overlay={menu} trigger={['click']} >
+                            <ButtonIcon
+                                color='primary'
+                                variant='filled'
+                                size="small"
+                                icon={MoreIcon}
+                            />
+                        </Dropdown >
+                    </div>
+                );
+            }
+        },
     ]
 
-    const months = [
-        { value: 0, label: 'January' },
-        { value: 1, label: 'February' },
-        { value: 2, label: 'March' },
-        // dst...
-    ];
-
     const handleChange = (field: string) => (
-        e: any | React.ChangeEvent<HTMLTextAreaElement>
+        e: any
     ) => {
-        const value = typeof e === 'string' || Array.isArray(e)
-            ? e
-            : e.target.value;
-
+        let value
+        if (dayjs.isDayjs(e) || e === null) {
+            value = e ? e.format('DD-MM-YYYY') : '';
+        }
+        // Jika event input biasa
+        else if (e && typeof e === 'object' && 'target' in e) {
+            value = e.target.value;
+        }
+        // Jika string langsung dari Select
+        else {
+            value = e;
+        }
         setFormData((prev) => ({
             ...prev,
             [field]: value,
@@ -190,6 +241,37 @@ const index = ({ data }: { data?: any }) => {
     };
 
 
+    const handleDelete = async (id?: any) => {
+        if (!deletedData) return;
+        try {
+            // const res = await deletePriceLevel(deletedData);
+            // if (res.success) {
+            //     notifySuccess(res.message);
+            //     setData(prev => prev.filter(item => item.id !== deletedData));
+            // }
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setOpenModalDelete(false);
+            setDeletedData(null);
+        }
+    };
+
+    const handleSubmit = () => {
+        if (formData.attendance_type == 'Check Out') {
+            setOpenModalCheckout(true)
+        }
+    }
+
+    const handleOpenModal = (mode: any) => {
+        setOpenModalForm(true)
+        setFormMode(mode)
+    }
+
+    const handleOpenModalDelete = (data: any) => {
+        setOpenModalDelete(true)
+        setDeletedData(data)
+    }
 
     return (
         <>
@@ -199,7 +281,29 @@ const index = ({ data }: { data?: any }) => {
                 handleChange={handleChange}
                 formData={formData}
                 handleCancel={() => setOpenModalForm(false)}
-                handleSubmit={() => setOpenModalForm(false)}
+                handleSubmit={handleSubmit}
+                formMode={formMode}
+            />
+            <ModalDetailAttendance
+                open={openModalDetail}
+                handleChange={handleChange}
+                formData={formData}
+                handleCancel={() => setOpenModalDetail(false)}
+                handleSubmit={() => setOpenModalDetail(false)}
+            />
+            <ConfirmModal
+                open={openModalDelete}
+                onCancel={() => setOpenModalDelete(false)}
+                onSave={handleDelete}
+                action='Delete'
+                text='Are you sure you want to delete this attendance?'
+            />
+            <ConfirmModal
+                open={openModalCheckout}
+                onCancel={() => setOpenModalCheckout(false)}
+                onSave={() => setOpenModalCheckout(false)}
+                action='Checkout'
+                text='Are you sure want to checkout?'
             />
             <div className="mt-6 mx-4 mb-0">
                 <div className='flex justify-between items-center'>
@@ -219,7 +323,7 @@ const index = ({ data }: { data?: any }) => {
                             height={15}
                         />}
                         label='Add Attendance'
-                        onClick={() => setOpenModalForm(true)}
+                        onClick={() => handleOpenModal('create')}
                     />
                 </div>
             </div>

@@ -24,7 +24,7 @@ import Pagination from '@/components/pagination'
 import ButtonIcon from '@/components/button/ButtonIcon'
 import SearchTable from '@/components/search/SearchTable'
 import ShowPageSize from '@/components/pagination/ShowPageSize'
-import ModalDelete from '@/components/modal/ModalDelete'
+import ConfirmModal from '@/components/modal/ConfirmModal'
 import { useRouter } from 'next/navigation'
 
 const index = ({ priceLevels }: { priceLevels?: any }) => {
@@ -151,11 +151,12 @@ const index = ({ priceLevels }: { priceLevels?: any }) => {
     return (
         <>
             {contextHolder}
-            <ModalDelete
+            <ConfirmModal
                 open={openModalDelete}
                 onCancel={() => setOpenModalDelete(false)}
-                onDelete={handleDelete}
-                item='price level'
+                onSave={handleDelete}
+                action='Delete'
+                text='Are you sure you want to delete this price level?'
             />
             <div className="mt-6 mx-4 mb-0">
                 <div className='flex justify-between items-center'>

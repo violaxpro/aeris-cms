@@ -17,11 +17,10 @@ import Pagination from '@/components/pagination'
 import ButtonIcon from '@/components/button/ButtonIcon'
 import SearchTable from '@/components/search/SearchTable'
 import ShowPageSize from '@/components/pagination/ShowPageSize'
-import ModalDelete from '@/components/modal/ModalDelete'
+import ConfirmModal from '@/components/modal/ConfirmModal'
 import { useRouter } from 'next/navigation'
 import { useNotificationAntd } from '@/components/toast'
 import dayjs from 'dayjs'
-
 
 const index = () => {
     const [tagsData, setTagsData] = useState([])
@@ -113,11 +112,12 @@ const index = () => {
     };
     return (
         <>
-            <ModalDelete
+            <ConfirmModal
                 open={openModalDelete}
                 onCancel={() => setOpenModalDelete(false)}
-                onDelete={handleDelete}
-                item='tag'
+                onSave={handleDelete}
+                action='Delete'
+                text='Are you sure you want to delete this tag?'
             />
             {contextHolder}
             <div className="mt-6 mx-6 mb-0">

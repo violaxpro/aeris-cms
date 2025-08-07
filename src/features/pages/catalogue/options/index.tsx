@@ -19,7 +19,7 @@ import Pagination from '@/components/pagination'
 import ButtonIcon from '@/components/button/ButtonIcon'
 import SearchTable from '@/components/search/SearchTable'
 import ShowPageSize from '@/components/pagination/ShowPageSize'
-import ModalDelete from '@/components/modal/ModalDelete'
+import ConfirmModal from '@/components/modal/ConfirmModal'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { useNotificationAntd } from '@/components/toast'
@@ -114,11 +114,12 @@ const index = ({ optionsData }: { optionsData?: any }) => {
     };
     return (
         <>
-            <ModalDelete
+            <ConfirmModal
                 open={openModalDelete}
                 onCancel={() => setOpenModalDelete(false)}
-                onDelete={handleDelete}
-                item='options'
+                onSave={handleDelete}
+                action='Delete'
+                text='Are you sure you want to delete this option?'
             />
             {contextHolder}
             <div className="mt-6 mx-6 mb-0">

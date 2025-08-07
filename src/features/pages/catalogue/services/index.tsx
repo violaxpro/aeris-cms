@@ -25,7 +25,7 @@ import Pagination from '@/components/pagination'
 import ButtonAction from '@/components/button/ButtonIcon'
 import SearchTable from '@/components/search/SearchTable'
 import ShowPageSize from '@/components/pagination/ShowPageSize'
-import ModalDelete from '@/components/modal/ModalDelete'
+import ConfirmModal from '@/components/modal/ConfirmModal'
 import FormService from './FormService'
 
 const index = ({ services }: { services?: any }) => {
@@ -223,10 +223,12 @@ const index = ({ services }: { services?: any }) => {
     return (
         <>
             {contextHolder}
-            <ModalDelete
+            <ConfirmModal
                 open={openModalDelete}
                 onCancel={() => setOpenModalDelete(false)}
-                onDelete={handleDelete}
+                onSave={handleDelete}
+                action='Delete'
+                text='Are you sure you want to delete this service?'
             />
             <FormService
                 openModal={openModalForm}

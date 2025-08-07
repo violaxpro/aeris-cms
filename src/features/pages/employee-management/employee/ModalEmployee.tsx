@@ -35,8 +35,8 @@ const ModalEmployee = ({ open, handleChange, formData, handleCancel, handleSubmi
                 <Input
                     id='nik'
                     type='text'
-                    label='National ID (NIK)'
-                    placeholder='Input National ID (NIK)'
+                    label='National ID'
+                    placeholder='Input National ID'
                     onChange={handleChange('nik')}
                     value={formData.nik}
                 />

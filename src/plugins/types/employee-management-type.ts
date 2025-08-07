@@ -60,7 +60,8 @@ export const attendanceData = [
         finish_break: '13:00 PM',
         check_out: '20:00 PM',
         overtime: '4h 00m',
-        note: ''
+        note: '',
+        total_hours: '4h 00m'
     }
 ]
 
