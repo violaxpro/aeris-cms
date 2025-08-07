@@ -458,9 +458,9 @@ export const menuItems = [
                         href: routes.eCommerce.benefit,
                     },
                     {
-                        key: 'organizational',
-                        label: 'Organizational',
-                        href: routes.eCommerce.organizational,
+                        key: 'settings',
+                        label: 'Settings',
+                        href: routes.eCommerce.employeeSettings,
                     },
                 ]
             },

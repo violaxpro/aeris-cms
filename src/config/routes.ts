@@ -146,8 +146,7 @@ export const routes = {
 
     benefit: '/ecommerce/benefit',
 
-    organizational: '/ecommerce/organizational',
-
+    employeeSettings: '/ecommerce/employee-settings',
 
     generalSettings: '/ecommerce/general-settings',
 

@@ -50,8 +50,12 @@ import CardEmployee from '@/components/card/CardEmployee'
 import SelectRangePicker from '@/components/date-picker/SelectRangePicker'
 import ShiftSchedulerAntd from '@/components/scheduler'
 import ModalPerformance from './ModalPerformance'
+import Tabs, { Tab } from '@/components/tab'
+import Organizational from './branch-performance'
+
 
 const index = ({ data }: { data?: any }) => {
+    const [activeTab, setActiveTab] = useState<string>('employee-performance');
     const { contextHolder, notifySuccess } = useNotificationAntd()
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
@@ -81,6 +85,11 @@ const index = ({ data }: { data?: any }) => {
         },
     ]
 
+    const tabs: Tab[] = [
+        { key: 'employee-performance', label: 'Employee Perfromance' },
+        { key: 'branch-performance', label: 'Branch Perfromance' },
+
+    ];
     const columnsBenefitEmployee: TableColumnsType<any> = [
         {
             title: 'Employee Name',
@@ -273,8 +282,8 @@ const index = ({ data }: { data?: any }) => {
             // formMode={formMode}
             />
 
-            <div className="mt-6 mx-6 mb-0">
-                <div className='flex md:flex-row flex-col md:justify-between md:items-center items-start'>
+            <div className="mt-6 mb-0">
+                <div className='flex md:flex-row flex-col md:justify-between md:items-center items-start mx-6'>
                     <div>
                         <h1 className='text-xl font-bold'>
                             Performance
@@ -296,111 +305,121 @@ const index = ({ data }: { data?: any }) => {
                             width={8}
                         />
                     </div>
-
                 </div>
+                <Tabs
+                    tabs={tabs}
+                    activeTab={activeTab}
+                    setActiveTab={setActiveTab}
+                    borderClass='w-full'
+                />
             </div>
             <Content className="mb-0">
                 <div style={{ padding: 24, minHeight: 360 }}>
-                    <div className='flex flex-col gap-4'>
-                        <div className='grid md:grid-cols-4 gap-4'>
-                            <Card title='Employee Evaluated' icon={EmployeeIcon}>
-                                <span className='text-4xl font-semibold text-[#0A3353]'>53</span>
-                            </Card>
-                            <Card title='Pending Evaluations' icon={ClipboardPendingIcon} bgIcon='bg-[#FF9E021A]' width={20}>
-                                <span className='text-4xl font-semibold text-[#0A3353]'>14</span>
-                            </Card>
-                            <Card title='Employee Productivity' icon={ProductivityIcon} bgIcon='bg-[#01933B1A]' width={20}>
-                                <span className='text-4xl font-semibold text-[#0A3353]'>82%</span>
-                            </Card>
-                            <Card title='Avg. Score' icon={ChartAverageIcon} bgIcon='bg-[#A329041A]'>
-                                <span className='text-4xl font-semibold text-[#0A3353]'>82,6</span>
-                            </Card>
+                    {
+                        activeTab == 'employee-performance' ?
+                            <div className='flex flex-col gap-4'>
+                                <div className='grid md:grid-cols-4 gap-4'>
+                                    <Card title='Employee Evaluated' icon={EmployeeIcon}>
+                                        <span className='text-4xl font-semibold text-[#0A3353]'>53</span>
+                                    </Card>
+                                    <Card title='Pending Evaluations' icon={ClipboardPendingIcon} bgIcon='bg-[#FF9E021A]' width={20}>
+                                        <span className='text-4xl font-semibold text-[#0A3353]'>14</span>
+                                    </Card>
+                                    <Card title='Employee Productivity' icon={ProductivityIcon} bgIcon='bg-[#01933B1A]' width={20}>
+                                        <span className='text-4xl font-semibold text-[#0A3353]'>82%</span>
+                                    </Card>
+                                    <Card title='Avg. Score' icon={ChartAverageIcon} bgIcon='bg-[#A329041A]'>
+                                        <span className='text-4xl font-semibold text-[#0A3353]'>82,6</span>
+                                    </Card>
 
-                        </div>
-
-                        <div className='grid md:grid-cols-[2fr_1fr] grid-cols-1 gap-4 items-start'>
-                            <div className='flex flex-col justify-between mb-4 gap-2'>
-                                <div className="flex gap-2 items-center justify-between md:hidden">
-                                    <SearchTable
-                                        value={search}
-                                        onChange={(e) => setSearch(e.target.value)}
-                                        onSearch={() => console.log('Searching for:', search)}
-                                    />
-                                    <Dropdown overlay={mobileMenu} trigger={['click']}>
-                                        <button className="p-2 border rounded">
-                                            <MoreOutlined />
-                                        </button>
-                                    </Dropdown>
                                 </div>
-                                <div className='md:flex flex-col md:flex-row items-start md:items-center justify-between gap-4 hidden'>
-                                    <div className='flex items-center gap-2'>
-                                        <ShowPageSize
+
+                                <div className='grid md:grid-cols-[2fr_1fr] grid-cols-1 gap-4 items-start'>
+                                    <div className='flex flex-col justify-between mb-4 gap-2'>
+                                        <div className="flex gap-2 items-center justify-between md:hidden">
+                                            <SearchTable
+                                                value={search}
+                                                onChange={(e) => setSearch(e.target.value)}
+                                                onSearch={() => console.log('Searching for:', search)}
+                                            />
+                                            <Dropdown overlay={mobileMenu} trigger={['click']}>
+                                                <button className="p-2 border rounded">
+                                                    <MoreOutlined />
+                                                </button>
+                                            </Dropdown>
+                                        </div>
+                                        <div className='md:flex flex-col md:flex-row items-start md:items-center justify-between gap-4 hidden'>
+                                            <div className='flex items-center gap-2'>
+                                                <ShowPageSize
+                                                    pageSize={pageSize}
+                                                    onChange={setPageSize}
+                                                />
+                                                <ButtonFilter
+                                                    label='Filter by'
+                                                    icon={<Image
+                                                        src={FilterIcon}
+                                                        alt='filter-icon'
+                                                        width={15}
+                                                        height={15}
+                                                    />}
+                                                    onClick={() => setisOpenModalFilter(true)}
+                                                    position='end'
+                                                    style={{ padding: '1.2rem 1.7rem' }}
+                                                />
+                                                <SearchTable
+                                                    value={search}
+                                                    onChange={(e) => setSearch(e.target.value)}
+                                                    onSearch={() => console.log('Searching for:', search)}
+                                                />
+                                            </div>
+
+                                            <div className='flex items-center gap-2'>
+                                                <Button
+                                                    icon={<Image
+                                                        src={ExportIcon}
+                                                        alt='export-icon'
+                                                        width={15}
+                                                        height={15}
+                                                    />}
+                                                    label='Export'
+                                                    style={{ padding: '1.2rem' }}
+                                                // link={routes.eCommerce.editQuote}
+                                                />
+                                            </div>
+                                        </div>
+                                        <Table
+                                            columns={columnsBenefitEmployee}
+                                            dataSource={dataBenefitEmployee}
+                                        />
+                                        <Pagination
+                                            current={currentPage}
+                                            total={dataBenefitEmployee.length}
                                             pageSize={pageSize}
-                                            onChange={setPageSize}
-                                        />
-                                        <ButtonFilter
-                                            label='Filter by'
-                                            icon={<Image
-                                                src={FilterIcon}
-                                                alt='filter-icon'
-                                                width={15}
-                                                height={15}
-                                            />}
-                                            onClick={() => setisOpenModalFilter(true)}
-                                            position='end'
-                                            style={{ padding: '1.2rem 1.7rem' }}
-                                        />
-                                        <SearchTable
-                                            value={search}
-                                            onChange={(e) => setSearch(e.target.value)}
-                                            onSearch={() => console.log('Searching for:', search)}
+                                            onChange={(page) => setCurrentPage(page)}
                                         />
                                     </div>
+                                    <div>
+                                        <div className='rounded-lg border border-[#E5E7EB] md:h-[auto] p-5 flex flex-col gap-3 overflow-auto'>
+                                            <div className='flex justify-between items-center mb-3'>
+                                                <h4 className='text-lg font-semibold'>Top Performance</h4>
+                                                <ButtonIcon
+                                                    icon={EmployeeOrangeIcon}
+                                                    width={15}
+                                                    color='orange'
+                                                    variant='filled'
+                                                />
+                                            </div>
+                                            <div className='w-full flex flex-col gap-4'>
+                                                <CardEmployee name='Marcella Indarwati' role='UI/UX Designer' score={4.5} />
+                                                <CardEmployee name='Viola Yosevi' role='Front End Developer' score={4} />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            : <Organizational />
+                    }
 
-                                    <div className='flex items-center gap-2'>
-                                        <Button
-                                            icon={<Image
-                                                src={ExportIcon}
-                                                alt='export-icon'
-                                                width={15}
-                                                height={15}
-                                            />}
-                                            label='Export'
-                                            style={{ padding: '1.2rem' }}
-                                        // link={routes.eCommerce.editQuote}
-                                        />
-                                    </div>
-                                </div>
-                                <Table
-                                    columns={columnsBenefitEmployee}
-                                    dataSource={dataBenefitEmployee}
-                                />
-                                <Pagination
-                                    current={currentPage}
-                                    total={dataBenefitEmployee.length}
-                                    pageSize={pageSize}
-                                    onChange={(page) => setCurrentPage(page)}
-                                />
-                            </div>
-                            <div>
-                                <div className='rounded-lg border border-[#E5E7EB] md:h-[auto] p-5 flex flex-col gap-3 overflow-auto'>
-                                    <div className='flex justify-between items-center mb-3'>
-                                        <h4 className='text-lg font-semibold'>Top Performance</h4>
-                                        <ButtonIcon
-                                            icon={EmployeeOrangeIcon}
-                                            width={15}
-                                            color='orange'
-                                            variant='filled'
-                                        />
-                                    </div>
-                                    <div className='w-full flex flex-col gap-4'>
-                                        <CardEmployee name='Marcella Indarwati' role='UI/UX Designer' score={4.5} />
-                                        <CardEmployee name='Viola Yosevi' role='Front End Developer' score={4} />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </Content>
 

@@ -66,7 +66,7 @@ const index = ({
             {canScrollLeft && (
                 <button
                     onClick={() => scrollTabs('left')}
-                    className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-[#EAF3FF] shadow rounded-full w-8 h-8"
+                    className="absolute left-0 top-1/2 -translate-y-1/2 z-50 bg-[#EAF3FF] shadow rounded-full w-8 h-8"
                 >
                     <LeftOutlined className='!text-[#3666AA]' />
                 </button>
@@ -75,7 +75,7 @@ const index = ({
             <div
                 ref={scrollRef}
                 className={`relative z-10 flex overflow-x-auto scrollbar-none whitespace-nowrap ${overflowClass}`}>
-                <div className={`flex border-b border-gray-200 gap-6 ${borderClass}`} style={{ borderColor: '#E5E7EB' }}>
+                <div className={`flex justify-around items-center border-b border-gray-200 gap-6 ${borderClass}`} style={{ borderColor: '#E5E7EB' }}>
                     {tabs.map((tab) => (
                         <button
                             key={tab.key}
