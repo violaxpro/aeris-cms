@@ -1,3 +1,5 @@
+import dayjs, { Dayjs } from 'dayjs'
+
 export function snakeObjectToCamelObject<T, U>(obj: T): U {
     const camelObj: any = {}
     for (const key in obj) {
@@ -45,3 +47,38 @@ export const mapShiftsToDays = (days: any, record: any) => {
 
     return mapped;
 };
+
+export const getDatesByDay = (
+    start: dayjs.Dayjs | null,
+    end: dayjs.Dayjs | null,
+    days: string[]
+) => {
+    const result: Record<string, string> = {};
+
+    let baseDate = dayjs(); // default hari ini
+    let weekStart = baseDate.startOf('week').add(1, 'day'); // start dari Senin minggu ini
+
+    if (start && end) {
+        // Kalau ada range yang dipilih, pakai start-nya aja dan lanjut 6 hari ke depan
+        for (let i = 0; i < days.length; i++) {
+            const date = start.clone().add(i, 'day');
+            result[days[i]] = date.format('MMM DD, YYYY');
+        }
+    } else {
+        // Kalau belum pilih range, pakai minggu berjalan
+        for (let i = 0; i < days.length; i++) {
+            const date = weekStart.clone().add(i, 'day');
+            result[days[i]] = date.format('MMM DD, YYYY');
+        }
+    }
+
+    return result;
+};
+
+export const getTimeDiffInMinutes = (start: string, end: string): number => {
+    const [startH, startM] = start.split(":").map(Number);
+    const [endH, endM] = end.split(":").map(Number);
+    const startTotal = startH * 60 + startM;
+    const endTotal = endH * 60 + endM;
+    return endTotal - startTotal;
+}

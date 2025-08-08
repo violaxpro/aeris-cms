@@ -1,41 +1,26 @@
 'use client'
-import React, { useState } from 'react'
+import React, { act, useState } from 'react'
 import Breadcrumb from '@/components/breadcrumb'
 import Button from '@/components/button'
 import Image from 'next/image'
 import {
-    EmployeeIcon,
     ExportIcon,
-    MoreBlackIcon,
-    EmployeeOrangeIcon,
-    PlusFilledIcon,
-    LegendPurpleIcon,
     ChevronLeftBlackIcon,
     CalendarTodayIcon,
     CalendarWeekIcon,
     CalendarMonthIcon,
     PersonIcon,
-    ChevronLeftIcon,
-    ChevronRightIcon
 } from '@public/icon'
 import { routes } from '@/config/routes'
 import { useNotificationAntd } from '@/components/toast'
 import { Content } from 'antd/es/layout/layout'
 import ShowPageSize from '@/components/pagination/ShowPageSize'
 import type { TableColumnsType } from 'antd'
-import Link from 'next/link'
-import StatusTag from '@/components/tag'
-import { Card } from '@/components/card'
 import SelectDatePicker from '@/components/date-picker/SelectDatePicker'
 import Avatar from '@/components/avatar'
 import AvatarImage from "public/social-avatar.webp"
-import { Dropdown, Menu } from 'antd'
+import { Menu } from 'antd'
 import ButtonIcon from '@/components/button/ButtonIcon'
-import CardTopPerformanceReport from '@/components/card/CardTopPerformanceReport'
-import Progress from '@/components/progress'
-import ButtonTab from '@/components/tab/ButtonTab'
-import BarChart from '@/components/chart/BarChart'
-import AreaChart from '@/components/chart/AreaChart'
 import { useRouter } from 'next/navigation'
 import { Divider } from 'antd'
 import dayjs, { Dayjs } from 'dayjs'
@@ -43,17 +28,14 @@ import Table from '@/components/table'
 import SelectRangePicker from '@/components/date-picker/SelectRangePicker'
 
 const index = ({ data, slug }: { data?: any, slug: any }) => {
-    const [activeTab, setActiveTab] = useState('today');
+    const [activeTab, setActiveTab] = useState('week');
     const [selectedRange, setSelectedRange] = useState<[dayjs.Dayjs, dayjs.Dayjs] | null>(null);
     const router = useRouter()
     const { contextHolder, notifySuccess } = useNotificationAntd()
-    const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [isOpenModalFilter, setisOpenModalFilter] = useState(false)
-    const [search, setSearch] = useState('')
     const [selectedMonth, setSelectedMonth] = useState<Dayjs>(dayjs());
     const [openModalForm, setOpenModalForm] = useState(false)
-    const [openModalDetail, setOpenModalDetail] = useState(false)
     const [formData, setFormData] = useState({
         employee_name: [],
         benefit_name: '',
@@ -79,14 +61,13 @@ const index = ({ data, slug }: { data?: any, slug: any }) => {
         setSelectedRange(dates);
     };
 
-    const columnsOvertimeSummary: TableColumnsType<any> = [
+    const columnsTotalSummary: TableColumnsType<any> = [
         {
-            title: 'Date',
-            dataIndex: 'date',
-            sorter: (a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+            title: 'Name',
+            dataIndex: 'name',
+            sorter: (a: any, b: any) => a?.name.localeCompare(b?.name),
             render: (val: string) => {
-                const date = dayjs(val).format('DD/MM/YYYY')
-                return date
+                return val
             }
         },
         {
@@ -97,41 +78,49 @@ const index = ({ data, slug }: { data?: any, slug: any }) => {
                 return <span>{row.duration}</span>
             }
         },
-        {
-            title: 'Description',
-            dataIndex: 'description',
-            sorter: (a: any, b: any) => a.description.localeCompare().b.description,
-            render: (_: any, row: any) => {
-                return <span>{row.description}</span>
-            }
-        },
     ]
 
-    const columnsDailyActivityLog: TableColumnsType<any> = [
+    const columnsActivityLog: TableColumnsType<any> = [
         {
             title: 'Date',
             dataIndex: 'date',
+            width: 120,
             sorter: (a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime(),
             render: (_: any, row: any) => {
-                const date = dayjs(row.date).format('DD/MM/YYYY')
-                const week = row.date
-                return activeTab == 'month' ? week : date
+                const day = dayjs(row.date).format('dddd');
+                const fullDate = dayjs(row.date).format('DD MMM YYYY');
+
+                return (
+                    <div className="flex flex-col">
+                        <span>{day}</span>
+                        <span>{fullDate}</span>
+                    </div>
+                );
             }
         },
         {
-            title: 'Task',
-            dataIndex: 'tasks',
-            render: (tasks: any[]) => {
-                return (
-                    <div className="flex flex-col gap-2">
-                        {tasks.map((item, idx) => (
-                            <div key={idx} className='flex flex-col'>
-                                <span>{item.task}</span>
-                                <span className="text-xs text-gray-500">{item.duration}</span>
-                            </div>
-                        ))}
-                    </div>
-                );
+            title: 'Check In',
+            dataIndex: 'checkIn',
+            sorter: (a: any, b: any) => new Date(a.checkIn).getTime() - new Date(b.checkIn).getTime(),
+            render: (_: any, row: any) => {
+                return row.checkIn
+            }
+        },
+        {
+            title: 'Break',
+            dataIndex: 'break',
+            width: 100,
+            sorter: (a: any, b: any) => new Date(a.break).getTime() - new Date(b.break).getTime(),
+            render: (_: any, row: any) => {
+                return row.break
+            }
+        },
+        {
+            title: 'Check Out',
+            dataIndex: 'checkOut',
+            sorter: (a: any, b: any) => new Date(a.checkOut).getTime() - new Date(b.checkOut).getTime(),
+            render: (_: any, row: any) => {
+                return row.checkOut
             }
         },
         {
@@ -143,14 +132,6 @@ const index = ({ data, slug }: { data?: any, slug: any }) => {
             }
         },
     ]
-
-
-    const months = [
-        { value: 0, label: 'January' },
-        { value: 1, label: 'February' },
-        { value: 2, label: 'March' },
-        // dst...
-    ];
 
     const handleChange = (field: string) => (
         e: any | React.ChangeEvent<HTMLTextAreaElement>
@@ -171,152 +152,58 @@ const index = ({ data, slug }: { data?: any, slug: any }) => {
         setFormMode(mode)
     }
 
-    const dataChart = [
+    const weeklyActivityLog = [
         {
-            label: 'Insurance',
-            sublabel: 'Health Insurance',
-            value: 24,
-            color: '#002B49',
+            date: '23 June 2025',
+            checkIn: '07.00',
+            break: '12.00 - 13.00',
+            checkOut: '16.00',
+            totalHours: '8h 00m',
         },
         {
-            label: 'Allowance',
-            sublabel: 'Transport Allowance',
-            value: 12,
-            color: '#5583F0',
+            date: '24 June 2025',
+            checkIn: '07.00',
+            break: '12.00 - 13.00',
+            checkOut: '16.00',
+            totalHours: '8h 00m',
         },
         {
-            label: 'Scholarship',
-            sublabel: 'Academic Support',
-            value: 6,
-            color: '#79ACFF',
+            date: '25 June 2025',
+            checkIn: '07.00',
+            break: '12.00 - 13.00',
+            checkOut: '16.00',
+            totalHours: '8h 00m',
+        },
+        {
+            date: '26 June 2025',
+            checkIn: '07.00',
+            break: '12.00 - 13.00',
+            checkOut: '16.00',
+            totalHours: '8h 00m',
+        },
+        {
+            date: '27 June 2025',
+            checkIn: '07.00',
+            break: '12.00 - 13.00',
+            checkOut: '16.00',
+            totalHours: '8h 00m',
+        },
+        {
+            date: ' 28 June 2025',
+            checkIn: '07.00',
+            break: '12.00 - 13.00',
+            checkOut: '16.00',
+            totalHours: '8h 00m',
         },
     ]
 
-    const dataOvertime = [
-        {
-            date: "June 3, 2025",
-            duration: "2h 30m",
-            description: "Tight project deadline",
-        },
-        {
-            date: "June 20, 2025",
-            duration: "4h 00m",
-            description: "Work delay due to technical issues",
-        },
-        {
-            date: "June 20, 2025",
-            duration: "1h 25m",
-            description: "-",
-        },
-        {
-            date: "June 25, 2025",
-            duration: "2h 00m",
-            description: "System or feature testing",
-        },
-        {
-            date: "June 27, 2025",
-            duration: "3h 30m",
-            description: "-",
-        },
-        {
-            date: "June 30, 2025",
-            duration: "0h 45m",
-            description: "-",
-        },
+    const weeklyTotalSummary = [
+        { name: 'Total Hours', duration: '30h 45m' },
+        { name: 'Total Overtime', duration: '8h 25m' },
+        { name: 'Total Sick Leave', duration: '1' },
+        { name: 'Total Vacation', duration: '2' },
+        { name: 'Total Personal Leave', duration: '0' },
     ];
-
-    const dataDailyActivityLog = [
-        {
-            date: "June 23, 2025",
-            tasks: [
-                { task: "Attendance Page", duration: "3h 25m" },
-                { task: "Timesheet Page", duration: "4h 15m" },
-                { task: "Shift Management Page", duration: "0h 20m" },
-            ],
-            totalHours: "8h 00m",
-        },
-        {
-            date: "June 24, 2025",
-            tasks: [
-                { task: "Shift Management Page", duration: "5h 00m" },
-                { task: "Leave and Permit Page", duration: "4h 25m" },
-            ],
-            totalHours: "9h 25m",
-        },
-        {
-            date: "June 25, 2025",
-            tasks: [
-                { task: "Leave and Permit Page", duration: "3h 00m" },
-                { task: "Overtime Page", duration: "5h 00m" },
-            ],
-            totalHours: "8h 00m",
-        },
-        {
-            date: "June 26, 2025",
-            tasks: [
-                { task: "Overtime Page", duration: "4h 10m" },
-                { task: "Employee Page", duration: "8h 00m" },
-            ],
-            totalHours: "12h 10m",
-        },
-        {
-            date: "June 27, 2025",
-            tasks: [
-                { task: "Performance Page", duration: "8h 00m" },
-            ],
-            totalHours: "8h 00m",
-        },
-        {
-            date: "June 28, 2025",
-            tasks: [
-                { task: "Performance Page", duration: "4h 00m" },
-            ],
-            totalHours: "4h 00m",
-        },
-    ];
-
-    const dataWeek = dataDailyActivityLog?.find(log => log.date === "June 26, 2025")
-
-    const monthActivityLog: any = [
-        {
-            date: "Week 1 (June 1 - June 7)",
-            tasks: [
-                { task: "Attendance Page", duration: "3h 25m" },
-                { task: "Timesheet Page", duration: "4h 15m" },
-                { task: "Shift Management Page", duration: "0h 20m" },
-            ],
-            totalHours: "32h 00m",
-        },
-        {
-            date: "Week 2 (June 8 - June 14)",
-            tasks: [
-                { task: "Attendance Page", duration: "3h 25m" },
-                { task: "Timesheet Page", duration: "4h 15m" },
-                { task: "Shift Management Page", duration: "0h 20m" },
-            ],
-            totalHours: "36h 30m",
-        },
-        {
-            date: "Week 3 (June 15 - June 21)",
-            tasks: [
-                { task: "Attendance Page", duration: "3h 25m" },
-                { task: "Timesheet Page", duration: "4h 15m" },
-                { task: "Shift Management Page", duration: "0h 20m" },
-            ],
-            totalHours: "40h 00m",
-        },
-        {
-            date: "Week 4 (June 22 - June 28)",
-            tasks: [
-                { task: "Attendance Page", duration: "3h 25m" },
-                { task: "Timesheet Page", duration: "4h 15m" },
-                { task: "Shift Management Page", duration: "0h 20m" },
-            ],
-            totalHours: "49h 35m", // dari data dailyActivityLog
-        },
-    ];
-
-
 
 
     const mobileMenu = (
@@ -332,26 +219,6 @@ const index = ({ data, slug }: { data?: any, slug: any }) => {
             </Menu.Item>
         </Menu>
     );
-
-    const tabs = [
-        { key: 'today', label: 'Today' },
-        { key: 'week', label: 'Week' },
-        { key: 'month', label: 'Month' },
-    ];
-
-    const overtime_analytics_data_week = [
-        {
-            name: 'Week 1',
-            data: [10, 20, 15, 30, 25, 40, 50]
-        }
-    ]
-
-    const overtime_analytics_data_month = [
-        {
-            name: 'Overtime Analytics',
-            data: [55, 35, 65, 60]
-        },
-    ]
     return (
         <>
             {contextHolder}
@@ -472,85 +339,61 @@ const index = ({ data, slug }: { data?: any, slug: any }) => {
                                                 </div>
                                             </div>
                                         </div>
-
-
                                     </div>
                                 </div>
-
                             </div>
                         </div>
-                        <div className='grid md:grid-cols-[1fr_1fr] grid-cols-1 gap-4 items-start'>
-                            <div className='rounded-lg border border-[#E5E7EB] md:h-[550px] p-5 flex flex-col gap-3 overflow-auto'>
-                                <div className='flex flex-col mb-3 gap-4'>
-                                    <h4 className='text-lg font-semibold'>Overtime Summary</h4>
-                                    <div className='flex gap-3'>
-                                        <div className='flex flex-col w-full'>
-                                            <label className='text-gray-400'>Total Overtime Days</label>
-                                            <span className='font-medium'>3 Days</span>
-                                        </div>
-                                        <div className='flex flex-col w-full'>
-                                            <label className='text-gray-400'>Total Overtime Hours</label>
-                                            <span className='font-medium'>44h 40m</span>
-                                        </div>
-                                        <div className='flex flex-col w-full'>
-                                            <label className='text-gray-400'>Avg Overtime/Day</label>
-                                            <span className='font-medium'>2h 30m</span>
-                                        </div>
-                                    </div>
+                        <div className='flex justify-center gap-4'>
+                            <button
+                                key='week'
+                                onClick={() => setActiveTab('week')}
+                                className={`px-3 py-1 rounded-md border transition-all ${activeTab == 'week'
+                                    ? 'bg-[#EEF2F7] text-[#2E5AAC] border-[#C8D3E0]'
+                                    : 'bg-transparent text-black border-transparent'
+                                    }`}
+                            >
+                                <div className="flex items-center gap-1 relative">
+                                    <span>Week</span>
                                 </div>
-                                <div className='w-full flex flex-col gap-4'>
+                            </button>
+                            <SelectRangePicker
+                                picker='date'
+                                format='MMMM DD,YYYY'
+                                onChange={handleRangeChange}
+                            />
+                            <button
+                                key='month'
+                                onClick={() => setActiveTab('month')}
+                                className={`px-3 rounded-md border transition-all ${activeTab == 'month'
+                                    ? 'bg-[#EEF2F7] text-[#2E5AAC] border-[#C8D3E0]'
+                                    : 'bg-transparent text-black border-transparent'
+                                    }`}
+                            >
+                                <div className="flex items-center gap-1 relative">
+                                    <span>Month</span>
+                                </div>
+                            </button>
+                        </div>
+                        <div className='grid md:grid-cols-[1fr_1fr] grid-cols-1 gap-4 items-start'>
+                            <div className='rounded-lg border border-[#E5E7EB] h-auto p-5 flex flex-col gap-3 overflow-auto'>
+                                <div className='flex flex-col justify-between mb-4 gap-2'>
+                                    <div className='flex justify-between'>
+                                        <h4 className='text-lg font-semibold'>{`${activeTab == 'week' ? 'Weekly' : 'Monthly'}`} Activity Log</h4>
+                                    </div>
                                     <Table
-                                        columns={columnsOvertimeSummary}
-                                        dataSource={dataOvertime}
+                                        columns={columnsActivityLog}
+                                        dataSource={weeklyActivityLog}
                                     />
                                 </div>
                             </div>
-                            <div className='rounded-lg border border-[#E5E7EB] md:h-[665px] p-5 flex flex-col gap-3 overflow-auto'>
-                                <div className='flex flex-col justify-between mb-4 gap-2'>
-                                    <div className='flex justify-between'>
-                                        <h4 className='text-lg font-semibold'>Daily Activity Log</h4>
-                                        <ButtonTab
-                                            tabs={tabs}
-                                            activeKey={activeTab}
-                                            onTabClick={setActiveTab}
-                                        />
-                                    </div>
-                                    {
-                                        activeTab == 'week' ?
-                                            <div className='flex gap-4 items-center justify-between'>
-                                                <ButtonIcon
-                                                    icon={ChevronLeftIcon}
-                                                    className='cursor-pointer !h-10 !w-10'
-                                                    width={8}
-                                                />
-                                                <SelectRangePicker
-                                                    picker='date'
-                                                    format='MMMM DD,YYYY'
-                                                    onChange={handleRangeChange}
-                                                />
-                                                <ButtonIcon
-                                                    icon={ChevronRightIcon}
-                                                    className='cursor-pointer !h-10 !w-10'
-                                                    width={8}
-                                                />
-                                            </div>
-                                            : <div className='flex flex-col gap-2'>
-                                                <span className='text-gray-500 text-md'>{activeTab == 'month' ? 'This month' : ' Monday,'}</span>
-                                                <span className='text-lg'>{activeTab == 'month' ? 'June' : 'June 23, 2025'}</span>
-                                            </div>
-
-                                    }
-
-
+                            <div className='rounded-lg border border-[#E5E7EB] md:h-[490px] p-5 flex flex-col gap-3 overflow-auto'>
+                                <div className='flex flex-col mb-3 gap-4'>
+                                    <h4 className='text-lg font-semibold'>{`${activeTab == 'week' ? 'Weekly' : 'Monthly'}`} Total Summary</h4>
+                                </div>
+                                <div className='w-full flex flex-col gap-4'>
                                     <Table
-                                        columns={columnsDailyActivityLog}
-                                        dataSource={
-                                            activeTab == 'today'
-                                                ? [dataWeek]
-                                                : activeTab == 'week'
-                                                    ? dataDailyActivityLog
-                                                    : monthActivityLog
-                                        }
+                                        columns={columnsTotalSummary}
+                                        dataSource={weeklyTotalSummary}
                                     />
                                 </div>
                             </div>

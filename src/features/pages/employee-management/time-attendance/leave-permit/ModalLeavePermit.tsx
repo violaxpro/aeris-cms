@@ -101,7 +101,6 @@ const ModalLeavePermit = ({ open, handleChange, formData, handleCancel, handleSu
                                     value={formData.end_time}
                                     onChange={(val) => handleChange('end_time')(val)}
                                 />
-
                             </>
                             :
                             <>

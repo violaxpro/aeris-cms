@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Table } from 'antd';
 import type { TableColumnsType, TableProps, TablePaginationConfig } from 'antd';
-
+import { CaretDownIcon, CaretRightIcon } from '@public/icon';
+import Image from 'next/image';
 type TableRowSelection<T extends object = object> = TableProps<T>['rowSelection'];
 
 type tableProps<data> = {
@@ -12,10 +13,21 @@ type tableProps<data> = {
     onSelectChange?: (keys: React.Key[]) => void
     pagination?: TablePaginationConfig
     scroll?: any
+    expandable?: TableProps<data>['expandable']
 }
 
-const index = <data extends object>({ columns, dataSource, withSelectableRows = false, selectedRowKeys, onSelectChange, pagination, scroll = { x: 'max-content' } }: tableProps<data>) => {
+const index = <data extends object>({
+    columns,
+    dataSource,
+    withSelectableRows = false,
+    selectedRowKeys,
+    onSelectChange,
+    pagination,
+    scroll = { x: 'max-content' },
+    expandable
+}: tableProps<data>) => {
     const [selectRowKeys, setSelectRowKey] = useState<React.Key[]>([]);
+    const [expandedRowKeys, setExpandedRowKeys] = useState<any>([]);
 
     const keys = selectedRowKeys ?? selectRowKeys;
     const onChange = onSelectChange ?? setSelectRowKey;
@@ -57,6 +69,32 @@ const index = <data extends object>({ columns, dataSource, withSelectableRows = 
         //     ...pagination,
         // }}
         pagination={false}
+        expandable={
+            expandable
+                ? {
+                    expandedRowKeys,
+                    onExpand: (expanded: any, record: any) => {
+                        setExpandedRowKeys(expanded ? [record.id] : []);
+                    },
+                    expandIcon: ({ expanded, onExpand, record }) =>
+                        expanded ? (
+                            <Image
+                                src={CaretDownIcon}
+                                alt='caret-down-icon'
+                                onClick={(e) => onExpand(record, e)}
+                            />
+                        ) : (
+                            <Image
+                                src={CaretRightIcon}
+                                alt='caret-right-icon'
+                                onClick={(e) => onExpand(record, e)}
+                            />
+                        ),
+                    ...expandable
+                }
+                : undefined
+        }
+
 
     />;
 };

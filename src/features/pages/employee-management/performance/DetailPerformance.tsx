@@ -136,19 +136,7 @@ const DetailPerformance = ({ slug }: { slug?: any }) => {
                     />
                 </div>
                 <div className='flex gap-4 items-center'>
-                    <div className='flex gap-4 items-center'>
-                        <ButtonIcon
-                            icon={ChevronLeftIcon}
-                            className='cursor-pointer p-4'
-                            width={8}
-                        />
-                        <SelectRangePicker />
-                        <ButtonIcon
-                            icon={ChevronRightIcon}
-                            className='cursor-pointer'
-                            width={8}
-                        />
-                    </div>
+                    <SelectRangePicker />
                     <Button
                         icon={<Image
                             src={ExportIcon}

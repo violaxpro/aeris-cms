@@ -1,5 +1,6 @@
 'use client'
 import React, { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Breadcrumb from '@/components/breadcrumb'
 import Button from '@/components/button'
 import Image from 'next/image'
@@ -17,12 +18,14 @@ import {
     EmployeeOrangeIcon,
     PlusFilledIcon,
     ChevronLeftIcon,
-    ChevronRightIcon
+    ChevronRightIcon,
+    DownloadIcon,
+    EyeIcon
 } from '@public/icon'
 import { routes } from '@/config/routes'
 import { useNotificationAntd } from '@/components/toast'
 import { Content } from 'antd/es/layout/layout'
-import ButtonFilter from '@/components/button/ButtonAction'
+import ButtonAction from '@/components/button/ButtonAction'
 import ButtonDelete from '@/components/button/ButtonAction'
 import Pagination from '@/components/pagination'
 import SearchTable from '@/components/search/SearchTable'
@@ -53,11 +56,12 @@ import ScheduleTable from '@/components/scheduler/SchedulerShift'
 import ButtonTab from '@/components/tab/ButtonTab'
 import LineAreaChart from '@/components/chart/LineAreaChart'
 import AreaChart from '@/components/chart/AreaChart'
-import { mapShiftsToDays } from '@/plugins/utils/utils'
+import { mapShiftsToDays, getDatesByDay, getTimeDiffInMinutes } from '@/plugins/utils/utils'
 import ProgressBar from '@/components/progress'
 
 const index = ({ data }: { data?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
+    const router = useRouter()
     const [activeTab, setActiveTab] = useState('day');
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
@@ -93,33 +97,6 @@ const index = ({ data }: { data?: any }) => {
         { key: 'month', label: 'Month' },
     ];
     const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    const getDatesByDay = (
-        start: dayjs.Dayjs | null,
-        end: dayjs.Dayjs | null,
-        days: string[]
-    ) => {
-        const result: Record<string, string> = {};
-
-        let baseDate = dayjs(); // default hari ini
-        let weekStart = baseDate.startOf('week').add(1, 'day'); // start dari Senin minggu ini
-
-        if (start && end) {
-            // Kalau ada range yang dipilih, pakai start-nya aja dan lanjut 6 hari ke depan
-            for (let i = 0; i < days.length; i++) {
-                const date = start.clone().add(i, 'day');
-                result[days[i]] = date.format('MMM DD, YYYY');
-            }
-        } else {
-            // Kalau belum pilih range, pakai minggu berjalan
-            for (let i = 0; i < days.length; i++) {
-                const date = weekStart.clone().add(i, 'day');
-                result[days[i]] = date.format('MMM DD, YYYY');
-            }
-        }
-
-        return result;
-    };
-
 
     const dateLabelsByDay = getDatesByDay(
         selectedRange ? selectedRange[0] : null,
@@ -132,7 +109,6 @@ const index = ({ data }: { data?: any }) => {
             title: 'Employee Name',
             dataIndex: 'name',
             key: 'name',
-            fixed: 'left',
             width: 250,
             render: (_: any, record: any) => (
                 <Space>
@@ -155,21 +131,55 @@ const index = ({ data }: { data?: any }) => {
             width: 100,
             render: (_: any, record: any) => {
                 const shift = record.shiftsMapped[day];
+                // total jam kerja perusahaan
+                const workingTime = 8 * 60
+                const workEndTime = '16:00';
 
-                // Default cell kosong tapi tetap tampil
+                //ambil data attendance berdasarkan day (check in dan checkout)
+                const attendanceForDay = record.attendance?.find((a: any) => a.date === dateLabelsByDay[day]);
+                let completed = 0,
+                    hoursWorking = 0,
+                    minutesWorking = 0,
+                    progressColor = ''
+                if (attendanceForDay) {
+                    const checkIn = attendanceForDay ? attendanceForDay.check_in : '00:00';
+                    const checkOut = attendanceForDay ? attendanceForDay.check_out : '00:00';
+
+                    // total minutes working per day
+                    const totalWorkingPerDay = getTimeDiffInMinutes(checkIn, checkOut)
+
+                    // convert total minutes to hours working
+                    hoursWorking = Math.floor(totalWorkingPerDay / 60)
+                    minutesWorking = totalWorkingPerDay % 60
+
+                    // progress bar
+                    // const totalOvertime = getTimeDiffInMinutes(workEndTime, checkOut)
+                    // convert total minutes overtime
+                    // const hoursOvertime = Math.floor(totalOvertime / 60)
+                    // const minutesOvertime = totalOvertime % 60
+                    completed = attendanceForDay ? attendanceForDay.is_claim_overtime == 'yes' ? hoursWorking : 8 : 0
+
+                    progressColor = attendanceForDay.is_claim_overtime == 'yes'
+                        ? '#C20205' : attendanceForDay?.leave_type ? '#FF7601' : '#3666AA'
+                    console.log(attendanceForDay?.leave_type)
+                }
+
                 return <div>
-                    <label>3h 11m</label>
+                    {
+                        attendanceForDay?.leave_type
+                            ? <label>{`${attendanceForDay?.leave_type}`}</label>
+                            : <label>{`${hoursWorking}h ${minutesWorking}m`}</label>
+                    }
+
                     <ProgressBar
-                        completed={70}
-                        total={100}
+                        completed={completed}
+                        total={8}
                         isShowLabelProgress={false}
-                        strokeColor="#3666AA"
+                        strokeColor={progressColor}
                         size='small'
                         width={100}
                     />
                 </div>
-
-
             },
         })),
         {
@@ -177,9 +187,9 @@ const index = ({ data }: { data?: any }) => {
             dataIndex: 'total_time',
             key: 'total_time',
             width: 50,
-            render: (_: any, record: any) => (
-                <div>
-                    <label>3h 11m</label>
+            render: (_: any, record: any) => {
+                return <div>
+                    <label>20h 35m</label>
                     <ProgressBar
                         completed={20}
                         total={100}
@@ -189,8 +199,25 @@ const index = ({ data }: { data?: any }) => {
                         width={100}
                     />
                 </div>
-            ),
+            }
         },
+        {
+            title: 'Action',
+            width: 50,
+            key: 'action',
+            render: (_: any, row: any) => {
+                return <div className="flex flex-col w-full items-center">
+                    <ButtonIcon
+                        icon={EyeIcon}
+                        width={20}
+                        height={20}
+                        onClick={() => router.push(routes.eCommerce.detailTimesheet(row.id))}
+                    />
+                </div>
+
+
+            }
+        }
 
     ];
 
@@ -287,7 +314,7 @@ const index = ({ data }: { data?: any }) => {
 
     const employeeData = [
         {
-            key: '1',
+            id: 1,
             name: 'Marcella Indarwati',
             role: 'UI/UX Designer',
             avatar: 'https://via.placeholder.com/40',
@@ -295,12 +322,35 @@ const index = ({ data }: { data?: any }) => {
             end_time: ['04:00 PM'],
             apply_on_days: ['Monday', 'Tuesday'],
             apply_on_week_of_mont: ['Week 1', 'Week 2'],
-            type: 'Shift 1'
-            // Monday: [{ type: 'Shift 1', time: '08:00 AM - 04:00 PM' }],
-            // Friday: [{ type: 'Shift 1', time: '08:00 AM - 04:00 PM' }],
+            type: 'Shift 1',
+            attendance: [
+                {
+                    date: 'Aug 04, 2025',
+                    check_in: '07:56',
+                    start_break: '12:05',
+                    finish_break: '13:02',
+                    check_out: '16:07',
+                    ovrtime: '0h',
+                    is_claim_overtime: 'no',
+                    leave_type: ''
+
+                },
+                {
+                    date: 'Aug 05, 2025',
+                    check_in: '08:00',
+                    start_break: '12:02',
+                    finish_break: '13:05',
+                    check_out: '17:20',
+                    ovrtime: '1h 20m',
+                    is_claim_overtime: 'yes',
+                    leave_type: ''
+
+                }
+            ]
+
         },
         {
-            key: '2',
+            id: 2,
             name: 'Yuliana Dwi',
             role: 'Front End Developer',
             avatar: 'https://via.placeholder.com/40',
@@ -308,10 +358,42 @@ const index = ({ data }: { data?: any }) => {
             end_time: ['08:00 AM'],
             apply_on_days: ['Wednesday', 'Thursday'],
             apply_on_week_of_mont: ['Week 1', 'Week 4'],
-            type: 'Shift 2'
+            type: 'Shift 2',
+            attendance: [
+                {
+                    date: 'Aug 04, 2025',
+                    check_in: '07:56',
+                    start_break: '12:05',
+                    finish_break: '13:02',
+                    check_out: '16:07',
+                    ovrtime: '0h',
+                    is_claim_overtime: 'no',
+                    leave_type: ''
+                },
+                {
+                    date: 'Aug 05, 2025',
+                    check_in: '08:00',
+                    start_break: '12:02',
+                    finish_break: '13:05',
+                    check_out: '17:20',
+                    ovrtime: '1h 20m',
+                    is_claim_overtime: 'yes',
+                    leave_type: ''
+                },
+                {
+                    date: 'Aug 06, 2025',
+                    check_in: '00:00',
+                    start_break: '00:00',
+                    finish_break: '00:00',
+                    check_out: '00:00',
+                    ovrtime: '0h 0m',
+                    is_claim_overtime: 'no',
+                    leave_type: 'Sick Leave'
+                }
+            ]
         },
         {
-            key: '3',
+            id: 3,
             name: 'Cahyo Nur',
             role: 'Back End Developer',
             avatar: 'https://via.placeholder.com/40',
@@ -319,7 +401,31 @@ const index = ({ data }: { data?: any }) => {
             end_time: ['12:00 AM'],
             apply_on_days: ['Thursday', 'Friday'],
             apply_on_week_of_mont: ['Week 1', 'Week 4'],
-            type: 'Shift 3'
+            type: 'Shift 3',
+            attendance: [
+                {
+                    date: 'Aug 04, 2025',
+                    check_in: '07:56',
+                    start_break: '12:05',
+                    finish_break: '13:02',
+                    check_out: '16:07',
+                    ovrtime: '0h',
+                    is_claim_overtime: 'no',
+                    leave_type: ''
+
+                },
+                {
+                    date: 'Aug 05, 2025',
+                    check_in: '08:00',
+                    start_break: '12:02',
+                    finish_break: '13:05',
+                    check_out: '17:20',
+                    ovrtime: '1h 20m',
+                    is_claim_overtime: 'yes',
+                    leave_type: ''
+
+                }
+            ]
         },
         // Tambahkan lainnya sesuai kebutuhan
     ];
@@ -358,17 +464,6 @@ const index = ({ data }: { data?: any }) => {
                             items={breadcrumb}
                         />
                     </div>
-                    <Button
-                        icon={<Image
-                            src={AddIcon}
-                            alt='add-icon'
-                            width={15}
-                            height={15}
-                        />}
-                        label='Add Timesheet'
-                        style={{ padding: '1.2rem' }}
-                        onClick={() => setOpenModalForm(true)}
-                    />
                 </div>
             </div>
             <Content className="mb-0">
@@ -424,7 +519,7 @@ const index = ({ data }: { data?: any }) => {
                                             pageSize={pageSize}
                                             onChange={setPageSize}
                                         />
-                                        <ButtonFilter
+                                        <ButtonAction
                                             label='Filter by'
                                             icon={<Image
                                                 src={FilterIcon}
@@ -444,27 +539,91 @@ const index = ({ data }: { data?: any }) => {
                                     </div>
 
                                     <div className='flex gap-4 items-center'>
-                                        <ButtonIcon
-                                            icon={ChevronLeftIcon}
-                                            className='cursor-pointer p-4'
-                                            width={8}
-                                        />
                                         <SelectRangePicker
                                             picker='date'
                                             format='MMMM DD,YYYY'
                                             onChange={handleRangeChange}
                                         />
-                                        <ButtonIcon
-                                            icon={ChevronRightIcon}
-                                            className='cursor-pointer'
-                                            width={8}
+                                        <ButtonAction
+                                            icon={<Image
+                                                src={DownloadIcon}
+                                                alt='download-icon'
+                                                width={15}
+                                                height={15}
+                                            />}
+                                            label='Download PDF'
+                                        // onClick={() => handlePrint(invoiceData)}
+                                        />
+
+                                        <Button
+                                            icon={<Image
+                                                src={ExportIcon}
+                                                alt='export-icon'
+                                                width={15}
+                                                height={15}
+                                            />}
+                                            label='Export'
+                                        // link={routes.eCommerce.editQuote}
                                         />
                                     </div>
                                 </div>
                                 <Table
                                     columns={columns}
                                     dataSource={processedData}
-                                    scroll={{ x: 'max-content' }}
+                                    expandable={{
+                                        expandedRowRender: (record) => {
+                                            const detailRows = [
+                                                { label: 'Check In', key: 'check_in', default: '00:00' },
+                                                { label: 'Start Break', key: 'start_break', default: '00:00' },
+                                                { label: 'Finish Break', key: 'finish_break', default: '00:00' },
+                                                { label: 'Check Out', key: 'check_out', default: '00:00' },
+                                                { label: 'Overtime', key: 'ovrtime', default: '0h' },
+                                            ];
+
+                                            // Ambil semua tanggal dari attendance lalu urutkan sesuai kebutuhan
+                                            const attendanceDate = record.attendance
+                                                ? record.attendance.map((a: any) => a.date)
+                                                : [];
+                                            const dateTableHeader = days.map((day) => {
+                                                return dateLabelsByDay[day]
+                                            })
+
+                                            return (
+                                                <div
+                                                    style={{
+                                                        display: 'grid',
+                                                        minWidth: '1000px',
+                                                        gridTemplateColumns: '250px repeat(6, 1fr) 100px 80px', // Sesuaikan lebar dengan tabel aslinya
+                                                        fontSize: '0.85rem',
+                                                        padding: '8px 4rem',
+                                                    }}
+                                                >
+                                                    {/* Baris per detail (Check In, Start Break, dst.) */}
+                                                    {detailRows.map((row) => (
+                                                        <>
+                                                            {/* Label (tempat sejajar dengan kolom Employee Name) */}
+                                                            <div style={{ textAlign: 'left', paddingRight: '8px', fontWeight: 'bold' }}>{row.label}</div>
+
+                                                            {/* Data Tanggal */}
+                                                            {dateTableHeader.map((date, idx) => {
+                                                                const att = record.attendance?.find((a: any) => a.date === date);
+                                                                return (
+                                                                    <div key={idx} style={{ textAlign: 'center' }}>
+                                                                        {att && att[row.key] ? att[row.key] : row.default}
+                                                                    </div>
+                                                                );
+                                                            })}
+
+                                                            {/* Kolom kosong untuk Total Time dan Action */}
+                                                            <div></div>
+                                                            <div></div>
+                                                        </>
+                                                    ))}
+                                                </div>
+                                            );
+                                        },
+                                        // rowExpandable: (record) => record.attendance && record.attendance.length > 0
+                                    }}
                                 />
                             </div>
                         </div>

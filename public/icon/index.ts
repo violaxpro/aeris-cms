@@ -83,6 +83,8 @@ export { default as LightIcon } from './LightIcon.svg'
 export { default as DarkIcon } from './DarkIcon.svg'
 export { default as IndonesianFlagIcon } from './IndonesianFlagIcon.svg'
 export { default as EnglishFlagIcon } from './EnglishFlagIcon.svg'
+export { default as CaretDownIcon } from './CaretDownIcon.svg'
+export { default as CaretRightIcon } from './CaretRightIcon.svg'
 
 
 

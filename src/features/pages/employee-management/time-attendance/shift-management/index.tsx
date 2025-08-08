@@ -377,20 +377,7 @@ const index = ({ data }: { data?: any }) => {
                                             onSearch={() => console.log('Searching for:', search)}
                                         />
                                     </div>
-
-                                    <div className='flex gap-4 items-center'>
-                                        <ButtonIcon
-                                            icon={ChevronLeftIcon}
-                                            className='cursor-pointer p-4'
-                                            width={8}
-                                        />
-                                        <SelectRangePicker />
-                                        <ButtonIcon
-                                            icon={ChevronRightIcon}
-                                            className='cursor-pointer'
-                                            width={8}
-                                        />
-                                    </div>
+                                    <SelectRangePicker />
                                 </div>
                                 <ShiftScheduler data={employeeData} />
                             </div>

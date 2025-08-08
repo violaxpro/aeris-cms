@@ -297,7 +297,7 @@ const index = ({ data }: { data?: any }) => {
                 text='Are you sure want to checkout?'
             />
             <div className="mt-6 mx-4 mb-0">
-                <div className='flex justify-between items-center'>
+                <div className='flex md:flex-row flex-col justify-between items-center'>
                     <div>
                         <h1 className='text-xl font-bold'>
                             Attendance
@@ -397,7 +397,7 @@ const index = ({ data }: { data?: any }) => {
                             </div>
 
                         </div>
-                        <div className='flex justify-between mb-4 gap-2'>
+                        <div className='flex justify-between md:flex-row  flex-col mb-4 gap-2'>
                             <div className='flex items-center gap-2'>
                                 <ShowPageSize
                                     pageSize={pageSize}
@@ -420,7 +420,6 @@ const index = ({ data }: { data?: any }) => {
                                     onChange={(e) => setSearch(e.target.value)}
                                     onSearch={() => console.log('Searching for:', search)}
                                 />
-
                             </div>
                             <div className='flex items-center gap-2'>
                                 <SelectDatePicker
@@ -435,7 +434,6 @@ const index = ({ data }: { data?: any }) => {
                                         height={15}
                                     />}
                                     label='Export'
-                                    style={{ padding: '1.2rem' }}
                                 // link={routes.eCommerce.editQuote}
                                 />
                             </div>

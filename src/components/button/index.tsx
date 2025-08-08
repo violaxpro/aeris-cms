@@ -33,7 +33,7 @@ const index = ({
     // hover:!bg-inherit hover:!text-inherit hover:!border-inherit
     const button = (
         <Button
-            className={`${btnClassname}`}
+            className={`!h-10 ${btnClassname}`}
             type={type}
             onClick={onClick}
             shape={shape}

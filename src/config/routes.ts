@@ -121,6 +121,8 @@ export const routes = {
     detailAttendance: (slug: string) => `/ecommerce/attendance/${slug}/detail`,
 
     timesheet: '/ecommerce/timesheet',
+    detailTimesheet: (slug: string) => `/ecommerce/timesheet/${slug}/detail`,
+
 
     shiftManagement: '/ecommerce/shift-management',
 

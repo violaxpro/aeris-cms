@@ -1,6 +1,6 @@
 import React from 'react'
 import { Params } from '@/plugins/types'
-import DetailTimesheet from '@/features/pages/employee-management/time-attendance/timesheet/DetailPerformance'
+import DetailTimesheet from '@/features/pages/employee-management/time-attendance/timesheet/DetailTimesheet'
 
 export default async function DetailTimesheetPage(props: { params: Params }) {
     const params = await props.params;

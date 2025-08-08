@@ -19,7 +19,7 @@ const index = ({ btnClassname, icon, label, link, type, onClick, shape, style, p
     // hover:!bg-inherit hover:!text-inherit hover:!border-inherit
     const button = (
         <Button
-            className={`btn-action ${btnClassname}`}
+            className={`btn-action !h-10 ${btnClassname}`}
             type={type}
             onClick={onClick}
             shape={shape}

@@ -292,19 +292,7 @@ const index = ({ data }: { data?: any }) => {
                             items={breadcrumb}
                         />
                     </div>
-                    <div className='flex gap-4 items-center'>
-                        <ButtonIcon
-                            icon={ChevronLeftIcon}
-                            className='cursor-pointer p-4'
-                            width={8}
-                        />
-                        <SelectRangePicker />
-                        <ButtonIcon
-                            icon={ChevronRightIcon}
-                            className='cursor-pointer'
-                            width={8}
-                        />
-                    </div>
+                    <SelectRangePicker />
                 </div>
                 <Tabs
                     tabs={tabs}
