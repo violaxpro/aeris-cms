@@ -9,7 +9,7 @@ export const downloadPayslipPDF = async (payslipData: any, page: any) => {
 
     const link = document.createElement('a');
     link.href = blobUrl;
-    link.download = `Pay Slip-${payslipData.invoiceNumber}.pdf`;
+    link.download = `Pay Slip-${payslipData.employee_id}.pdf`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

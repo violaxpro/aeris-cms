@@ -181,7 +181,70 @@ const index = ({ data }: { data?: any }) => {
         }));
     };
 
+    const payslipData = {
+        employee_id: '222345',
+        income: [
+            { name: "Base Salary", price: "Rp. 4.500.000" },
+            { name: "Overtime", price: "Rp. 500.000" },
+            { name: "KPI", price: "Rp. 300.000" },
+            { name: "Reimbursement", price: "Rp. 300.000" },
+            { name: "Bonus", price: "Rp. 300.000" },
+        ],
+        deductions: [
+            { name: "Late Free", price: "Rp. 50.000" },
+            { name: "BPJS Kesehatan", price: "Rp. 150.000" },
+            { name: "BPJS Ketenagakerjaan", price: "Rp. 100.000" },
+            { name: "PPh21", price: "Rp. 100.000" },
+            { name: "Debt", price: "Rp. 100.000" },
+        ],
+        overtime: [
+            {
+                date: "03 June 2025",
+                description: "Special Shift",
+                hours: "2.5h",
+                price: "Rp. 75.000",
+            },
+            {
+                date: "05 June 2025",
+                description: "Extra Work",
+                hours: "1.0h",
+                price: "Rp. 30.000",
+            },
+        ],
+        leaves: [
+            {
+                type: "Sick Leave",
+                eligible: "12/Year",
+                used: "2x",
+                remaining: "10x",
+            },
+            {
+                type: "Vacation",
+                eligible: "12/Year",
+                used: "3x",
+                remaining: "9x",
+            },
+            {
+                type: "Personal Leave",
+                eligible: "6/Year",
+                used: "0x",
+                remaining: "6x",
+            },
+        ],
+        summary: {
+            totalIncome: "Rp. 5.300.000",
+            totalDeduction: "Rp. 300.000",
+            totalReceived: "Rp. 5.000.000",
+        },
+    };
 
+    const handlePrint = async (data: any) => {
+        await downloadPayslipPDF(data, 'payslip');
+    }
+
+    const handlePreview = async (data: any) => {
+        await previewAndPrintPDF(data, 'payslip');
+    }
 
     return (
         <>
@@ -265,7 +328,7 @@ const index = ({ data }: { data?: any }) => {
                                             height={15}
                                         />}
                                         label='Download'
-                                        onClick={() => console.log('hi')}
+                                        onClick={() => handlePrint(payslipData)}
                                     />
                                     <ButtonAction
                                         icon={<Image
