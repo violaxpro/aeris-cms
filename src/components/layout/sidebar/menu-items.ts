@@ -445,8 +445,7 @@ export const menuItems = [
                     {
                         key: 'pay-slip',
                         label: 'Pay Slip',
-                        // href: routes.eCommerce.employee,
-                        href: '#'
+                        href: routes.eCommerce.paySlip,
                     },
                     {
                         key: 'performance',

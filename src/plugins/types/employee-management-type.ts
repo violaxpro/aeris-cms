@@ -172,6 +172,7 @@ export const employeeData = [
         email: 'marcella@gmail.com',
         joining_date: 'June 02, 2025',
         status: 'Active',
+        slip_status: 'Draft'
     },
     {
         id: 2,
@@ -181,6 +182,8 @@ export const employeeData = [
         email: 'yuliana@gmail.com',
         joining_date: 'June 02, 2025',
         status: 'Leave',
+        slip_status: 'Completed'
+
     },
     {
         id: 3,
@@ -190,5 +193,21 @@ export const employeeData = [
         email: 'lili@gmail.com',
         joining_date: 'June 02, 2025',
         status: 'Resign',
+        slip_status: 'Completed'
+
+    },
+
+    {
+        id: 4,
+        employee_id: '2198089',
+        employee_name: 'Viola Yosevi',
+        role: 'Front End Developer',
+        email: 'viola@gmail.com',
+        joining_date: 'June 02, 2025',
+        status: 'Resign',
+        slip_status: 'Completed'
+
     }
+
 ]
+

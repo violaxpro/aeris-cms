@@ -466,7 +466,7 @@ const index = ({ quoteData }: { quoteData?: any }) => {
                                         width={15}
                                         height={15}
                                     />}
-                                    label='Sent'
+                                    label='Send'
                                     style={{ padding: '1.2rem 1.7rem' }}
                                     onClick={() => console.log('hi')}
                                 />

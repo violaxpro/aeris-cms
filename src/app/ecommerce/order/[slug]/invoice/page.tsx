@@ -3,6 +3,7 @@
 import React, { useEffect } from 'react'
 import { InvoicePDF } from '@/features/pages/sales/pdf/Invoice';
 import { PackingSlipPDF } from '@/features/pages/sales/pdf/PackingSlip';
+import { PaySlipPDF } from '@/features/pages/employee-management/pdf/Payslip';
 import { Params } from '@/plugins/types'
 import { orderDummyData } from '@/plugins/types/sales-type';
 import { PDFViewer } from '@react-pdf/renderer';
@@ -35,6 +36,62 @@ export default async function InvoicePage(props: { params: Params }) {
         freight: 15.00,
         unitPrice: 200,
         quantity: 10
+    };
+
+    const payslipData = {
+        income: [
+            { name: "Base Salary", price: "Rp. 4.500.000" },
+            { name: "Overtime", price: "Rp. 500.000" },
+            { name: "KPI", price: "Rp. 300.000" },
+            { name: "Reimbursement", price: "Rp. 300.000" },
+            { name: "Bonus", price: "Rp. 300.000" },
+        ],
+        deductions: [
+            { name: "Late Free", price: "Rp. 50.000" },
+            { name: "BPJS Kesehatan", price: "Rp. 150.000" },
+            { name: "BPJS Ketenagakerjaan", price: "Rp. 100.000" },
+            { name: "PPh21", price: "Rp. 100.000" },
+            { name: "Debt", price: "Rp. 100.000" },
+        ],
+        overtime: [
+            {
+                date: "03 June 2025",
+                description: "Special Shift",
+                hours: "2.5h",
+                price: "Rp. 75.000",
+            },
+            {
+                date: "05 June 2025",
+                description: "Extra Work",
+                hours: "1.0h",
+                price: "Rp. 30.000",
+            },
+        ],
+        leaves: [
+            {
+                type: "Sick Leave",
+                eligible: "12/Year",
+                used: "2x",
+                remaining: "10x",
+            },
+            {
+                type: "Vacation",
+                eligible: "12/Year",
+                used: "3x",
+                remaining: "9x",
+            },
+            {
+                type: "Personal Leave",
+                eligible: "6/Year",
+                used: "0x",
+                remaining: "6x",
+            },
+        ],
+        summary: {
+            totalIncome: "Rp. 5.300.000",
+            totalDeduction: "Rp. 300.000",
+            totalReceived: "Rp. 5.000.000",
+        },
     };
 
     //preview dulu baru cetak
@@ -83,6 +140,9 @@ export default async function InvoicePage(props: { params: Params }) {
             </PDFViewer>
             <PDFViewer width="100%" height="100%">
                 <PackingSlipPDF orderData={invoiceData} page='order' />
+            </PDFViewer>
+            <PDFViewer width="100%" height="100%">
+                <PaySlipPDF payslipData={payslipData} page='packing-slip' />
             </PDFViewer>
         </div>
     );

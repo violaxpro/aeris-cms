@@ -85,6 +85,9 @@ export { default as IndonesianFlagIcon } from './IndonesianFlagIcon.svg'
 export { default as EnglishFlagIcon } from './EnglishFlagIcon.svg'
 export { default as CaretDownIcon } from './CaretDownIcon.svg'
 export { default as CaretRightIcon } from './CaretRightIcon.svg'
+export { default as PencilYellowIcon } from './PencilYellowIcon.svg'
+export { default as DownloadPdfIcon } from './DownloadPdfIcon.svg'
+export { default as SendIcon } from './SendIcon.svg'
 
 
 

@@ -123,7 +123,6 @@ export const routes = {
     timesheet: '/ecommerce/timesheet',
     detailTimesheet: (slug: string) => `/ecommerce/timesheet/${slug}/detail`,
 
-
     shiftManagement: '/ecommerce/shift-management',
 
     overtime: '/ecommerce/overtime',
@@ -140,6 +139,11 @@ export const routes = {
     createEmployee: '/ecommerce/employee/create',
     editEmployee: (slug: string) => `/ecommerce/employee/${slug}/edit`,
     detailEmployee: (slug: string) => `/ecommerce/employee/${slug}/detail`,
+
+    paySlip: '/ecommerce/pay-slip',
+    createPaySlip: '/ecommerce/pay-slip/create',
+    editPaySlip: (slug: string) => `/ecommerce/pay-slip/${slug}/edit`,
+    detailPaySlip: (slug: string) => `/ecommerce/pay-slip/${slug}/detail`,
 
     performance: '/ecommerce/performance',
     detailPerformance: (slug: string) => `/ecommerce/performance/${slug}/detail`,
