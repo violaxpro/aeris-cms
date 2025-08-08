@@ -15,6 +15,7 @@ type buttonProps = {
     style?: any
     position?: 'start' | 'end'
     labelEnd?: string
+    disabled?: boolean
 }
 const index = ({
     btnClassname = '!w-auto !bg-[var(--default-color)] !text-white hover:!border-inherit',
@@ -26,7 +27,8 @@ const index = ({
     shape,
     style,
     position = 'start',
-    labelEnd
+    labelEnd,
+    disabled = false
 }: buttonProps) => {
     // hover:!bg-inherit hover:!text-inherit hover:!border-inherit
     const button = (
@@ -37,6 +39,7 @@ const index = ({
             shape={shape}
             style={style}
             iconPosition={position}
+            disabled={disabled}
         >
             <div className='flex gap-2'>
                 {icon ?? icon}

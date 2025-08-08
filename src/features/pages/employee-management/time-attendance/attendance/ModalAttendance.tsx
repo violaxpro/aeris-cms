@@ -35,27 +35,34 @@ const ModalAttendance = ({ open, handleChange, formData, handleCancel, handleSub
     return (
         <Modal
             open={open}
-            title='Create New Attendance'
-            subtitle='Please complete all fields to add new attendance today.'
+            title={formMode == 'create' ? 'Create New Attendance' : 'Attendance Detail'}
+            subtitle={formMode == 'create' ? 'Please complete all fields to add new attendance today.' : 'Marcella Indarwati'}
+            date={formMode == 'detail' && 'Thursday, 7 August 2025'}
             handleCancel={handleCancel}
         >
             <div className='grid grid-cols-2 gap-5'>
-                <SelectInput
-                    id='name'
-                    label='Name'
-                    placeholder='Select Name'
-                    onChange={handleChange('name')}
-                    options={[
-                        { label: 'Ola', value: '1' }
-                    ]}
-                    value={formData.name}
-                />
-                <DatePickerInput
-                    id='date'
-                    label='Date'
-                    value={formData.date ? dayjs(formData.date) : null}
-                    onChange={(val) => handleChange('date')(val)}
-                />
+                {
+                    formMode == 'create' &&
+                    <>
+                        <SelectInput
+                            id='name'
+                            label='Name'
+                            placeholder='Select Name'
+                            onChange={handleChange('name')}
+                            options={[
+                                { label: 'Ola', value: '1' }
+                            ]}
+                            value={formData.name}
+                        />
+                        <DatePickerInput
+                            id='date'
+                            label='Date'
+                            value={formData.date ? dayjs(formData.date) : null}
+                            onChange={(val) => handleChange('date')(val)}
+                        />
+                    </>
+                }
+
                 <div className='col-span-full grid md:grid-cols-4 gap-5'>
                     <TimePickerInput
                         id='check_in'
@@ -178,17 +185,26 @@ const ModalAttendance = ({ open, handleChange, formData, handleCancel, handleSub
                 } */}
 
                 <div className='col-span-full flex justify-center '>
-                    <Button
-                        label='Submit'
-                        onClick={handleSubmit}
-                        style={{ padding: '1.2rem 2rem' }}
-                    // btnClassname={
-                    //     `!w-auto !text-white hover:!border-inherit ${formData.is_claim_overtime === ''
-                    //         ? '!bg-[#A9A8A8]'
-                    //         : '!bg-[var(--default-color)]'
-                    //     }`
-                    // }
-                    />
+                    {
+                        formMode == 'create'
+                            ? <Button
+                                label='Submit'
+                                onClick={handleSubmit}
+                                style={{ padding: '1.2rem 2rem' }}
+                            /> : <Button
+                                label='Save'
+                                onClick={handleSubmit}
+                                disabled={formData.is_claim_overtime == '' && true}
+                                style={{ padding: '1.2rem 2rem' }}
+                                btnClassname={
+                                    `!w-auto !text-white hover:!border-inherit ${formData.is_claim_overtime === ''
+                                        ? '!bg-[#A9A8A8]'
+                                        : '!bg-[var(--default-color)]'
+                                    }`
+                                }
+                            />
+                    }
+
                 </div>
             </div>
 

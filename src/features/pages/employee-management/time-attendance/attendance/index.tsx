@@ -36,7 +36,6 @@ import { Avatar } from 'antd'
 import AvatarImage from "public/social-avatar.webp"
 import ModalAttendance from './ModalAttendance'
 import ModalDelete from '@/components/modal/ModalDelete'
-import ModalDetailAttendance from './ModalDetailAttendance'
 import ConfirmModal from '@/components/modal/ConfirmModal'
 
 const index = ({ data }: { data?: any }) => {
@@ -55,7 +54,6 @@ const index = ({ data }: { data?: any }) => {
     const [openModalDelete, setOpenModalDelete] = useState(false)
     const [openModalCheckout, setOpenModalCheckout] = useState(false)
     const [openModalForm, setOpenModalForm] = useState(false)
-    const [openModalDetail, setOpenModalDetail] = useState(false)
     const [deletedData, setDeletedData] = useState<any>(null)
     const [formMode, setFormMode] = useState('create')
     const [formData, setFormData] = useState({
@@ -194,7 +192,7 @@ const index = ({ data }: { data?: any }) => {
 
                 const menu = (
                     <Menu>
-                        <Menu.Item key="detail" onClick={() => setOpenModalDetail(true)}>
+                        <Menu.Item key="detail" onClick={() => handleOpenModal('detail')}>
                             Detail
                         </Menu.Item>
                         <Menu.Item key="delete" onClick={() => handleOpenModalDelete(row.id)}>
@@ -283,13 +281,6 @@ const index = ({ data }: { data?: any }) => {
                 handleCancel={() => setOpenModalForm(false)}
                 handleSubmit={handleSubmit}
                 formMode={formMode}
-            />
-            <ModalDetailAttendance
-                open={openModalDetail}
-                handleChange={handleChange}
-                formData={formData}
-                handleCancel={() => setOpenModalDetail(false)}
-                handleSubmit={() => setOpenModalDetail(false)}
             />
             <ConfirmModal
                 open={openModalDelete}
