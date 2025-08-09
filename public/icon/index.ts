@@ -88,6 +88,7 @@ export { default as CaretRightIcon } from './CaretRightIcon.svg'
 export { default as PencilYellowIcon } from './PencilYellowIcon.svg'
 export { default as DownloadPdfIcon } from './DownloadPdfIcon.svg'
 export { default as SendIcon } from './SendIcon.svg'
+export { default as CopyIcon } from './CopyIcon.svg'
 
 
 
