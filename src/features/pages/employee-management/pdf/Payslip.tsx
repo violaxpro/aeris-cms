@@ -159,6 +159,7 @@ const styles = StyleSheet.create({
         border: '1px solid #eee',
         paddingVertical: 8,
         fontSize: 10,
+        width: '100%'
     },
     rowOdd: {
         backgroundColor: '#3666AA0D',
@@ -194,7 +195,7 @@ const styles = StyleSheet.create({
     colSecond: {
         width: '35%',
         textAlign: 'left',
-        paddingHorizontal: 4,
+        paddingHorizontal: 6,
     },
     colFirst: {
         width: '20%',
@@ -345,7 +346,7 @@ export const PaySlipPDF = ({ payslipData, page }: { payslipData: any, page: stri
                                     key={index}
                                     style={styles.tableRow}
                                 >
-                                    <Text style={{ width: '50%', textAlign: 'center' }}>{item.name}</Text>
+                                    <Text style={{ width: '50%', textAlign: 'left', paddingLeft: 8 }}>{item.name}</Text>
                                     <Text style={{ width: '50%', textAlign: 'center' }}>{item.price}</Text>
                                 </View>
                             ))}
@@ -363,7 +364,7 @@ export const PaySlipPDF = ({ payslipData, page }: { payslipData: any, page: stri
                                     key={index}
                                     style={styles.tableRow}
                                 >
-                                    <Text style={{ width: '50%', textAlign: 'center' }}>{item.name}</Text>
+                                    <Text style={{ width: '50%', textAlign: 'left', paddingLeft: 8 }}>{item.name}</Text>
                                     <Text style={{ width: '50%', textAlign: 'center', }}>{item.price}</Text>
                                 </View>
                             ))}
@@ -375,20 +376,20 @@ export const PaySlipPDF = ({ payslipData, page }: { payslipData: any, page: stri
                             <View style={{ width: '50%' }}>
                                 <Text style={styles.title}>Overtime Summary</Text>
                                 <View style={styles.tableHeader}>
-                                    <Text style={styles.colFirst}>Date</Text>
+                                    <Text style={{ width: '25%' }}>Date</Text>
                                     <Text style={styles.colSecond}>Description</Text>
                                     <Text style={styles.colFirst}>Hours</Text>
-                                    <Text style={styles.colThird}>Price</Text>
+                                    <Text style={{ width: '25%' }}>Price</Text>
                                 </View>
                                 {payslipData?.overtime?.map((item: any, index: number) => (
                                     <View
                                         key={index}
                                         style={styles.tableRow}
                                     >
-                                        <Text style={styles.colFirst}>{item.date}</Text>
+                                        <Text style={{ width: '25%', textAlign: 'center' }}>{item.date}</Text>
                                         <Text style={styles.colSecond}>{item.description}</Text>
                                         <Text style={styles.colFirst}>{item.hours}</Text>
-                                        <Text style={styles.colThird}>{item.price}</Text>
+                                        <Text style={{ width: '25%' }}>{item.price}</Text>
                                     </View>
                                 ))}
                             </View>
@@ -396,9 +397,9 @@ export const PaySlipPDF = ({ payslipData, page }: { payslipData: any, page: stri
                                 <Text style={styles.title}>Leaves Summary</Text>
                                 <View style={styles.tableHeader}>
                                     <Text style={styles.colSecond}>Leave Type</Text>
-                                    <Text style={styles.colFirst}>Eligible</Text>
+                                    <Text style={{ width: '25%' }}>Eligible</Text>
                                     <Text style={styles.colFirst}>Used</Text>
-                                    <Text style={styles.colFirst}>Remaining</Text>
+                                    <Text style={{ width: '25%', textAlign: 'center' }}>Remaining</Text>
                                 </View>
                                 {payslipData?.leaves?.map((item: any, index: number) => (
                                     <View
@@ -406,9 +407,9 @@ export const PaySlipPDF = ({ payslipData, page }: { payslipData: any, page: stri
                                         style={styles.tableRow}
                                     >
                                         <Text style={styles.colSecond}>{item.type}</Text>
-                                        <Text style={styles.colFirst}>{item.eligible}</Text>
+                                        <Text style={{ width: '25%', textAlign: 'center' }}>{item.eligible}</Text>
                                         <Text style={styles.colFirst}>{item.used}</Text>
-                                        <Text style={styles.colFirst}>{item.remaining}</Text>
+                                        <Text style={{ width: '25%', textAlign: 'center' }}>{item.remaining}</Text>
                                     </View>
                                 ))}
                             </View>
