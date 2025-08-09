@@ -4,6 +4,7 @@ import Breadcrumb from "@/components/breadcrumb"
 import Tabs, { Tab } from '@/components/tab'
 import TaxesSetting from './TaxesSettings'
 import General from './General'
+import TimeSetting from './Time'
 import Currency from './Currency'
 import Communications from './Communications'
 import PaymentSettings from './PaymentSettings'
@@ -18,6 +19,7 @@ const index = ({ taxesData }: { taxesData?: any }) => {
 
     const tabs: Tab[] = [
         { key: 'general', label: 'General' },
+        { key: 'time', label: 'Time' },
         { key: 'communications', label: 'Communications' },
         { key: 'payment-settings', label: 'Payment Settings' },
         { key: 'invoice', label: 'Invoice' },
@@ -59,6 +61,8 @@ const index = ({ taxesData }: { taxesData?: any }) => {
 
 
             {activeTab == 'general' && <General mode='create' />}
+
+            {activeTab == 'time' && <TimeSetting mode='create' />}
 
             {activeTab == 'communications' && <Communications mode='create' />}
 

@@ -89,3 +89,43 @@ export const formatTime = (secs: number) => {
     const s = String(secs % 60).padStart(2, "0");
     return `${h}:${m}:${s}`;
 };
+
+
+// Format waktu
+export const dateFormats = [
+    { label: 'YYYY-MM-DD', value: 'YYYY-MM-DD' },
+    { label: 'DD-MM-YYYY', value: 'DD-MM-YYYY' },
+    { label: 'MM-DD-YYYY', value: 'MM-DD-YYYY' },
+    { label: 'DD/MM/YYYY', value: 'DD/MM/YYYY' },
+    { label: 'MM/DD/YYYY', value: 'MM/DD/YYYY' },
+    { label: 'YYYY/MM/DD', value: 'YYYY/MM/DD' },
+    { label: 'DD MMM YYYY', value: 'DD MMM YYYY' },
+    { label: 'MMM DD, YYYY', value: 'MMM DD, YYYY' },
+]
+
+export const timeFormats = [
+    { label: 'HH:mm (24-hour)', value: 'HH:mm' },
+    { label: 'hh:mm A (12-hour)', value: 'hh:mm A' },
+    { label: 'HH:mm:ss (24-hour with seconds)', value: 'HH:mm:ss' },
+    { label: 'hh:mm:ss A (12-hour with seconds)', value: 'hh:mm:ss A' },
+]
+
+// Timezone
+export const timezones = [
+    { label: 'Asia/Jakarta (GMT+7)', value: 'Asia/Jakarta' },
+    { label: 'Asia/Singapore (GMT+8)', value: 'Asia/Singapore' },
+    { label: 'Asia/Tokyo (GMT+9)', value: 'Asia/Tokyo' },
+    { label: 'Europe/London (GMT+0)', value: 'Europe/London' },
+    { label: 'Europe/Paris (GMT+1)', value: 'Europe/Paris' },
+    { label: 'America/New_York (GMT-5)', value: 'America/New_York' },
+    { label: 'America/Los_Angeles (GMT-8)', value: 'America/Los_Angeles' },
+    { label: 'Australia/Sydney (AEST/AEDT)', value: 'Australia/Sydney' },
+    { label: 'Australia/Melbourne (AEST/AEDT)', value: 'Australia/Melbourne' },
+    // { label: 'Australia/Brisbane (AEST)', value: 'Australia/Brisbane' },
+    // { label: 'Australia/Perth (AWST)', value: 'Australia/Perth' },
+    // { label: 'Australia/Adelaide (ACST/ACDT)', value: 'Australia/Adelaide' },
+    // { label: 'Australia/Darwin (ACST)', value: 'Australia/Darwin' },
+    // { label: 'Australia/Hobart (AEST/AEDT)', value: 'Australia/Hobart' },
+    // { label: 'Australia/Broken_Hill (ACST/ACDT)', value: 'Australia/Broken_Hill' },
+    // { label: 'Australia/Lord_Howe (LHST/LHDT)', value: 'Australia/Lord_Howe' }
+]
