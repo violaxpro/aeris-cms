@@ -224,6 +224,8 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                 height={15}
                                             />}
                                             shape='round'
+                                            hasHeight={false}
+
                                         />
                                         <SwitchInput
                                             label='Enable'
@@ -250,6 +252,8 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                 height={15}
                                             />}
                                             shape='round'
+                                            hasHeight={false}
+
                                         />
                                         <SwitchInput
                                             label='Enable'
@@ -277,6 +281,8 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                 height={15}
                                             />}
                                             shape='round'
+                                            hasHeight={false}
+
                                         />
 
                                         <SwitchInput
@@ -309,6 +315,8 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                     height={15}
                                                 />}
                                                 shape='round'
+                                                hasHeight={false}
+
                                             />
 
                                             <SwitchInput
@@ -336,6 +344,8 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                     height={15}
                                                 />}
                                                 shape='round'
+                                                hasHeight={false}
+
                                             />
 
                                             <SwitchInput
@@ -363,6 +373,8 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                 height={15}
                                             />}
                                             shape='round'
+                                            hasHeight={false}
+
                                         />
 
                                         <SwitchInput

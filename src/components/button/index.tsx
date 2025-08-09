@@ -6,6 +6,7 @@ import Link from 'next/link';
 
 type buttonProps = {
     btnClassname?: string
+    hasHeight?: boolean
     icon?: any
     label?: string
     link?: string
@@ -19,6 +20,7 @@ type buttonProps = {
 }
 const index = ({
     btnClassname = '!w-auto !bg-[var(--default-color)] !text-white hover:!border-inherit',
+    hasHeight = true,
     icon,
     label,
     link,
@@ -33,7 +35,7 @@ const index = ({
     // hover:!bg-inherit hover:!text-inherit hover:!border-inherit
     const button = (
         <Button
-            className={`!h-10 ${btnClassname}`}
+            className={`${btnClassname} ${hasHeight ? '!h-10' : ''}`}
             type={type}
             onClick={onClick}
             shape={shape}
