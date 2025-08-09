@@ -64,9 +64,12 @@ const index = ({ data }: { data?: any }) => {
         start_time: '',
         end_time: '',
         apply_on_days: [],
-        apply_on_weeks_of_month: [],
+        // apply_on_weeks_of_month: [],
         assign_to: [],
-        repeat_weekly: false
+        repeat_weekly: false,
+        start_date: '',
+        end_date: '',
+        day_times: {} as Record<string, { start: string; end: string }[]>
     })
     const [modalType, setModalType] = useState('employee-benefit')
     const [formMode, setFormMode] = useState('create')
