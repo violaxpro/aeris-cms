@@ -89,6 +89,7 @@ export { default as PencilYellowIcon } from './PencilYellowIcon.svg'
 export { default as DownloadPdfIcon } from './DownloadPdfIcon.svg'
 export { default as SendIcon } from './SendIcon.svg'
 export { default as CopyIcon } from './CopyIcon.svg'
+export { default as PlayIcon } from './PlayIcon.svg'
 
 
 

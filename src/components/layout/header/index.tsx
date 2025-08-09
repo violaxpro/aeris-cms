@@ -21,10 +21,13 @@ import {
     HamburgerIcon
 } from '@public/icon';
 import { MoreOutlined } from '@ant-design/icons';
+import TimerBox from '@/components/timer';
 
 const { useBreakpoint } = Grid;
 
 export default function HeaderLayout({ onOpenDrawer }: { onOpenDrawer?: () => void }) {
+    const [second, setSecond] = useState(0)
+    const [isRunning, setIsRunning] = useState(false)
     const [isScrolled, setIsScrolled] = useState(false);
     const [open, setOpen] = useState(false);
     const screens = useBreakpoint();
@@ -46,6 +49,24 @@ export default function HeaderLayout({ onOpenDrawer }: { onOpenDrawer?: () => vo
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
+
+    useEffect(() => {
+        let interval: NodeJS.Timeout | null = null
+        if (isRunning) {
+            interval = setInterval(() => {
+                setSecond(prev => prev + 1)
+            }, 1000)
+        }
+
+        return () => {
+            if (interval) clearInterval(interval)
+        }
+
+    }, [isRunning])
+
+    const handleRunning = () => {
+        setIsRunning(prev => !prev)
+    }
 
 
     const mobileMenu = (
@@ -110,7 +131,12 @@ export default function HeaderLayout({ onOpenDrawer }: { onOpenDrawer?: () => vo
                     />
                     <span className='font-semibold'>Need Support?</span>
                 </Button>
-                <Button className='rounded-lg !h-10 !shadow-md !border-none'>
+                <TimerBox
+                    isRunning={isRunning}
+                    onPlay={handleRunning}
+                    seconds={second}
+                />
+                <Button className='rounded-lg !h-10 !shadow-sm !border-gray-200'>
                     <Badge count={3}>
                         <Image
                             src={BellBlackIcon}
@@ -119,7 +145,7 @@ export default function HeaderLayout({ onOpenDrawer }: { onOpenDrawer?: () => vo
                     </Badge>
                 </Button>
                 <Button
-                    className='rounded-lg !h-10 !w-10 !shadow-md !border-none'
+                    className='rounded-lg !h-10 !w-12 !shadow-sm !border-gray-200'
                     icon={
                         <Image
                             src={GearBlackIcon}

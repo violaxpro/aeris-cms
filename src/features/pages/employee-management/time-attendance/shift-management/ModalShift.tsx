@@ -21,7 +21,9 @@ type ModalShiftType = {
         start_time: string
         end_time: string
         apply_on_days: string[]
-        apply_on_weeks_of_month: string[]
+        // apply_on_weeks_of_month: string[]
+        start_date: string
+        end_date: string
         assign_to: string[],
         repeat_weekly: boolean
         day_times: Record<string, { start: string; end: string }[]>
@@ -145,6 +147,27 @@ const ModalShift = ({ open, handleChange, formData, handleCancel, handleSubmit }
                         })
                     }}
                 />
+
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 col-span-3">
+                        Apply on Weeks
+                    </label>
+                    <div className='grid grid-cols-2 gap-3'>
+                        <DatePickerInput
+                            id='start_date'
+                            value={formData.start_date ? dayjs(formData.start_date) : null}
+                            onChange={handleChange('start_date')}
+                            placeholder='Select Start Date'
+                        />
+                        <DatePickerInput
+                            id='end_date'
+                            value={formData.end_date ? dayjs(formData.end_date) : null}
+                            onChange={handleChange('end_date')}
+                            placeholder='Select End Date'
+                        />
+                    </div>
+                </div>
+
                 <SelectInput
                     id='assign_to'
                     label='Assign To'

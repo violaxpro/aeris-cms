@@ -126,6 +126,7 @@ const CheckboxGroupWithTime: React.FC<CheckboxGroupProps> = ({
                                         onChangeTimes?.(day.value, idx, 'start', t ? t.format(format) : '')
                                     }
                                     suffixIcon={null}
+                                    allowClear={false}
                                 />
                                 <span>-</span>
                                 <TimePicker
@@ -135,6 +136,7 @@ const CheckboxGroupWithTime: React.FC<CheckboxGroupProps> = ({
                                         onChangeTimes?.(day.value, idx, 'end', t ? t.format(format) : '')
                                     }
                                     suffixIcon={null}
+                                    allowClear={false}
                                 />
                             </div>
                         ))}
