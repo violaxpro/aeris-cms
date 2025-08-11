@@ -1,9 +1,10 @@
 'use client'
 import React, { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import Table from "@/components/table"
 import type { TableColumnsType } from 'antd'
 import { Dropdown, Menu } from 'antd'
-import { PlusCircleOutlined, FilterOutlined, MoreOutlined } from '@ant-design/icons'
+import { AddIcon, FilterIcon, TrashIconRed, PencilIconBlue } from '@public/icon'
 import Popover from '@/components/popover'
 import { routes } from '@/config/routes'
 import Link from 'next/link'
@@ -11,6 +12,7 @@ import Breadcrumb from "@/components/breadcrumb"
 import { Content } from 'antd/es/layout/layout'
 import Button from "@/components/button"
 import SearchInput from '@/components/search';
+import SearchTable from '@/components/search/SearchTable'
 import { getTaxes, deleteTaxes } from '@/services/settings-service'
 import { useNotificationAntd } from '@/components/toast'
 import { useAtom } from 'jotai'
@@ -18,9 +20,13 @@ import { smsAtom } from '@/store/SettingsAtom'
 import { TemplateType, smsTemplateData } from '@/plugins/types/settings-type'
 import dayjs from 'dayjs';
 import FormSms from './FormSms'
+import ButtonIcon from '@/components/button/ButtonIcon'
+import Image from 'next/image'
+import ConfirmModal from '@/components/modal/ConfirmModal'
 
 const index = ({ smsData }: { smsData?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
+    const router = useRouter()
     const [data, setData] = useAtom(smsAtom)
     const [isOpenModal, setIsOpenModal] = useState(false)
     const [isOpenModalFilter, setisOpenModalFilter] = useState(false)
@@ -28,6 +34,8 @@ const index = ({ smsData }: { smsData?: any }) => {
     const [search, setSearch] = useState('')
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
     const [currenData, setCurrenData] = useState<any>(null)
+    const [openModalDelete, setOpenModalDelete] = useState(false)
+    const [deletedData, setDeletedData] = useState<any>(null)
 
     const handleDelete = async (id: any) => {
         try {
@@ -86,35 +94,33 @@ const index = ({ smsData }: { smsData?: any }) => {
             key: 'action',
             width: 120,
             render: (_: string, row: any) => {
-                const menu = (
-                    <Menu>
-                        <Menu.Item key="edit" onClick={() => {
-                            setCurrenData(row)
-                            setIsOpenModal(true)
-                        }}>
-                            Edit
-                        </Menu.Item>
-                        <Menu.Item key="delete">
-                            <Popover
-                                title='Delete Email'
-                                description='Are you sure to delete this data?'
-                                onDelete={() => handleDelete(row.id)}
-                                label='Delete'
-                            />
-                        </Menu.Item>
-                    </Menu >
-                );
 
                 return (
-                    <Dropdown overlay={menu} trigger={['click']} >
-                        <button className="flex items-center justify-center px-2 py-1 border rounded ">
-                            Actions <MoreOutlined className="ml-1" />
-                        </button>
-                    </Dropdown >
+                    <div className="flex items-center justify-end gap-3 pe-4">
+                        <ButtonIcon
+                            color='primary'
+                            variant='filled'
+                            size="small"
+                            icon={PencilIconBlue}
+                            onClick={() => router.push(routes.eCommerce.editPriceLevel(row.id))}
+                        />
+                        <ButtonIcon
+                            color='danger'
+                            variant='filled'
+                            size="small"
+                            icon={TrashIconRed}
+                            onClick={() => handleOpenModalDelete(row.id)}
+                        />
+                    </div >
                 );
             }
         },
     ]
+
+    const handleOpenModalDelete = (data: any) => {
+        setOpenModalDelete(true)
+        setDeletedData(data)
+    }
 
     const handleSearch = (value: string) => {
         const search = value.toLowerCase()
@@ -144,21 +150,37 @@ const index = ({ smsData }: { smsData?: any }) => {
     return (
         <>
             {contextHolder}
-            <Content className="mt-6 mx-4 mb-0">
+            <ConfirmModal
+                open={openModalDelete}
+                onCancel={() => setOpenModalDelete(false)}
+                onSave={handleDelete}
+                action='Delete'
+                text='Are you sure you want to delete this sms template?'
+            />
+            <Content className="mb-0">
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
                     <div className='flex justify-between mb-4'>
                         <div>
-                            <h1 className='text-xl font-bold'>
+                            <h1 className='text-2xl font-bold'>
                                 SMS Templates
                             </h1>
                         </div>
-                        <div className='flex items-center gap-2'>
-                            <SearchInput onSearch={handleSearch} />
+                        <div className='flex items-center gap-2 w-auto'>
+                            <SearchTable
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                                onSearch={() => console.log('Searching for:', search)}
+                            />
                             <Button
-
-                                icon={<PlusCircleOutlined />}
-                                label='Add Template'
+                                icon={<Image
+                                    src={AddIcon}
+                                    alt='add-icon'
+                                    width={15}
+                                    height={15}
+                                />}
+                                label='Add Sms Template'
                                 onClick={() => setIsOpenModal(true)}
+                                hasWidth={true}
                             />
                         </div>
                     </div>

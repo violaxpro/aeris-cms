@@ -3,7 +3,17 @@ import Modal from '@/components/modal'
 import Input from '@/components/input'
 import Textarea from '@/components/textarea'
 import dynamic from 'next/dynamic'
-const QuillInput = dynamic(() => import('@/components/quill-input'), { ssr: false, loading: () => <p>Loading editor...</p>, });
+import Spinner from '@/components/spin'
+const QuillInput = dynamic(() => import('@/components/quill-input'),
+    {
+        ssr: false,
+        loading: () => (
+            <div className="flex justify-center items-center min-h-[200px]">
+                <Spinner size="large" />
+            </div>
+        ),
+    }
+);
 
 type EmailForm = {
     open: boolean

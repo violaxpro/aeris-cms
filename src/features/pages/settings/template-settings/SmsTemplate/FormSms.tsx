@@ -3,7 +3,18 @@ import Modal from '@/components/modal'
 import Input from '@/components/input'
 import Textarea from '@/components/textarea'
 import dynamic from 'next/dynamic'
-const QuillInput = dynamic(() => import('@/components/quill-input'), { ssr: false, loading: () => <p>Loading editor...</p>, });
+import Spinner from '@/components/spin'
+const QuillInput = dynamic(() =>
+    import('@/components/quill-input'),
+    {
+        ssr: false,
+        loading: () => (
+            <div className="flex justify-center items-center min-h-[200px]">
+                <Spinner size="large" />
+            </div>
+        ),
+    }
+);
 
 type EmailForm = {
     open: boolean
@@ -22,13 +33,11 @@ const FormSms = ({
         template_content: '',
     })
 
-
     const handleChange = (e: any) => {
         const { id, value } = e.target
         const updated = { ...smsData, [id]: value }
         setSmsData(updated)
     }
-
 
     const handleQuillChange = (value: string) => {
         const updated = { ...smsData, template_content: value };

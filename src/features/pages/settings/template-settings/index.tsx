@@ -11,9 +11,7 @@ const index = () => {
     const tabs: Tab[] = [
         { key: 'email-template', label: 'Email Template' },
         { key: 'sms-template', label: 'SMS Template' },
-
     ];
-
 
     const breadcrumb = [
         {
@@ -26,8 +24,8 @@ const index = () => {
 
     return (
         <>
-            <div className="mt-6 mx-4 mb-0">
-                <h1 className='text-xl font-bold'>
+            <div className="mt-6 mx-6 mb-0">
+                <h1 className='text-2xl font-bold'>
                     Template Settings
                 </h1>
                 <Breadcrumb
@@ -39,6 +37,7 @@ const index = () => {
                 tabs={tabs}
                 activeTab={activeTab}
                 setActiveTab={setActiveTab}
+                borderClass='w-full'
             />
 
 
