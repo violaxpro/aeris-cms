@@ -1,4 +1,5 @@
-import ProductPage from "@/features/pages/catalogue/product"
+import ProductPage from "@/features/pages/catalogue/product-service/product"
+import ProductsServices from '@/features/pages/catalogue/product-service'
 import { getProduct } from '@/services/products-service'
 import { getBrands } from "@/services/brands-service";
 import { getCategories } from "@/services/category-service";
@@ -34,6 +35,7 @@ export default async function ProductPageRoute() {
   }
 
   return (
-    <ProductPage products={products} />
+    // <ProductPage products={products} />
+    <ProductsServices products={products} />
   );
 }

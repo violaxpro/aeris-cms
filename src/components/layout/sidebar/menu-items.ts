@@ -82,15 +82,15 @@ export const menuItems = [
                 icon: AppstoreOutlined,
                 children: [
                     {
-                        key: 'products',
-                        label: 'Products',
+                        key: 'products-services',
+                        label: 'Products/Services',
                         href: routes.eCommerce.products,
                     },
-                    {
-                        key: 'services',
-                        label: 'Services',
-                        href: routes.eCommerce.services,
-                    },
+                    // {
+                    //     key: 'services',
+                    //     label: 'Services',
+                    //     href: routes.eCommerce.services,
+                    // },
                     {
                         key: 'price-level',
                         label: 'Price Level',

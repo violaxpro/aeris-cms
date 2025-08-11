@@ -4,13 +4,11 @@ import Table from "@/components/table"
 import type { TableColumnsType } from 'antd'
 import { Dropdown, Menu } from 'antd'
 import { ProductDataType } from '@/data/products-data'
-import { EditOutlined, PlusCircleOutlined, InfoCircleOutlined, MoreOutlined } from '@ant-design/icons'
 import { routes } from '@/config/routes'
 import Link from 'next/link'
 import Breadcrumb from "@/components/breadcrumb"
 import { Content } from 'antd/es/layout/layout'
 import Button from "@/components/button"
-import SearchInput from '@/components/search';
 import StatusBadge from '@/components/badge/badge-status'
 import Popover from '@/components/popover'
 import { deleteProduct } from '@/services/products-service'
@@ -19,7 +17,7 @@ import { useAtom } from 'jotai'
 import { productAtom } from '@/store/ProductAtom'
 import dayjs from 'dayjs'
 import Image from 'next/image'
-import { TrashIconRed, FilterIcon, AddIcon, MoreIcon } from '@public/icon'
+import { TrashIconRed, FilterIcon, AddIcon, PencilIconBlue } from '@public/icon'
 import StatusTag from '@/components/tag'
 import ButtonFilter from '@/components/button/ButtonAction'
 import ButtonDelete from '@/components/button/ButtonAction'
@@ -28,8 +26,9 @@ import ButtonAction from '@/components/button/ButtonIcon'
 import SearchTable from '@/components/search/SearchTable'
 import ShowPageSize from '@/components/pagination/ShowPageSize'
 import ConfirmModal from '@/components/modal/ConfirmModal'
+import FormService from './FormService'
 
-const index = ({ products }: { products?: any }) => {
+const index = ({ services }: { services?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
     const [data, setData] = useAtom(productAtom)
     const [filteredData, setFilteredData] = useState<ProductDataType[]>([]);
@@ -39,7 +38,9 @@ const index = ({ products }: { products?: any }) => {
     const [pageSize, setPageSize] = useState(10);
     const [isOpenModalFilter, setisOpenModalFilter] = useState(false)
     const [openModalDelete, setOpenModalDelete] = useState(false)
+    const [openModalForm, setOpenModalForm] = useState(false)
     const [deletedData, setDeletedData] = useState<any>(null)
+    const [modalType, setModalType] = useState('create')
 
     const handleDelete = async (id?: any) => {
         if (!deletedData) return;
@@ -62,7 +63,7 @@ const index = ({ products }: { products?: any }) => {
             title: 'Catalogue',
         },
         {
-            title: 'Products',
+            title: 'Services',
         },
     ]
 
@@ -72,11 +73,6 @@ const index = ({ products }: { products?: any }) => {
     }
     const columnProducts: TableColumnsType<ProductDataType> = [
         {
-            title: 'ID',
-            dataIndex: 'id',
-            sorter: (a: any, b: any) => a.id - b.id,
-        },
-        {
             title: 'SKU',
             dataIndex: 'sku',
             sorter: (a: any, b: any) => {
@@ -84,44 +80,20 @@ const index = ({ products }: { products?: any }) => {
             }
         },
         {
-            title: 'Image',
-            dataIndex: 'images',
-            render: (_: any, row: any) => {
-                const url = row && row.images.length > 0 ? row?.images[0]?.url : null
-                return <Image
-                    src={url}
-                    alt="product-img"
-                    width={50}
-                    height={50}
-                    className='object-cover rounded-xl'
-                />
-            }
-        },
-        {
-            title: 'Product Name',
+            title: 'Name',
             dataIndex: 'name',
             sorter: (a: any, b: any) => {
                 return a?.name?.localeCompare(b?.name)
             }
         },
         {
-            title: 'RRP Price',
-            dataIndex: 'price',
+            title: 'Buying Price',
+            dataIndex: 'buy_price',
             sorter: (a: any, b: any) => {
-                return a.price - b.price
+                return a.buy_price - b.buy_price
             },
             render: (val: any) => {
                 return <span>${val}</span>
-            }
-        },
-        {
-            title: 'Status',
-            dataIndex: 'status',
-            sorter: (a: any, b: any) => {
-                return a?.status - b?.status
-            },
-            render: (value: any) => {
-                return <StatusBadge status={value} />;
             }
         },
         {
@@ -149,14 +121,14 @@ const index = ({ products }: { products?: any }) => {
         //     title: 'Rating',
         //     dataIndex: 'rating',
         //     render: (value: number[]) => {
-        //         if (!value.length) return '-'
-        //         const average = value.reduce((a, b) => a + b, 0);
-        //         return (
-        //             <>
-        //                 <Rate disabled allowHalf defaultValue={average} />
-        //                 <span className='ms-6 text-sm'>({average.toFixed(1)})</span>
-        //             </>
-        //         );
+        //         // if (!value.length) return '-'
+        //         // const average = value.reduce((a, b) => a + b, 0);
+        //         // return (
+        //         //     <>
+        //         //         <Rate disabled allowHalf defaultValue={average} />
+        //         //         <span className='ms-6 text-sm'>({average.toFixed(1)})</span>
+        //         //     </>
+        //         // );
         //         return value
 
         //     },
@@ -192,7 +164,9 @@ const index = ({ products }: { products?: any }) => {
                                 color='primary'
                                 variant='filled'
                                 size="small"
-                                icon={MoreIcon}
+                                icon={PencilIconBlue}
+                                onClick={() => handleOpenModalForm('edit')}
+
                             />
                         </Dropdown >
                         <ButtonAction
@@ -220,10 +194,15 @@ const index = ({ products }: { products?: any }) => {
         });
         setFilteredData(result);
     };
+
+    const handleOpenModalForm = (type: string) => {
+        setModalType(type)
+        setOpenModalForm(true)
+    }
     // Ambil data dari props saat pertama render
     useEffect(() => {
-        setData(products || []);
-    }, [products]);
+        setData(services || []);
+    }, [services]);
 
     // Filter data setiap kali data atau search berubah
     useEffect(() => {
@@ -241,8 +220,6 @@ const index = ({ products }: { products?: any }) => {
     }, [data, search]);
 
 
-    console.log(deletedData, openModalDelete, products, data)
-
     return (
         <>
             {contextHolder}
@@ -251,17 +228,19 @@ const index = ({ products }: { products?: any }) => {
                 onCancel={() => setOpenModalDelete(false)}
                 onSave={handleDelete}
                 action='Delete'
-                text='Are you sure you want to delete this product?'
+                text='Are you sure you want to delete this service?'
             />
-            <div className="mt-6 mx-4 mb-0">
+            <FormService
+                openModal={openModalForm}
+                handleCancel={() => setOpenModalForm(false)}
+                modalType={modalType}
+            />
+            <div className="mt-6 mx-6 mb-0">
                 <div className='flex justify-between items-center'>
                     <div>
-                        <h1 className='text-xl font-bold'>
-                            Products
+                        <h1 className='text-2xl font-bold'>
+                            Services
                         </h1>
-                        <Breadcrumb
-                            items={breadcrumb}
-                        />
                     </div>
                     <Button
                         icon={<Image
@@ -270,19 +249,14 @@ const index = ({ products }: { products?: any }) => {
                             width={15}
                             height={15}
                         />}
-                        label='Add Product'
-                        link={routes.eCommerce.createProduct}
+                        label='Add Service'
+                        onClick={() => handleOpenModalForm('create')}
                     />
                 </div>
             </div>
-            <Content className="mb-0 ">
+            <Content className="mb-0">
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
                     <div className='flex justify-between mb-4 gap-2'>
-                        {/* <Button
-                                       label='Add Payment'
-                                       onClick={handleClickModalPaid}
-                                   /> */}
-
                         <div className='flex items-center gap-2'>
                             <ShowPageSize
                                 pageSize={pageSize}
@@ -298,7 +272,6 @@ const index = ({ products }: { products?: any }) => {
                                 />}
                                 onClick={() => setisOpenModalFilter(true)}
                                 position='end'
-                                style={{ padding: '1.2rem 1.7rem' }}
                             />
                             <SearchTable
                                 value={search}
@@ -317,7 +290,6 @@ const index = ({ products }: { products?: any }) => {
                                 />}
                                 onClick={() => setisOpenModalFilter(true)}
                                 position='start'
-                                style={{ padding: '1.2rem 1.7rem' }}
                                 btnClassname='btn-delete-all'
                             />
                         }

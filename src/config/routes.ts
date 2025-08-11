@@ -1,11 +1,11 @@
 export const routes = {
   eCommerce: {
     dashboard: '/',
-    products: '/ecommerce/products',
-    createProduct: '/ecommerce/products/create',
-    productDetails: (slug: string) => `/ecommerce/products/${slug}`,
-    editProduct: (slug: string) => `/ecommerce/products/${slug}/edit`,
-    detailProduct: (slug: string) => `/ecommerce/products/${slug}/detail`,
+    products: '/ecommerce/products-services',
+    createProduct: '/ecommerce/products-services/create',
+    productDetails: (slug: string) => `/ecommerce/products-services/${slug}`,
+    editProduct: (slug: string) => `/ecommerce/products-services/${slug}/edit`,
+    detailProduct: (slug: string) => `/ecommerce/products-services/${slug}/detail`,
 
     services: '/ecommerce/services',
     createService: '/ecommerce/services/create',

@@ -1,4 +1,4 @@
-import ServiceList from '@/features/pages/catalogue/services'
+import ServiceList from '@/features/pages/catalogue/product-service/service'
 import { getProduct } from '@/services/products-service'
 import { getBrands } from "@/services/brands-service";
 import { getCategories } from "@/services/category-service";

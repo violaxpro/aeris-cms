@@ -63,11 +63,8 @@ const KitPriceInformation = ({ dataById, onChange }: ChildFormProps) => {
                                     id={`productName-${index}`}
                                     label="Product Name"
                                     placeholder="Select Product(s)"
-                                    modeType="multiple"
                                     onChange={(selectedOptions) =>
-                                        updateItem(index, 'productName', Array.isArray(selectedOptions)
-                                            ? selectedOptions.map((opt: any) => opt)
-                                            : [])
+                                        updateItem(index, 'productName', selectedOptions)
                                     }
                                     value={item.productName}
                                     options={optionsProduct}
