@@ -4,8 +4,10 @@ import Breadcrumb from "@/components/breadcrumb"
 import Input from '@/components/input'
 import Button from '@/components/button'
 import CheckboxInput from '@/components/checkbox'
-import FormGroup from '@/components/form'
+import FormGroup from '@/components/form-group'
 import { Content } from 'antd/es/layout/layout'
+import CustomSwitch from '@/components/switch/CustomSwitch';
+import { PowerIcon, LampIcon } from '@public/icon'
 
 const index = () => {
     const [formData, setFormData] = useState({
@@ -47,18 +49,36 @@ const index = () => {
 
     return (
         <>
-            <div className="mt-6 mx-4 mb-0">
-                <h1 className='text-xl font-bold'>
+            <div className="mt-6 mx-6 mb-0">
+                <h1 className='text-2xl font-bold'>
                     Shipping Methods
                 </h1>
                 <Breadcrumb
                     items={breadcrumb}
                 />
             </div>
-            <Content className="mt-6 mx-4 mb-0">
-                <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
-                    <div>
-                        <FormGroup title="Free Shipping" description='Free Shipping'>
+            <Content className="mb-0">
+                <div style={{ padding: 24, minHeight: 360, background: '#fff' }} className='flex flex-col gap-6'>
+                    <div className='flex flex-col gap-4'>
+                        <div className='flex justify-between mt-4 items-center'>
+                            <div>
+                                <h4 className="text-2xl font-semibold">Free Shipping</h4>
+                                <p className="mt-2">Free Shipping</p>
+                            </div>
+                            <CustomSwitch
+                                labelOn="On  Mode"
+                                labelOff="Off Mode"
+                                iconOn={LampIcon}
+                                iconOff={PowerIcon}
+                                onToggle={(state) => setFormData((prev: any) => ({
+                                    ...prev,
+                                    free_shipping_status: state
+                                }))}
+                                size='md'
+                            />
+                        </div>
+                        <hr className='border-[#E5E7EB]' />
+                        <div className={`col-span-12 md:col-span-8 grid grid-cols-2 gap-4`}>
                             <Input
                                 id='label_free_shipping'
                                 label='Label'
@@ -75,18 +95,28 @@ const index = () => {
                                 onChange={handleChange}
                                 value={formData.minimum_ammount}
                             />
-                            <CheckboxInput
-                                label='Status'
-                                text='Status'
-                                onChange={(e: any) => setFormData({
-                                    ...formData,
-                                    free_shipping_status: e
-                                })}
-                                checked={formData.free_shipping_status}
+                        </div>
+                    </div>
+                    <div className='flex flex-col gap-4'>
+                        <div className='flex justify-between mt-4 items-center'>
+                            <div>
+                                <h4 className="text-2xl font-semibold">Local Pickup</h4>
+                                <p className="mt-2">Local Pickup</p>
+                            </div>
+                            <CustomSwitch
+                                labelOn="On  Mode"
+                                labelOff="Off Mode"
+                                iconOn={LampIcon}
+                                iconOff={PowerIcon}
+                                onToggle={(state) => setFormData((prev: any) => ({
+                                    ...prev,
+                                    local_pickup_status: state
+                                }))}
+                                size='md'
                             />
-                        </FormGroup>
-                        <hr style={{ borderColor: '#E5E7EB', marginTop: '1rem', margin: '1rem 0' }} />
-                        <FormGroup title="Local Pickup" description='Local Pickup'>
+                        </div>
+                        <hr className='border-[#E5E7EB]' />
+                        <div className={`col-span-12 md:col-span-8 grid grid-cols-2 gap-4`}>
                             <Input
                                 id='label_local_pickup'
                                 label='Label'
@@ -103,18 +133,28 @@ const index = () => {
                                 onChange={handleChange}
                                 value={formData.cost_local_pickup}
                             />
-                            <CheckboxInput
-                                label='Status'
-                                text='Status'
-                                onChange={(e: any) => setFormData({
-                                    ...formData,
-                                    local_pickup_status: e
-                                })}
-                                checked={formData.local_pickup_status}
+                        </div>
+                    </div>
+                    <div className='flex flex-col gap-4'>
+                        <div className='flex justify-between mt-4 items-center'>
+                            <div>
+                                <h4 className="text-2xl font-semibold">Flat Rate</h4>
+                                <p className="mt-2">Flat Rate</p>
+                            </div>
+                            <CustomSwitch
+                                labelOn="On  Mode"
+                                labelOff="Off Mode"
+                                iconOn={LampIcon}
+                                iconOff={PowerIcon}
+                                onToggle={(state) => setFormData((prev: any) => ({
+                                    ...prev,
+                                    flat_rate_status: state
+                                }))}
+                                size='md'
                             />
-                        </FormGroup>
-                        <hr style={{ borderColor: '#E5E7EB', marginTop: '1rem', margin: '1rem 0' }} />
-                        <FormGroup title="Flat Rate" description='Flat Rate'>
+                        </div>
+                        <hr className='border-[#E5E7EB]' />
+                        <div className={`col-span-12 md:col-span-8 grid grid-cols-2 gap-4`}>
                             <Input
                                 id='label_flat_rate'
                                 label='Label'
@@ -131,21 +171,12 @@ const index = () => {
                                 onChange={handleChange}
                                 value={formData.cost_flat_rate}
                             />
-                            <CheckboxInput
-                                label='Status'
-                                text='Status'
-                                onChange={(e: any) => setFormData({
-                                    ...formData,
-                                    flat_rate_status: e
-                                })}
-                                checked={formData.flat_rate_status}
-                            />
-                        </FormGroup>
+                        </div>
                     </div>
 
                     <div className="mt-6 flex justify-end">
                         <Button
-                            label='Create Shipping Methods'
+                            label='Save Shipping Methods'
                             onClick={handleSubmit}
                         />
                     </div>

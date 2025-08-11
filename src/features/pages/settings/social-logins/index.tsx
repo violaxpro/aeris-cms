@@ -91,15 +91,6 @@ const index = () => {
                                 onChange={handleChange}
                                 value={formData.app_secret}
                             />
-                            <CheckboxInput
-                                label='Status'
-                                text='Status'
-                                onChange={(e: any) => setFormData({
-                                    ...formData,
-                                    facebook_status: e
-                                })}
-                                checked={formData.facebook_status}
-                            />
                         </div>
                     </div>
                     <div className='flex flex-col gap-4'>
@@ -138,15 +129,7 @@ const index = () => {
                                 onChange={handleChange}
                                 value={formData.client_secret}
                             />
-                            <CheckboxInput
-                                label='Status'
-                                text='Status'
-                                onChange={(e: any) => setFormData({
-                                    ...formData,
-                                    google_status: e
-                                })}
-                                checked={formData.google_status}
-                            />
+
                         </div>
 
                     </div>
