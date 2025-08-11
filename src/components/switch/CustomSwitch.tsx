@@ -77,7 +77,7 @@ const CustomSwitch: React.FC<CustomSwitchProps> = ({
         >
             {/* Label Aktif */}
             <span
-                className={`absolute left-1/3 -translate-x-1/2 text-white ${label} font-medium transition-opacity duration-200
+                className={`absolute left-1/3 -translate-x-1/2 w-10 text-white ${label} font-medium transition-opacity duration-200
             ${enabled ? 'opacity-100' : 'opacity-0'} uppercase`}
             >
                 {labelOn}

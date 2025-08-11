@@ -93,6 +93,8 @@ export { default as PlayIcon } from './PlayIcon.svg'
 export { default as BlockIcon } from './BlockIcon.svg'
 export { default as AddOutlineIcon } from './AddOutlineIcon.svg'
 export { default as CalendarGreyIcon } from './CalendarGreyIcon.svg'
+export { default as LampIcon } from './LampIcon.svg'
+export { default as PowerIcon } from './PowerIcon.svg'
 
 
 

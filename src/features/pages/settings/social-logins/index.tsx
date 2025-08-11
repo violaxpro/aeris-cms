@@ -4,8 +4,11 @@ import Breadcrumb from "@/components/breadcrumb"
 import Input from '@/components/input'
 import Button from '@/components/button'
 import CheckboxInput from '@/components/checkbox'
-import FormGroup from '@/components/form'
+import FormGroup from '@/components/form-group'
 import { Content } from 'antd/es/layout/layout'
+import { Divider } from 'antd'
+import CustomSwitch from '@/components/switch/CustomSwitch';
+import { PowerIcon, LampIcon } from '@public/icon'
 
 const index = () => {
     const [formData, setFormData] = useState({
@@ -14,7 +17,9 @@ const index = () => {
         app_secret: '',
         google_status: false,
         client_id: '',
-        client_secret: ''
+        client_secret: '',
+        facebook_mode: false,
+        google_mode: false
     })
 
     const handleChange = (e: any) => {
@@ -40,18 +45,36 @@ const index = () => {
 
     return (
         <>
-            <div className="mt-6 mx-4 mb-0">
-                <h1 className='text-xl font-bold'>
+            <div className="mt-6 mx-6 mb-0">
+                <h1 className='text-2xl font-bold'>
                     Social Logins
                 </h1>
                 <Breadcrumb
                     items={breadcrumb}
                 />
             </div>
-            <Content className="mt-6 mx-4 mb-0">
-                <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
-                    <div>
-                        <FormGroup title="Facebook" description='Facebook Logins'>
+            <Content className="mb-0">
+                <div style={{ padding: 24, minHeight: 360, background: '#fff' }} className='flex flex-col gap-6'>
+                    <div className='flex flex-col gap-4'>
+                        <div className='flex justify-between mt-4 items-center'>
+                            <div>
+                                <h4 className="text-2xl font-semibold">Facebook</h4>
+                                <p className="mt-2">Facebook Settings</p>
+                            </div>
+                            <CustomSwitch
+                                labelOn="On  Mode"
+                                labelOff="Off Mode"
+                                iconOn={LampIcon}
+                                iconOff={PowerIcon}
+                                onToggle={(state) => setFormData((prev: any) => ({
+                                    ...prev,
+                                    facebook_mode: state
+                                }))}
+                                size='md'
+                            />
+                        </div>
+                        <hr className='border-[#E5E7EB]' />
+                        <div className={`col-span-12 md:col-span-8 grid grid-cols-2 gap-4`}>
                             <Input
                                 id='app_id'
                                 label='App ID'
@@ -77,9 +100,28 @@ const index = () => {
                                 })}
                                 checked={formData.facebook_status}
                             />
-                        </FormGroup>
-                        <hr style={{ borderColor: '#E5E7EB', marginTop: '1rem', margin: '1rem 0' }} />
-                        <FormGroup title="Google" description='Google Logins'>
+                        </div>
+                    </div>
+                    <div className='flex flex-col gap-4'>
+                        <div className='flex justify-between mt-4 items-center'>
+                            <div>
+                                <h4 className="text-2xl font-semibold">Google</h4>
+                                <p className="mt-2">Google Login</p>
+                            </div>
+                            <CustomSwitch
+                                labelOn="On  Mode"
+                                labelOff="Off Mode"
+                                iconOn={LampIcon}
+                                iconOff={PowerIcon}
+                                onToggle={(state) => setFormData((prev: any) => ({
+                                    ...prev,
+                                    google_mode: state
+                                }))}
+                                size='md'
+                            />
+                        </div>
+                        <hr className='border-[#E5E7EB]' />
+                        <div className={`col-span-12 md:col-span-8 grid grid-cols-2 gap-4`}>
                             <Input
                                 id='client_id'
                                 label='Client ID'
@@ -105,12 +147,12 @@ const index = () => {
                                 })}
                                 checked={formData.google_status}
                             />
-                        </FormGroup>
-                    </div>
+                        </div>
 
+                    </div>
                     <div className="mt-6 flex justify-end">
                         <Button
-                            label='Create Social Logins'
+                            label='Save Social Logins'
                             onClick={handleSubmit}
                         />
                     </div>
