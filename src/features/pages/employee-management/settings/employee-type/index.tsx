@@ -21,18 +21,10 @@ import ModalCapacity from './ModalCapacity';
 
 const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd();
-    const [emailSmtp, setEmailSmtp] = useState(false)
-    const [awsSmtp, setAwsSmtp] = useState(false)
-    const [twillio, setTwillio] = useState(false)
-    const [facebook, setFacebook] = useState(false)
-    const [tawkTo, setTawkTo] = useState(false)
-    const [tidio, setTidio] = useState(false)
-    const [isLoading, setIsLoading] = useState(false)
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [currentMethod, setCurrentMethod] = useState<string | null>()
     const [leaveType, setLeaveType] = useState<string>('full_time');
     const [modalType, setModalType] = useState<string>('leave-type');
-    const [editorContent, setEditorContent] = useState('');
     const [formData, setFormData] = useState({
         annual_leave_time: initialValues ? initialValues.annual_leave_time : '',
         sick_permit_time: initialValues ? initialValues.sick_permit_time : '',
@@ -52,12 +44,6 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
     });
 
-    const optionsSecurityType = [
-        { label: "SSL", value: 'ssl' },
-        { label: "TLS", value: 'tls' },
-        { label: "STARTTLS", value: 'starttls' },
-        { label: "No Security", value: 'nosecurity' }
-    ]
     const [dynamicFields, setDynamicFields] = useState<Record<string, any[]>>({
         business_number: [],
         phone_number: [],
@@ -332,7 +318,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                     {/* Submit */}
                     <div className="mt-6 flex justify-end">
                         <Button
-                            label='Create Communications'
+                            label='Save Employee Type'
                             onClick={handleSubmit}
                         />
                     </div>
