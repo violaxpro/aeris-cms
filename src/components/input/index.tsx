@@ -16,6 +16,7 @@ type inputProps = {
     className?: string,
     disabled?: boolean
     divClassName?: string
+    labelClassName?: string
     prefix?: React.ReactNode;
     suffix?: React.ReactNode;
     required?: boolean;
@@ -36,6 +37,7 @@ const index = ({ label,
     className,
     disabled,
     divClassName,
+    labelClassName = 'w-full',
     prefix,
     suffix,
     required,
@@ -45,7 +47,7 @@ const index = ({ label,
     return (
         <div className={divClassName}>
             {
-                label && (<label htmlFor={id} className="flex justify-between items-center text-sm font-medium text-gray-700">
+                label && (<label htmlFor={id} className={`flex justify-between items-center text-sm font-medium text-gray-700 ${labelClassName}`}>
                     <div>
                         {label}
                         {required && <span className="text-red-500 ml-1">*</span>}

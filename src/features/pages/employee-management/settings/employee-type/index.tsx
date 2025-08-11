@@ -17,6 +17,7 @@ import FileUploader from '@/components/input-file';
 import { PlusOutlined, MinusCircleOutlined, EyeOutlined } from '@ant-design/icons';
 import { PencilIcon, BodyIconSwitch, HeaderIconSwitch } from '@public/icon';
 import ModalLeaveType from './ModalLeaveType';
+import ModalCapacity from './ModalCapacity';
 
 const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd();
@@ -30,6 +31,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [currentMethod, setCurrentMethod] = useState<string | null>()
     const [leaveType, setLeaveType] = useState<string>('full_time');
+    const [modalType, setModalType] = useState<string>('leave-type');
     const [editorContent, setEditorContent] = useState('');
     const [formData, setFormData] = useState({
         annual_leave_time: initialValues ? initialValues.annual_leave_time : '',
@@ -38,6 +40,15 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         sick_leave_time: initialValues ? initialValues.sick_leave_time : '',
         holiday_leave_time: initialValues ? initialValues.holiday_leave_time : '',
         early_leave_time: initialValues ? initialValues.early_leave_time : '',
+        capacity: initialValues ? initialValues.capacity : 'daily',
+        monday: initialValues ? initialValues.monday : '',
+        tuesday: initialValues ? initialValues.tuesday : '',
+        wednesday: initialValues ? initialValues.wednesday : '',
+        thursday: initialValues ? initialValues.thursday : '',
+        friday: initialValues ? initialValues.friday : '',
+        saturday: initialValues ? initialValues.saturday : '',
+        weekly_total: initialValues ? initialValues.weekly_total : '',
+        weekly_hours: initialValues ? initialValues.weekly_hours : '',
 
     });
 
@@ -79,22 +90,28 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         });
     };
 
-    const handleOpenModal = (type: string, method?: string,) => {
-        console.log(type)
+    const handleOpenModal = (type: string, modal: string, method?: string) => {
         setCurrentMethod(method)
-        setLeaveType(type)
         setIsModalOpen(true);
+        setLeaveType(type)
+        setModalType(modal)
     };
 
 
 
-    const handleChange = (e: any) => {
-        const { id, value } = e.target;
+    const handleChange = (field: string) => (
+        e: any | React.ChangeEvent<HTMLTextAreaElement>
+    ) => {
+        const value = typeof e === 'string' || Array.isArray(e)
+            ? e
+            : e.target.value;
+
         setFormData((prev) => ({
             ...prev,
-            [id]: value,
+            [field]: value,
         }));
     };
+
 
     const handleSubmit = async () => {
         try {
@@ -135,17 +152,33 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     return (
         <>
             {contextHolder}
-            <ModalLeaveType
-                isModalOpen={isModalOpen}
-                handleCancel={() => {
-                    setIsModalOpen(false)
-                    setLeaveType('')
-                }}
-                handleChange={handleChange}
-                formData={formData}
-                leaveType={leaveType}
-            />
+            {
+                modalType == 'leave-type' &&
+                <ModalLeaveType
+                    isModalOpen={isModalOpen}
+                    handleCancel={() => {
+                        setIsModalOpen(false)
+                        setLeaveType('')
+                    }}
+                    handleChange={handleChange}
+                    formData={formData}
+                    leaveType={leaveType}
+                />
+            }
+            {
+                modalType == 'capacity' &&
+                <ModalCapacity
+                    isModalOpen={isModalOpen}
+                    handleCancel={() => {
+                        setIsModalOpen(false)
+                        setLeaveType('')
+                    }}
+                    handleChange={handleChange}
+                    formData={formData}
+                    leaveType={leaveType}
+                />
 
+            }
             <Content className="mt-4 mx-4 mb-0">
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
 
@@ -161,7 +194,9 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     <div className='flex gap-3'>
                                         <Button
                                             label='Setup'
-                                            onClick={() => handleOpenModal('full_time')}
+                                            onClick={() => {
+                                                handleOpenModal('full_time', 'capacity')
+                                            }}
                                             icon={<Image
                                                 src={PencilIcon}
                                                 alt='edit-icon'
@@ -181,7 +216,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     <div className='flex gap-3'>
                                         <Button
                                             label='Setup'
-                                            onClick={() => handleOpenModal('full_time')}
+                                            onClick={() => handleOpenModal('full_time', 'leave-type')}
                                             icon={<Image
                                                 src={PencilIcon}
                                                 alt='edit-icon'
@@ -203,7 +238,9 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     <div className='flex gap-3'>
                                         <Button
                                             label='Setup'
-                                            onClick={() => handleOpenModal('part_time')}
+                                            onClick={() => {
+                                                handleOpenModal('part_time', 'capacity')
+                                            }}
                                             icon={<Image
                                                 src={PencilIcon}
                                                 alt='edit-icon'
@@ -222,7 +259,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     <div className='flex gap-3'>
                                         <Button
                                             label='Setup'
-                                            onClick={() => handleOpenModal('part_time')}
+                                            onClick={() => handleOpenModal('part_time', 'leave-type')}
                                             icon={<Image
                                                 src={PencilIcon}
                                                 alt='edit-icon'
@@ -247,7 +284,9 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     <div className='flex gap-3'>
                                         <Button
                                             label='Setup'
-                                            onClick={() => handleOpenModal('hourly')}
+                                            onClick={() => {
+                                                handleOpenModal('hourly', 'capacity')
+                                            }}
                                             icon={<Image
                                                 src={PencilIcon}
                                                 alt='edit-icon'
@@ -270,7 +309,9 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     <div className='flex gap-3'>
                                         <Button
                                             label='Setup'
-                                            onClick={() => handleOpenModal('freelance')}
+                                            onClick={() => {
+                                                handleOpenModal('freelance', 'capacity')
+                                            }}
                                             icon={<Image
                                                 src={PencilIcon}
                                                 alt='edit-icon'
