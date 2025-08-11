@@ -1,6 +1,8 @@
 import React from 'react';
 import { DatePicker, Space } from 'antd';
 import type { DatePickerProps } from 'antd';
+import Image from 'next/image';
+import { CalendarGreyIcon } from '@public/icon';
 
 type DatePickerInputProps = {
     id?: string
@@ -47,6 +49,12 @@ const DatePickerInput: React.FC<DatePickerInputProps> = ({
                 className='h-10'
                 showTime={showTime}
                 format={format}
+                suffixIcon={<Image
+                    src={CalendarGreyIcon}
+                    alt='calendar-icon'
+                    width={15}
+                    height={15}
+                />}
             />
         </div>
     );

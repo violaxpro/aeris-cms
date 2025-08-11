@@ -49,6 +49,8 @@ import SelectRangePicker from '@/components/date-picker/SelectRangePicker'
 import ShiftScheduler from '@/components/scheduler'
 import ModalShift from './ModalShift'
 import ScheduleTable from '@/components/scheduler/SchedulerShift'
+import { defaultTimes } from '@/plugins/utils/utils';
+
 
 const index = ({ data }: { data?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
@@ -69,7 +71,9 @@ const index = ({ data }: { data?: any }) => {
         repeat_weekly: false,
         start_date: '',
         end_date: '',
-        day_times: {} as Record<string, { start: string; end: string }[]>
+        day_times: defaultTimes,
+        month: '',
+        repeat_time: 0
     })
     const [modalType, setModalType] = useState('employee-benefit')
     const [formMode, setFormMode] = useState('create')
@@ -190,7 +194,7 @@ const index = ({ data }: { data?: any }) => {
     ];
 
     const handleChange = (field: string) => (
-        e: any | React.ChangeEvent<HTMLTextAreaElement>
+        e: any
     ) => {
         let value;
 

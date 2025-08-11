@@ -90,6 +90,9 @@ export { default as DownloadPdfIcon } from './DownloadPdfIcon.svg'
 export { default as SendIcon } from './SendIcon.svg'
 export { default as CopyIcon } from './CopyIcon.svg'
 export { default as PlayIcon } from './PlayIcon.svg'
+export { default as BlockIcon } from './BlockIcon.svg'
+export { default as AddOutlineIcon } from './AddOutlineIcon.svg'
+export { default as CalendarGreyIcon } from './CalendarGreyIcon.svg'
 
 
 

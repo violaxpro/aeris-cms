@@ -90,6 +90,13 @@ export const formatTime = (secs: number) => {
     return `${h}:${m}:${s}`;
 };
 
+export const getDayShort = (dayName: string) => {
+    return new Intl.DateTimeFormat('en-US', { weekday: 'short' })
+        .format(new Date(dayName + ' 2023-01-01'));
+};
+
+console.log(getDayShort('Monday')); // Mon
+
 
 // Format waktu
 export const dateFormats = [
@@ -129,3 +136,34 @@ export const timezones = [
     // { label: 'Australia/Broken_Hill (ACST/ACDT)', value: 'Australia/Broken_Hill' },
     // { label: 'Australia/Lord_Howe (LHST/LHDT)', value: 'Australia/Lord_Howe' }
 ]
+
+export const defaultTimes: Record<string, { start: string; end: string }[]> = {
+    monday: [
+        { start: '8:00am', end: '12:00pm' },
+        { start: '1:00pm', end: '4:00pm' },
+    ],
+    tuesday: [
+        { start: '8:00am', end: '12:00pm' },
+        { start: '1:00pm', end: '4:00pm' },
+    ],
+    wednesday: [
+        { start: '8:00am', end: '12:00pm' },
+        { start: '1:00pm', end: '4:00pm' },
+    ],
+    thursday: [
+        { start: '8:00am', end: '12:00pm' },
+        { start: '1:00pm', end: '4:00pm' },
+    ],
+    friday: [
+        { start: '8:00am', end: '11:45am' },
+        { start: '1:15pm', end: '4:00pm' },
+    ],
+    saturday: [
+        { start: '8:00am', end: '12:00pm' },
+        { start: '1:00pm', end: '2:00pm' },
+    ],
+    sunday: [
+        { start: '', end: '' },
+        { start: '', end: '' },
+    ],
+};

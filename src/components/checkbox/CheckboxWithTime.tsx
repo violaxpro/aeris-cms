@@ -2,7 +2,8 @@ import React from 'react';
 import { Checkbox, TimePicker } from 'antd';
 import dayjs from 'dayjs';
 import Image from 'next/image';
-import { CopyIcon } from '@public/icon';
+import { BlockIcon, AddOutlineIcon, CopyIcon } from '@public/icon';
+import { defaultTimes } from '@/plugins/utils/utils';
 
 type DayOption = {
     label: string;
@@ -23,6 +24,7 @@ type CheckboxGroupProps = {
     label?: string;
     required?: boolean;
     format?: any
+    onChangeAllTimes?: (dayValue: string, newTimes: TimeRange[]) => void;
 };
 
 const CheckboxGroupWithTime: React.FC<CheckboxGroupProps> = ({
@@ -33,7 +35,8 @@ const CheckboxGroupWithTime: React.FC<CheckboxGroupProps> = ({
     onChangeTimes,
     label,
     required,
-    format = 'h:mma'
+    format = 'h:mma',
+    onChangeAllTimes
 }) => {
     const handleCheck = (dayValue: string, checked: boolean) => {
         if (checked) {
@@ -43,107 +46,145 @@ const CheckboxGroupWithTime: React.FC<CheckboxGroupProps> = ({
         }
     };
 
-    const defaultTimes: Record<string, { start: string; end: string }[]> = {
-        monday: [
-            { start: '8:00am', end: '12:00pm' },
-            { start: '1:00pm', end: '4:00pm' },
-        ],
-        tuesday: [
-            { start: '8:00am', end: '12:00pm' },
-            { start: '1:00pm', end: '4:00pm' },
-        ],
-        wednesday: [
-            { start: '8:00am', end: '12:00pm' },
-            { start: '1:00pm', end: '4:00pm' },
-        ],
-        thursday: [
-            { start: '8:00am', end: '12:00pm' },
-            { start: '1:00pm', end: '4:00pm' },
-        ],
-        friday: [
-            { start: '8:00am', end: '11:45am' },
-            { start: '1:15pm', end: '4:00pm' },
-        ],
-        saturday: [
-            { start: '8:00am', end: '12:00pm' },
-            { start: '1:00pm', end: '2:00pm' },
-        ],
-        sunday: [
-            { start: '', end: '' },
-            { start: '', end: '' },
-        ],
+    const handleAddTime = (dayValue: string) => {
+        const defaults = defaultTimes[dayValue.toLowerCase()] || [];
+        const currentTimes = times[dayValue] && times[dayValue].length > 0
+            ? [...times[dayValue]]
+            : [];
+
+        let newTime = { start: '', end: '' };
+
+        // kalau masih ada default yang belum dipakai, ambil sesuai urutan
+        if (defaults[currentTimes.length]) {
+            newTime = defaults[currentTimes.length];
+        }
+
+        currentTimes.push(newTime);
+
+        // onChangeDays?.([...new Set([...value, dayValue])]);
+        onChangeAllTimes?.(dayValue, currentTimes);
     };
 
+    const handleDeleteTime = (dayValue: string, idx: number) => {
+        const currentTimes = [...(times[dayValue] || [])];
+        currentTimes.splice(idx, 1);
+        onChangeAllTimes?.(dayValue, currentTimes);
+    };
+
+    console.log(times)
+
+
     const handleCopy = (dayValue: string) => {
-        // contoh: copy text ke clipboard
-        navigator.clipboard.writeText(`Data untuk ${dayValue}`)
-        console.log(`Copied: ${dayValue}`)
-    }
+        if (!defaultTimes[dayValue.toLowerCase()]) return;
+        const text = defaultTimes[dayValue.toLowerCase()]
+            .map(t => `${t.start} - ${t.end}`)
+            .join('\n');
+        navigator.clipboard.writeText(text);
+        alert(`Copied: ${text}`);
+    };
+
 
     return (
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 gap-4">
             {label && (
-                <label className="block text-sm font-medium text-gray-700 col-span-3">
+                <label className="block text-sm font-medium text-gray-700 col-span-2">
                     {label}
                     {required && <span className="text-red-500 ml-1">*</span>}
                 </label>
             )}
 
-            {options.map(day => (
-                <div key={day.value} className="flex flex-col">
-                    <div className="flex justify-between items-center w-full">
-                        <Checkbox
-                            checked={value.includes(day.value)}
-                            onChange={e => handleCheck(day.value, e.target.checked)}
-                        >
-                            {day.label}
-                        </Checkbox>
-                        <Image
-                            src={CopyIcon}
-                            alt="copy-paste"
-                            width={16}
-                            height={16}
-                            onClick={e => {
-                                e.stopPropagation() // supaya klik icon tidak check/uncheck
-                                handleCopy(day.value)
-                            }}
-                            className="cursor-pointer"
-                        />
-                    </div>
-
-
-                    {/* TimePicker SELALU render */}
-                    <div className="mt-1 flex flex-col gap-1">
-                        {(times[day.value] && times[day.value].length > 0
-                            ? times[day.value]
-                            : defaultTimes[day.value.toLowerCase()] || [{ start: '', end: '' }, { start: '', end: '' }]
-                        ).map((time, idx) => (
-                            <div key={idx} className="flex items-center gap-2">
-                                <TimePicker
-                                    format={format}
-                                    value={time.start ? dayjs(time.start, format) : null}
-                                    onChange={(t) =>
-                                        onChangeTimes?.(day.value, idx, 'start', t ? t.format(format) : '')
-                                    }
-                                    suffixIcon={null}
-                                    allowClear={false}
-                                />
-                                <span>-</span>
-                                <TimePicker
-                                    format={format}
-                                    value={time.end ? dayjs(time.end, format) : null}
-                                    onChange={(t) =>
-                                        onChangeTimes?.(day.value, idx, 'end', t ? t.format(format) : '')
-                                    }
-                                    suffixIcon={null}
-                                    allowClear={false}
-                                />
+            {options.map(day => {
+                const currentTimes =
+                    times[day.value] === undefined
+                        ? (defaultTimes[day.value.toLowerCase()] || []) // awal → default
+                        : times[day.value]; // kalau sudah ada → pakai data
+                return (
+                    <div key={day.value} className="flex flex-col w-full items-start">
+                        <div className="grid grid-cols-[60px_1fr]  w-full">
+                            <div className='mt-2'>
+                                <Checkbox
+                                    checked={value.includes(day.value)}
+                                    onChange={e => handleCheck(day.value, e.target.checked)}
+                                >
+                                    {day.label.slice(0, 3)}
+                                </Checkbox>
                             </div>
-                        ))}
-                    </div>
 
-                </div>
-            ))}
+                            {/* TimePicker SELALU render */}
+                            <div className="mt-1 flex flex-col gap-1 w-55">
+                                {currentTimes.length === 0 ? (
+                                    // Kalau kosong → cuma tombol Add
+                                    <div className="flex items-center justify-end gap-2 mt-1">
+                                        <Image
+                                            src={AddOutlineIcon}
+                                            alt="add-icon"
+                                            width={15}
+                                            height={15}
+                                            className="cursor-pointer"
+                                            onClick={() => handleAddTime(day.value)}
+                                        />
+                                    </div>
+                                ) : (
+                                    // Kalau ada isi → render semua times
+                                    currentTimes.map((time, idx) => (
+                                        <div key={idx} className="flex items-center gap-2">
+                                            <TimePicker
+                                                format={format}
+                                                value={time.start ? dayjs(time.start, format) : null}
+                                                onChange={(t) =>
+                                                    onChangeTimes?.(day.value, idx, 'start', t ? t.format(format) : '')
+                                                }
+                                                suffixIcon={null}
+                                                allowClear={false}
+                                            />
+                                            <span>-</span>
+                                            <TimePicker
+                                                format={format}
+                                                value={time.end ? dayjs(time.end, format) : null}
+                                                onChange={(t) =>
+                                                    onChangeTimes?.(day.value, idx, 'end', t ? t.format(format) : '')
+                                                }
+                                                suffixIcon={null}
+                                                allowClear={false}
+                                            />
+                                            <div className="flex gap-2  w-30">
+                                                <Image
+                                                    src={BlockIcon}
+                                                    alt="delete-icon"
+                                                    width={15}
+                                                    height={15}
+                                                    className="cursor-pointer"
+                                                    onClick={() => handleDeleteTime(day.value, idx)}
+                                                />
+                                                {idx === 0 && (
+                                                    <>
+                                                        <Image
+                                                            src={AddOutlineIcon}
+                                                            alt="add-icon"
+                                                            width={15}
+                                                            height={15}
+                                                            className="cursor-pointer"
+                                                            onClick={() => handleAddTime(day.value)}
+                                                        />
+                                                        <Image
+                                                            src={CopyIcon}
+                                                            alt="copy-paste"
+                                                            width={15}
+                                                            height={15}
+                                                            className="cursor-pointer"
+                                                            onClick={() => handleCopy(day.value)}
+                                                        />
+                                                    </>
+                                                )}
+                                            </div>
+                                        </div>
+                                    ))
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                )
+            })}
         </div>
     );
 };

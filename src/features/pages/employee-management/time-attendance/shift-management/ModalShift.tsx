@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Modal from '@/components/modal'
 import SelectInput from '@/components/select'
 import Button from '@/components/button'
@@ -27,12 +27,22 @@ type ModalShiftType = {
         assign_to: string[],
         repeat_weekly: boolean
         day_times: Record<string, { start: string; end: string }[]>
+        month: string
+        repeat_time: number
     }
     handleCancel: () => void
     handleSubmit: () => void
 }
 const ModalShift = ({ open, handleChange, formData, handleCancel, handleSubmit }: ModalShiftType) => {
     const [isLoading, setIsLoading] = React.useState(false)
+    const [times, setTimes] = useState<Record<string, any[]>>({});
+
+    const handleChangeAllTimes = (dayValue: string, newTimes: any[]) => {
+        setTimes(prev => ({
+            ...prev,
+            [dayValue]: newTimes
+        }));
+    };
     const handleSuccess = async (file: any) => {
         setIsLoading(true)
         try {
@@ -136,7 +146,7 @@ const ModalShift = ({ open, handleChange, formData, handleCancel, handleSubmit }
                     label='Apply on Days'
                     options={days_option}
                     value={formData.apply_on_days}
-                    times={formData.day_times}
+                    times={times}
                     onChangeDays={handleChange('apply_on_days')}
                     onChangeTimes={(day, idx, field, val) => {
                         handleChange('day_times')({
@@ -146,9 +156,10 @@ const ModalShift = ({ open, handleChange, formData, handleCancel, handleSubmit }
                             ) || []
                         })
                     }}
+                    onChangeAllTimes={handleChangeAllTimes}
                 />
 
-                <div>
+                {/* <div>
                     <label className="block text-sm font-medium text-gray-700 col-span-3">
                         Apply on Weeks
                     </label>
@@ -166,7 +177,7 @@ const ModalShift = ({ open, handleChange, formData, handleCancel, handleSubmit }
                             placeholder='Select End Date'
                         />
                     </div>
-                </div>
+                </div> */}
 
                 <SelectInput
                     id='assign_to'
@@ -191,6 +202,30 @@ const ModalShift = ({ open, handleChange, formData, handleCancel, handleSubmit }
                         onChange={handleChange('repeat_weekly')}
                     />
                 </div>
+                {
+                    formData.repeat_weekly &&
+                    <div className='grid grid-cols-[1fr_150px] gap-3'>
+                        <DatePickerInput
+                            id='month'
+                            label='Month'
+                            value={formData.month ? dayjs(formData.month) : null}
+                            onChange={handleChange('month')}
+                            format='MMMM'
+                            placeholder='Select Month'
+                        />
+                        <div className='flex justify-center items-center gap-1'>
+                            <Input
+                                id='repeat_time'
+                                type='number'
+                                label='Repeat'
+                                value={formData.repeat_time}
+                                onChange={handleChange('repeat_time')}
+                            />
+                            <label className='pt-3'>times</label>
+                        </div>
+                    </div>
+
+                }
 
 
                 <div className='col-span-full flex justify-center '>
