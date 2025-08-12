@@ -115,6 +115,22 @@ export const routes = {
     createSubscribe: '/ecommerce/subscribe/create',
     editSubscribe: (slug: string) => `/ecommerce/subscribe/${slug}/edit`,
 
+    flashSale: '/ecommerce/flash-sale',
+    createFlashSale: '/ecommerce/flash-sale/create',
+    editFlashSale: (slug: string) => `/ecommerce/flash-sale/${slug}/edit`,
+
+    emailMarketing: '/ecommerce/email-marketing',
+    createemailMarketing: '/ecommerce/email-marketing/create',
+    editemailMarketing: (slug: string) => `/ecommerce/email-marketing/${slug}/edit`,
+
+    smsMarketing: '/ecommerce/sms-marketing',
+    createSmsMarketing: '/ecommerce/sms-marketing/create',
+    editSmsMarketing: (slug: string) => `/ecommerce/sms-marketing/${slug}/edit`,
+
+    coupon: '/ecommerce/coupon',
+    createCoupon: '/ecommerce/coupon/create',
+    editCoupon: (slug: string) => `/ecommerce/coupon/${slug}/edit`,
+
     attendance: '/ecommerce/attendance',
     createAttendance: '/ecommerce/attendance/create',
     editAttendance: (slug: string) => `/ecommerce/attendance/${slug}/edit`,

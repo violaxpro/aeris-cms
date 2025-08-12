@@ -28,6 +28,7 @@ import { AddIcon, FilterIcon, TrashIconRed, PencilIconBlue } from '@public/icon'
 
 const index = ({ warehouseBranchList }: { warehouseBranchList?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
+    const router = useRouter()
     const [data, setData] = useAtom(branchListAtom)
     const [openModalDelete, setOpenModalDelete] = useState(false)
     const [deletedData, setDeletedData] = useState<any>(null)
@@ -90,25 +91,23 @@ const index = ({ warehouseBranchList }: { warehouseBranchList?: any }) => {
             key: 'action',
             width: 120,
             render: (_: string, row: any) => {
-                const menu = (
-                    <Menu>
-                        <Menu.Item key="delete">
-                            <DeletePopover
-                                title='Delete Warehouse Branch List'
-                                description='Are you sure to delete this data?'
-                                onDelete={() => handleDelete(row.id)}
-                                label='Delete'
-                            />
-                        </Menu.Item>
-                    </Menu>
-                );
-
                 return (
-                    <Dropdown overlay={menu} trigger={['click']} >
-                        <button className="flex items-center justify-center px-2 py-1 border rounded ">
-                            Actions <MoreOutlined className="ml-1" />
-                        </button>
-                    </Dropdown >
+                    <div className="flex items-center justify-end gap-3 pe-4">
+                        <ButtonIcon
+                            color='primary'
+                            variant='filled'
+                            size="small"
+                            icon={PencilIconBlue}
+                            onClick={() => router.push(routes.eCommerce.editPriceLevel(row.id))}
+                        />
+                        <ButtonIcon
+                            color='danger'
+                            variant='filled'
+                            size="small"
+                            icon={TrashIconRed}
+                            onClick={() => handleOpenModalDelete(row.id)}
+                        />
+                    </div >
                 );
 
             },
@@ -126,6 +125,13 @@ const index = ({ warehouseBranchList }: { warehouseBranchList?: any }) => {
     return (
         <>
             {contextHolder}
+            <ConfirmModal
+                open={openModalDelete}
+                onCancel={() => setOpenModalDelete(false)}
+                onSave={handleDelete}
+                action='Delete'
+                text='Are you sure you want to delete this warehouse branch list?'
+            />
             <div className="mt-6 mx-6 mb-0">
                 <h1 className='text-2xl font-bold'>
                     Warehouse Branch Lists

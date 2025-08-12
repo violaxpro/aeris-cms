@@ -351,27 +351,23 @@ export const menuItems = [
                     {
                         key: 'flash-sale',
                         label: 'Flash Sale',
-                        // href: routes.eCommerce.products,
-                        href: '#'
+                        href: routes.eCommerce.flashSale,
                     },
                     {
                         key: 'coupon',
                         label: 'Coupon',
-                        // href: routes.eCommerce.products,
-                        href: '#'
-
+                        href: routes.eCommerce.coupon,
                     },
                     {
                         key: 'email-marketing',
                         label: 'Email Marketing',
-                        // href: routes.eCommerce.products,
+                        // href: routes.eCommerce.emailMarketing,
                         href: '#'
-
                     },
                     {
                         key: 'sms-marketing',
                         label: 'SMS Marketing',
-                        // href: routes.eCommerce.products,
+                        // href: routes.eCommerce.smsMarketing,
                         href: '#'
                     },
                 ]

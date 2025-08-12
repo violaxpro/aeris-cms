@@ -28,6 +28,7 @@ export { default as ArrowRight } from './ArrowRight.svg'
 export { default as CalenderBlueIcon } from './CalenderBlueIcon.svg'
 export { default as EyeIcon } from './EyeIcon.svg'
 export { default as CancelIcon } from './CancelIcon.svg'
+export { default as CancelGreyIcon } from './CancelGreyIcon.svg'
 export { default as StatusIcon } from './StatusIcon.svg'
 export { default as CopyPasteIcon } from './CopyPasteIcon.svg'
 export { default as DownloadIcon } from './DownloadIcon.svg'
@@ -95,6 +96,7 @@ export { default as AddOutlineIcon } from './AddOutlineIcon.svg'
 export { default as CalendarGreyIcon } from './CalendarGreyIcon.svg'
 export { default as LampIcon } from './LampIcon.svg'
 export { default as PowerIcon } from './PowerIcon.svg'
+export { default as PlusOutlineIcon } from './PlusOutlineIcon.svg'
 
 
 

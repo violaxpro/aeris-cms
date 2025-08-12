@@ -2,9 +2,10 @@
 import React, { useState, useEffect } from 'react'
 import Table from "@/components/table"
 import type { TableColumnsType } from 'antd'
-import { BrandType } from '@/data/brands-data'
+import { Dropdown, Menu } from 'antd'
+import { WarehouseBranchListType } from '@/plugins/types/warehouse-type'
 import Image from 'next/image'
-import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons'
+import { EditOutlined, PlusCircleOutlined, MoreOutlined } from '@ant-design/icons'
 import DeletePopover from '@/components/popover'
 import { routes } from '@/config/routes'
 import Link from 'next/link'
@@ -12,10 +13,11 @@ import Breadcrumb from "@/components/breadcrumb"
 import { Content } from 'antd/es/layout/layout'
 import Button from "@/components/button"
 import SearchInput from '@/components/search';
+import StatusTag from '@/components/tag'
 import { deleteBrand } from '@/services/brands-service'
 import { useNotificationAntd } from '@/components/toast'
 import { useAtom } from 'jotai'
-import { brandAtom } from '@/store/BrandAtomStore'
+import { branchListAtom } from '@/store/WarehouseAtom'
 import ButtonAction from '@/components/button/ButtonAction'
 import ButtonIcon from '@/components/button/ButtonIcon'
 import { useRouter } from 'next/navigation'
@@ -24,11 +26,12 @@ import Pagination from '@/components/pagination'
 import SearchTable from '@/components/search/SearchTable'
 import ShowPageSize from '@/components/pagination/ShowPageSize'
 import { AddIcon, FilterIcon, TrashIconRed, PencilIconBlue } from '@public/icon'
+import dayjs from 'dayjs'
 
-const index = ({ inventoryLists }: { inventoryLists?: any }) => {
+const index = ({ flashSaleData }: { flashSaleData?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
     const router = useRouter()
-    const [data, setData] = useAtom(brandAtom)
+    const [data, setData] = useAtom(branchListAtom)
     const [openModalDelete, setOpenModalDelete] = useState(false)
     const [deletedData, setDeletedData] = useState<any>(null)
     const [pageSize, setPageSize] = useState(10);
@@ -37,6 +40,7 @@ const index = ({ inventoryLists }: { inventoryLists?: any }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [filteredData, setFilteredData] = useState<any[]>([]);
     const [search, setSearch] = useState('')
+
     const handleDelete = async (id: any) => {
         try {
             const res = await deleteBrand(id)
@@ -56,55 +60,50 @@ const index = ({ inventoryLists }: { inventoryLists?: any }) => {
 
     const breadcrumb = [
         {
-            title: 'Warehouse',
+            title: 'Marketing',
         },
         {
-            title: 'Inventory Lists',
+            title: 'Flash Sale',
         },
     ]
-    const columns: TableColumnsType<BrandType> = [
+    const columns: TableColumnsType<any> = [
         {
-            title: 'SKU',
-            dataIndex: 'sku',
+            title: 'Campaign Name',
+            dataIndex: 'campaign_name',
         },
         {
-            title: 'Thumbnail',
-            dataIndex: 'url_logo',
-            render: (url: string) => {
-                if (!url) return null;
-                return (
-                    <Image
-                        src={url}
-                        alt="product-img"
-                        width={50}
-                        height={50}
-                        className='object-cover rounded-xl'
-                    />
+            title: 'Created',
+            dataIndex: 'created_at',
+            sorter: (a: any, b: any) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+            render: (val: any) => {
+                const date = dayjs(val).format("DD/MM/YYYY")
+                return <div className="flex flex-col w-full">
+                    <div className="flex justify-start gap-1">
+                        <span>{date}</span>
+                    </div>
+                </div>
+            }
+        },
+        {
+            title: 'Status',
+            dataIndex: 'status',
+            sorter: (a: any, b: any) => {
+                const status = ['Actived', 'Expired'];
+                return status.indexOf(a.status) - status.indexOf(b.status
                 )
             },
+            render: (val: any) => {
+                let status
+                if (val == 1) {
+                    status = 'Actived'
+                } else {
+                    status = 'Expired'
+                }
+                return <StatusTag status={status} type='marketing' />
+            }
         },
         {
-            title: 'Name',
-            dataIndex: 'name',
-        },
-        {
-            title: 'In Stock',
-            dataIndex: 'in_stock',
-        },
-        {
-            title: 'Waiting',
-            dataIndex: 'waiting',
-        },
-        {
-            title: 'Sold',
-            dataIndex: 'sold',
-        },
-        {
-            title: 'Added',
-            dataIndex: 'added',
-        },
-        {
-            title: 'Action',
+            title: 'Actions',
             dataIndex: 'action',
             key: 'action',
             width: 120,
@@ -116,7 +115,7 @@ const index = ({ inventoryLists }: { inventoryLists?: any }) => {
                             variant='filled'
                             size="small"
                             icon={PencilIconBlue}
-                            onClick={() => router.push(routes.eCommerce.editPriceLevel(row.id))}
+                            onClick={() => router.push(routes.eCommerce.editFlashSale(row.id))}
                         />
                         <ButtonIcon
                             color='danger'
@@ -127,7 +126,8 @@ const index = ({ inventoryLists }: { inventoryLists?: any }) => {
                         />
                     </div >
                 );
-            }
+
+            },
         },
 
     ]
@@ -137,8 +137,8 @@ const index = ({ inventoryLists }: { inventoryLists?: any }) => {
     };
 
     useEffect(() => {
-        setData(inventoryLists)
-    }, [inventoryLists])
+        setData(flashSaleData)
+    }, [flashSaleData])
     return (
         <>
             {contextHolder}
@@ -147,15 +147,31 @@ const index = ({ inventoryLists }: { inventoryLists?: any }) => {
                 onCancel={() => setOpenModalDelete(false)}
                 onSave={handleDelete}
                 action='Delete'
-                text='Are you sure you want to delete this inventory list?'
+                text='Are you sure you want to delete this flash sale?'
             />
             <div className="mt-6 mx-6 mb-0">
-                <h1 className='text-2xl font-bold'>
-                    Inventory Lists
-                </h1>
-                <Breadcrumb
-                    items={breadcrumb}
-                />
+                <div className='flex justify-between items-center'>
+                    <div>
+                        <h1 className='text-xl font-bold'>
+                            Flash Sale
+                        </h1>
+                        <Breadcrumb
+                            items={breadcrumb}
+                        />
+                    </div>
+                    <Button
+                        icon={<Image
+                            src={AddIcon}
+                            alt='add-icon'
+                            width={15}
+                            height={15}
+                        />}
+
+                        label='Add Flash Sale'
+                        link={routes.eCommerce.createFlashSale}
+
+                    />
+                </div>
             </div>
             <Content className="mb-0">
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
@@ -164,17 +180,6 @@ const index = ({ inventoryLists }: { inventoryLists?: any }) => {
                             <ShowPageSize
                                 pageSize={pageSize}
                                 onChange={setPageSize}
-                            />
-                            <ButtonAction
-                                label='Filter by'
-                                icon={<Image
-                                    src={FilterIcon}
-                                    alt='filter-icon'
-                                    width={15}
-                                    height={15}
-                                />}
-                                onClick={() => setisOpenModalFilter(true)}
-                                position='end'
                             />
                             <SearchTable
                                 value={search}

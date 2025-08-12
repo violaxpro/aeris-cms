@@ -254,7 +254,7 @@ const index = ({ data }: { data?: any }) => {
     ];
 
     const handleChange = (field: string) => (
-        e: any | React.ChangeEvent<HTMLTextAreaElement>
+        e: any
     ) => {
         const value = typeof e === 'string' || Array.isArray(e)
             ? e
