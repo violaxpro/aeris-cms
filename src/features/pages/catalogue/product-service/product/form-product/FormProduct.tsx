@@ -84,7 +84,9 @@ const ProductForm: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
     const handleSubmit = async () => {
         try {
-
+            if(formData.tab_basic_information.metaTitle) {
+                
+            }
             const submitData = {
                 name: formData.tab_basic_information.productName,
                 short_description: formData.tab_basic_information.shortDesc || 'short-desc',

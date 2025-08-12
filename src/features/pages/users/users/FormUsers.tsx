@@ -5,7 +5,7 @@ import Breadcrumb from "@/components/breadcrumb";
 import { Content } from 'antd/es/layout/layout';
 import Button from '@/components/button'
 import { FormProps } from '@/plugins/types/form-type';
-import FormGroup from '@/components/form';
+import FormGroup from '@/components/form-group';
 import Input from "@/components/input"
 import SelectInput from '@/components/select';
 import { routes } from '@/config/routes';
@@ -32,6 +32,14 @@ const FormUsers: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         price_level: initialValues ? initialValues.price_level : '',
         credit: initialValues ? initialValues.credit : '',
         permission: initialValues ? initialValues.permission : '',
+        person: initialValues ? initialValues.person : '',
+        company: initialValues ? initialValues.company : '',
+        first_address: initialValues ? initialValues.first_address : '',
+        second_address: initialValues ? initialValues.second_address : '',
+        country: initialValues ? initialValues.country : '',
+        state: initialValues ? initialValues.state : '',
+        city: initialValues ? initialValues.city : '',
+        postcode: initialValues ? initialValues.postcode : '',
     });
 
     const [formErrors, setFormErrors] = useState({
@@ -49,7 +57,7 @@ const FormUsers: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const breadcrumb = [
         { title: 'Users' },
         { title: 'Users', url: routes.eCommerce.users },
-        { title: mode === 'create' ? 'Create Users' : 'Edit Users' },
+        { title: mode === 'create' ? 'Create' : 'Edit' },
     ];
 
     const handleChange = (e: any) => {
@@ -140,19 +148,18 @@ const FormUsers: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     return (
         <>
             {contextHolder}
-            <div className="mt-6 mx-4 mb-0">
-                <h1 className="text-xl font-bold mb-4">{mode === 'create' ? 'Create Users' : 'Edit Users'}</h1>
+            <div className="mt-6 mx-6 mb-0">
+                <h1 className="text-2xl font-bold mb-4">{mode === 'create' ? 'Create Users' : 'Edit Users'}</h1>
                 <Breadcrumb items={breadcrumb} />
             </div>
 
-            <Content className="mt-4 mx-4 mb-0">
+            <Content className="mb-0">
                 <div style={{ padding: 24, minHeight: 360, background: 'var(--background)' }}>
-
-                    {/* Tab Content */}
-                    <div>
+                    <div className='flex flex-col gap-8'>
                         <FormGroup
                             title="Users"
                             description="Users information"
+                            childClassName='grid md:grid-cols-4 gap-2'
                         >
                             <Input
                                 id='firstname'
@@ -211,6 +218,14 @@ const FormUsers: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 value={formData.confirm_password}
                             />
                             <Input
+                                id='permission'
+                                label='Permission'
+                                type='text'
+                                placeholder='Input Permission'
+                                onChange={handleChange}
+                                value={formData.permission}
+                            />
+                            {/* <Input
                                 id='price_level'
                                 label='Price Level'
                                 type='text'
@@ -225,16 +240,83 @@ const FormUsers: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 placeholder='Input Credit'
                                 onChange={handleChange}
                                 value={formData.credit}
+                            /> */}
+
+                        </FormGroup>
+                        <FormGroup
+                            title="Address"
+                            description="Address information"
+                            childClassName='grid md:grid-cols-2 gap-3'
+                        >
+                            <Input
+                                id='person'
+                                label='Person'
+                                type='text'
+                                placeholder='Input Person'
+                                onChange={handleChange}
+                                value={formData.person}
                             />
                             <Input
-                                id='permission'
-                                label='Permission'
+                                id='company'
+                                label='Company'
                                 type='text'
-                                placeholder='Input Permission'
+                                placeholder='Input Company'
                                 onChange={handleChange}
-                                value={formData.permission}
+                                value={formData.company}
                             />
+                            <Input
+                                id='first_address'
+                                label='Address 1'
+                                type='first_address'
+                                placeholder='Input Address 1'
+                                onChange={handleChange}
+                                value={formData.first_address}
+                            />
+                            <Input
+                                id='second_address'
+                                label='Address 2'
+                                type='text'
+                                placeholder='Input Address 2'
+                                onChange={handleChange}
+                                value={formData.second_address}
+                            />
+                            <div className='col-span-full grid md:grid-cols-4 gap-3'>
+                                <SelectInput
+                                    id='country'
+                                    label="Country"
+                                    placeholder="Select Country"
+                                    value={formData.country}
+                                    onChange={(e) => handleChangeSelect('country', e)}
+                                    options={optionBrands}
+                                />
+                                <SelectInput
+                                    id='city'
+                                    label="City"
+                                    placeholder="Select City"
+                                    value={formData.city}
+                                    onChange={(e) => handleChangeSelect('city', e)}
+                                    options={optionBrands}
+                                />
+                                <SelectInput
+                                    id='state'
+                                    label="State"
+                                    placeholder="Select State"
+                                    value={formData.state}
+                                    onChange={(e) => handleChangeSelect('state', e)}
+                                    options={optionBrands}
+                                />
+                                <Input
+                                    id='postcode'
+                                    label='Post Code'
+                                    type='text'
+                                    placeholder='Input Post Code'
+                                    onChange={handleChange}
+                                    value={formData.postcode}
+                                />
+                            </div>
+
                         </FormGroup>
+
                     </div>
 
                     {/* Submit */}
