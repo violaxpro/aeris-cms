@@ -175,7 +175,7 @@ const FormFlashSale: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             {
                                 product.map((item: any, index: number) => {
                                     return (
-                                        <div className='col-span-full border p-6 rounded-xl' style={{ borderColor: '#E5E7EB' }}  >
+                                        <div key={index} className='col-span-full border p-6 rounded-xl' style={{ borderColor: '#E5E7EB' }}  >
                                             <div className='col-span-full flex-col gap-3'>
                                                 <div className='w-full flex justify-between items-center'>
                                                     <h4 className='text-lg font-semibold'>Product Information</h4>
