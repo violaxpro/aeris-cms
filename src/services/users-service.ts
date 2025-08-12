@@ -1,7 +1,7 @@
 import baseService from "./base-service";
 import { UserType } from "@/plugins/types/users-type";
 
-const api = '/admin/user'
+const api = '/admin/user/admins'
 
 export async function getUsers(param?: string | number) {
     const url = param ? `${api}/${param}` : api

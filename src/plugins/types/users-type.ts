@@ -40,6 +40,16 @@ export type UserType = {
     last_login: string
 }
 
+export type RolesType = {
+    id?: number | string | undefined
+    name: string
+    created: {
+        name: string
+        date: string
+    }
+    permission: string[]
+}
+
 export const dummyUser = [
     {
         id: 1,

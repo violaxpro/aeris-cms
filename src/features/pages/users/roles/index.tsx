@@ -27,8 +27,9 @@ import ConfirmModal from '@/components/modal/ConfirmModal'
 import Pagination from '@/components/pagination'
 import SearchTable from '@/components/search/SearchTable'
 import ShowPageSize from '@/components/pagination/ShowPageSize'
+import ModalRole from './ModalRole'
 
-const index = ({ usersData }: { usersData?: any }) => {
+const index = ({ rolesData }: { rolesData?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
     const router = useRouter()
     const [data, setData] = useAtom(userATom)
@@ -40,6 +41,12 @@ const index = ({ usersData }: { usersData?: any }) => {
     const [isOpenModalFilter, setisOpenModalFilter] = useState(false)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
+    const [formData, setFormData] = useState({
+        role: '',
+        permission: '',
+    })
+    const [formMode, setFormMode] = useState('create')
+    const [openModalForm, setOpenModalForm] = useState(false)
 
     const handleOpenModalDelete = (data: any) => {
         setOpenModalDelete(true)
@@ -68,9 +75,10 @@ const index = ({ usersData }: { usersData?: any }) => {
             title: 'Users',
         },
         {
-            title: 'Users',
+            title: 'Roles',
         },
     ]
+    console.log(filteredData)
     const columns: TableColumnsType<UserType> = [
         {
             title: 'ID',
@@ -81,68 +89,18 @@ const index = ({ usersData }: { usersData?: any }) => {
             title: 'Name',
             dataIndex: 'name',
             render: (_: any, row: any) => {
-                return (
-                    <span>{row.name}</span>
-                )
+                return row.name
             },
-        },
-        {
-            title: 'Email',
-            dataIndex: 'email',
-            sorter: (a, b) => a.email.localeCompare(b.email)
-        },
-        {
-            title: 'Phone',
-            dataIndex: 'phone',
-            sorter: (a: any, b: any) => {
-                return a?.phone - b?.phone
-            },
-            render: (value: any) => {
-                return value
-            }
-        },
-        {
-            title: 'Price Group',
-            dataIndex: 'price_level',
-            sorter: (a: any, b: any) => {
-                return a?.price_level.localeCompare(b?.price_level)
-            },
-            render: (value: any) => {
-                return value
-            }
-        },
-        {
-            title: 'Last Login',
-            dataIndex: 'last_login',
-            sorter: (a: any, b: any) => new Date(a?.last_login).getTime() - new Date(b?.last_login).getTime(),
-            render: (value: any) => {
-                const date = dayjs(value?.last_login).format("DD/MM/YYYY")
-                return <span>{date}</span>
-            }
-        },
-        {
-            title: 'Trade Account',
-            dataIndex: 'trade_account',
-            sorter: (a: any, b: any) => {
-                return a?.trade_account?.company_name.localeCompare(b?.trade_account?.company_name)
-            },
-            render: (value: any) => {
-                return value?.company_name
-            }
         },
         {
             title: 'Created',
             dataIndex: 'created_at',
             sorter: (a: any, b: any) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
             render: (val: any) => {
-                const date = dayjs(val?.date).format("DD/MM/YYYY")
-                const user = val?.name
+                const date = dayjs(val).format("DD/MM/YYYY")
                 return <div className="flex flex-col w-full">
                     <div className="flex justify-start gap-1">
                         <span>{date}</span>
-                    </div>
-                    <div className="flex justify-start gap-1">
-                        <span>by {user || '-'}</span>
                     </div>
                 </div>
             }
@@ -153,7 +111,6 @@ const index = ({ usersData }: { usersData?: any }) => {
             key: 'action',
             width: 120,
             render: (_: string, row: any) => {
-
                 return (
                     <div className="flex items-center justify-end gap-3 pe-4">
                         <ButtonIcon
@@ -187,12 +144,26 @@ const index = ({ usersData }: { usersData?: any }) => {
         setFilteredData(result);
     };
 
+
+    const handleChange = (field: string) => (
+        e: any | React.ChangeEvent<HTMLTextAreaElement>
+    ) => {
+        const value = typeof e === 'string' || Array.isArray(e)
+            ? e
+            : e.target.value;
+
+        setFormData((prev) => ({
+            ...prev,
+            [field]: value,
+        }));
+    };
+
     useEffect(() => {
-        setData(usersData)
+        setData(rolesData)
         if (!search) {
-            setFilteredData(usersData)
+            setFilteredData(rolesData)
         }
-    }, [usersData, search])
+    }, [rolesData, search])
 
     return (
         <>
@@ -202,13 +173,21 @@ const index = ({ usersData }: { usersData?: any }) => {
                 onCancel={() => setOpenModalDelete(false)}
                 onSave={handleDelete}
                 action='Delete'
-                text='Are you sure you want to delete this user?'
+                text='Are you sure you want to delete this role?'
+            />
+            <ModalRole
+                open={openModalForm}
+                handleChange={handleChange}
+                formData={formData}
+                handleCancel={() => setOpenModalForm(false)}
+                handleSubmit={() => setOpenModalForm(false)}
+                formMode={formMode}
             />
             <div className="mt-6 mx-6 mb-0">
                 <div className='flex justify-between items-center'>
                     <div>
                         <h1 className='text-2xl font-bold'>
-                            Users
+                            Roles
                         </h1>
                         <Breadcrumb
                             items={breadcrumb}
@@ -217,8 +196,8 @@ const index = ({ usersData }: { usersData?: any }) => {
 
                     <Button
                         icon={<PlusCircleOutlined />}
-                        label='Add User'
-                        link={routes.eCommerce.createUsers}
+                        label='Add Role'
+                        onClick={() => setOpenModalForm(true)}
                     />
                 </div>
 

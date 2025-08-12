@@ -1,9 +1,9 @@
 import React from 'react'
-import UsersList from '@/features/pages/users/users'
+import SubscribeList from '@/features/pages/users/subscribe'
 import { getUsers } from '@/services/users-service'
 import { dummyUser } from '@/plugins/types/users-type'
 
-export default async function UsersPage() {
+export default async function SubscribePage() {
     let users = []
     try {
         const res = await getUsers()
@@ -13,7 +13,7 @@ export default async function UsersPage() {
     }
     return (
         <div>
-            <UsersList usersData={users} />
+            <SubscribeList subscribeData={users} />
         </div>
     )
 }

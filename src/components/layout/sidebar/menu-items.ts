@@ -326,14 +326,12 @@ export const menuItems = [
                     {
                         key: 'roles',
                         label: 'Roles',
-                        // href: routes.eCommerce.roles,
-                        href: '#'
+                        href: routes.eCommerce.roles,
                     },
                     {
                         key: 'subscribe',
                         label: 'Subscribe',
-                        // href: routes.eCommerce.subscribe,
-                        href: '#'
+                        href: routes.eCommerce.subscribe,
                     },
                 ],
             },
