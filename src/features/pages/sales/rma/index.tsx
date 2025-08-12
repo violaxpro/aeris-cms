@@ -28,7 +28,7 @@ import { stripHTML } from '@/plugins/validators/common-rules'
 import Pagination from '@/components/pagination'
 import { MoreIcon, TrashIconRed, FilterIcon, AddIcon } from '@public/icon'
 import Image from 'next/image'
-import ButtonAction from '@/components/button/ButtonIcon'
+import ButtonIcon from '@/components/button/ButtonIcon'
 import SearchTable from '@/components/search/SearchTable'
 import ShowPageSize from '@/components/pagination/ShowPageSize'
 import ButtonDelete from '@/components/button/ButtonAction'
@@ -286,14 +286,14 @@ const index = ({ returnSales }: { returnSales?: any }) => {
                 return (
                     <div className='flex items-center gap-2'>
                         <Dropdown overlay={menu} trigger={['click']} >
-                            <ButtonAction
+                            <ButtonIcon
                                 color='primary'
                                 variant='filled'
                                 size="small"
                                 icon={MoreIcon}
                             />
                         </Dropdown >
-                        <ButtonAction
+                        <ButtonIcon
                             color='danger'
                             variant='filled'
                             size="small"

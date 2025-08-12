@@ -170,7 +170,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                 handleChange={handleChange}
                 formData={formData}
             />
-            <Content className="mt-4 mx-4 mb-0">
+            <Content className="mb-0">
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
                     <div className='flex flex-col gap-10'>
                         <FormGroup
@@ -465,7 +465,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                     <div className="mt-6 flex justify-end">
                         <Button
 
-                            label={mode === 'create' ? 'Create General' : 'Edit General'}
+                            label='Save General'
                             onClick={handleSubmit}
                         />
                     </div>

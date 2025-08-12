@@ -4,6 +4,9 @@ import Table from "@/components/table"
 import type { TableColumnsType } from 'antd'
 import { Dropdown, Menu } from 'antd'
 import { PlusCircleOutlined, FilterOutlined, MoreOutlined } from '@ant-design/icons'
+import Image from 'next/image'
+import { MoreIcon, AddIcon } from '@public/icon'
+import ButtonIcon from '@/components/button/ButtonIcon'
 import Popover from '@/components/popover'
 import { routes } from '@/config/routes'
 import Link from 'next/link'
@@ -11,6 +14,7 @@ import Breadcrumb from "@/components/breadcrumb"
 import { Content } from 'antd/es/layout/layout'
 import Button from "@/components/button"
 import SearchInput from '@/components/search';
+import SearchTable from '@/components/search/SearchTable'
 import { getTaxes, deleteTaxes } from '@/services/settings-service'
 import { useNotificationAntd } from '@/components/toast'
 import { useAtom } from 'jotai'
@@ -115,11 +119,17 @@ const index = ({ taxesData }: { taxesData?: any }) => {
                 );
 
                 return (
-                    <Dropdown overlay={menu} trigger={['click']} >
-                        <button className="flex items-center justify-center px-2 py-1 border rounded hover:bg-gray-100">
-                            Actions <MoreOutlined className="ml-1" />
-                        </button>
-                    </Dropdown >
+                    <div className='flex items-center gap-2 cursor-pointer'>
+                        <Dropdown overlay={menu} trigger={['click']} >
+                            <ButtonIcon
+                                color='primary'
+                                variant='filled'
+                                size="small"
+                                icon={MoreIcon}
+                            />
+                        </Dropdown >
+                    </div>
+
                 );
             }
         },
@@ -153,16 +163,20 @@ const index = ({ taxesData }: { taxesData?: any }) => {
     return (
         <>
             {contextHolder}
-            <Content className="mt-6 mx-4 mb-0">
+            <Content className="mb-0">
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
                     <div className='flex justify-between mb-4'>
                         <div>
-                            <h1 className='text-xl font-bold'>
+                            <h1 className='text-2xl font-bold'>
                                 Tax Setting
                             </h1>
                         </div>
                         <div className='flex items-center gap-2'>
-                            <SearchInput onSearch={handleSearch} />
+                            <SearchTable
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                                onSearch={() => console.log('Searching for:', search)}
+                            />
                             <Button
 
                                 icon={<PlusCircleOutlined />}

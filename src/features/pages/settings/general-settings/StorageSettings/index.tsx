@@ -13,7 +13,7 @@ import CustomSwitch from '@/components/switch/CustomSwitch';
 import SelectInput from '@/components/select';
 import { uploadImages } from '@/services/upload-images';
 import { useNotificationAntd } from '@/components/toast';
-import { BodyIconSwitch, HeaderIconSwitch } from '@public/icon';
+import { TestModeIcon, LiveModeIcon } from '@public/icon';
 import FileUploader from '@/components/input-file';
 import DatePickerInput from '@/components/date-picker';
 import dayjs from 'dayjs'
@@ -83,7 +83,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     return (
         <>
             {contextHolder}
-            <Content className="mt-4 mx-4 mb-0">
+            <Content className="mb-0">
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
                     <div className='flex flex-col gap-8'>
                         <div className='flex justify-between mt-4 items-center'>
@@ -94,8 +94,8 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             <CustomSwitch
                                 labelOn="Live Mode"
                                 labelOff="Tes Mode"
-                                iconOn={BodyIconSwitch}
-                                iconOff={HeaderIconSwitch}
+                                iconOn={LiveModeIcon}
+                                iconOff={TestModeIcon}
                                 onToggle={(state) => setFormData((prev: any) => ({
                                     ...prev,
                                     mode: state
@@ -104,7 +104,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             />
 
                         </div>
-                        <Divider />
+                        <hr className='border-[#E5E7EB]' />
                         <div className={`col-span-12 md:col-span-8 grid grid-cols-2 gap-4`}>
 
                             <Input
@@ -178,7 +178,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                     <div className="mt-6 flex justify-end">
                         <Button
 
-                            label='Create Storage Settings'
+                            label='Save Storage Settings'
                             onClick={handleSubmit}
                         />
                     </div>

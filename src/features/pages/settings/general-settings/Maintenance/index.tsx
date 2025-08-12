@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { Content } from 'antd/es/layout/layout';
 import Button from '@/components/button'
 import { FormProps } from '@/plugins/types/form-type';
-import FormGroup from '@/components/form';
+import FormGroup from '@/components/form-group';
 import CheckboxInput from '@/components/checkbox';
 import { uploadImages } from '@/services/upload-images';
 import { useNotificationAntd } from '@/components/toast';
@@ -57,39 +57,32 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     return (
         <>
             {contextHolder}
-            <Content className="mt-4 mx-4 mb-0">
+            <Content className="mb-0">
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
-
                     <div className='flex flex-col gap-8'>
-                        <FormGroup
-                            title="Maintenance"
-                            description="Maintenance setting for handling if system is maintenance"
-
-                        >
-                            <div className="space-y-4 col-span-full">
-                                <div className='flex justify-end'>
-                                    <CheckboxInput
-                                        text='Maintenance Mode'
-                                        checked={formData.maintenance}
-                                        onChange={(checked) => (
-                                            setFormData((prev) => ({
-                                                ...prev,
-                                                maintenance: checked
-                                            }))
-                                        )}
-                                    />
-                                </div>
+                        <div className='flex justify-between mt-4 items-center'>
+                            <div>
+                                <h4 className="text-2xl font-semibold">Maintenance</h4>
+                                <p className="mt-2">Maintenance setting for handling if system is maintenance</p>
                             </div>
-                        </FormGroup>
-                        <hr style={{ borderColor: '#E5E7EB', marginTop: '1rem', margin: '1rem 0' }} />
-
+                            <CheckboxInput
+                                text='Maintenance Mode'
+                                checked={formData.maintenance}
+                                onChange={(checked) => (
+                                    setFormData((prev) => ({
+                                        ...prev,
+                                        maintenance: checked
+                                    }))
+                                )}
+                            />
+                        </div>
                     </div>
 
                     {/* Submit */}
                     <div className="mt-6 flex justify-end">
                         <Button
 
-                            label='Create Maintenance'
+                            label='Save Maintenance'
                             onClick={handleSubmit}
                         />
                     </div>

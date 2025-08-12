@@ -43,8 +43,8 @@ const index = ({ taxesData }: { taxesData?: any }) => {
     return (
         <>
             <div className="mt-6 mx-6 mb-0">
-                <h1 className='text-xl font-bold'>
-                    General Setting
+                <h1 className='text-2xl font-bold'>
+                    General Settings
                 </h1>
                 <Breadcrumb
                     items={breadcrumb}

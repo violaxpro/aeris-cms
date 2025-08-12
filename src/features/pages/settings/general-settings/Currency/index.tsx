@@ -66,7 +66,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     return (
         <>
             {contextHolder}
-            <Content className="mt-4 mx-4 mb-0">
+            <Content className="mb-0">
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
 
                     <div>
@@ -116,7 +116,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                     <div className="mt-6 flex justify-end">
                         <Button
 
-                            label='Create Currency'
+                            label='Save Currency'
                             onClick={handleSubmit}
                         />
                     </div>

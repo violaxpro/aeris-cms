@@ -187,14 +187,6 @@ const index = ({ data }: { data?: any }) => {
         },
     ]
 
-
-    const months = [
-        { value: 0, label: 'January' },
-        { value: 1, label: 'February' },
-        { value: 2, label: 'March' },
-        // dst...
-    ];
-
     const handleChange = (field: string) => (
         e: any | React.ChangeEvent<HTMLTextAreaElement>
     ) => {

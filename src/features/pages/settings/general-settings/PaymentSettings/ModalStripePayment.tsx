@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Modal from '@/components/modal'
 import Input from '@/components/input'
 import CustomSwitch from '@/components/switch/CustomSwitch';
-import { BodyIconSwitch, HeaderIconSwitch } from '@public/icon';
+import { TestModeIcon, LiveModeIcon } from '@public/icon';
 
 type ModalStripePaymentProps = {
     isModalOpen: boolean
@@ -34,8 +34,8 @@ const ModalStripePayment = ({
             rightButton={<CustomSwitch
                 labelOn="Live Mode"
                 labelOff="Test Mode"
-                iconOn={BodyIconSwitch}
-                iconOff={HeaderIconSwitch}
+                iconOn={LiveModeIcon}
+                iconOff={TestModeIcon}
                 onToggle={(state) => setField(state)}
                 size='md'
             />}

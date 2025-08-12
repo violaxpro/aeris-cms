@@ -3,7 +3,7 @@ import Modal from '@/components/modal'
 import Input from '@/components/input'
 import TextArea from '@/components/textarea'
 import CustomSwitch from '@/components/switch/CustomSwitch';
-import { BodyIconSwitch, HeaderIconSwitch } from '@public/icon';
+import { TestModeIcon, LiveModeIcon } from '@public/icon';
 
 type ModalBankTransferProps = {
     isModalOpen: boolean
@@ -39,8 +39,8 @@ const ModalBankTransfer = ({
             rightButton={<CustomSwitch
                 labelOn="Live Mode"
                 labelOff="Test Mode"
-                iconOn={BodyIconSwitch}
-                iconOff={HeaderIconSwitch}
+                iconOn={LiveModeIcon}
+                iconOff={TestModeIcon}
                 onToggle={(state) => setField(state)}
                 size='md'
             />}
