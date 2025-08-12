@@ -40,7 +40,7 @@ const CheckboxInput: React.FC<CheckboxInputProps> = ({
                     </div>
                 </label>
             }
-            <Checkbox id={id} checked={checked} onChange={handleChange} disabled={disabled}>
+            <Checkbox id={id} checked={checked} onChange={handleChange} disabled={disabled} className={className}>
                 {text}
             </Checkbox>
         </div>

@@ -3,159 +3,121 @@ import React, { useState, useEffect } from 'react'
 import Table from "@/components/table"
 import type { TableColumnsType } from 'antd'
 import { Dropdown, Menu } from 'antd'
-import { UserType } from '@/plugins/types/users-type'
+import { WarehouseBranchListType } from '@/plugins/types/warehouse-type'
 import Image from 'next/image'
-import { EditOutlined, PlusCircleOutlined, InfoCircleOutlined, MoreOutlined } from '@ant-design/icons'
-import { AddIcon, FilterIcon, TrashIconRed, PencilIconBlue } from '@public/icon'
-import Popover from '@/components/popover'
+import { EditOutlined, PlusCircleOutlined, MoreOutlined } from '@ant-design/icons'
+import DeletePopover from '@/components/popover'
 import { routes } from '@/config/routes'
 import Link from 'next/link'
 import Breadcrumb from "@/components/breadcrumb"
 import { Content } from 'antd/es/layout/layout'
 import Button from "@/components/button"
-import ButtonAction from '@/components/button/ButtonAction'
 import SearchInput from '@/components/search';
-import dayjs from 'dayjs'
-import { deleteUser } from '@/services/users-service'
+import StatusTag from '@/components/tag'
+import { deleteBrand } from '@/services/brands-service'
 import { useNotificationAntd } from '@/components/toast'
 import { useAtom } from 'jotai'
-import { userATom } from '@/store/UserAtom'
-import StatusBadge from '@/components/badge/badge-status'
+import { branchListAtom } from '@/store/WarehouseAtom'
+import ButtonAction from '@/components/button/ButtonAction'
 import ButtonIcon from '@/components/button/ButtonIcon'
 import { useRouter } from 'next/navigation'
 import ConfirmModal from '@/components/modal/ConfirmModal'
 import Pagination from '@/components/pagination'
 import SearchTable from '@/components/search/SearchTable'
 import ShowPageSize from '@/components/pagination/ShowPageSize'
+import { AddIcon, FilterIcon, TrashIconRed, PencilIconBlue } from '@public/icon'
+import dayjs from 'dayjs'
 
-const index = ({ usersData }: { usersData?: any }) => {
+const index = ({ couponData }: { couponData?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
     const router = useRouter()
-    const [data, setData] = useAtom(userATom)
-    const [filteredData, setFilteredData] = useState<UserType[]>([]);
-    const [search, setSearch] = useState('')
+    const [data, setData] = useAtom(branchListAtom)
     const [openModalDelete, setOpenModalDelete] = useState(false)
     const [deletedData, setDeletedData] = useState<any>(null)
     const [pageSize, setPageSize] = useState(10);
     const [isOpenModalFilter, setisOpenModalFilter] = useState(false)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
+    const [filteredData, setFilteredData] = useState<any[]>([]);
+    const [search, setSearch] = useState('')
 
-    const handleOpenModalDelete = (data: any) => {
-        setOpenModalDelete(true)
-        setDeletedData(data)
-    }
     const handleDelete = async (id: any) => {
         try {
-            const res = await deleteUser(id)
+            const res = await deleteBrand(id)
             if (res.success == true) {
                 notifySuccess(res.message)
-                const updatedData = data.filter(item => item.id !== id);
-                setData(updatedData);
-
-                setFilteredData(updatedData.filter(item =>
-                    item.firstname.toLowerCase().includes(search.toLowerCase()) ||
-                    item?.lastname.toLowerCase().includes(search)
-                ));
+                setData(prev => prev.filter(item => item.id !== id))
             }
         } catch (error) {
             console.error(error)
         }
     }
 
+    const handleOpenModalDelete = (data: any) => {
+        setOpenModalDelete(true)
+        setDeletedData(data)
+    }
+
     const breadcrumb = [
         {
-            title: 'Users',
+            title: 'Marketing',
         },
         {
-            title: 'Users',
+            title: 'Coupon',
         },
     ]
-    const columns: TableColumnsType<UserType> = [
-        {
-            title: 'ID',
-            dataIndex: 'id',
-            sorter: (a: any, b: any) => a.id - b.id,
-        },
+    const columns: TableColumnsType<any> = [
         {
             title: 'Name',
-            dataIndex: 'name',
+            dataIndex: 'coupon_name',
+        },
+        {
+            title: 'Code',
+            dataIndex: 'code',
+            sorter: (a: any, b: any) => a?.code.localeCompare(b?.code),
+            render: (val: any) => {
+                return val
+            }
+        },
+        {
+            title: 'Discount',
+            dataIndex: 'discount_value',
+            sorter: (a: any, b: any) => a?.discount_value - b?.discount_value,
             render: (_: any, row: any) => {
-                const first_name = row?.firstname
-                const last_name = row?.lastname
-                return (
-                    <span>{row.name}</span>
+                const discountType = row.discount_type
+                const discountValue = row.discount_value
+                if (discountType == 'percentage') {
+                    return <span>{discountValue}%</span>
+                } else {
+                    const discount = discountValue / 100 * 100
+                    return <span>{discount}%</span>
+                }
+            }
+        },
+        {
+            title: 'Status',
+            dataIndex: 'status',
+            sorter: (a: any, b: any) => {
+                const status = ['Actived', 'Expired'];
+                return status.indexOf(a.status) - status.indexOf(b.status
                 )
             },
-        },
-        {
-            title: 'Email',
-            dataIndex: 'email',
-            sorter: (a, b) => a.email.localeCompare(b.email)
-        },
-        {
-            title: 'Phone',
-            dataIndex: 'phone',
-            sorter: (a: any, b: any) => {
-                return a?.phone - b?.phone
-            },
-            render: (value: any) => {
-                return value
-            }
-        },
-        {
-            title: 'Price Group',
-            dataIndex: 'price_level',
-            sorter: (a: any, b: any) => {
-                return a?.price_level.localeCompare(b?.price_level)
-            },
-            render: (value: any) => {
-                return value
-            }
-        },
-        {
-            title: 'Last Login',
-            dataIndex: 'last_login',
-            sorter: (a: any, b: any) => new Date(a?.last_login).getTime() - new Date(b?.last_login).getTime(),
-            render: (value: any) => {
-                const date = dayjs(value?.last_login).format("DD/MM/YYYY")
-                return <span>{date}</span>
-            }
-        },
-        {
-            title: 'Trade Account',
-            dataIndex: 'trade_account',
-            sorter: (a: any, b: any) => {
-                return a?.trade_account?.company_name.localeCompare(b?.trade_account?.company_name)
-            },
-            render: (value: any) => {
-                return value?.company_name
-            }
-        },
-        {
-            title: 'Created',
-            dataIndex: 'created_at',
-            sorter: (a: any, b: any) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
             render: (val: any) => {
-                const date = dayjs(val?.date).format("DD/MM/YYYY")
-                const user = val?.name
-                return <div className="flex flex-col w-full">
-                    <div className="flex justify-start gap-1">
-                        <span>{date}</span>
-                    </div>
-                    <div className="flex justify-start gap-1">
-                        <span>by {user || '-'}</span>
-                    </div>
-                </div>
+                let status
+                if (val == 1) {
+                    status = 'Actived'
+                } else {
+                    status = 'Expired'
+                }
+                return <StatusTag status={status} type='marketing' />
             }
         },
         {
-            title: 'Action',
+            title: 'Actions',
             dataIndex: 'action',
             key: 'action',
             width: 120,
             render: (_: string, row: any) => {
-
                 return (
                     <div className="flex items-center justify-end gap-3 pe-4">
                         <ButtonIcon
@@ -163,7 +125,7 @@ const index = ({ usersData }: { usersData?: any }) => {
                             variant='filled'
                             size="small"
                             icon={PencilIconBlue}
-                            onClick={() => router.push(routes.eCommerce.editPriceLevel(row.id))}
+                            onClick={() => router.push(routes.eCommerce.editCoupon(row.id))}
                         />
                         <ButtonIcon
                             color='danger'
@@ -174,28 +136,19 @@ const index = ({ usersData }: { usersData?: any }) => {
                         />
                     </div >
                 );
-            }
+
+            },
         },
 
     ]
 
-    const handleSearch = (value: string) => {
-        const search = value.toLowerCase();
-        setSearch(search)
-        const result = data.filter((item: any) => {
-            return item?.firstname.toLowerCase().includes(search) ||
-                item?.last_name.toLowerCase().includes(search)
-        });
-        setFilteredData(result);
+    const handleSearch = (query: string) => {
+        console.log('User mencari:', query);
     };
 
     useEffect(() => {
-        setData(usersData)
-        if (!search) {
-            setFilteredData(usersData)
-        }
-    }, [usersData, search])
-
+        setData(couponData)
+    }, [couponData])
     return (
         <>
             {contextHolder}
@@ -204,26 +157,31 @@ const index = ({ usersData }: { usersData?: any }) => {
                 onCancel={() => setOpenModalDelete(false)}
                 onSave={handleDelete}
                 action='Delete'
-                text='Are you sure you want to delete this user?'
+                text='Are you sure you want to delete this coupon?'
             />
             <div className="mt-6 mx-6 mb-0">
                 <div className='flex justify-between items-center'>
                     <div>
-                        <h1 className='text-2xl font-bold'>
-                            Users
+                        <h1 className='text-xl font-bold'>
+                            Coupon
                         </h1>
                         <Breadcrumb
                             items={breadcrumb}
                         />
                     </div>
-
                     <Button
-                        icon={<PlusCircleOutlined />}
-                        label='Add User'
-                        link={routes.eCommerce.createUsers}
+                        icon={<Image
+                            src={AddIcon}
+                            alt='add-icon'
+                            width={15}
+                            height={15}
+                        />}
+
+                        label='Add Coupon'
+                        link={routes.eCommerce.createCoupon}
+
                     />
                 </div>
-
             </div>
             <Content className="mb-0">
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
@@ -232,17 +190,6 @@ const index = ({ usersData }: { usersData?: any }) => {
                             <ShowPageSize
                                 pageSize={pageSize}
                                 onChange={setPageSize}
-                            />
-                            <ButtonAction
-                                label='Filter by'
-                                icon={<Image
-                                    src={FilterIcon}
-                                    alt='filter-icon'
-                                    width={15}
-                                    height={15}
-                                />}
-                                onClick={() => setisOpenModalFilter(true)}
-                                position='end'
                             />
                             <SearchTable
                                 value={search}
@@ -269,14 +216,14 @@ const index = ({ usersData }: { usersData?: any }) => {
                     </div>
                     <Table
                         columns={columns}
-                        dataSource={filteredData}
+                        dataSource={data}
                         withSelectableRows
                         selectedRowKeys={selectedRowKeys}
                         onSelectChange={setSelectedRowKeys}
                     />
                     <Pagination
                         current={currentPage}
-                        total={filteredData.length}
+                        total={data?.length}
                         pageSize={pageSize}
                         onChange={(page) => setCurrentPage(page)}
                     />

@@ -14,12 +14,34 @@ export type ProductType = {
 export type flashSaleType = {
     id: string;
     campaign_name: string;
-    status: number;
+    status: number | boolean | string;
     start_date: string;
     end_date: string;
     product: any[];
     created: any;
 };
+
+export type couponType = {
+    id: string;
+    coupon_name: string
+    code: string
+    discount_type: string
+    discount_value: string
+    is_free_shipping: boolean
+    start_date: string
+    end_date: string
+    minimum_spend: number
+    maximum_spend: number
+    image: any[]
+    product: string[]
+    category: string[]
+    exclude_product: string[]
+    exclude_category: string[]
+    exclude_price: number
+    usage_limit_per_coupon: number
+    usage_limit_per_customer: number
+    status: number | boolean | string;
+}
 
 export const flashSaleData: flashSaleType[] = [
     {
@@ -91,3 +113,52 @@ export const flashSaleData: flashSaleType[] = [
         created: new Date("2025-08-10T08:00:00Z")
     }
 ];
+
+export const dummyCoupon: couponType[] = [
+    {
+        id: "coup-001",
+        coupon_name: "Summer Sale",
+        code: "SUMMER2025",
+        discount_type: "percentage", // could be "percentage" or "fixed"
+        discount_value: "15", // percentage or fixed amount in string
+        is_free_shipping: true,
+        start_date: "2025-08-15",
+        end_date: "2025-08-31",
+        minimum_spend: 100000, // Rp 100,000
+        maximum_spend: 1000000, // Rp 1,000,000
+        image: [
+            { url: "https://example.com/images/coupons/summer-sale.jpg", alt: "Summer Sale Banner" }
+        ],
+        product: ["prod-101", "prod-102", "prod-103"],
+        category: ["cat-01", "cat-02"],
+        exclude_product: ["prod-201"],
+        exclude_category: ["cat-05"],
+        exclude_price: 500000, // Rp 500,000
+        usage_limit_per_coupon: 50,
+        usage_limit_per_customer: 2,
+        status: 1
+    },
+    {
+        id: "coup-002",
+        coupon_name: "August17",
+        code: "AUG17",
+        discount_type: "fixed", // could be "percentage" or "fixed"
+        discount_value: "30", // percentage or fixed amount in string
+        is_free_shipping: true,
+        start_date: "2025-08-15",
+        end_date: "2025-08-31",
+        minimum_spend: 100000, // Rp 100,000
+        maximum_spend: 1000000, // Rp 1,000,000
+        image: [
+            { url: "https://example.com/images/coupons/summer-sale.jpg", alt: "Summer Sale Banner" }
+        ],
+        product: ["prod-101", "prod-102", "prod-103"],
+        category: ["cat-01", "cat-02"],
+        exclude_product: ["prod-201"],
+        exclude_category: ["cat-05"],
+        exclude_price: 500000, // Rp 500,000
+        usage_limit_per_coupon: 50,
+        usage_limit_per_customer: 2,
+        status: 0
+    }
+]

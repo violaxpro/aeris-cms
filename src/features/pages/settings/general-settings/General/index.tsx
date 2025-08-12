@@ -327,6 +327,8 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                         <DeleteOutlined className='!text-inherit' />
                                                     }
                                                     onClick={() => removeDynamicItem('phone_number', index)}
+                                                    style={{ height: '5vh', marginTop: '1.2rem' }}
+
                                                 />
                                             </div>
 
