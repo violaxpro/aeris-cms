@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import Table from "@/components/table"
 import type { TableColumnsType } from 'antd'
 import { BrandType } from '@/data/brands-data'
@@ -16,12 +16,27 @@ import { deleteBrand } from '@/services/brands-service'
 import { useNotificationAntd } from '@/components/toast'
 import { useAtom } from 'jotai'
 import { brandAtom } from '@/store/BrandAtomStore'
+import ButtonAction from '@/components/button/ButtonAction'
+import ButtonIcon from '@/components/button/ButtonIcon'
+import { useRouter } from 'next/navigation'
+import ConfirmModal from '@/components/modal/ConfirmModal'
+import Pagination from '@/components/pagination'
+import SearchTable from '@/components/search/SearchTable'
+import ShowPageSize from '@/components/pagination/ShowPageSize'
+import { AddIcon, FilterIcon, TrashIconRed, PencilIconBlue } from '@public/icon'
 
-const index = ({ brandsData }: { brandsData?: any }) => {
+const index = ({ inventoryLists }: { inventoryLists?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
+    const router = useRouter()
     const [data, setData] = useAtom(brandAtom)
-
-
+    const [openModalDelete, setOpenModalDelete] = useState(false)
+    const [deletedData, setDeletedData] = useState<any>(null)
+    const [pageSize, setPageSize] = useState(10);
+    const [isOpenModalFilter, setisOpenModalFilter] = useState(false)
+    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [filteredData, setFilteredData] = useState<any[]>([]);
+    const [search, setSearch] = useState('')
     const handleDelete = async (id: any) => {
         try {
             const res = await deleteBrand(id)
@@ -34,19 +49,20 @@ const index = ({ brandsData }: { brandsData?: any }) => {
         }
     }
 
+    const handleOpenModalDelete = (data: any) => {
+        setOpenModalDelete(true)
+        setDeletedData(data)
+    }
+
     const breadcrumb = [
         {
             title: 'Warehouse',
         },
         {
-            title: 'Inventory List',
+            title: 'Inventory Lists',
         },
     ]
     const columns: TableColumnsType<BrandType> = [
-        {
-            title: 'ID',
-            dataIndex: 'id',
-        },
         {
             title: 'SKU',
             dataIndex: 'sku',
@@ -92,19 +108,26 @@ const index = ({ brandsData }: { brandsData?: any }) => {
             dataIndex: 'action',
             key: 'action',
             width: 120,
-            render: (_: string, row: any) => (
-
-                <div className="flex items-center justify-end gap-3 pe-4">
-                    {/* <Link href={routes.eCommerce.editBrands(row.id)}>
-                        <EditOutlined />
-                    </Link> */}
-                    <DeletePopover
-                        title='Delete Inventory List'
-                        description='Are you sure to delete this data?'
-                        onDelete={() => handleDelete(row.id)}
-                    />
-                </div >
-            ),
+            render: (_: string, row: any) => {
+                return (
+                    <div className="flex items-center justify-end gap-3 pe-4">
+                        <ButtonIcon
+                            color='primary'
+                            variant='filled'
+                            size="small"
+                            icon={PencilIconBlue}
+                            onClick={() => router.push(routes.eCommerce.editPriceLevel(row.id))}
+                        />
+                        <ButtonIcon
+                            color='danger'
+                            variant='filled'
+                            size="small"
+                            icon={TrashIconRed}
+                            onClick={() => handleOpenModalDelete(row.id)}
+                        />
+                    </div >
+                );
+            }
         },
 
     ]
@@ -114,37 +137,73 @@ const index = ({ brandsData }: { brandsData?: any }) => {
     };
 
     useEffect(() => {
-        setData(brandsData)
-    }, [brandsData])
+        setData(inventoryLists)
+    }, [inventoryLists])
     return (
         <>
             {contextHolder}
-            <div className="mt-6 mx-4 mb-0">
-                <h1 className='text-xl font-bold'>
-                    Inventory List
+            <div className="mt-6 mx-6 mb-0">
+                <h1 className='text-2xl font-bold'>
+                    Inventory Lists
                 </h1>
                 <Breadcrumb
                     items={breadcrumb}
                 />
             </div>
-            <Content className="mt-6 mx-4 mb-0">
+            <Content className="mb-0">
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
-                    <div className='flex justify-end mb-4'>
+                    <div className='flex justify-between mb-4'>
                         <div className='flex items-center gap-2'>
-                            <SearchInput onSearch={handleSearch} />
-                            {/* <Button
-                                
-                                icon={<PlusCircleOutlined />}
-                                label='Add Inventory List'
-                                link={routes.eCommerce.createBrands}
-                            /> */}
+                            <ShowPageSize
+                                pageSize={pageSize}
+                                onChange={setPageSize}
+                            />
+                            <ButtonAction
+                                label='Filter by'
+                                icon={<Image
+                                    src={FilterIcon}
+                                    alt='filter-icon'
+                                    width={15}
+                                    height={15}
+                                />}
+                                onClick={() => setisOpenModalFilter(true)}
+                                position='end'
+                            />
+                            <SearchTable
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                                onSearch={() => console.log('Searching for:', search)}
+                            />
                         </div>
+                        {
+                            selectedRowKeys.length > 0 && <ButtonAction
+                                label='Delete All'
+                                icon={<Image
+                                    src={TrashIconRed}
+                                    alt='trash-icon'
+                                    width={10}
+                                    height={10}
+                                />}
+                                onClick={() => setisOpenModalFilter(true)}
+                                position='start'
+                                btnClassname='btn-delete-all'
+                            />
+                        }
+
 
                     </div>
                     <Table
                         columns={columns}
                         dataSource={data}
                         withSelectableRows
+                        selectedRowKeys={selectedRowKeys}
+                        onSelectChange={setSelectedRowKeys}
+                    />
+                    <Pagination
+                        current={currentPage}
+                        total={data?.length}
+                        pageSize={pageSize}
+                        onChange={(page) => setCurrentPage(page)}
                     />
                 </div>
             </Content>

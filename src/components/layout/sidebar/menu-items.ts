@@ -168,13 +168,13 @@ export const menuItems = [
                 icon: DropboxOutlined,
                 children: [
                     {
-                        key: 'inventory-list',
-                        label: 'Inventory List',
+                        key: 'inventory-lists',
+                        label: 'Inventory Lists',
                         href: routes.eCommerce.inventoryList,
                     },
                     {
-                        key: 'warehouse-branch-list',
-                        label: 'Warehouse Branch List',
+                        key: 'warehouse-branch-lists',
+                        label: 'Warehouse Branch Lists',
                         href: routes.eCommerce.warehouseBranchList,
                     },
                 ],
