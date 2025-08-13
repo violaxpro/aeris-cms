@@ -290,7 +290,35 @@ const index = ({ data }: { data?: any }) => {
                     /> : <ModalDetailAttendance
                         open={openModalForm}
                         handleCancel={() => setOpenModalCheckout(false)}
-
+                        data={{
+                            name: 'Marcella Indarwati',
+                            date: 'Wednesday, 13 August 2025',
+                            status: 'In Progress',
+                            steps: [
+                                {
+                                    type: 'checkin',
+                                    device: 'Laptop Asus',
+                                    location: 'Jl. Merpati, Sidoarjo, Jawa Timur',
+                                    time: '07:56:05',
+                                },
+                                {
+                                    type: 'startbreak',
+                                    device: 'Laptop Asus',
+                                    location: 'Jl. Merpati, Sidoarjo, Jawa Timur',
+                                    time: '12:00:38',
+                                },
+                                {
+                                    type: 'finishbreak',
+                                    device: 'Laptop Asus',
+                                    location: 'Jl. Merpati, Sidoarjo, Jawa Timur',
+                                    comment: 'Extending my break to complete an important personal errand outside of work',
+                                    time: '13:35:20',
+                                },
+                                {
+                                    type: 'checkout',
+                                },
+                            ],
+                        }}
                     />
             }
 
