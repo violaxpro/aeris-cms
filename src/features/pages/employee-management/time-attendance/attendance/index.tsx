@@ -37,6 +37,7 @@ import AvatarImage from "public/social-avatar.webp"
 import ModalAttendance from './ModalAttendance'
 import ModalDelete from '@/components/modal/ModalDelete'
 import ConfirmModal from '@/components/modal/ConfirmModal'
+import ModalDetailAttendance from './ModalDetailAttendance'
 
 const index = ({ data }: { data?: any }) => {
     const today = dayjs(); // Hari ini
@@ -192,8 +193,11 @@ const index = ({ data }: { data?: any }) => {
 
                 const menu = (
                     <Menu>
-                        <Menu.Item key="detail" onClick={() => handleOpenModal('detail')}>
-                            Detail
+                        <Menu.Item key="notes" onClick={() => handleOpenModal('notes')}>
+                            Notes
+                        </Menu.Item>
+                        <Menu.Item key="edit" onClick={() => handleOpenModal('edit')}>
+                            Edit
                         </Menu.Item>
                         <Menu.Item key="delete" onClick={() => handleOpenModalDelete(row.id)}>
                             Delete
@@ -274,14 +278,23 @@ const index = ({ data }: { data?: any }) => {
     return (
         <>
             {contextHolder}
-            <ModalAttendance
-                open={openModalForm}
-                handleChange={handleChange}
-                formData={formData}
-                handleCancel={() => setOpenModalForm(false)}
-                handleSubmit={handleSubmit}
-                formMode={formMode}
-            />
+            {
+                formMode == 'create' || formMode == 'edit'
+                    ? <ModalAttendance
+                        open={openModalForm}
+                        handleChange={handleChange}
+                        formData={formData}
+                        handleCancel={() => setOpenModalForm(false)}
+                        handleSubmit={handleSubmit}
+                        formMode={formMode}
+                    /> : <ModalDetailAttendance
+                        open={openModalForm}
+                        handleCancel={() => setOpenModalCheckout(false)}
+
+                    />
+            }
+
+
             <ConfirmModal
                 open={openModalDelete}
                 onCancel={() => setOpenModalDelete(false)}
@@ -442,6 +455,11 @@ const index = ({ data }: { data?: any }) => {
                         <Table
                             columns={columns}
                             dataSource={attendanceData}
+                            onRowClick={(record) => {
+                                // setSelectedOrder(record);
+                                setFormMode('detail')
+                                setOpenModalForm(true);
+                            }}
                         />
                         <Pagination
                             current={currentPage}

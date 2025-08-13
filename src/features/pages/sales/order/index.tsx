@@ -638,6 +638,8 @@ const index = ({ orderData }: { orderData?: any }) => {
                         withSelectableRows
                         selectedRowKeys={selectedRowKeys}
                         onSelectChange={setSelectedRowKeys}
+                        detailRoutes={(slug: any) => routes.eCommerce.detailOrder(slug)}
+                        getRowValue={(record: any) => record.invoice_number}
                     // pagination={{
                     //     pageSize,
                     //     onShowSizeChange: (_, size) => setPageSize(size),

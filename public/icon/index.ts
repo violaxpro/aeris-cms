@@ -113,6 +113,17 @@ export { default as TruckIcon } from './TruckIcon.svg'
 export { default as TemplateIcon } from './TemplateIcon.svg'
 export { default as TestModeIcon } from './TestModeIcon.svg'
 export { default as LiveModeIcon } from './LiveModeIcon.svg'
+export { default as StopIcon } from './StopIcon.svg'
+export { default as CameraIcon } from './CameraIcon.svg'
+export { default as CurrentLocationIcon } from './CurrentLocationIcon.svg'
+export { default as FinishBreakIcon } from './FinishBreakIcon.svg'
+export { default as CheckinIcon } from './CheckinIcon.svg'
+export { default as BreakfastIcon } from './BreakfastIcon.svg'
+export { default as CheckoutBlueIcon } from './CheckoutBlueIcon.svg'
+export { default as CheckoutGreyIcon } from './CheckoutGreyIcon.svg'
+export { default as DeviceMobileIcon } from './DeviceMobileIcon.svg'
+export { default as PinMapBlackIcon } from './PinMapBlackIcon.svg'
+export { default as CommentIcon } from './CommentIcon.svg'
 
 
 

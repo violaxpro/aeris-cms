@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { PlayCircleOutlined } from "@ant-design/icons";
 import Image from "next/image";
-import { PlayIcon } from "@public/icon";
+import { PlayIcon, StopIcon } from "@public/icon";
 import { formatTime } from "@/plugins/utils/utils";
 type TimerBoxProps = {
     seconds: number
@@ -26,9 +26,10 @@ export default function TimerBox({ isRunning = false, onPlay, seconds }: TimerBo
                 className="flex items-center justify-center w-8 h-8 rounded-full  text-white"
             >
                 <Image
-                    src={PlayIcon}
-                    alt="play-icon"
+                    src={!isRunning ? PlayIcon : StopIcon}
+                    alt="play-stop-icon"
                     className="cursor-pointer"
+                    width={20}
                 />
             </button>
         </div>

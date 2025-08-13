@@ -21,12 +21,12 @@ const ButtonTab: React.FC<ButtonTabProps> = ({ tabs, activeKey, onTabClick }) =>
                     <button
                         key={tab.key}
                         onClick={() => onTabClick(tab.key)}
-                        className={`px-3 py-1.5 rounded-md border transition-all ${isActive
-                                ? 'bg-[#EEF2F7] text-[#2E5AAC] border-[#C8D3E0]'
-                                : 'bg-transparent text-black border-transparent'
+                        className={`px-3 py-1.5 rounded-md border transition-all w-full ${isActive
+                            ? 'bg-[#EEF2F7] text-[#2E5AAC] border-[#C8D3E0]'
+                            : 'bg-transparent text-black border-transparent'
                             }`}
                     >
-                        <div className="flex items-center gap-1 relative">
+                        <div className="flex items-center justify-center gap-1 relative">
                             <span>{tab.label}</span>
                             {tab.badgeCount && tab.badgeCount > 0 && (
                                 <span className="ml-1 bg-red-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">

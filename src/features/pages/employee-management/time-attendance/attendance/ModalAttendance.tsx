@@ -35,9 +35,9 @@ const ModalAttendance = ({ open, handleChange, formData, handleCancel, handleSub
     return (
         <Modal
             open={open}
-            title={formMode == 'create' ? 'Create New Attendance' : 'Attendance Detail'}
+            title={formMode == 'create' ? 'Create New Attendance' : 'Edit Attendance'}
             subtitle={formMode == 'create' ? 'Please complete all fields to add new attendance today.' : 'Marcella Indarwati'}
-            date={formMode == 'detail' && 'Thursday, 7 August 2025'}
+            date={formMode == 'edit' && 'Thursday, 7 August 2025'}
             handleCancel={handleCancel}
         >
             <div className='grid grid-cols-2 gap-5'>

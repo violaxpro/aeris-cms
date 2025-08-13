@@ -6,7 +6,7 @@ type SegmentedProps = {
     size?: SizeType
     shape?: "default" | "round" | undefined
     options: any[]
-    value?: string | number;
+    value?: any;
     onChange?: (value: string | number) => void
 }
 const index = ({

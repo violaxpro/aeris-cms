@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Table } from 'antd';
 import type { TableColumnsType, TableProps, TablePaginationConfig } from 'antd';
 import { CaretDownIcon, CaretRightIcon } from '@public/icon';
@@ -14,6 +15,9 @@ type tableProps<data> = {
     pagination?: TablePaginationConfig
     scroll?: any
     expandable?: TableProps<data>['expandable']
+    detailRoutes?: (slug: any) => string;
+    getRowValue?: (record: any) => any;
+    onRowClick?: (record: any) => void;
 }
 
 const index = <data extends object>({
@@ -24,8 +28,12 @@ const index = <data extends object>({
     onSelectChange,
     pagination,
     scroll = { x: 'max-content' },
-    expandable
+    expandable,
+    detailRoutes,
+    getRowValue,
+    onRowClick
 }: tableProps<data>) => {
+    const router = useRouter()
     const [selectRowKeys, setSelectRowKey] = useState<React.Key[]>([]);
     const [expandedRowKeys, setExpandedRowKeys] = useState<any>([]);
 
@@ -94,6 +102,21 @@ const index = <data extends object>({
                 }
                 : undefined
         }
+        onRow={(record: any) => {
+            return {
+                onClick: () => {
+                    if (onRowClick) {
+                        onRowClick(record);
+                        return;
+                    }
+                    if (detailRoutes) {
+                        const value = getRowValue ? getRowValue(record) : record.id;
+                        router.push(detailRoutes(value));
+                    }
+                },
+                style: { cursor: 'pointer' },
+            };
+        }}
 
 
     />;
