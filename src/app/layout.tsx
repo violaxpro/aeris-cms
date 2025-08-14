@@ -35,12 +35,23 @@ export default async function RootLayout({
                 <script
                     dangerouslySetInnerHTML={{
                         __html: `
-              window.addEventListener('error', function (e) {
-                alert("Error: " + e.message + "\\n" + (e.error?.stack || 'no stack'));
-              });
-              window.addEventListener('unhandledrejection', function (e) {
-                alert("Promise Error: " + (e.reason?.message || e.reason));
-              });
+              (function() {
+                const origFormat = Intl.DateTimeFormat.prototype.format;
+                Intl.DateTimeFormat.prototype.format = function(date) {
+                  try {
+                    const ts = date instanceof Date ? date : new Date(date);
+                    if (isNaN(ts.getTime())) {
+                      console.warn('⚠️ Invalid date passed to format:', date);
+                      alert('Invalid date detected: ' + JSON.stringify(date));
+                    }
+                    return origFormat.call(this, ts);
+                  } catch (err) {
+                    console.error('Date format error:', err, 'value:', date);
+                    alert('Date format error: ' + err.message + '\\nValue: ' + JSON.stringify(date));
+                    throw err;
+                  }
+                };
+              })();
             `,
                     }}
                 />
