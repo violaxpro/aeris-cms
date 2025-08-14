@@ -31,31 +31,6 @@ export default async function RootLayout({
             // required this one for next-themes, remove it if you are not using next-theme
             suppressHydrationWarning
         >
-            <head>
-                <script
-                    dangerouslySetInnerHTML={{
-                        __html: `
-              (function() {
-                const origFormat = Intl.DateTimeFormat.prototype.format;
-                Intl.DateTimeFormat.prototype.format = function(date) {
-                  try {
-                    const ts = date instanceof Date ? date : new Date(date);
-                    if (isNaN(ts.getTime())) {
-                      console.warn('⚠️ Invalid date passed to format:', date);
-                      alert('Invalid date detected: ' + JSON.stringify(date));
-                    }
-                    return origFormat.call(this, ts);
-                  } catch (err) {
-                    console.error('Date format error:', err, 'value:', date);
-                    alert('Date format error: ' + err.message + '\\nValue: ' + JSON.stringify(date));
-                    throw err;
-                  }
-                };
-              })();
-            `,
-                    }}
-                />
-            </head>
             <body
                 // to prevent any warning that is caused by third party extensions like Grammarly
                 suppressHydrationWarning

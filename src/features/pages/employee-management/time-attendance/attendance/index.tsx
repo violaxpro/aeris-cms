@@ -310,10 +310,10 @@ const index = ({ data }: { data?: any }) => {
                 action='Checkout'
                 text='Are you sure want to checkout?'
             />
-            <div className="mt-6 mx-4 mb-0">
-                <div className='flex md:flex-row flex-col justify-between items-center'>
+            <div className="mt-6 mx-6 mb-0">
+                <div className='flex md:flex-row md:justify-between md:items-center flex-col items-start'>
                     <div>
-                        <h1 className='text-xl font-bold'>
+                        <h1 className='text-2xl font-bold'>
                             Attendance
                         </h1>
                         <Breadcrumb

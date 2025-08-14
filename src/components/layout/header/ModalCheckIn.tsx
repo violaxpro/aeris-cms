@@ -9,6 +9,7 @@ import Button from '@/components/button'
 type ModalCheckInType = {
     isModalOpen: boolean
     formData: {
+        is_checkin: boolean
         check_in_photo: string[]
         check_in_description: string
         check_in_location: string

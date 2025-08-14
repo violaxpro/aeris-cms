@@ -41,6 +41,7 @@ export default function HeaderLayout({ onOpenDrawer }: { onOpenDrawer?: () => vo
     const isMobile = !screens.lg;
     const [formData, setFormData] = useState({
         // Check In
+        is_checkin: false,
         check_in_photo: [],
         check_in_description: '',
         check_in_location: '',
@@ -117,30 +118,32 @@ export default function HeaderLayout({ onOpenDrawer }: { onOpenDrawer?: () => vo
     const handleRunning = () => {
         const status = getAttendanceStatus(formData)
         console.log(status)
+
+        if (isRunning) {
+            setIsRunning(false)
+            return
+        }
+
         if (['can_check_in', 'can_start_break', 'can_finish_break', 'can_checkout'].includes(status)) {
             setAttendanceType(status);
             setOpenModalWorking(true);
             return;
         }
+        // if (!formData.is_checkin || !formData.is_start_break || !formData.is_finish_break || !formData.is_checkout) {
+        //     console.log('masuk')
+        //     setAttendanceType(status);
+        //     setOpenModalWorking(true);
+        //     return;
+        // }
 
         // 2️⃣ Jika sudah di fase kerja / break, tombol play/pause toggle timer
         setIsRunning(prev => !prev);
-        // switch (status) {
-        //     case 'can_check_in':
-        //         setOpenModalWorking(true)
-        //         setAttendanceType(type)
-        //         break;
-
-        //     default:
-        //         break;
-        // }
-        // setIsRunning(prev => !prev)
     }
 
     const handleSubmit = () => {
         switch (attendanceType) {
             case 'can_check_in':
-                setFormData((prev: any) => ({ ...prev, check_in_photo: ['dummy_photo'] }));
+                setFormData((prev: any) => ({ ...prev, is_checkin: true }));
                 setIsRunning(true);
                 break;
             case 'can_start_break':
@@ -150,7 +153,7 @@ export default function HeaderLayout({ onOpenDrawer }: { onOpenDrawer?: () => vo
 
             case 'can_finish_break':
                 setFormData(prev => ({ ...prev, is_finish_break: true }));
-                setIsRunning(false); // berhenti timer break
+                setIsRunning(true); // berhenti timer break
                 break;
 
             case 'can_checkout':
@@ -193,7 +196,7 @@ export default function HeaderLayout({ onOpenDrawer }: { onOpenDrawer?: () => vo
             ]}
         />
     );
-    console.log(attendanceType)
+    console.log(formData)
     return (
         <>
             {
@@ -207,7 +210,7 @@ export default function HeaderLayout({ onOpenDrawer }: { onOpenDrawer?: () => vo
                 />
             }
             {
-                attendanceType == 'can_start_break' || attendanceType == 'can_checkout'
+                (attendanceType == 'can_start_break' || attendanceType == 'can_checkout')
                 && <ModalStartBreakCheckout
                     isModalOpen={openModalWorking}
                     formData={formData}
