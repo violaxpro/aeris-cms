@@ -31,6 +31,20 @@ export default async function RootLayout({
             // required this one for next-themes, remove it if you are not using next-theme
             suppressHydrationWarning
         >
+            <head>
+                <script
+                    dangerouslySetInnerHTML={{
+                        __html: `
+              window.addEventListener('error', function (e) {
+                alert("Error: " + e.message + "\\n" + (e.error?.stack || 'no stack'));
+              });
+              window.addEventListener('unhandledrejection', function (e) {
+                alert("Promise Error: " + (e.reason?.message || e.reason));
+              });
+            `,
+                    }}
+                />
+            </head>
             <body
                 // to prevent any warning that is caused by third party extensions like Grammarly
                 suppressHydrationWarning
