@@ -61,7 +61,84 @@ export const attendanceData = [
         check_out: '20:00 PM',
         overtime: '4h 00m',
         note: '',
-        total_hours: '4h 00m'
+        total_hours: '4h 00m',
+        date: 'Wednesday, 13 August 2025',
+        summary_attendance: {
+            date: 'Wednesday, 13 August 2025',
+            status: 'In Progress',
+            steps: [
+                {
+                    type: 'checkin',
+                    device: 'Laptop Asus',
+                    location: 'Jl. Merpati, Sidoarjo, Jawa Timur',
+                    time: '07:56:05',
+                    image: '/logo/Logo Xpro Group.png'
+                },
+                {
+                    type: 'startbreak',
+                    device: 'Laptop Asus',
+                    location: 'Jl. Merpati, Sidoarjo, Jawa Timur',
+                    time: '12:00:38',
+                },
+                {
+                    type: 'finishbreak',
+                    device: 'Laptop Asus',
+                    location: 'Jl. Merpati, Sidoarjo, Jawa Timur',
+                    comment: 'Extending my break to complete an important personal errand outside of work',
+                    time: '13:35:20',
+                },
+                {
+                    type: 'checkout',
+                },
+            ],
+        }
+    },
+    {
+        id: 2,
+        employee_name: 'Viola Yosevi',
+        position: 'Front End Developer',
+        status: 'On Time',
+        check_in: '07:56 AM',
+        break: '12:03 PM',
+        finish_break: '13:00 PM',
+        check_out: '20:00 PM',
+        overtime: '4h 00m',
+        note: '',
+        total_hours: '4h 00m',
+        date: 'Wednesday, 13 August 2025',
+        summary_attendance: {
+            date: 'Wednesday, 13 August 2025',
+            status: 'Finish',
+            steps: [
+                {
+                    type: 'checkin',
+                    device: 'Laptop Asus',
+                    location: 'Jl. Merpati, Sidoarjo, Jawa Timur',
+                    time: '07:56:05',
+                    image: '/logo/Logo Xpro Group.png'
+                },
+                {
+                    type: 'startbreak',
+                    device: 'Laptop Asus',
+                    location: 'Jl. Merpati, Sidoarjo, Jawa Timur',
+                    time: '12:00:38',
+                },
+                {
+                    type: 'finishbreak',
+                    device: 'Laptop Asus',
+                    location: 'Jl. Merpati, Sidoarjo, Jawa Timur',
+                    comment: 'Extending my break to complete an important personal errand outside of work',
+                    time: '13:35:20',
+                },
+                {
+                    type: 'checkout',
+                    device: 'Laptop Asus',
+                    location: 'Jl. Merpati, Sidoarjo, Jawa Timur',
+                    time: '07:56:05',
+                    image: '/logo/Alarm Expert Logo.png'
+                },
+            ],
+        }
     }
 ]
 

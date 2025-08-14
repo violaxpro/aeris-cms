@@ -1,7 +1,6 @@
 'use client'
 import React, { useState } from 'react'
-import { Button } from 'antd'
-import { ButtonProps } from 'antd';
+import { Button, ButtonProps } from 'antd'
 import Link from 'next/link';
 
 type buttonProps = {
@@ -18,7 +17,7 @@ type buttonProps = {
     position?: 'start' | 'end'
     labelEnd?: string
     disabled?: boolean
-}
+} & ButtonProps
 const index = ({
     btnClassname = '!bg-[var(--default-color)] !text-white hover:!border-inherit',
     hasHeight = true,
@@ -32,7 +31,8 @@ const index = ({
     style,
     position = 'start',
     labelEnd,
-    disabled = false
+    disabled = false,
+    ...props
 }: buttonProps) => {
     // hover:!bg-inherit hover:!text-inherit hover:!border-inherit
     const button = (
@@ -44,6 +44,7 @@ const index = ({
             style={style}
             iconPosition={position}
             disabled={disabled}
+            {...props}
         >
             <div className='flex gap-2'>
                 {icon ?? icon}

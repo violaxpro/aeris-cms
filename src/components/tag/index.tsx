@@ -1,13 +1,13 @@
 import React from 'react';
-import { Tag } from 'antd';
+import { Tag, TagProps } from 'antd';
 import { statusMap } from '@/config/colors-status';
 
 type StatusTagProps = {
     status: string;
     type?: string
-};
+} & TagProps;
 
-const StatusTag: React.FC<StatusTagProps> = ({ status, type = 'quote' }) => {
+const StatusTag: React.FC<StatusTagProps> = ({ status, type = 'quote', ...props }) => {
     // const colorMap: Record<string, string> = {
     //     // DRFAT: '#9CA3AF',
     //     // DRAFT: '#FF6A00',
@@ -45,7 +45,7 @@ const StatusTag: React.FC<StatusTagProps> = ({ status, type = 'quote' }) => {
         config = statusMap[status] || { color: '#D9D9D980', text: status, textColor: '#505050' };
     }
 
-    return <Tag color={config.color} bordered={false}>
+    return <Tag color={config.color} bordered={false} {...props}>
         <span style={{ color: config.textColor }} className='font-semibold text-sm'>{config.text}</span>
     </Tag>;
 };
