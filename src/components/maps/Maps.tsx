@@ -1,7 +1,9 @@
-import { useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
+'use client'
+import dynamic from "next/dynamic";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+
+const { MapContainer, TileLayer, Marker, Popup, useMap } = require("react-leaflet");
 
 type Props = {
     position: [number, number];
@@ -9,7 +11,7 @@ type Props = {
 };
 
 const markerIcon = L.icon({
-    iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+    iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
     iconSize: [25, 41],
     iconAnchor: [12, 41],
 });
@@ -20,22 +22,14 @@ function ChangeView({ center }: { center: [number, number] }) {
     return null;
 }
 
-export default function Maps({ position, address }: Props) {
-    useEffect(() => {
-        const container = L.DomUtil.get('map');
-        if (container != null) {
-            (container as any)._leaflet_id = null;
-        }
-    }, [position]);
-
+function MapsComponent({ position, address }: Props) {
     return (
         <MapContainer
-            id="map"
+            key={position.join(",")} // biar re-render kalau posisi berubah
             center={position}
             zoom={18}
-            scrollWheelZoom={true}
+            scrollWheelZoom
             className="h-48 w-full rounded shadow"
-            dragging={true}
         >
             <ChangeView center={position} />
             <TileLayer
@@ -48,3 +42,8 @@ export default function Maps({ position, address }: Props) {
         </MapContainer>
     );
 }
+
+// Dynamic import supaya hanya dijalankan di client
+export default dynamic(() => Promise.resolve(MapsComponent), {
+    ssr: false,
+});

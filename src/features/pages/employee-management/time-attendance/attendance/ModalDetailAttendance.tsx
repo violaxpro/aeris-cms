@@ -87,6 +87,19 @@ const ModalDetailAttendance = ({ open, data, handleCancel }: ModalDetailAttendan
                 <Timeline>
                     {data?.summary_attendance?.steps.map((step: any, idx: any) => {
                         const isDisabled = !step.device || !step.location || !step.time;
+                        const getType = (type: string) => {
+                            let attendanceType
+                            if (type == 'checkin') {
+                                attendanceType = 'Check In'
+                            } else if (type == 'startbreak') {
+                                attendanceType = 'Start Break'
+                            } else if (type == 'finishbreak') {
+                                attendanceType = 'Finish Break'
+                            } else {
+                                attendanceType = 'Check Out'
+                            }
+                            return attendanceType
+                        }
                         return (
                             <Timeline.Item
                                 key={idx}
@@ -103,9 +116,12 @@ const ModalDetailAttendance = ({ open, data, handleCancel }: ModalDetailAttendan
                                 <div className='flex flex-col'>
                                     <div className='flex justify-between items-center -mt-2'>
                                         <label className={`text-lg font-semibold ${isDisabled ? 'text-[#787878]' : ''}`}>
-                                            {step.type
+                                            {/* {step.type
                                                 .replace(/([A-Z])/g, ' $1')
-                                                .replace(/^./, (str: any) => str.toUpperCase())}
+                                                .replace(/^./, (str: any) => str.toUpperCase())} */}
+                                            {
+                                                getType(step?.type)
+                                            }
                                         </label>
                                         <div className='flex gap-2 items-center'>
                                             {
