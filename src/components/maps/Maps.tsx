@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -22,23 +22,25 @@ function ChangeView({ center }: { center: [number, number] }) {
 }
 
 export default function Maps({ position, address }: Props) {
+    const [mapKey] = useState(() => dayjs().valueOf());
     if (!position || position[0] === 0) {
         return <div className="h-48 w-full flex items-center justify-center text-gray-500">Loading map...</div>;
     }
 
-    useEffect(() => {
-        const container = L.DomUtil.get('map');
-        if (container != null) {
-            // 🛠 reset instance biar Leaflet mau init ulang
-            (container as any)._leaflet_id = null;
-        }
-    }, [position]); // tergantung perubahan koordinat
+    // useEffect(() => {
+    //     const container = L.DomUtil.get('map');
+    //     if (container != null) {
+    //         // 🛠 reset instance biar Leaflet mau init ulang
+    //         (container as any)._leaflet_id = null;
+    //     }
+    // }, [position]); // tergantung perubahan koordinat
 
 
     return (
         <MapContainer
-            id='map'
-            key={position.join(',') + dayjs()}
+            // id='map'
+            // key={position.join(',') + dayjs()}
+            key={mapKey}
             center={position}
             zoom={18}
             scrollWheelZoom={true}
