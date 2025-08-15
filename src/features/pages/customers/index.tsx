@@ -70,11 +70,6 @@ const index = ({ customersData }: { customersData?: any }) => {
     ]
     const columns: TableColumnsType<UserType> = [
         {
-            title: 'ID',
-            dataIndex: 'id',
-            sorter: (a: any, b: any) => a.id - b.id,
-        },
-        {
             title: 'Name',
             dataIndex: 'name',
             render: (_: any, row: any) => {
