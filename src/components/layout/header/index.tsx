@@ -64,14 +64,11 @@ export default function HeaderLayout({ onOpenDrawer }: { onOpenDrawer?: () => vo
         check_out_location: '',
     });
 
-    // const savedSecond = localStorage.getItem('lastSecondTimeWorking') ?? 0;
-    // const savedStatus = localStorage.getItem('lastStatus') ?? '';
-    // const savedStartTime = localStorage.getItem('timerStartAt') ?? '';
-    const [savedSecond, setSavedSecond] = useState<any>(0);
-    const [savedStatus, setSavedStatus] = useState('');
-    const [savedStartTime, setSavedStartTime] = useState('');
-
-
+    const savedStatus = typeof window !== 'undefined'
+        ? localStorage.getItem('lastStatus') || ''
+        : '';
+    const savedSecond = typeof window !== 'undefined'
+        ? localStorage.getItem('lastSecondTimeWorking') : '';
 
     const handleChange = (field: string) => (
         e: any
@@ -221,44 +218,33 @@ export default function HeaderLayout({ onOpenDrawer }: { onOpenDrawer?: () => vo
 
     }, [isRunning])
 
-    // Restore state saat refresh
-    useEffect(() => {
-        if (savedStatus) {
-            setFormData(prev => ({ ...prev, last_status: savedStatus }));
-        }
 
-        // Kalau sedang jalan (checkin / finish_break)
-        if (savedStartTime && ['checkin', 'finish_break'].includes(savedStatus)) {
-            const diff = Math.floor((dayjs().valueOf() - parseInt(savedStartTime, 10)) / 1000);
-            const base = savedSecond ? JSON.parse(savedSecond) : 0;
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+
+        const lastSecond = localStorage.getItem('lastSecondTimeWorking');
+        const lastStatus = localStorage.getItem('lastStatus') || '';
+        const startTime = localStorage.getItem('timerStartAt') ?? '';
+
+        setFormData(prev => ({ ...prev, last_status: lastStatus }));
+
+        if (startTime && ['checkin', 'finish_break'].includes(lastStatus)) {
+            const diff = Math.floor((dayjs().valueOf() - parseInt(startTime, 10)) / 1000);
+            const base = lastSecond ? JSON.parse(lastSecond) : 0;
             setSecond(base + diff);
             setIsRunning(true);
-        }
-        // Kalau sedang break
-        else if (savedStartTime && savedStatus === 'start_break') {
-            const diff = Math.floor((dayjs().valueOf() - parseInt(savedStartTime, 10)) / 1000);
+        } else if (startTime && lastStatus === 'start_break') {
+            const diff = Math.floor((dayjs().valueOf() - parseInt(startTime, 10)) / 1000);
             const base = localStorage.getItem('lastSecondTimeStartBreak')
-                ? JSON.parse(localStorage.getItem('lastSecondTimeStartBreak') ?? '')
+                ? JSON.parse(localStorage.getItem('lastSecondTimeStartBreak') || '0')
                 : 0;
             setSecond(base + diff);
             setIsRunning(true);
-        }
-        // Kalau pause
-        else if (savedSecond) {
-            setSecond(JSON.parse(savedSecond));
+        } else if (lastSecond) {
+            setSecond(JSON.parse(lastSecond));
         }
     }, []);
 
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-            setSavedSecond(localStorage.getItem('lastSecondTimeWorking') ?? 0);
-            setSavedStatus(localStorage.getItem('lastStatus') ?? '');
-            setSavedStartTime(localStorage.getItem('timerStartAt') ?? '');
-        }
-    }, []);
-
-
-    console.log(formData)
     return (
         <>
             {

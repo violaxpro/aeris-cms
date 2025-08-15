@@ -1,10 +1,12 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import Modal from '@/components/modal'
 import Textarea from '@/components/textarea'
 import CameraInput from '@/components/input-camera'
-import LocationInput from '@/components/maps/InputMaps'
 import Button from '@/components/button'
+import dynamic from 'next/dynamic'
+const LocationInput = dynamic(() => import('@/components/maps/InputMaps'), { ssr: false })
+
 
 type ModalCheckInType = {
     isModalOpen: boolean

@@ -64,11 +64,6 @@ export const menuItems = [
                         href: routes.eCommerce.transaction,
                     },
                     {
-                        key: 'rma',
-                        label: 'RMA',
-                        href: routes.eCommerce.returnSales,
-                    },
-                    {
                         key: 'credit',
                         label: 'Credit',
                         href: routes.eCommerce.creditSalesList,
@@ -145,11 +140,6 @@ export const menuItems = [
                         href: routes.eCommerce.purchases,
                     },
                     {
-                        key: 'rma-suppliers',
-                        label: 'RMA Suppliers',
-                        href: routes.eCommerce.returnSupplier,
-                    },
-                    {
                         key: 'credit-suppliers',
                         label: 'Credit Suppliers',
                         href: routes.eCommerce.creditSupplierList,
@@ -160,12 +150,6 @@ export const menuItems = [
                         href: routes.eCommerce.supplierList,
                     },
                 ],
-            },
-            {
-                key: 'return',
-                label: 'RMA',
-                href: routes.eCommerce.customers,
-                icon: TeamOutlined,
             },
             {
                 key: 'warehouse',
@@ -184,6 +168,24 @@ export const menuItems = [
                         href: routes.eCommerce.warehouseBranchList,
                     },
                 ],
+            },
+            {
+                key: 'return',
+                label: 'RMA',
+                href: routes.eCommerce.customers,
+                icon: TeamOutlined,
+                children: [
+                    {
+                        key: 'rma-sales',
+                        label: 'RMA Sales',
+                        href: routes.eCommerce.returnSales,
+                    },
+                    {
+                        key: 'rma-suppliers',
+                        label: 'RMA Suppliers',
+                        href: routes.eCommerce.returnSupplier,
+                    },
+                ]
             },
             {
                 key: 'customer',
