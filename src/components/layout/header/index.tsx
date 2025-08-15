@@ -27,6 +27,7 @@ import ModalStartBreakCheckout from './ModalStartBreakCheckout';
 import ModalFinishBreak from './ModalFinishBreak';
 import dayjs from 'dayjs';
 import { getAttendanceStatus } from '@/plugins/utils/attendance';
+import { formatTime } from '@/plugins/utils/utils';
 
 const { useBreakpoint } = Grid;
 
@@ -40,6 +41,8 @@ export default function HeaderLayout({ onOpenDrawer }: { onOpenDrawer?: () => vo
     const screens = useBreakpoint();
     const isMobile = !screens.lg;
     const [formData, setFormData] = useState({
+        work_duration: 0,
+        last_status: '',
         // Check In
         is_checkin: false,
         check_in_photo: [],
@@ -62,6 +65,9 @@ export default function HeaderLayout({ onOpenDrawer }: { onOpenDrawer?: () => vo
     });
 
     const status = getAttendanceStatus(formData)
+    const savedSecond = localStorage.getItem('lastSecondTimeWorking') ?? 0;
+    const savedStatus = localStorage.getItem('lastStatus') ?? '';
+    const savedStartTime = localStorage.getItem('timerStartAt') ?? '';
     console.log(status)
     const handleChange = (field: string) => (
         e: any
@@ -92,84 +98,75 @@ export default function HeaderLayout({ onOpenDrawer }: { onOpenDrawer?: () => vo
         setOpen(false);
     };
 
-    useEffect(() => {
-        const handleScroll = () => {
-            setIsScrolled(window.scrollY > 0);
-        };
-
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
-
-    useEffect(() => {
-        let interval: NodeJS.Timeout | null = null
-        if (isRunning) {
-            interval = setInterval(() => {
-                setSecond(prev => prev + 1)
-            }, 1000)
-        }
-
-        return () => {
-            if (interval) clearInterval(interval)
-        }
-
-    }, [isRunning])
-
     const handleRunning = () => {
-        const status = getAttendanceStatus(formData)
-        console.log(status)
+        const status = getAttendanceStatus(formData);
+        const savedStatus = localStorage.getItem('lastStatus') || formData.last_status;
 
+        // === Kalau lagi jalan → STOP ===
         if (isRunning) {
-            setIsRunning(false)
-            return
+            // Simpan waktu terakhir sesuai status
+            if (['checkin', 'finish_break'].includes(savedStatus)) {
+                localStorage.setItem('lastSecondTimeWorking', JSON.stringify(second));
+            } else if (savedStatus === 'start_break') {
+                localStorage.setItem('lastSecondTimeStartBreak', JSON.stringify(second));
+            }
+            setIsRunning(false);
+            return; // stop di sini, jangan lanjut ke modal
         }
 
-        if (['can_check_in', 'can_start_break', 'can_finish_break', 'can_checkout'].includes(status)) {
+        // === Kalau lagi berhenti → START ===
+        if (['checkin', 'start_break', 'finish_break', 'checkout'].includes(status)) {
+            // Status awal → minta konfirmasi modal
             setAttendanceType(status);
             setOpenModalWorking(true);
-            return;
+        } else {
+            // Resume tanpa modal
+            localStorage.setItem('timerStartAt', dayjs().valueOf().toString());
+            localStorage.setItem('lastStatus', savedStatus);
+            setIsRunning(true);
         }
-        // if (!formData.is_checkin || !formData.is_start_break || !formData.is_finish_break || !formData.is_checkout) {
-        //     console.log('masuk')
-        //     setAttendanceType(status);
-        //     setOpenModalWorking(true);
-        //     return;
-        // }
-
-        // 2️⃣ Jika sudah di fase kerja / break, tombol play/pause toggle timer
-        setIsRunning(prev => !prev);
-    }
+    };
 
     const handleSubmit = () => {
+        const now = dayjs().valueOf();
+
         switch (attendanceType) {
-            case 'can_check_in':
-                setFormData((prev: any) => ({ ...prev, is_checkin: true }));
+            case 'checkin':
+                localStorage.setItem('checkinHistory', JSON.stringify(now));
+                setFormData(prev => ({ ...prev, last_status: 'checkin' }));
+                localStorage.setItem('lastStatus', 'checkin');
+                localStorage.setItem('timerStartAt', now.toString());
                 setIsRunning(true);
                 break;
-            case 'can_start_break':
-                setFormData(prev => ({ ...prev, is_start_break: true }));
-                setIsRunning(true); // mulai timer break
+
+            case 'start_break':
+                setFormData(prev => ({ ...prev, last_status: 'start_break' }));
+                localStorage.setItem('lastStatus', 'start_break');
+                localStorage.setItem('timerStartAt', now.toString());
+                setSecond(0);
+                setIsRunning(true);
                 break;
 
-            case 'can_finish_break':
-                setFormData(prev => ({ ...prev, is_finish_break: true }));
-                setIsRunning(true); // berhenti timer break
+            case 'finish_break':
+                const lastSecond = localStorage.getItem('lastSecondTimeWorking');
+                setSecond(lastSecond ? JSON.parse(lastSecond) : 0);
+                setFormData(prev => ({ ...prev, last_status: 'finish_break' }));
+                localStorage.setItem('lastStatus', 'finish_break');
+                localStorage.setItem('timerStartAt', now.toString());
+                setIsRunning(true);
                 break;
 
-            case 'can_checkout':
-                setFormData(prev => ({ ...prev, is_checkout: true }));
-                setIsRunning(false); // berhenti timer kerja
-                break;
-            case 'off_day':
-                alert('Today id off day!');
-                break;
-            default:
-                alert('Working...');
+            case 'checkout':
+                setFormData(prev => ({ ...prev, last_status: 'checkout' }));
+                localStorage.setItem('lastStatus', 'checkout');
+                setIsRunning(false);
                 break;
         }
+
         setOpenModalWorking(false);
         setAttendanceType('');
-    }
+    };
+
     const mobileMenu = (
         <Menu
             items={[
@@ -196,11 +193,64 @@ export default function HeaderLayout({ onOpenDrawer }: { onOpenDrawer?: () => vo
             ]}
         />
     );
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 0);
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    useEffect(() => {
+        let interval: NodeJS.Timeout | null = null
+        if (isRunning) {
+            interval = setInterval(() => {
+                setSecond(prev => prev + 1)
+            }, 1000)
+        }
+
+        return () => {
+            if (interval) clearInterval(interval)
+        }
+
+    }, [isRunning])
+
+    // Restore state saat refresh
+    useEffect(() => {
+        if (savedStatus) {
+            setFormData(prev => ({ ...prev, last_status: savedStatus }));
+        }
+
+        // Kalau sedang jalan (checkin / finish_break)
+        if (savedStartTime && ['checkin', 'finish_break'].includes(savedStatus)) {
+            const diff = Math.floor((dayjs().valueOf() - parseInt(savedStartTime, 10)) / 1000);
+            const base = savedSecond ? JSON.parse(savedSecond) : 0;
+            setSecond(base + diff);
+            setIsRunning(true);
+        }
+        // Kalau sedang break
+        else if (savedStartTime && savedStatus === 'start_break') {
+            const diff = Math.floor((dayjs().valueOf() - parseInt(savedStartTime, 10)) / 1000);
+            const base = localStorage.getItem('lastSecondTimeStartBreak')
+                ? JSON.parse(localStorage.getItem('lastSecondTimeStartBreak') ?? '')
+                : 0;
+            setSecond(base + diff);
+            setIsRunning(true);
+        }
+        // Kalau pause
+        else if (savedSecond) {
+            setSecond(JSON.parse(savedSecond));
+        }
+    }, []);
+
+
     console.log(formData)
     return (
         <>
             {
-                attendanceType == 'can_check_in'
+                attendanceType == 'checkin'
                 && <ModalCheckIn
                     isModalOpen={openModalWorking}
                     formData={formData}
@@ -210,7 +260,7 @@ export default function HeaderLayout({ onOpenDrawer }: { onOpenDrawer?: () => vo
                 />
             }
             {
-                (attendanceType == 'can_start_break' || attendanceType == 'can_checkout')
+                (attendanceType == 'start_break' || attendanceType == 'checkout')
                 && <ModalStartBreakCheckout
                     isModalOpen={openModalWorking}
                     formData={formData}
@@ -221,7 +271,7 @@ export default function HeaderLayout({ onOpenDrawer }: { onOpenDrawer?: () => vo
             }
 
             {
-                attendanceType == 'can_finish_break' &&
+                attendanceType == 'finish_break' &&
                 <ModalFinishBreak
                     isModalOpen={openModalWorking}
                     formData={formData}
@@ -270,6 +320,7 @@ export default function HeaderLayout({ onOpenDrawer }: { onOpenDrawer?: () => vo
                         isRunning={isRunning}
                         onPlay={handleRunning}
                         seconds={second}
+                        lastStatus={savedStatus}
                     />
                     <Button className='rounded-lg !h-10 !shadow-sm !border-gray-200'>
                         <Badge count={3}>

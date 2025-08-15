@@ -14,6 +14,7 @@ export interface ProductForm {
     current_serial_number: string
     reason: string
     product_return: boolean
+    status: string
 }
 
 interface ProductInputProps {
@@ -84,7 +85,7 @@ const ProductReturn = ({
                 required
 
             />
-            <Input
+            {/* <Input
                 id='return_type'
                 type='text'
                 label='Return Type'
@@ -93,18 +94,6 @@ const ProductReturn = ({
                 className='mb-1'
                 required
 
-            />
-            {/* <SelectInput
-                id='return_type'
-                label='Return Type'
-                placeholder='Select Return Type'
-                value={productForm.return_type}
-                onChange={(val) => setProductForm((prev: any) => ({ ...prev, return_type: val }))}
-                options={[
-                    { label: 'Replace', value: 'Replace' },
-                    { label: 'Repair', value: 'Repair' },
-                    { label: 'Refund', value: 'Refund' },
-                ]}
             /> */}
             <Input
                 id='current_serial_number'
@@ -126,16 +115,32 @@ const ProductReturn = ({
                 required
 
             />
-            <div className='flex flex-col'>
-                <CheckboxInput
-                    label='Product Return'
-                    checked={productForm.product_return}
-                    onChange={(val) => handleProductCheckbox('product_return', val)}
-                    text={productForm.product_return == true ? 'True' : 'False'}
-                    required
+            <SelectInput
+                id='return_type'
+                label='Return Type'
+                placeholder='Select Return Type'
+                value={productForm.return_type}
+                onChange={handleProductChange}
+                options={[
+                    { label: 'Change new product', value: 'Change new product' },
+                    { label: 'Credit', value: 'Credit' },
+                    { label: 'Refund', value: 'Refund' },
+                    { label: 'Other', value: 'Other' },
+                ]}
+            />
+            <SelectInput
+                id='status'
+                label='Status'
+                placeholder='Select Status'
+                value={productForm.status}
+                onChange={handleProductChange}
+                options={[
+                    { label: 'Waiting', value: 'Waiting' },
+                    { label: 'Approved', value: 'Approved' },
+                    { label: 'Rejected', value: 'Rejected' },
+                ]}
+            />
 
-                />
-            </div>
             {
                 onRemove && <div className='flex item-ends justify-center mt-4 '>
                     {

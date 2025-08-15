@@ -162,6 +162,12 @@ export const menuItems = [
                 ],
             },
             {
+                key: 'return',
+                label: 'RMA',
+                href: routes.eCommerce.customers,
+                icon: TeamOutlined,
+            },
+            {
                 key: 'warehouse',
                 label: 'Warehouse',
                 href: '#',
@@ -182,7 +188,7 @@ export const menuItems = [
             {
                 key: 'customer',
                 label: 'Customers',
-                href: '#',
+                href: routes.eCommerce.customers,
                 icon: TeamOutlined,
             },
             {

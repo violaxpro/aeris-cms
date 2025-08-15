@@ -30,7 +30,7 @@ const FormReturnSales: React.FC<FormProps> = ({ mode, initialValues, slug, dataT
 
     const [optionsCategories] = useAtom(categoriesAtom)
     const [formData, setFormData] = useState({
-        purchase_id: initialValues ? initialValues.purchase_id : '',
+        order_id: initialValues ? initialValues.order_id : '',
         sales_person: initialValues ? initialValues.sales_person : '',
         status: initialValues ? initialValues.status : '',
         product: initialValues ? initialValues.product : [],
@@ -48,7 +48,8 @@ const FormReturnSales: React.FC<FormProps> = ({ mode, initialValues, slug, dataT
         return_type: '',
         current_serial_number: '',
         reason: '',
-        product_return: false
+        product_return: false,
+        status: ''
     }]);
 
     const breadcrumb = [
@@ -88,7 +89,7 @@ const FormReturnSales: React.FC<FormProps> = ({ mode, initialValues, slug, dataT
     const handleSubmit = async () => {
         try {
             const submitData = {
-                purchase_id: formData.purchase_id,
+                order_id: formData.order_id,
                 sales_person: formData.sales_person,
                 status: formData.status,
                 notes: formData.notes,
@@ -170,7 +171,8 @@ const FormReturnSales: React.FC<FormProps> = ({ mode, initialValues, slug, dataT
                 return_type: '',
                 current_serial_number: '',
                 reason: '',
-                product_return: false
+                product_return: false,
+                status: ''
             }
         ])
     }
@@ -212,21 +214,21 @@ const FormReturnSales: React.FC<FormProps> = ({ mode, initialValues, slug, dataT
                     <div className='flex flex-col gap-5'>
                         <div className='grid md:grid-cols-2 gap-2'>
                             <SelectInput
-                                id='purchase_id'
-                                label='Purchase Id'
-                                value={formData.purchase_id}
-                                placeholder='Select Purchase Id'
-                                onChange={(val) => handleChangeSelect('purchase_id', val)}
+                                id='order_id'
+                                label='Order Id'
+                                value={formData.order_id}
+                                placeholder='Select Order Id'
+                                onChange={(val) => handleChangeSelect('order_id', val)}
                                 required
                             />
-                            <SelectInput
+                            {/* <SelectInput
                                 id='sales_person'
                                 label='Sales Person'
                                 placeholder='Select Sales Person'
                                 value={formData.sales_person}
                                 onChange={(val) => handleChangeSelect('sales_person', val)}
                                 required
-                            />
+                            /> */}
                             {/* <SelectInput
                             id='status'
                             label='Status'

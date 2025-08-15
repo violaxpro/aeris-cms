@@ -95,6 +95,10 @@ export const routes = {
 
     warehouseBranchList: '/ecommerce/warehouse-branch-list',
 
+    customers: '/ecommerce/customers',
+    createCustomers: '/ecommerce/customers/create',
+    editCustomers: (slug: string) => `/ecommerce/customers/${slug}/edit`,
+
     stockUpdate: '/ecommerce/stock-update',
 
     slider: '/ecommerce/slider',

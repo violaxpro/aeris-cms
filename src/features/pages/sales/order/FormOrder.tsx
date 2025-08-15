@@ -635,6 +635,7 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 suffix={
                                     <Button
                                         label='Apply'
+                                        hasHeight={false}
                                     />
                                 }
                                 style={{ marginTop: '1rem' }}

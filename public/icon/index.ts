@@ -129,6 +129,8 @@ export { default as CommentGreyIcon } from './CommentGreyIcon.svg'
 export { default as FlagFinishIcon } from './FlagFinishIcon.svg'
 export { default as GalleryIcon } from './GalleryIcon.svg'
 export { default as ProgressIcon } from './ProgressIcon.svg'
+export { default as PauseRoundedYellowIcon } from './PauseRoundedYellowIcon.svg'
+export { default as PlayNextRoundedYellowIcon } from './PlayNextRoundedYellowIcon.svg'
 
 
 
