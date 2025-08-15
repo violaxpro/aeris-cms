@@ -69,18 +69,23 @@ export const getAttendanceStatus = (formData: any): AttendanceStatus => {
 
     const workDuration = formData.work_duration
     const lastStatus = formData.last_status
+    const afterCheckout = localStorage.getItem('afterCheckout') === 'true';
 
     switch (lastStatus) {
         case undefined:
         case null:
             return 'checkin'
         case 'checkin':
+            if (afterCheckout) {
+                return 'checkout';
+            }
             return 'start_break'
         case 'start_break':
             return 'finish_break'
         case 'finish_break':
             return 'checkout'
         case 'checkout':
+            localStorage.setItem('afterCheckout', 'true');
             return 'checkin'
 
         default:

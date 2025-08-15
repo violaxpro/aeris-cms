@@ -64,11 +64,15 @@ export default function HeaderLayout({ onOpenDrawer }: { onOpenDrawer?: () => vo
         check_out_location: '',
     });
 
-    const status = getAttendanceStatus(formData)
-    const savedSecond = localStorage.getItem('lastSecondTimeWorking') ?? 0;
-    const savedStatus = localStorage.getItem('lastStatus') ?? '';
-    const savedStartTime = localStorage.getItem('timerStartAt') ?? '';
-    console.log(status)
+    // const savedSecond = localStorage.getItem('lastSecondTimeWorking') ?? 0;
+    // const savedStatus = localStorage.getItem('lastStatus') ?? '';
+    // const savedStartTime = localStorage.getItem('timerStartAt') ?? '';
+    const [savedSecond, setSavedSecond] = useState<any>(0);
+    const [savedStatus, setSavedStatus] = useState('');
+    const [savedStartTime, setSavedStartTime] = useState('');
+
+
+
     const handleChange = (field: string) => (
         e: any
     ) => {
@@ -148,8 +152,7 @@ export default function HeaderLayout({ onOpenDrawer }: { onOpenDrawer?: () => vo
                 break;
 
             case 'finish_break':
-                const lastSecond = localStorage.getItem('lastSecondTimeWorking');
-                setSecond(lastSecond ? JSON.parse(lastSecond) : 0);
+                setSecond(savedSecond ? JSON.parse(savedSecond) : 0);
                 setFormData(prev => ({ ...prev, last_status: 'finish_break' }));
                 localStorage.setItem('lastStatus', 'finish_break');
                 localStorage.setItem('timerStartAt', now.toString());
@@ -159,6 +162,7 @@ export default function HeaderLayout({ onOpenDrawer }: { onOpenDrawer?: () => vo
             case 'checkout':
                 setFormData(prev => ({ ...prev, last_status: 'checkout' }));
                 localStorage.setItem('lastStatus', 'checkout');
+                localStorage.removeItem('afterCheckout');
                 setIsRunning(false);
                 break;
         }
@@ -242,6 +246,14 @@ export default function HeaderLayout({ onOpenDrawer }: { onOpenDrawer?: () => vo
         // Kalau pause
         else if (savedSecond) {
             setSecond(JSON.parse(savedSecond));
+        }
+    }, []);
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            setSavedSecond(localStorage.getItem('lastSecondTimeWorking') ?? 0);
+            setSavedStatus(localStorage.getItem('lastStatus') ?? '');
+            setSavedStartTime(localStorage.getItem('timerStartAt') ?? '');
         }
     }, []);
 
