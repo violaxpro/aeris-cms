@@ -155,7 +155,7 @@ const index = ({ customersData }: { customersData?: any }) => {
                             variant='filled'
                             size="small"
                             icon={PencilIconBlue}
-                            onClick={() => router.push(routes.eCommerce.editPriceLevel(row.id))}
+                            onClick={() => router.push(routes.eCommerce.editCustomers(row.id))}
                         />
                         <ButtonIcon
                             color='danger'

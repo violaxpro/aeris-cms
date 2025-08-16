@@ -447,7 +447,7 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
                 return <Button
                     label='Choose'
                     onClick={() => handleSelectSerialNumber(
-                        modalSerialNumber.row?.id!,
+                        modalSerialNumber?.row?.id,
                         row.serial_number,
                         row.location,
                         row.po_number

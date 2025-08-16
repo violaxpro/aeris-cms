@@ -70,6 +70,14 @@ const index = ({ data }: { data?: any }) => {
         start_break: '',
         finish_break: '',
         check_out: '',
+        time: [
+            {
+                check_in: '',
+                start_break: '',
+                finish_break: '',
+                check_out: '',
+            }
+        ],
         is_claim_overtime: '',
         overtime_reason: '',
         internal_notes: '',
@@ -336,16 +344,16 @@ const index = ({ data }: { data?: any }) => {
                 <div style={{ padding: 24, minHeight: 360 }}>
                     <div className='flex flex-col gap-4'>
                         <div className='grid md:grid-cols-4 gap-4'>
-                            <Card title='On Time' icon={ClockOutlineGreenIcon} bgIcon='bg-[#01933B1A]'>
+                            <Card title='Total On Time' icon={ClockOutlineGreenIcon} bgIcon='bg-[#01933B1A]'>
                                 <span className='text-2xl font-bold'>60</span>
                             </Card>
-                            <Card title='Late' icon={ClockOutlineOrangeIcon} bgIcon='bg-[#FF9E021A]'>
+                            <Card title='Total Late' icon={ClockOutlineOrangeIcon} bgIcon='bg-[#FF9E021A]'>
                                 <span className='text-2xl font-bold'>3</span>
                             </Card>
-                            <Card title='Absent' icon={ClockOutlineBlueIcon}>
+                            <Card title='Total Absent' icon={ClockOutlineBlueIcon}>
                                 <span className='text-2xl font-bold'>2</span>
                             </Card>
-                            <Card title='On Leave' icon={ClockOutlineRedIcon} bgIcon='bg-[#EA00001A]'>
+                            <Card title='Total On Leave' icon={ClockOutlineRedIcon} bgIcon='bg-[#EA00001A]'>
                                 <span className='text-2xl font-bold'>1</span>
                             </Card>
 
