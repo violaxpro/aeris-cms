@@ -6,9 +6,9 @@ import Button from '@/components/button'
 import CheckboxInput from '@/components/checkbox'
 import FormGroup from '@/components/form-group'
 import { Content } from 'antd/es/layout/layout'
-import { Divider } from 'antd'
 import CustomSwitch from '@/components/switch/CustomSwitch';
 import { PowerIcon, LampIcon } from '@public/icon'
+import Divider from '@/components/divider'
 
 const index = () => {
     const [formData, setFormData] = useState({
@@ -73,7 +73,7 @@ const index = () => {
                                 size='md'
                             />
                         </div>
-                        <hr className='border-[#E5E7EB]' />
+                        <Divider />
                         <div className={`col-span-12 md:col-span-8 grid grid-cols-2 gap-4`}>
                             <Input
                                 id='app_id'
@@ -111,7 +111,7 @@ const index = () => {
                                 size='md'
                             />
                         </div>
-                        <hr className='border-[#E5E7EB]' />
+                        <Divider />
                         <div className={`col-span-12 md:col-span-8 grid grid-cols-2 gap-4`}>
                             <Input
                                 id='client_id'

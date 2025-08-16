@@ -123,8 +123,16 @@ export const orderDummyData = [
         order_reference: 'Order 1',
         product: [
             {
-                sku: '459834',
-                name: 'Product A',
+                sku: '0317-8471',
+                name: 'U-Prox Keyfob - White SMART9412',
+                price: 500,
+                buying_price: 600,
+                qty: 2,
+                total: 1200
+            },
+            {
+                sku: '0317-8472',
+                name: 'Hikvision Wireless Repeater DS-PR1-WB',
                 price: 500,
                 buying_price: 600,
                 qty: 2,
@@ -136,7 +144,80 @@ export const orderDummyData = [
         subtotal: 1200,
         discount: 0.5,
         shipping_fee: 400,
-        gst: 10
+        gst: 10,
+        serialNumbers: [
+            {
+                id: 1,
+                sku: '0317-8471',
+                name: 'U-Prox Keyfob - White SMART9412',
+                serial_number: 'SN-UPX-0001',
+                stock: 200,
+                pick: 3,
+                pack: 3,
+                warehouses: [
+                    {
+                        id: 1,
+                        location: 'Seadan Parramatta',
+                        serial_number: 'SN-8765',
+                        po_number: 'PO 8965',
+                        date: '2023-12-14 15:20'
+                    },
+                    {
+                        id: 2,
+                        location: 'Victorinox',
+                        serial_number: 'SN-2465',
+                        po_number: 'PO 8965',
+                        date: '2023-12-30 10:04'
+                    },
+                    {
+                        id: 3,
+                        location: 'Tenton Sports',
+                        serial_number: 'SN-2450',
+                        po_number: 'PO 8965',
+                        date: '2023-12-08 14:20'
+                    },
+                    {
+                        id: 4,
+                        location: 'Northhampton',
+                        serial_number: 'Empty',
+                        po_number: 'PO 8965',
+                        date: '2023-12-22 11:40'
+                    },
+                    {
+                        id: 5,
+                        location: 'Toronto',
+                        serial_number: 'Empty',
+                        po_number: 'PO 8965',
+                        date: '2023-12-23 17:20'
+                    }
+                ],
+            },
+            {
+                id: 2,
+                sku: '0317-8472',
+                name: 'Hikvision Wireless Repeater DS-PR1-WB',
+                serial_number: 'SN-UPX-0002',
+                stock: 48,
+                pick: 3,
+                pack: 3,
+                warehouses: [
+                    {
+                        id: 1,
+                        location: 'Seadan Parramatta',
+                        serial_number: 'SN-8765',
+                        po_number: 'PO 8965',
+                        date: '2023-12-14 15:20'
+                    },
+                    {
+                        id: 2,
+                        location: 'Victorinox',
+                        serial_number: 'SN-2465',
+                        po_number: 'PO 8965',
+                        date: '2023-12-30 10:04'
+                    },
+                ],
+            }
+        ]
     },
     {
         id: 2,

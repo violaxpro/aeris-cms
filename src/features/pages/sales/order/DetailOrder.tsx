@@ -28,12 +28,30 @@ import { useRouter } from 'next/navigation'
 import { downloadInvoicePDF, previewAndPrintPDF } from '@/services/invoice-service'
 import Modal from '@/components/modal'
 import HoverPopover from '@/components/popover/HoverPopover'
+import CheckboxInput from '@/components/checkbox'
+import Input from '@/components/input'
+import Pagination from '@/components/pagination'
+import SearchTable from '@/components/search/SearchTable'
+import ShowPageSize from '@/components/pagination/ShowPageSize'
 
 const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
     const router = useRouter()
     const [profitHidden, setProfitHidden] = useState(true)
     const [buyPriceHidden, setBuyPriceHidden] = useState(true)
     const [isOpenModalSupplier, setIsOpenModalSupplier] = useState(false)
+    const [serialNumberData, setSerialNumberData] = useState<any>({
+        pickId: [],
+        packId: [],
+        serialNumber: {},
+        productFrom: ''
+    })
+    const [modalSerialNumber, setModalSerialNumber] = useState<{ open: boolean; row: any }>({ open: false, row: null })
+    const [currentOrder, setCurrentOrder] = useState<any>(null)
+    const [currentPageWarehouse, setCurrentPageWarehouse] = useState(1);
+    const [pageSizeWarehouse, setPageSizeWarehouse] = useState(10);
+    const [search, setSearch] = useState('')
+
+    console.log(serialNumberData)
 
     const breadcrumb = [
         { title: 'Sales' },
@@ -125,6 +143,28 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
 
     ]
 
+    const openSerialNumberModal = (row: any) => {
+        setModalSerialNumber({ open: true, row });
+    };
+
+    // Saat user pilih serial number di modal:
+    const handleSelectSerialNumber = (rowId: string, serial: string, warehouseName: string, poNumber: string) => {
+        setSerialNumberData((prev: any) => ({
+            ...prev,
+            serialNumber: {
+                ...prev.serialNumber,
+                [rowId]: serial
+            },
+            productFrom: {
+                ...prev.productFrom,
+                [rowId]: `${warehouseName} - ${poNumber}`
+            }
+        }));
+
+        // Tutup modal
+        setModalSerialNumber({ open: false, row: null });
+    };
+
     const columnsSerialNumber: TableColumnsType<any> = [
         {
             title: 'SKU',
@@ -162,25 +202,26 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
                 return a?.serial_number.localeCompare(b?.serial_number)
             },
             render: (_: any, row: any) => {
-                return <div className="flex flex-col w-full">
-                    <div className="flex justify-start gap-1">
-                        <span>{row.serial_number}</span>
-                    </div>
-                </div>
+                return <Input
+                    id='serialNumber'
+                    value={serialNumberData.serialNumber[row.id] || ''}
+                    type='text'
+                    placeholder="Select Serial Number"
+                    onClick={() => {
+                        // Buka modal dan kirim row.id
+                        openSerialNumberModal(row);
+                    }}
+                />
             }
         },
         {
-            title: 'Stock',
-            dataIndex: 'stock',
+            title: 'Product From',
+            dataIndex: 'product_from',
             sorter: (a: any, b: any) => {
-                return a?.stock - b?.stock
+                return a?.product_form.localeCompare(b?.product_form)
             },
             render: (_: any, row: any) => {
-                return <div className="flex flex-col w-full">
-                    <div className="flex justify-start gap-1">
-                        <span>{row.stock}</span>
-                    </div>
-                </div>
+                return serialNumberData.productFrom[row.id] || ''
             }
         },
         {
@@ -190,11 +231,18 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
                 return a?.pick - b?.pick
             },
             render: (_: any, row: any) => {
-                return <div className="flex flex-col w-full">
-                    <div className="flex justify-start gap-1">
-                        <span>{row.pick}</span>
-                    </div>
-                </div>
+                const isChecked = serialNumberData.pickId.includes(row.id);
+                return <CheckboxInput
+                    checked={isChecked}
+                    onChange={(checked) => {
+                        setSerialNumberData((prev: any) => ({
+                            ...prev,
+                            pickId: checked
+                                ? [...prev.pickId, row.id] // add
+                                : prev.pickId.filter((id: any) => id !== row.id) // remove
+                        }));
+                    }}
+                />
             }
         },
         {
@@ -204,11 +252,18 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
                 return a?.pack - b?.pack
             },
             render: (_: any, row: any) => {
-                return <div className="flex flex-col w-full">
-                    <div className="flex justify-start gap-1">
-                        <span>{row.pack}</span>
-                    </div>
-                </div>
+                const isChecked = serialNumberData.packId.includes(row.id);
+                return <CheckboxInput
+                    checked={isChecked}
+                    onChange={(checked) => {
+                        setSerialNumberData((prev: any) => ({
+                            ...prev,
+                            packId: checked
+                                ? [...prev.packId, row.id] // add
+                                : prev.packId.filter((id: any) => id !== row.id) // remove
+                        }));
+                    }}
+                />
             }
         },
 
@@ -336,6 +391,75 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
         },
     ]
 
+    const columnWarehouse: TableColumnsType<any> = [
+        {
+            title: 'Warehouse Location',
+            dataIndex: 'location',
+            sorter: (a: any, b: any) => {
+                return a?.location.localeCompare(b?.location)
+            },
+            render: (_: any, row: any) => {
+                return <div className="flex flex-col w-full">
+                    <div className="flex justify-start gap-1">
+                        <span>{row.location}</span>
+                    </div>
+                </div>
+            }
+        },
+        {
+            title: 'Serial Number',
+            dataIndex: 'serial_number',
+            sorter: (a: any, b: any) => {
+                return a?.serial_number.localeCompare(b?.serial_number)
+            },
+            render: (_: any, row: any) => {
+                return <div className="flex flex-col w-full">
+                    <div className="flex justify-start gap-1">
+                        <span>{row.serial_number}</span>
+                    </div>
+                </div>
+            }
+        },
+        {
+            title: 'PO Number',
+            dataIndex: 'po_number',
+            sorter: (a: any, b: any) => {
+                const aName = a?.supplier?.[0]?.name || '';
+                const bName = b?.supplier?.[0]?.name || '';
+                return a?.po_number.localeCompare(b?.po_number);
+            },
+            render: (_: any, row: any) => {
+                return row.po_number
+            }
+        },
+        {
+            title: 'Date',
+            dataIndex: 'date',
+            sorter: (a: any, b: any) => {
+                return dayjs(a.created_at).valueOf() - dayjs(b.created_at).valueOf();
+            },
+            render: (_: any, row: any) => {
+                return row.date
+            }
+        },
+        {
+            render: (_: any, row: any) => {
+                return <Button
+                    label='Choose'
+                    onClick={() => handleSelectSerialNumber(
+                        modalSerialNumber.row?.id!,
+                        row.serial_number,
+                        row.location,
+                        row.po_number
+                    )}
+                    shape='round'
+                    hasHeight={false}
+                />
+            }
+        },
+    ]
+
+
     const invoiceData = {
         invoiceNumber: 'INV-2025-001',
         customerName: 'John Doe',
@@ -358,8 +482,48 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
     const handlePreview = async (data: any) => {
         await previewAndPrintPDF(data, 'order');
     }
+
+    console.log(modalSerialNumber)
     return (
         <>
+            <Modal
+                open={modalSerialNumber.open}
+                handleCancel={() => setModalSerialNumber({ open: false, row: null })}
+                title='Choose Serial Number'
+                subtitle='Please choose serial number.'
+            >
+                <div className='flex justify-between mb-3'>
+                    <div className='flex flex-col'>
+                        <span className='text-2xl font-semibold'>{modalSerialNumber?.row?.sku}</span>
+                        <span>{modalSerialNumber?.row?.name}</span>
+                    </div>
+                    <div className='flex gap-2 items-center'>
+                        <SearchTable
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            onSearch={() => {
+                                console.log('Searching for:', search)
+                            }}
+                        />
+                        <ShowPageSize
+                            pageSize={pageSizeWarehouse}
+                            onChange={setPageSizeWarehouse}
+                        />
+                    </div>
+                </div>
+                <div className='flex flex-col gap-3'>
+                    <Table
+                        columns={columnWarehouse}
+                        dataSource={modalSerialNumber?.row?.warehouses}
+                    />
+                    <Pagination
+                        current={currentPageWarehouse}
+                        total={modalSerialNumber?.row?.warehouses.length}
+                        pageSize={pageSizeWarehouse}
+                        onChange={(page) => setCurrentPageWarehouse(page)}
+                    />
+                </div>
+            </Modal>
             <Modal
                 open={isOpenModalSupplier}
                 title='Supplier'
@@ -370,10 +534,10 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
                     dataSource={data?.product}
                 />
             </Modal>
-            <div className="mt-6 mx-5 mb-0">
+            <div className="mt-6 mx-6 mb-0">
                 <div className='flex justify-between items-center'>
                     <div>
-                        <h1 className='text-xl font-bold'>
+                        <h1 className='text-2xl font-bold'>
                             Order Detail
                         </h1>
                         <Breadcrumb
@@ -531,29 +695,12 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
                         </div>
                     </div>
                     <Divider />
-                    <div className='grid gap-4'>
+                    <div className='grid gap-6'>
                         <div>
                             <h4 className='text-xl font-semibold'> Serial Number</h4>
                             <Table
                                 columns={columnsSerialNumber}
-                                dataSource={[
-                                    {
-                                        sku: '0317-8471',
-                                        name: 'U-Prox Keyfob - White SMART9412',
-                                        serial_number: 'SN-UPX-0001',
-                                        stock: 200,
-                                        pick: 3,
-                                        pack: 3
-                                    },
-                                    {
-                                        sku: '0317-8471',
-                                        name: 'U-Prox Keyfob - White SMART9412',
-                                        serial_number: 'SN-UPX-0002',
-                                        stock: 48,
-                                        pick: 3,
-                                        pack: 3
-                                    }
-                                ]}
+                                dataSource={data?.serialNumbers}
                             />
                         </div>
                         <div>

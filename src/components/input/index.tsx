@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Input } from 'antd';
 
 type inputProps = {
-    label: string
+    label?: string
     placeholder?: string
     id: string
     value: string | number | string[]
@@ -21,6 +21,7 @@ type inputProps = {
     suffix?: React.ReactNode;
     required?: boolean;
     segmented?: any
+    onClick?: any
 }
 
 const index = ({ label,
@@ -41,7 +42,8 @@ const index = ({ label,
     prefix,
     suffix,
     required,
-    segmented
+    segmented,
+    onClick
 }: inputProps) => {
 
     return (
@@ -74,6 +76,7 @@ const index = ({ label,
                     readOnly={readOnly}
                     suffix={suffix}
                     prefix={prefix}
+                    onClick={onClick}
                 />
                 {errorMessage && (
                     <p className="text-red-500 text-xs mt-1">{errorMessage}</p>

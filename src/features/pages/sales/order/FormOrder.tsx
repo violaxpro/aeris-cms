@@ -16,7 +16,7 @@ import { useNotificationAntd } from '@/components/toast';
 import ProductInput, { ProductForm } from '../ProductInput';
 import { PlusOutlined, PercentageOutlined } from '@ant-design/icons';
 import { DollarIcon } from '@public/icon';
-import { Divider } from 'antd';
+import Divider from '@/components/divider'
 import Segmented from '@/components/segmented'
 import OrderSummary from '../OrderSummary';
 import Image from 'next/image';
@@ -394,16 +394,16 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                 handleChange={handleChangeCustomer}
                 formData={formCustomer}
             />
-            <div className="mt-6 mx-4 mb-0">
-                <h1 className="text-xl font-bold mb-4">{mode == 'create' ? 'Create Order' : 'Edit Order'}</h1>
+            <div className="mt-6 mx-6 mb-0">
+                <h1 className="text-2xl font-bold mb-4">{mode == 'create' ? 'Create Order' : 'Edit Order'}</h1>
                 <Breadcrumb items={breadcrumb} />
                 <Divider />
             </div>
 
             <Content className="mb-0">
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
-                    <div className='flex flex-col gap-1'>
-                        <h1 className='text-lg font-bold'>Customer Details</h1>
+                    <div className='flex flex-col gap-3'>
+                        <h1 className='text-xl font-semibold'>Customer Details</h1>
                         <Divider />
                         <div className='grid gap-3'>
                             <div className={`grid md:grid-cols-[2fr_1fr_repeat(3,1fr)] gap-4 mt-2`}>
@@ -435,7 +435,7 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                 <Button
                                                     label='Add New Customer'
                                                     onClick={() => setOpenModalCustomer(true)}
-                                                    btnClassname='w-full'
+                                                    hasWidth
                                                 />
                                             </div>
 
@@ -521,12 +521,12 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                 <Button
                                                     label='Add One of Billing Address'
                                                     onClick={() => handleOpenModal('oneof', 'billing')}
-                                                    btnClassname='w-full'
+                                                    hasWidth
                                                 />
                                                 <Button
                                                     label='Add Billing Address'
                                                     onClick={() => handleOpenModal('new', 'billing')}
-                                                    btnClassname='w-full'
+                                                    hasWidth
                                                 />
                                             </div>
 
@@ -550,12 +550,12 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                 <Button
                                                     label='Add One of Shipping Address'
                                                     onClick={() => handleOpenModal('oneof', 'shipping')}
-                                                    btnClassname='w-full'
+                                                    hasWidth
                                                 />
                                                 <Button
                                                     label='Add Shipping Address'
                                                     onClick={() => handleOpenModal('new', 'shipping')}
-                                                    btnClassname='w-full'
+                                                    hasWidth
                                                 />
                                             </div>
 
@@ -582,8 +582,8 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             </div>
                         </div>
 
-                        <div className='md:my-10'>
-                            <h1 className='text-lg font-bold'>Product List</h1>
+                        <div className='flex flex-col gap-3 my-5'>
+                            <h1 className='text-xl font-semibold'>Product List</h1>
                             <Divider />
                             {
                                 productForm.map((item, index) => {
@@ -600,7 +600,6 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     )
                                 })
                             }
-                            <Divider />
                             <div className='flex justify-end'>
                                 <Button
                                     label='Add Product'
@@ -692,7 +691,7 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                         </div>
 
                         <div className='grid md:grid-cols-12 gap-3 mt-5'>
-                            <div className='grid grid-cols-2 col-span-9 gap-3'>
+                            <div className='grid md:grid-cols-2 md:col-span-9 gap-3'>
                                 <Textarea
                                     id='delivery_note'
                                     label='Delivery Notes'
@@ -709,7 +708,7 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 />
                             </div>
 
-                            <div className='grid col-span-3 gap-1 '>
+                            <div className='grid md:col-span-3 gap-1 '>
                                 <OrderSummary
                                     profitHidden={profitHidden}
                                     onReveal={() => setProfitHidden(false)}
@@ -732,7 +731,7 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             onClick={() => router.push(routes.eCommerce.order)}
                         />
                         <Button
-                            label={mode == 'create' ? 'Create Quote' : 'Edit Quote'}
+                            label={mode == 'create' ? 'Create Order' : 'Edit Order'}
                             onClick={handleSubmit}
                         />
                     </div>

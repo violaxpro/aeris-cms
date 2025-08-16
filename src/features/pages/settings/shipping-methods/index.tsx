@@ -8,6 +8,7 @@ import FormGroup from '@/components/form-group'
 import { Content } from 'antd/es/layout/layout'
 import CustomSwitch from '@/components/switch/CustomSwitch';
 import { PowerIcon, LampIcon } from '@public/icon'
+import Divider from '@/components/divider'
 
 const index = () => {
     const [formData, setFormData] = useState({
@@ -77,7 +78,7 @@ const index = () => {
                                 size='md'
                             />
                         </div>
-                        <hr className='border-[#E5E7EB]' />
+                        <Divider />
                         <div className={`col-span-12 md:col-span-8 grid grid-cols-2 gap-4`}>
                             <Input
                                 id='label_free_shipping'
@@ -115,7 +116,7 @@ const index = () => {
                                 size='md'
                             />
                         </div>
-                        <hr className='border-[#E5E7EB]' />
+                        <Divider />
                         <div className={`col-span-12 md:col-span-8 grid grid-cols-2 gap-4`}>
                             <Input
                                 id='label_local_pickup'
@@ -153,7 +154,7 @@ const index = () => {
                                 size='md'
                             />
                         </div>
-                        <hr className='border-[#E5E7EB]' />
+                        <Divider />
                         <div className={`col-span-12 md:col-span-8 grid grid-cols-2 gap-4`}>
                             <Input
                                 id='label_flat_rate'

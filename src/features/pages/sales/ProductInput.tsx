@@ -12,6 +12,7 @@ import { TrashIcon, TrashIconRed } from '@public/icon';
 import Button from '@/components/button'
 import Modal from '@/components/modal'
 import { CalculatorOutlined } from '@ant-design/icons';
+import Divider from '@/components/divider'
 export interface ProductForm {
     sku: string
     name: string
@@ -56,6 +57,7 @@ const ProductInput = ({
 }: ProductInputProps) => {
     const [optionsTax] = useAtom(taxSetAtom)
     const [items, setItems] = useState([])
+    const [buyPriceHidden, setBuyPriceHidden] = useState(true)
     const [taxError, setTaxError] = useState('');
     const [openModal, setOpenModal] = useState(false)
     const [modalType, setModalType] = useState<'product' | 'service' | null>(null)
@@ -175,7 +177,7 @@ const ProductInput = ({
 
     console.log(optionsTax)
     return (
-        <div>
+        <div className='flex flex-col gap-4'>
             <Modal
                 open={openModal}
                 title={`Create New ${modalType == 'product' ? 'Product' : 'Service'}`}
@@ -212,7 +214,7 @@ const ProductInput = ({
                             className='mb-1'
                             required
                         />
-                        <div className={`grid ${modalType == 'product' ? 'grid-cols-4' : 'grid-cols-2'} gap-3`}>
+                        <div className={`grid ${modalType == 'product' ? 'md:grid-cols-4 grid-cols-2' : 'grid-cols-2'} gap-3`}>
                             <Input
                                 id='buy_price'
                                 type='number'
@@ -301,7 +303,7 @@ const ProductInput = ({
 
 
             </Modal >
-            <div className='grid md:grid-cols-[2fr_2fr_1fr_1fr_1fr_1fr_1fr_50px] items-center gap-4 mb-2'>
+            <div className='grid md:grid-cols-[2fr_2fr_1fr_1fr_1fr_1fr_1fr_50px] grid-cols-2 items-center md:gap-4 gap-6 mb-2'>
                 <SelectInput
                     id='sku'
                     label='SKU'
@@ -316,16 +318,16 @@ const ProductInput = ({
                     popupRender={(options: any) => (
                         <>
                             {options}
-                            <div className='p-4 flex gap-3'>
+                            <div className='flex gap-3 p-2'>
                                 <Button
                                     label='Add Product'
                                     onClick={() => handleOpenModal('product')}
-                                    btnClassname='w-auto'
+                                    hasWidth
                                 />
                                 <Button
                                     label='Add Service'
                                     onClick={() => handleOpenModal('service')}
-                                    btnClassname='w-auto'
+                                    hasWidth
                                 />
                             </div>
 
@@ -355,16 +357,23 @@ const ProductInput = ({
                     }))}
                     required
                 /> */}
-                <Input
-                    id='price'
-                    type='text'
-                    label='Price'
-                    value={productForm.price}
-                    onChange={handleProductChange}
-                    className='mb-1'
-                    required
-
-                />
+                <div className='flex flex-col justify-start h-15'>
+                    <Input
+                        id='price'
+                        type='text'
+                        label='Price'
+                        value={productForm.price}
+                        onChange={handleProductChange}
+                        required
+                    />
+                    <div className="flex justify-start gap-1">
+                        {
+                            buyPriceHidden ? <button onClick={() => setBuyPriceHidden(false)} className="text-[#3666AA] font-medium cursor-pointer">
+                                Reveal
+                            </button> : <span onClick={() => setBuyPriceHidden(true)} className='cursor-pointer text-xs'>Buy Price : 100</span>
+                        }
+                    </div>
+                </div>
                 {/* <Input
                     id='buying_price'
                     type='text'
@@ -436,6 +445,7 @@ const ProductInput = ({
                     </div>
                 }
             </div>
+            <Divider />
         </div >
 
     )
