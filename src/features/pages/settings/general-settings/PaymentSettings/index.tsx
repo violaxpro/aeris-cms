@@ -21,6 +21,7 @@ import ModalPaypalPayment from './ModalPaypalPayment';
 import ModalApplePayment from './ModalApplePayment';
 import ModalGooglePayment from './ModalGooglePayment';
 import ModalBankTransfer from './ModalBankTransfer';
+import { optionCurrency } from '@/plugins/utils/currency';
 
 const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd();
@@ -217,14 +218,6 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                         >
                             <div className='grid md:grid-cols-2 gap-3'>
                                 <Input
-                                    id='support_currency'
-                                    label='Supported Currency'
-                                    type='text'
-                                    placeholder='Supported Currency'
-                                    onChange={handleChange}
-                                    value={formData.support_currency}
-                                />
-                                <Input
                                     id='default_currency'
                                     label='Default Currency'
                                     type='text'
@@ -232,7 +225,16 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     onChange={handleChange}
                                     value={formData.default_currency}
                                 />
-                                <Input
+                                <SelectInput
+                                    id='support_currency'
+                                    label='Supported Currency'
+                                    placeholder='Supported Currency'
+                                    onChange={handleChange}
+                                    value={formData.support_currency}
+                                    options={optionCurrency}
+                                />
+
+                                {/* <Input
                                     id='rate_service'
                                     label='Exchange Rate Service'
                                     type='text'
@@ -248,7 +250,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                         auto_refresh: e
                                     })}
                                     checked={formData.auto_refresh}
-                                />
+                                /> */}
                             </div>
                         </FormGroup>
                         <FormGroup title="Payment Gateaway" description='Payment gateaway settings' childClassName='flex flex-col gap-3' className='mt-5'>

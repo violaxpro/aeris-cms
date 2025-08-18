@@ -31,8 +31,9 @@ import StatusBadge from '@/components/badge/badge-status'
 import ButtonFilter from '@/components/button/ButtonAction'
 import ButtonDelete from '@/components/button/ButtonAction'
 import Pagination from '@/components/pagination'
-import { MoreIcon, TrashIconRed, PrintIconBlack, EmailBlackIcon, StatusIcon, DuplicateIcon } from '@public/icon'
+import { MoreIcon, TrashIconRed, PrintIconBlack, EmailBlackIcon, StatusIcon, DuplicateIcon, CopyPasteIcon } from '@public/icon'
 import ButtonAction from '@/components/button/ButtonAction'
+import ConfirmModal from '@/components/modal/ConfirmModal'
 
 const index = ({ quoteData }: { quoteData?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
@@ -51,6 +52,8 @@ const index = ({ quoteData }: { quoteData?: any }) => {
     const [currentOrder, setCurrentOrder] = useState<any>(null)
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
+    const [openModalDelete, setOpenModalDelete] = useState(false)
+    const [deletedData, setDeletedData] = useState<any>(null)
 
     const handleDateChange = (date: any, dateString: string | string[]) => {
         console.log('Selected date:', dateString);
@@ -85,6 +88,11 @@ const index = ({ quoteData }: { quoteData?: any }) => {
         // } catch (error) {
         //     console.error(error)
         // }
+    }
+
+    const handleOpenModalDelete = (data: any) => {
+        setOpenModalDelete(true)
+        setDeletedData(data)
     }
 
     const handleClickModalApproved = () => {
@@ -171,11 +179,14 @@ const index = ({ quoteData }: { quoteData?: any }) => {
             dataIndex: 'quote_number',
             sorter: (a: any, b: any) => a?.quote_number.localeCompare(b?.quote_number),
             render: (_: any, row: any) => {
-                return row.status !== 'Draft'
-                    ? <Link href={routes.eCommerce.detailQuote(row.quote_number)}>
-                        {row.status !== 'Draft' ? row.quote_number : '-'}
-                    </Link>
-                    : <span>-</span>
+                return <Link href={routes.eCommerce.detailQuote(row.quote_number)}>
+                    {row.quote_number || '-'}
+                </Link>
+                // return row.status !== 'Draft'
+                //     ? <Link href={routes.eCommerce.detailQuote(row.quote_number)}>
+                //         {row.status !== 'Draft' ? row.quote_number : '-'}
+                //     </Link>
+                //     : <span>-</span>
             }
         },
         {
@@ -193,10 +204,22 @@ const index = ({ quoteData }: { quoteData?: any }) => {
             render: (_: any, row: any) => {
                 return <div className="flex flex-col w-full">
                     <div className="flex justify-start gap-1">
-                        <span>{row?.user?.email}</span>
+                        <span>{row.email}</span>
+                        <Image
+                            src={CopyPasteIcon}
+                            alt='copypaste-icon'
+                            width={10}
+                            height={10}
+                        />
                     </div>
                     <div className="flex justify-start gap-1">
-                        <span>{row?.user?.mobile_number}</span>
+                        <span>{row.mobile_number}</span>
+                        <Image
+                            src={CopyPasteIcon}
+                            alt='copypaste-icon'
+                            width={10}
+                            height={10}
+                        />
                     </div>
                 </div>
             }
@@ -205,9 +228,7 @@ const index = ({ quoteData }: { quoteData?: any }) => {
             title: 'Status',
             dataIndex: 'status',
             sorter: (a: any, b: any) => {
-                const status = ['Draft', 'Approved', 'Processing', 'Awaiting Stock', 'Packed', 'Ready for Pickup', 'Shipped', 'In Transit',
-                    'Out of Delivery'
-                ];
+                const status = ['Draft', 'Accepted', 'Invoiced', 'Declined', 'Sent', 'Expired'];
                 return status.indexOf(a.status) - status.indexOf(b.status
                 )
             },
@@ -229,7 +250,7 @@ const index = ({ quoteData }: { quoteData?: any }) => {
             title: 'Expiry Date',
             dataIndex: 'expiry_date',
             sorter: (a: any, b: any) => {
-                return new Date(a?.expiry_date).getTime() - new Date(b?.expiry_date).getTime()
+                return dayjs(a?.expiry_date).valueOf() - dayjs(b?.expiry_date).valueOf()
             },
             render: (_: any, row: any) => {
                 const date = dayjs(row.expiry_date).format("DD/MM/YYYY")
@@ -244,7 +265,7 @@ const index = ({ quoteData }: { quoteData?: any }) => {
             title: 'Issue Date',
             dataIndex: 'date',
             sorter: (a: any, b: any) => {
-                return new Date(a?.date).getTime() - new Date(b?.date).getTime()
+                return dayjs(a?.date).valueOf() - dayjs(b?.date).valueOf()
             },
             render: (_: any, row: any) => {
                 const date = dayjs(row.date).format("DD/MM/YYYY")
@@ -263,7 +284,7 @@ const index = ({ quoteData }: { quoteData?: any }) => {
             title: 'Modified',
             dataIndex: 'modified',
             sorter: (a: any, b: any) => {
-                return new Date(a?.date).getTime() - new Date(b?.date).getTime()
+                return dayjs(a?.date).valueOf() - dayjs(b?.date).valueOf()
             },
             render: (_: any, row: any) => {
                 const date = dayjs(row?.date).format("DD/MM/YYYY")
@@ -312,6 +333,14 @@ const index = ({ quoteData }: { quoteData?: any }) => {
                                 Edit
                             </Link>
                         </Menu.Item>
+                        {
+                            row.status == 'Expired' &&
+                            <Menu.Item key="renew">
+                                <Link href={routes.eCommerce.editQuote(row.id)}>
+                                    Renew
+                                </Link>
+                            </Menu.Item>
+                        }
                         <Menu.Item key="sendEmail">
                             <Link href={routes.eCommerce.sendEmail(row.id)}>
                                 Send Email
@@ -344,7 +373,7 @@ const index = ({ quoteData }: { quoteData?: any }) => {
                 );
 
                 return (
-                    <div className='flex items-center gap-2'>
+                    <div className='flex items-center gap-2' onClick={(e) => e.stopPropagation()}>
                         <Dropdown overlay={menu} trigger={['click']} >
                             <ButtonIcon
                                 color='primary'
@@ -358,7 +387,10 @@ const index = ({ quoteData }: { quoteData?: any }) => {
                             variant='filled'
                             size="small"
                             icon={TrashIconRed}
-                        // onClick={() => setOpenModalDelete(true)}
+                            onClick={(e) => {
+                                e.stopPropagation()
+                                handleOpenModalDelete(row.id)
+                            }}
                         />
                     </div>
 
@@ -392,10 +424,17 @@ const index = ({ quoteData }: { quoteData?: any }) => {
     return (
         <>
             {contextHolder}
-            <div className="mt-6 mx-5 mb-0">
+            <ConfirmModal
+                open={openModalDelete}
+                onCancel={() => setOpenModalDelete(false)}
+                onSave={handleDelete}
+                action='Delete'
+                text='Are you sure you want to delete this order?'
+            />
+            <div className="mt-6 mx-6 mb-0">
                 <div className='flex justify-between items-center'>
                     <div>
-                        <h1 className='text-xl font-bold'>
+                        <h1 className='text-2xl font-bold'>
                             Quote
                         </h1>
                         <Breadcrumb
@@ -514,6 +553,8 @@ const index = ({ quoteData }: { quoteData?: any }) => {
                         withSelectableRows
                         selectedRowKeys={selectedRowKeys}
                         onSelectChange={setSelectedRowKeys}
+                        detailRoutes={(slug: any) => routes.eCommerce.detailQuote(slug)}
+                        getRowValue={(record: any) => record.quote_number}
                     // pagination={{
                     //     pageSize,
                     //     onShowSizeChange: (_, size) => setPageSize(size),

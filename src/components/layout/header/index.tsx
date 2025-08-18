@@ -299,7 +299,7 @@ export default function HeaderLayout({ onOpenDrawer }: { onOpenDrawer?: () => vo
                     <Image src={logoImg} alt="logo" width={120} height={40} />
                 </div>
             } */}
-                <div className="flex items-center demo-logo-vertical my-2 gap-6 ml-2">
+                <div className="flex items-center demo-logo-vertical my-2 gap-6 ml-2 md:w-80">
                     <SearchInput
                         placeholder="Search..."
                         onSearch={(value) => console.log(value)}

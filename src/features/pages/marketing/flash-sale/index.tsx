@@ -115,14 +115,20 @@ const index = ({ flashSaleData }: { flashSaleData?: any }) => {
                             variant='filled'
                             size="small"
                             icon={PencilIconBlue}
-                            onClick={() => router.push(routes.eCommerce.editFlashSale(row.id))}
+                            onClick={(e) => {
+                                e.stopPropagation()
+                                router.push(routes.eCommerce.editFlashSale(row.id))
+                            }}
                         />
                         <ButtonIcon
                             color='danger'
                             variant='filled'
                             size="small"
                             icon={TrashIconRed}
-                            onClick={() => handleOpenModalDelete(row.id)}
+                            onClick={(e) => {
+                                e.stopPropagation()
+                                handleOpenModalDelete(row.id)
+                            }}
                         />
                     </div >
                 );
@@ -152,7 +158,7 @@ const index = ({ flashSaleData }: { flashSaleData?: any }) => {
             <div className="mt-6 mx-6 mb-0">
                 <div className='flex justify-between items-center'>
                     <div>
-                        <h1 className='text-xl font-bold'>
+                        <h1 className='text-2xl font-bold'>
                             Flash Sale
                         </h1>
                         <Breadcrumb

@@ -131,6 +131,8 @@ export { default as GalleryIcon } from './GalleryIcon.svg'
 export { default as ProgressIcon } from './ProgressIcon.svg'
 export { default as PauseRoundedYellowIcon } from './PauseRoundedYellowIcon.svg'
 export { default as PlayNextRoundedYellowIcon } from './PlayNextRoundedYellowIcon.svg'
+export { default as SearchHeaderIcon } from './SearchHeaderIcon.svg'
+export { default as TrackingIcon } from './TrackingIcon.svg'
 
 
 

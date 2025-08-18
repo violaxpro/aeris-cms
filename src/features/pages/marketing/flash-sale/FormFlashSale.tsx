@@ -175,53 +175,74 @@ const FormFlashSale: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             {
                                 product.map((item: any, index: number) => {
                                     return (
-                                        <div key={index} className='col-span-full border p-6 rounded-xl' style={{ borderColor: '#E5E7EB' }}  >
-                                            <div className='col-span-full flex-col gap-3'>
-                                                <div className='w-full flex justify-between items-center'>
-                                                    <h4 className='text-lg font-semibold'>Product Information</h4>
-                                                    <ButtonIcon
-                                                        icon={CancelGreyIcon}
-                                                        shape='circle'
-                                                        variant='filled'
-                                                        color='default'
-                                                        onClick={() => handleRemoveProduct(index)}
-                                                    />
-                                                </div>
-                                                <div className='flex gap-3'>
-                                                    <div className='w-full grid md:grid-cols-6 gap-3'>
-                                                        <div className='col-span-full grid md:grid-cols-[2fr_repeat(3,1fr)] gap-3'>
-                                                            <SelectInput
-                                                                id='product_name'
-                                                                label='Product Name'
-                                                                value={item.product_name}
-                                                                onChange={(value: any) => handleChangeProduct(index, "product_name", value)}
-                                                                options={optionProducts}
-                                                            />
-                                                            <Input
-                                                                id='buy_price'
-                                                                label='Buy Price'
-                                                                type='text'
-                                                                value={item.buy_price}
-                                                                onChange={(e) => handleChangeProduct(index, e.target.id, e.target.value)}
-                                                                placeholder='Input Buy Price'
-                                                            />
-                                                            <Input
-                                                                id='rrp_price'
-                                                                label='RRP Price'
-                                                                type='text'
-                                                                value={item.rrp_price}
-                                                                onChange={(e) => handleChangeProduct(index, e.target.id, e.target.value)}
-                                                                placeholder='Input RRP Price'
-                                                            />
-                                                            <Input
-                                                                id='trade_price'
-                                                                label='Trade Price'
-                                                                type='text'
-                                                                value={item.trade_price}
-                                                                onChange={(e) => handleChangeProduct(index, e.target.id, e.target.value)}
-                                                                placeholder='Input Trade Price'
-                                                            />
+                                        <div key={index} className='col-span-full border p-6 rounded-xl border-[#E5E7EB]'>
+                                            <div className='col-span-full flex flex-col gap-6'>
+                                                <div className='flex flex-col'>
+                                                    <div className='w-full flex justify-between items-center'>
+                                                        <h4 className='text-lg font-semibold'>Product Information</h4>
+                                                        <ButtonIcon
+                                                            icon={CancelGreyIcon}
+                                                            shape='circle'
+                                                            variant='filled'
+                                                            color='default'
+                                                            onClick={() => handleRemoveProduct(index)}
+                                                        />
+                                                    </div>
+                                                    <div className='flex gap-3'>
+                                                        <div className='w-full grid md:grid-cols-6 gap-3'>
+                                                            <div className='col-span-full grid md:grid-cols-[3fr_1fr] gap-3'>
+                                                                <SelectInput
+                                                                    id='product_name'
+                                                                    label='Product Name'
+                                                                    value={item.product_name}
+                                                                    onChange={(value: any) => handleChangeProduct(index, "product_name", value)}
+                                                                    options={optionProducts}
+                                                                />
+                                                                <Input
+                                                                    id='quantity'
+                                                                    label='Quantity'
+                                                                    type='text'
+                                                                    value={item.quantity}
+                                                                    onChange={(e) => handleChangeProduct(index, e.target.id, e.target.value)}
+                                                                    placeholder='Input Quantity'
+                                                                />
+                                                            </div>
                                                         </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className='w-full flex flex-col'>
+                                                    <h4 className='text-lg font-semibold'>Price Information</h4>
+                                                    <div className='w-full grid md:grid-cols-4 gap-3'>
+                                                        <Input
+                                                            id='buy_price'
+                                                            label='Buy Price'
+                                                            type='text'
+                                                            value={item.buy_price}
+                                                            onChange={(e) => handleChangeProduct(index, e.target.id, e.target.value)}
+                                                            placeholder='Input Buy Price'
+                                                            prefix={<span className='text-gray-400'>$</span>}
+                                                        />
+                                                        <Input
+                                                            id='rrp_price'
+                                                            label='RRP Price'
+                                                            type='text'
+                                                            value={item.rrp_price}
+                                                            onChange={(e) => handleChangeProduct(index, e.target.id, e.target.value)}
+                                                            placeholder='Input RRP Price'
+                                                            prefix={<span className='text-gray-400'>$</span>}
+
+                                                        />
+                                                        <Input
+                                                            id='trade_price'
+                                                            label='Trade Price'
+                                                            type='text'
+                                                            value={item.trade_price}
+                                                            onChange={(e) => handleChangeProduct(index, e.target.id, e.target.value)}
+                                                            placeholder='Input Trade Price'
+                                                            prefix={<span className='text-gray-400'>$</span>}
+
+                                                        />
                                                         <Input
                                                             id='silver_price'
                                                             label='Silver Price'
@@ -229,6 +250,8 @@ const FormFlashSale: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                             value={item.silver_price}
                                                             onChange={(e) => handleChangeProduct(index, e.target.id, e.target.value)}
                                                             placeholder='Input Silver Price'
+                                                            prefix={<span className='text-gray-400'>$</span>}
+
                                                         />
                                                         <Input
                                                             id='gold_price'
@@ -237,6 +260,8 @@ const FormFlashSale: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                             value={item.gold_price}
                                                             onChange={(e) => handleChangeProduct(index, e.target.id, e.target.value)}
                                                             placeholder='Input Gold Price'
+                                                            prefix={<span className='text-gray-400'>$</span>}
+
                                                         />
                                                         <Input
                                                             id='platinum_price'
@@ -245,6 +270,8 @@ const FormFlashSale: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                             value={item.platinum_price}
                                                             onChange={(e) => handleChangeProduct(index, e.target.id, e.target.value)}
                                                             placeholder='Input Platinum Price'
+                                                            prefix={<span className='text-gray-400'>$</span>}
+
                                                         />
                                                         <Input
                                                             id='diamond_price'
@@ -253,6 +280,8 @@ const FormFlashSale: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                             value={item.diamond_price}
                                                             onChange={(e) => handleChangeProduct(index, e.target.id, e.target.value)}
                                                             placeholder='Input Diamond Price'
+                                                            prefix={<span className='text-gray-400'>$</span>}
+
                                                         />
                                                         <Input
                                                             id='flash_sale_price'
@@ -261,17 +290,12 @@ const FormFlashSale: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                             value={item.flash_sale_price}
                                                             onChange={(e) => handleChangeProduct(index, e.target.id, e.target.value)}
                                                             placeholder='Input Flash Sale Price'
-                                                        />
-                                                        <Input
-                                                            id='quantity'
-                                                            label='Quantity'
-                                                            type='text'
-                                                            value={item.quantity}
-                                                            onChange={(e) => handleChangeProduct(index, e.target.id, e.target.value)}
-                                                            placeholder='Input Quantity'
+                                                            prefix={<span className='text-gray-400'>$</span>}
+
                                                         />
                                                     </div>
                                                 </div>
+
                                             </div>
                                         </div>
                                     )

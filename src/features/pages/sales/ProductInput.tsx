@@ -12,7 +12,6 @@ import { TrashIcon, TrashIconRed } from '@public/icon';
 import Button from '@/components/button'
 import Modal from '@/components/modal'
 import { CalculatorOutlined } from '@ant-design/icons';
-import Divider from '@/components/divider'
 export interface ProductForm {
     sku: string
     name: string
@@ -58,6 +57,7 @@ const ProductInput = ({
     const [optionsTax] = useAtom(taxSetAtom)
     const [items, setItems] = useState([])
     const [buyPriceHidden, setBuyPriceHidden] = useState(true)
+    const [profitHidden, setprofitHidden] = useState(true)
     const [taxError, setTaxError] = useState('');
     const [openModal, setOpenModal] = useState(false)
     const [modalType, setModalType] = useState<'product' | 'service' | null>(null)
@@ -303,7 +303,7 @@ const ProductInput = ({
 
 
             </Modal >
-            <div className='grid md:grid-cols-[2fr_2fr_1fr_1fr_1fr_1fr_1fr_50px] grid-cols-2 items-center md:gap-4 gap-6 mb-2'>
+            <div className='grid md:grid-cols-[1fr_3fr_1fr_1fr_1fr_1fr_1fr_50px] grid-cols-2 md:gap-4 gap-6 mb-2'>
                 <SelectInput
                     id='sku'
                     label='SKU'
@@ -340,7 +340,7 @@ const ProductInput = ({
                 <Input
                     id='name'
                     type='text'
-                    label='Title'
+                    label='Title Product / Short Description Service *'
                     value={productForm.name}
                     onChange={handleProductChange}
                     className='mb-1'
@@ -357,7 +357,7 @@ const ProductInput = ({
                     }))}
                     required
                 /> */}
-                <div className='flex flex-col justify-start h-15'>
+                <div className='flex flex-col items-start'>
                     <Input
                         id='price'
                         type='text'
@@ -366,13 +366,24 @@ const ProductInput = ({
                         onChange={handleProductChange}
                         required
                     />
-                    <div className="flex justify-start gap-1">
-                        {
-                            buyPriceHidden ? <button onClick={() => setBuyPriceHidden(false)} className="text-[#3666AA] font-medium cursor-pointer">
+
+                    {
+                        buyPriceHidden ?
+                            <button onClick={() => setBuyPriceHidden(false)} className="text-[#3666AA] font-medium cursor-pointer">
                                 Reveal
-                            </button> : <span onClick={() => setBuyPriceHidden(true)} className='cursor-pointer text-xs'>Buy Price : 100</span>
-                        }
-                    </div>
+                            </button> :
+                            <div onClick={() => setBuyPriceHidden(true)} className='flex flex-col gap-1 cursor-pointer text-xs w-full'>
+                                <div className='flex justify-between'>
+                                    <span>Buy Price</span>
+                                    <span>$80.0</span>
+                                </div>
+                                <div className='flex justify-between'>
+                                    <span>Last Price</span>
+                                    <span>$97.0</span>
+                                </div>
+                            </div>
+                    }
+
                 </div>
                 {/* <Input
                     id='buying_price'
@@ -410,15 +421,27 @@ const ProductInput = ({
                     className='mb-1'
                     required
                 />
-                <Input
-                    id='total'
-                    type='text'
-                    label='Total'
-                    value={productForm.total}
-                    onChange={handleProductChange}
-                    className='mb-1'
-                    required
-                />
+                <div className='flex flex-col items-start'>
+                    <Input
+                        id='total'
+                        type='text'
+                        label='Amount'
+                        value={productForm.total}
+                        onChange={handleProductChange}
+                        className='mb-1'
+                        required
+                    />
+                    {
+                        profitHidden ?
+                            <button onClick={() => setprofitHidden(false)} className="text-[#3666AA] font-medium cursor-pointer">
+                                Reveal
+                            </button> :
+                            <div onClick={() => setprofitHidden(true)} className='flex gap-1 cursor-pointer text-xs w-full justify-between '>
+                                <span>Reveal Profit</span>
+                                <span>$80.0</span>
+                            </div>
+                    }
+                </div>
                 {
                     onRemove && <div className='flex item-ends justify-center mt-4 '>
                         {
@@ -444,7 +467,6 @@ const ProductInput = ({
                     </div>
                 }
             </div>
-            <Divider />
         </div >
 
     )

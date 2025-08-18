@@ -96,7 +96,6 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     })
     const [formCustomer, setFormCustomer] = useState({
         name: '',
-
     })
     const [openModalCustomer, setOpenModalCustomer] = useState(false)
 
@@ -314,11 +313,6 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         setProductForm(updated);
     };
 
-    const options = [
-        { label: 'WAITING', value: 'WAITING' },
-        { label: 'RECEIVE', value: 'RECEIVE' }
-    ]
-
     const handleDateChange = (field: string, value: any, dateString: string) => {
         setFormData(prev => ({
             ...prev,
@@ -333,6 +327,7 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
             [id]: value,
         }));
     };
+
     const handleChangeCustomer = (e: any) => {
         const { id, value } = e.target;
         setFormCustomer((prev) => ({
@@ -346,6 +341,7 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         setButtonType(btnType)
         setOpenModal(true);
     }
+
 
     console.log(formData, productForm)
 
@@ -376,6 +372,7 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         billing_address: customer.billing_address,
         shipping_address: customer.shipping_address
     }));
+
 
     return (
         <>
@@ -600,6 +597,7 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     )
                                 })
                             }
+                            <Divider />
                             <div className='flex justify-end'>
                                 <Button
                                     label='Add Product'

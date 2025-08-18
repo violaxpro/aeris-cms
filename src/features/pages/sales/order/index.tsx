@@ -42,6 +42,7 @@ import ButtonIcon from '@/components/button/ButtonIcon'
 import ButtonAction from '@/components/button/ButtonAction'
 import SearchTable from '@/components/search/SearchTable'
 import ShowPageSize from '@/components/pagination/ShowPageSize'
+import ConfirmModal from '@/components/modal/ConfirmModal'
 
 const index = ({ orderData }: { orderData?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
@@ -62,11 +63,18 @@ const index = ({ orderData }: { orderData?: any }) => {
     const [currentOrder, setCurrentOrder] = useState<any>(null)
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
+    const [openModalDelete, setOpenModalDelete] = useState(false)
+    const [deletedData, setDeletedData] = useState<any>(null)
 
     const handleDateChange = (date: any, dateString: string | string[]) => {
         console.log('Selected date:', dateString);
         setDate(date);
     };
+
+    const handleOpenModalDelete = (data: any) => {
+        setOpenModalDelete(true)
+        setDeletedData(data)
+    }
 
     const dataByStatus = activeTab == 'all'
         ? data
@@ -398,11 +406,14 @@ const index = ({ orderData }: { orderData?: any }) => {
                                 Detail
                             </Link>
                         </Menu.Item>
-                        {/* <Menu.Item key="sendEmail">
-                            <Link href={routes.eCommerce.sendEmail(row.id)}>
-                                Send Email
-                            </Link>
-                        </Menu.Item> */}
+                        {
+                            row.status == 'Approved' &&
+                            <Menu.Item key="tracking-number">
+                                <Link href={routes.eCommerce.detailOrder(row.invoice_number)}>
+                                    Tracking Number
+                                </Link>
+                            </Menu.Item>
+                        }
                         <Menu.Item key="createPO">
                             <Link href={routes.eCommerce.createPurchases}>
                                 Create PO
@@ -449,7 +460,10 @@ const index = ({ orderData }: { orderData?: any }) => {
                             variant='filled'
                             size="small"
                             icon={TrashIconRed}
-                            onClick={(e) => e.stopPropagation()}
+                            onClick={(e) => {
+                                e.stopPropagation()
+                                handleOpenModalDelete(row.id)
+                            }}
                         />
                     </div>
                 );
@@ -507,10 +521,17 @@ const index = ({ orderData }: { orderData?: any }) => {
     return (
         <>
             {contextHolder}
-            <div className="mt-6 mx-4 mb-0">
+            <ConfirmModal
+                open={openModalDelete}
+                onCancel={() => setOpenModalDelete(false)}
+                onSave={handleDelete}
+                action='Delete'
+                text='Are you sure you want to delete this order?'
+            />
+            <div className="mt-6 mx-6 mb-0">
                 <div className='flex justify-between items-center'>
                     <div>
-                        <h1 className='text-xl font-bold'>
+                        <h1 className='text-2xl font-bold'>
                             Order
                         </h1>
                         <Breadcrumb

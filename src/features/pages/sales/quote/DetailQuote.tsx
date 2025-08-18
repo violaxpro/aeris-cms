@@ -161,12 +161,14 @@ const DetailQuote = ({ slug, data }: { slug?: string | number, data: any }) => {
     const handlePreview = async (data: any) => {
         await previewAndPrintPDF(data, 'quote');
     }
+
+    console.log(data)
     return (
         <>
-            <div className="mt-6 mx-5 mb-0">
+            <div className="mt-6 mx-6 mb-0">
                 <div className='flex justify-between items-center'>
                     <div>
-                        <h1 className='text-xl font-bold'>
+                        <h1 className='text-2xl font-bold'>
                             Quote Detail
                         </h1>
                         <Breadcrumb

@@ -13,7 +13,9 @@ import {
     SentEmailIcon,
     ConvertIcon,
     ApproveIcon,
-    DownloadIcon
+    DownloadIcon,
+    TrackingIcon,
+    SendIcon
 } from '@public/icon'
 import Button from '@/components/button'
 import Table from '@/components/table'
@@ -33,18 +35,27 @@ import Input from '@/components/input'
 import Pagination from '@/components/pagination'
 import SearchTable from '@/components/search/SearchTable'
 import ShowPageSize from '@/components/pagination/ShowPageSize'
+import ModalTrackingNumber from './ModalTrackingNumber'
+import { useNotificationAntd } from '@/components/toast'
 
 const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
     const router = useRouter()
+    const { contextHolder, notifySuccess } = useNotificationAntd()
     const [profitHidden, setProfitHidden] = useState(true)
     const [buyPriceHidden, setBuyPriceHidden] = useState(true)
     const [isOpenModalSupplier, setIsOpenModalSupplier] = useState(false)
+    const [isOpenModalTracking, setIsOpenModalTracking] = useState(false)
     const [serialNumberData, setSerialNumberData] = useState<any>({
         pickId: [],
         packId: [],
         serialNumber: {},
         productFrom: ''
     })
+    const [trackingNumberData, setTrackingNumberData] = useState<any>({
+        courier: '',
+        tracking_number: [{ value: '' }],
+    })
+    const [isSendTrackingNumber, setIsSendTrackingNumber] = useState(false)
     const [modalSerialNumber, setModalSerialNumber] = useState<{ open: boolean; row: any }>({ open: false, row: null })
     const [currentOrder, setCurrentOrder] = useState<any>(null)
     const [currentPageWarehouse, setCurrentPageWarehouse] = useState(1);
@@ -143,27 +154,6 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
 
     ]
 
-    const openSerialNumberModal = (row: any) => {
-        setModalSerialNumber({ open: true, row });
-    };
-
-    // Saat user pilih serial number di modal:
-    const handleSelectSerialNumber = (rowId: string, serial: string, warehouseName: string, poNumber: string) => {
-        setSerialNumberData((prev: any) => ({
-            ...prev,
-            serialNumber: {
-                ...prev.serialNumber,
-                [rowId]: serial
-            },
-            productFrom: {
-                ...prev.productFrom,
-                [rowId]: `${warehouseName} - ${poNumber}`
-            }
-        }));
-
-        // Tutup modal
-        setModalSerialNumber({ open: false, row: null });
-    };
 
     const columnsSerialNumber: TableColumnsType<any> = [
         {
@@ -487,6 +477,43 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
         unitPrice: 200,
         quantity: 10
     };
+
+    const openSerialNumberModal = (row: any) => {
+        setModalSerialNumber({ open: true, row });
+    };
+
+    // Saat user pilih serial number di modal:
+    const handleSelectSerialNumber = (rowId: string, serial: string, warehouseName: string, poNumber: string) => {
+        setSerialNumberData((prev: any) => ({
+            ...prev,
+            serialNumber: {
+                ...prev.serialNumber,
+                [rowId]: serial
+            },
+            productFrom: {
+                ...prev.productFrom,
+                [rowId]: `${warehouseName} - ${poNumber}`
+            }
+        }));
+
+        // Tutup modal
+        setModalSerialNumber({ open: false, row: null });
+    };
+
+    const handleTrackingChange = (field: string, value: any) => {
+        setTrackingNumberData((prev: any) => ({
+            ...prev,
+            [field]: value,
+        }));
+    };
+
+    const handleSubmitTracking = () => {
+        console.log("Tracking data dikirim:", trackingNumberData);
+        setIsSendTrackingNumber(true)
+        setIsOpenModalTracking(false)
+        // TODO: kirim ke API di sini
+    };
+
     const handlePrint = async (data: any) => {
         await downloadInvoicePDF(data, 'order');
     }
@@ -495,9 +522,14 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
         await previewAndPrintPDF(data, 'order');
     }
 
+    const handleSendTrackingNumber = () => {
+        notifySuccess('Tracking Number has succesfully send!')
+    }
+
     console.log(modalSerialNumber)
     return (
         <>
+            {contextHolder}
             <Modal
                 open={modalSerialNumber.open}
                 handleCancel={() => setModalSerialNumber({ open: false, row: null })}
@@ -546,6 +578,13 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
                     dataSource={data?.product}
                 />
             </Modal>
+            <ModalTrackingNumber
+                isModalOpen={isOpenModalTracking}
+                handleCancel={() => setIsOpenModalTracking(false)}
+                handleChange={handleTrackingChange}
+                handleSubmit={handleSubmitTracking}
+                formData={trackingNumberData}
+            />
             <div className="mt-6 mx-6 mb-0">
                 <div className='flex justify-between items-center'>
                     <div>
@@ -582,16 +621,42 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
                             />
                         }
                         {
-                            data?.status && data?.status?.toLowerCase() == 'approved' && <ButtonAction
+                            isSendTrackingNumber &&
+                            <ButtonAction
                                 icon={<Image
-                                    src={ConvertIcon}
-                                    alt='convert-icon'
+                                    src={SendIcon}
+                                    alt='send-icon'
                                     width={15}
                                     height={15}
                                 />}
-                                label='Convert to Invoice'
-                            // link={routes.eCommerce.editQuote}
+                                label='Send Tracking Number'
+                                onClick={handleSendTrackingNumber}
                             />
+                        }
+                        {
+                            data?.status && data?.status?.toLowerCase() == 'approved' &&
+                            <div className='flex gap-3'>
+                                <ButtonAction
+                                    icon={<Image
+                                        src={TrackingIcon}
+                                        alt='tracking-icon'
+                                        width={15}
+                                        height={15}
+                                    />}
+                                    label='Tracking Number'
+                                    onClick={() => setIsOpenModalTracking(true)}
+                                />
+                                <ButtonAction
+                                    icon={<Image
+                                        src={ConvertIcon}
+                                        alt='convert-icon'
+                                        width={15}
+                                        height={15}
+                                    />}
+                                    label='Convert to Invoice'
+                                // link={routes.eCommerce.editQuote}
+                                />
+                            </div>
                         }
 
                         <ButtonAction
@@ -614,7 +679,17 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
                             label='Print'
                             onClick={() => handlePreview(invoiceData)}
                         />
-                        <ButtonAction
+                        <Button
+                            icon={<Image
+                                src={ExportIcon}
+                                alt='export-icon'
+                                width={15}
+                                height={15}
+                            />}
+                            label='Download PDF'
+                            onClick={() => handlePrint(invoiceData)}
+                        />
+                        {/* <ButtonAction
                             icon={<Image
                                 src={DownloadIcon}
                                 alt='download-icon'
@@ -623,8 +698,8 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
                             />}
                             label='Download PDF'
                             onClick={() => handlePrint(invoiceData)}
-                        />
-                        <Button
+                        /> */}
+                        {/* <Button
                             icon={<Image
                                 src={ExportIcon}
                                 alt='export-icon'
@@ -633,7 +708,7 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
                             />}
                             label='Export'
                         // link={routes.eCommerce.editQuote}
-                        />
+                        /> */}
                     </div>
 
                 </div>
@@ -659,6 +734,17 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
                             <InfoItem label='Customer Group' value='Distributor' />
                         </Card>
                     </div>
+                    {
+                        data?.status == 'Approved' &&
+                        <div className='grid gap-4'>
+                            <Card title='Tracking Number Information' gridcols='grid-cols-4'>
+                                <InfoItem label='Customer Name' value='James Smith' />
+                                <InfoItem label='Tracking Number 1' value='33AA1111111111111' />
+                                <InfoItem label='Tracking Number 2' value='33AB2222222222222' />
+                                <InfoItem label='Tracking Number 3' value='33AC3333333333333' />
+                            </Card>
+                        </div>
+                    }
                     <div className='grid gap-4'>
                         <Card title='Address Information'>
                             <Card title='Billing Address'>
@@ -697,7 +783,7 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
                         <div className='col-span-3 my-4'>
                             <OrderSummary
                                 profitHidden={profitHidden}
-                                onReveal={() => setProfitHidden(false)}
+                                onReveal={() => setProfitHidden(!profitHidden)}
                                 profit={100}
                                 subtotal={1130.4}
                                 shippingFee={50}
