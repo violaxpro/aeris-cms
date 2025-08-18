@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { createId } from '@paralleldrive/cuid2';
+import dayjs from 'dayjs'
 
 export const INVOICE_TABLE_DEFAULT_DATA = [
   {
@@ -32,7 +33,7 @@ export const INVOICE_BUILDER_DEFAULT_VALUE = {
   },
   invoice: {
     number: 'INV-001-002-003',
-    date: new Date(),
+    date: dayjs(),
     InvoiceNumberLabel: 'Invoice No.',
     InvoiceDateLabel: 'Invoice Date',
     InvoiceDueDateLabel: 'Due Date',

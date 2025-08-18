@@ -116,7 +116,7 @@ const index = ({ usersData }: { usersData?: any }) => {
         {
             title: 'Last Login',
             dataIndex: 'last_login',
-            sorter: (a: any, b: any) => new Date(a?.last_login).getTime() - new Date(b?.last_login).getTime(),
+            sorter: (a: any, b: any) => dayjs(a?.last_login).valueOf() - dayjs(b?.last_login).valueOf(),
             render: (value: any) => {
                 const date = dayjs(value?.last_login).format("DD/MM/YYYY")
                 return <span>{date}</span>
@@ -135,7 +135,7 @@ const index = ({ usersData }: { usersData?: any }) => {
         {
             title: 'Created',
             dataIndex: 'created_at',
-            sorter: (a: any, b: any) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+            sorter: (a: any, b: any) => dayjs(a.created_at).valueOf() - dayjs(b.created_at).valueOf(),
             render: (val: any) => {
                 const date = dayjs(val?.date).format("DD/MM/YYYY")
                 const user = val?.name

@@ -128,7 +128,7 @@ const index = ({ products }: { products?: any }) => {
             title: 'Last Updated',
             dataIndex: 'created_at',
             sorter: (a: any, b: any) => {
-                return new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+                return dayjs(a.created_at).valueOf() - dayjs(b.created_at).valueOf()
             },
             render: (_: any, row: any) => {
                 const createdAt = dayjs(row.created_at).format('DD/MM/YYYY')

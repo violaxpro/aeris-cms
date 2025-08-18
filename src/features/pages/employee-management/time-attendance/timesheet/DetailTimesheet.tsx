@@ -85,7 +85,7 @@ const index = ({ data, slug }: { data?: any, slug: any }) => {
             title: 'Date',
             dataIndex: 'date',
             width: 120,
-            sorter: (a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+            sorter: (a: any, b: any) => dayjs(a.date).valueOf() - dayjs(b.date).valueOf(),
             render: (_: any, row: any) => {
                 const day = dayjs(row.date).format('dddd');
                 const fullDate = dayjs(row.date).format('DD MMM YYYY');
@@ -101,7 +101,7 @@ const index = ({ data, slug }: { data?: any, slug: any }) => {
         {
             title: 'Check In',
             dataIndex: 'checkIn',
-            sorter: (a: any, b: any) => new Date(a.checkIn).getTime() - new Date(b.checkIn).getTime(),
+            sorter: (a: any, b: any) => dayjs(a.checkIn).valueOf() - dayjs(b.checkIn).valueOf(),
             render: (_: any, row: any) => {
                 return row.checkIn
             }
@@ -110,7 +110,7 @@ const index = ({ data, slug }: { data?: any, slug: any }) => {
             title: 'Break',
             dataIndex: 'break',
             width: 100,
-            sorter: (a: any, b: any) => new Date(a.break).getTime() - new Date(b.break).getTime(),
+            sorter: (a: any, b: any) => dayjs(a.break).valueOf() - dayjs(b.break).valueOf(),
             render: (_: any, row: any) => {
                 return row.break
             }
@@ -118,7 +118,7 @@ const index = ({ data, slug }: { data?: any, slug: any }) => {
         {
             title: 'Check Out',
             dataIndex: 'checkOut',
-            sorter: (a: any, b: any) => new Date(a.checkOut).getTime() - new Date(b.checkOut).getTime(),
+            sorter: (a: any, b: any) => dayjs(a.checkOut).valueOf() - dayjs(b.checkOut).valueOf(),
             render: (_: any, row: any) => {
                 return row.checkOut
             }

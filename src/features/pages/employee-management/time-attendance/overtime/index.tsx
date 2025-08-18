@@ -73,7 +73,7 @@ const index = ({ data }: { data?: any }) => {
             title: 'Overtime Date',
             dataIndex: 'overtime_date',
             sorter: (a: any, b: any) => {
-                return new Date(a.overtime_date).getTime() - new Date(b.overtime_date).getTime()
+                return dayjs(a.overtime_date).valueOf() - dayjs(b.overtime_date).valueOf()
             },
             render: (_: any, row: any) => {
                 return <div className="flex flex-col w-full">

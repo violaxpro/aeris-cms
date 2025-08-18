@@ -62,7 +62,7 @@ const index = ({ smsData }: { smsData?: any }) => {
             title: 'Created At',
             dataIndex: 'created_at',
             sorter: (a: any, b: any) => {
-                return new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+                return dayjs(a.created_at).valueOf() - dayjs(b.created_at).valueOf()
             },
             render: (val: any) => {
                 const date = dayjs(val).format("DD/MM/YYYY")
@@ -77,7 +77,7 @@ const index = ({ smsData }: { smsData?: any }) => {
             title: 'Updated At',
             dataIndex: 'updated_at',
             sorter: (a: any, b: any) => {
-                return new Date(a.updated_at).getTime() - new Date(b.updated_at).getTime()
+                return dayjs(a.updated_at).valueOf() - dayjs(b.updated_at).valueOf()
             },
             render: (val: any) => {
                 const date = dayjs(val).format("DD/MM/YYYY")

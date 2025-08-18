@@ -111,7 +111,7 @@ const index = ({ brandsData }: { brandsData?: any }) => {
         {
             title: 'Created At',
             dataIndex: 'created_at',
-            sorter: (a: any, b: any) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+            sorter: (a: any, b: any) => dayjs(a.createdAt).valueOf() - dayjs(b.createdAt).valueOf(),
             render: (created_at: string) => {
                 const date = dayjs(created_at).format('DD/MM/YYYY')
                 return date

@@ -93,7 +93,7 @@ const index = ({ attributesData }: { attributesData?: any }) => {
         {
             title: 'Created At',
             dataIndex: 'created_at',
-            sorter: (a: any, b: any) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+            sorter: (a: any, b: any) => dayjs(a.created_at).valueOf() - dayjs(b.created_at).valueOf(),
             render: (created_at: string) => {
                 const date = dayjs(created_at).format('DD/MM/YYYY')
                 return date

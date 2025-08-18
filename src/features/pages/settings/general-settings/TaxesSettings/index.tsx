@@ -82,7 +82,7 @@ const index = ({ taxesData }: { taxesData?: any }) => {
             title: 'Created',
             dataIndex: 'created_at',
             sorter: (a: any, b: any) => {
-                return new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+                return dayjs(a.created_at).valueOf() - dayjs(b.created_at).valueOf()
             },
             render: (val: any) => {
                 const date = dayjs(val).format("DD/MM/YYYY")

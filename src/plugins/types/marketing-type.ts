@@ -1,3 +1,5 @@
+import dayjs from 'dayjs'
+
 export type ProductType = {
     product_name: string;
     buy_price: number;
@@ -76,7 +78,7 @@ export const flashSaleData: flashSaleType[] = [
                 quantity: 50
             }
         ],
-        created: new Date("2025-08-10T08:00:00Z")
+        created: dayjs("2025-08-10T08:00:00Z")
     },
     {
         id: "fs_002",
@@ -110,7 +112,7 @@ export const flashSaleData: flashSaleType[] = [
                 quantity: 50
             }
         ],
-        created: new Date("2025-08-10T08:00:00Z")
+        created: dayjs("2025-08-10T08:00:00Z")
     }
 ];
 

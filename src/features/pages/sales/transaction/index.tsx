@@ -24,16 +24,19 @@ import ButtonAction from '@/components/button/ButtonIcon'
 import SearchTable from '@/components/search/SearchTable'
 import ShowPageSize from '@/components/pagination/ShowPageSize'
 import ButtonDelete from '@/components/button/ButtonAction'
-
+import ModalNotes from './ModalNotes'
+import ConfirmModal from '@/components/modal/ConfirmModal'
 
 const index = ({ transactionData }: { transactionData?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
     const [data, setData] = useAtom(transactionAtom)
     const [search, setSearch] = useState('')
-
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
+    const [isOpenModalNotes, setIsOpenModalNotes] = useState(false)
+    const [openModalDelete, setOpenModalDelete] = useState(false)
+    const [deletedData, setDeletedData] = useState<any>(null)
 
     const handleDelete = async (id: any) => {
         try {
@@ -45,6 +48,11 @@ const index = ({ transactionData }: { transactionData?: any }) => {
         } catch (error) {
             console.error(error)
         }
+    }
+
+    const handleOpenModalDelete = (data: any) => {
+        setOpenModalDelete(true)
+        setDeletedData(data)
     }
 
     const handleStatusAction = (status: string, id: number) => {
@@ -106,11 +114,11 @@ const index = ({ transactionData }: { transactionData?: any }) => {
             dataIndex: 'created',
             defaultSortOrder: 'descend',
             sorter: (a: any, b: any) => {
-                return new Date(a.created).getTime() - new Date(b.created).getTime()
+                return dayjs(a.created).valueOf() - dayjs(b.created).valueOf()
             },
             render: (val: any) => {
-                const date = dayjs(val.date).format("DD/MM/YYYY")
-                const user = val.name
+                const date = dayjs(val?.date).format("DD/MM/YYYY")
+                const user = val?.name
                 return <div className="flex flex-col w-full">
                     <div className="flex justify-start gap-1">
                         <span>{date}</span>
@@ -136,6 +144,9 @@ const index = ({ transactionData }: { transactionData?: any }) => {
                 const actionStatus = status[row.status] || ''
                 const menu = (
                     <Menu>
+                        <Menu.Item key="add-notes" onClick={() => setIsOpenModalNotes(true)}>
+                            Add Notes
+                        </Menu.Item>
                         <Menu.Item key="edit">
                             <Link href={routes.eCommerce.editPurchases(row.id)}>
                                 Edit
@@ -156,25 +167,17 @@ const index = ({ transactionData }: { transactionData?: any }) => {
                                 Packing Slip
                             </Link>
                         </Menu.Item>
-                        <Menu.Item key="serialNumber">
-                            <Link href={routes.eCommerce.createSerialNumber(row.id)}>
-                                Serial Number
-                            </Link>
-                        </Menu.Item>
-                        <Menu.Item key="delete">
-                            <DeletePopover
-                                title='Delete Return Supplier'
-                                description='Are you sure to delete this data?'
-                                onDelete={() => handleDelete(row.id)}
-                                label='Delete'
-                            />
+                        <Menu.Item key="delete" onClick={() => {
+                            handleOpenModalDelete(true)
+                        }}>
+                            Delete
                         </Menu.Item>
                     </Menu>
                 );
 
                 return (
-                    <div className='flex items-center gap-2'>
-                        <Dropdown overlay={menu} trigger={['click']} >
+                    <div className='flex items-center gap-2' onClick={(e) => e.stopPropagation()}>
+                        <Dropdown overlay={menu} trigger={['click']}>
                             <ButtonAction
                                 color='primary'
                                 variant='filled'
@@ -187,7 +190,10 @@ const index = ({ transactionData }: { transactionData?: any }) => {
                             variant='filled'
                             size="small"
                             icon={TrashIconRed}
-                        // onClick={() => setOpenModalDelete(true)}
+                            onClick={(e) => {
+                                e.stopPropagation()
+                                handleOpenModalDelete(true)
+                            }}
                         />
                     </div>
                 );
@@ -209,15 +215,26 @@ const index = ({ transactionData }: { transactionData?: any }) => {
     return (
         <>
             {contextHolder}
-            <div className="mt-6 mx-4 mb-0">
-                <h1 className='text-xl font-bold'>
+            <ConfirmModal
+                open={openModalDelete}
+                onCancel={() => setOpenModalDelete(false)}
+                onSave={handleDelete}
+                action='Delete'
+                text='Are you sure you want to delete this transaction?'
+            />
+            <ModalNotes
+                isModalOpen={isOpenModalNotes}
+                setIsModalOpen={setIsOpenModalNotes}
+            />
+            <div className="mt-6 mx-6 mb-0">
+                <h1 className='text-2xl font-bold'>
                     Transaction
                 </h1>
                 <Breadcrumb
                     items={breadcrumb}
                 />
             </div>
-            <Content className="mt-6 mx-4 mb-0">
+            <Content className="mb-0">
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
                     <div className='flex justify-between mb-4'>
                         <div className='flex items-center gap-2'>

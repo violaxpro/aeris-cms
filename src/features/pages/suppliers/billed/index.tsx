@@ -130,7 +130,7 @@ const index = ({ billData }: { billData?: any }) => {
             dataIndex: 'created',
             defaultSortOrder: 'descend',
             sorter: (a: any, b: any) => {
-                return new Date(a.created).getTime() - new Date(b.created).getTime()
+                return dayjs(a.created).valueOf() - dayjs(b.created).valueOf()
             },
             render: (val: any) => {
                 const date = dayjs(val.date).format("DD/MM/YYYY")

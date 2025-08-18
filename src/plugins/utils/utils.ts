@@ -92,7 +92,7 @@ export const formatTime = (secs: number) => {
 
 export const getDayShort = (dayName: string) => {
     return new Intl.DateTimeFormat('en-US', { weekday: 'short' })
-        .format(new Date(dayName + ' 2023-01-01'));
+        .format(dayjs(dayName + ' 2023-01-01').toDate());
 };
 
 console.log(getDayShort('Monday')); // Mon

@@ -303,7 +303,7 @@ const index = ({ orderData }: { orderData?: any }) => {
             dataIndex: 'created_by',
             defaultSortOrder: 'descend',
             sorter: (a: any, b: any) => {
-                return new Date(a.created_by).getTime() - new Date(b.created_by).getTime()
+                return dayjs(a.created_by).valueOf() - dayjs(b.created_by).valueOf()
             },
             render: (_: any, row: any) => {
                 const date = dayjs(row.date).format("DD/MM/YYYY")
@@ -322,7 +322,7 @@ const index = ({ orderData }: { orderData?: any }) => {
             title: 'Modified By',
             dataIndex: 'modified',
             sorter: (a: any, b: any) => {
-                return new Date(a.modified).getTime() - new Date(b.modified).getTime()
+                return dayjs(a.modified).valueOf() - dayjs(b.modified).valueOf()
             },
             render: (val: any) => {
                 const date = dayjs(val.date).format("DD/MM/YYYY")
