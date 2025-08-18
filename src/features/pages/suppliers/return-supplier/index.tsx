@@ -5,6 +5,7 @@ import type { TableColumnsType } from 'antd'
 import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons'
 import DeletePopover from '@/components/popover'
 import { routes } from '@/config/routes'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Breadcrumb from "@/components/breadcrumb"
 import { Content } from 'antd/es/layout/layout'
@@ -35,9 +36,12 @@ import ButtonAction from '@/components/button/ButtonAction'
 import SearchTable from '@/components/search/SearchTable'
 import ShowPageSize from '@/components/pagination/ShowPageSize'
 import StatusTag from '@/components/tag'
+import ConfirmModal from '@/components/modal/ConfirmModal'
+
 
 const index = ({ returnSupplierData }: { returnSupplierData?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
+    const router = useRouter()
     const [data, setData] = useAtom(returnSupplierAtom)
     const [search, setSearch] = useState('')
     const [filteredData, setFilteredData] = useState<ReturnSupplierType[]>([])
@@ -74,14 +78,10 @@ const index = ({ returnSupplierData }: { returnSupplierData?: any }) => {
             dataIndex: 'order_id',
         },
         {
-            title: 'Supplier',
-            dataIndex: 'supplier_name',
-        },
-        {
-            title: 'Total',
-            dataIndex: 'total',
-            render: (val) => {
-                return <span>${val}</span>
+            title: 'Sales Person',
+            dataIndex: 'sales_person',
+            render: (_: any, row: any) => {
+                return row.sales_person
             }
         },
         {
@@ -93,33 +93,28 @@ const index = ({ returnSupplierData }: { returnSupplierData?: any }) => {
             }
         },
         {
-            title: 'Created At',
-            dataIndex: 'createdAt',
-            render: (created_at: string) => {
-                const date = dayjs(created_at).format('DD MMMM, YYYY')
-                return date
-            }
-        },
-        {
             title: 'Action',
             dataIndex: 'action',
             key: 'action',
             width: 120,
             render: (_: string, row: any) => (
-                <div className="flex items-center justify-end gap-3 pe-4">
+                <div className="flex items-center justify-end gap-3 pe-4" onClick={(e) => e.stopPropagation()}>
                     <ButtonIcon
                         color='primary'
                         variant='filled'
                         size="small"
                         icon={PencilIconBlue}
-                    // onClick={() => router.push(routes.eCommerce.editAttributes(row.id))}
+                        onClick={() => router.push(routes.eCommerce.editReturnSupplier(row.id))}
                     />
                     <ButtonIcon
                         color='danger'
                         variant='filled'
                         size="small"
                         icon={TrashIconRed}
-                        onClick={() => handleOpenModalDelete(row.id)}
+                        onClick={(e) => {
+                            e.stopPropagation()
+                            handleOpenModalDelete(row.id)
+                        }}
                     />
                 </div >
             ),
@@ -142,11 +137,18 @@ const index = ({ returnSupplierData }: { returnSupplierData?: any }) => {
 
         <>
             {contextHolder}
+            <ConfirmModal
+                open={openModalDelete}
+                onCancel={() => setOpenModalDelete(false)}
+                onSave={handleDelete}
+                action='Delete'
+                text='Are you sure you want to delete this rma supplier?'
+            />
             <div className="mt-6 mx-6 mb-0">
                 <div className='flex justify-between items-center'>
                     <div>
-                        <h1 className='text-xl font-bold'>
-                            Return Suppliers
+                        <h1 className='text-2xl font-bold'>
+                            RMA Suppliers
                         </h1>
                         <Breadcrumb
                             items={breadcrumb}
@@ -159,7 +161,7 @@ const index = ({ returnSupplierData }: { returnSupplierData?: any }) => {
                             width={15}
                             height={15}
                         />}
-                        label='Add Return Supplier'
+                        label='Add RMA Supplier'
                         link={routes.eCommerce.createReturnSupplier}
                     />
                 </div>

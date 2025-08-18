@@ -217,7 +217,7 @@ const FormReturnSales: React.FC<FormProps> = ({ mode, initialValues, slug, dataT
         <>
             {contextHolder}
             <div className="mt-6 mx-6 mb-0">
-                <h1 className="text-2xl font-bold mb-4">{mode === 'create' ? 'Create Return Sales' : 'Edit Return Sales'}</h1>
+                <h1 className="text-2xl font-bold mb-4">{mode === 'create' ? 'Create RMA Sales' : 'Edit RMA Sales'}</h1>
                 <Breadcrumb items={breadcrumb} />
                 <Divider />
             </div>
@@ -404,7 +404,7 @@ const FormReturnSales: React.FC<FormProps> = ({ mode, initialValues, slug, dataT
                                 onClick={() => router.push(routes.eCommerce.returnSales)}
                             />
                             <Button
-                                label={mode === 'create' ? 'Create Return Sales' : 'Edit Return Sales'}
+                                label={mode === 'create' ? 'Create RMA Sales' : 'Edit RMA Sales'}
                                 onClick={handleSubmit}
                             />
                         </div>

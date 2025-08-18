@@ -19,6 +19,12 @@ import { useNotificationAntd } from '@/components/toast';
 import ProductInput from './ProductInput';
 import Table from '@/components/table'
 import { ProductForm } from './ProductInput';
+import Divider from '@/components/divider'
+import Image from 'next/image';
+import { PlusOutlineIcon } from '@public/icon';
+import { formatCurrency } from '@/plugins/utils/utils';
+import ButtonAction from '@/components/button/ButtonAction'
+
 
 const FormReturnSupplier: React.FC<FormProps> = ({ mode, initialValues, slug, dataTable }) => {
     const [optionBrands] = useAtom(brandsAtom)
@@ -27,43 +33,78 @@ const FormReturnSupplier: React.FC<FormProps> = ({ mode, initialValues, slug, da
 
     const [optionsCategories] = useAtom(categoriesAtom)
     const [formData, setFormData] = useState({
-        purchase_id: initialValues ? initialValues.purchase_id : '',
+        rma_type: initialValues ? initialValues.rma_type : '',
+        supplier_or_vendor: initialValues ? initialValues.supplier_or_vendor : '',
+        rma_id: initialValues ? initialValues.rma_id : '',
+        supplier_invoice: initialValues ? initialValues.supplier_invoice : '',
+        order_number: initialValues ? initialValues.order_number : '',
+        shipping_type: initialValues ? initialValues.shipping_type : '',
+        supplier_or_vendor_address: initialValues ? initialValues.supplier_or_vendor_address : '',
+        return_option: initialValues ? initialValues.return_option : '',
         sales_person: initialValues ? initialValues.sales_person : '',
         status: initialValues ? initialValues.status : '',
         product: initialValues ? initialValues.product : [],
-        notes: initialValues ? initialValues.notes : '',
+        internal_notes: initialValues ? initialValues.internal_notes : '',
+        customers_notes: initialValues ? initialValues.customers_notes : '',
         subtotal: initialValues ? initialValues.subtotal : '',
         tax_include: initialValues ? initialValues.tax_include : '',
         total: initialValues ? initialValues.total : ''
     });
     const [showAddProduct, setShowAddProduct] = useState(false)
     const [productList, setProductList] = useState<any[]>([]);
-    const [productForm, setProductForm] = useState({
+    const [productForm, setProductForm] = useState([{
         sku: '',
         name: '',
         price: '',
         return_type: '',
         current_serial_number: '',
         reason: '',
-        product_return: false
-    });
+        product_return: false,
+        status: '',
+        evidence: [],
+        product_condition: '',
+        packaging_condition: '',
+        is_no_missing_part: false,
+        is_serial_number_match: false
+    }]);
 
     const breadcrumb = [
-        { title: 'Return Suppliers', url: routes.eCommerce.returnSupplier },
-        { title: mode === 'create' ? 'Create Return Suppliers' : 'Edit Return Suppliers' },
+        { title: 'RMA' },
+        { title: 'RMA Suppliers', url: routes.eCommerce.returnSupplier },
+        { title: mode === 'create' ? 'Create' : 'Edit' },
     ];
 
-    const handleAddProduct = () => {
-        setProductList([...productList, productForm]);
-        setProductForm({
-            sku: '',
-            name: '',
-            price: '',
-            return_type: '',
-            current_serial_number: '',
-            reason: '',
-            product_return: false
-        });
+    const addItem = () => {
+        setProductForm([
+            ...productForm,
+            {
+                sku: '',
+                name: '',
+                price: '',
+                return_type: '',
+                current_serial_number: '',
+                reason: '',
+                product_return: false,
+                status: '',
+                evidence: [],
+                product_condition: '',
+                packaging_condition: '',
+                is_no_missing_part: false,
+                is_serial_number_match: false
+            }
+        ])
+    }
+
+    const handleRemoveRow = (index: number) => {
+        const updated = [...productForm];
+        updated.splice(index, 1);
+        setProductForm(updated);
+    };
+
+    const handleUpdateRow = (index: number, updatedForm: ProductForm) => {
+        const updated: any = [...productForm];
+        updated[index] = updatedForm;
+        setProductForm(updated);
     };
 
     const handleChange = (e: any) => {
@@ -84,10 +125,10 @@ const FormReturnSupplier: React.FC<FormProps> = ({ mode, initialValues, slug, da
     const handleSubmit = async () => {
         try {
             const submitData = {
-                purchase_id: formData.purchase_id,
+                order_number: formData.order_number,
                 sales_person: formData.sales_person,
                 status: formData.status,
-                notes: formData.notes,
+                internal_notes: formData.internal_notes,
                 prodcut: formData.product,
                 subtotal: formData.subtotal,
                 tax_include: formData.tax_include,
@@ -170,28 +211,94 @@ const FormReturnSupplier: React.FC<FormProps> = ({ mode, initialValues, slug, da
     return (
         <>
             {contextHolder}
-            <div className="mt-6 mx-4 mb-0">
-                <h1 className="text-xl font-bold mb-4">{mode === 'create' ? 'Create Return Suppliers' : 'Edit Return Suppliers'}</h1>
+            <div className="mt-6 mx-6 mb-0">
+                <h1 className="text-2xl font-bold mb-4">{mode === 'create' ? 'Create RMA Suppliers' : 'Edit RMA Suppliers'}</h1>
                 <Breadcrumb items={breadcrumb} />
             </div>
 
-            <Content className="mt-4 mx-4 mb-0">
-                <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
-                    <div className='grid md:grid-cols-3 gap-2'>
+            <Content className="mb-0">
+                <div style={{ padding: 24, minHeight: 360, background: '#fff' }} className='flex flex-col gap-5'>
+                    <div className='grid md:grid-cols-5 gap-2'>
                         <SelectInput
-                            id='purchase_id'
-                            label='Purchase Id'
-                            value={formData.purchase_id}
-                            placeholder='Select Purchase Id'
-                            onChange={(val) => handleChangeSelect('purchase_id', val)}
+                            id='rma_type'
+                            label='RMA Type'
+                            placeholder='Select RMA Type'
+                            value={formData.rma_type}
+                            onChange={(val) => handleChangeSelect('rma_type', val)}
+                            options={[
+                                { label: 'To Supplier', value: 'To Supplier' },
+                                { label: 'To Vendor', value: 'To Vendor' },
+
+                            ]}
                         />
                         <SelectInput
-                            id='sales_person'
-                            label='Sales Person'
-                            placeholder='Select Sales Person'
-                            value={formData.sales_person}
-                            onChange={(val) => handleChangeSelect('sales_person', val)}
+                            id='supplier_or_vendor'
+                            label='Supplier/Vendor'
+                            placeholder='Select Supplier/Vendor'
+                            value={formData.supplier_or_vendor}
+                            onChange={(val) => handleChangeSelect('supplier_or_vendor', val)}
                         />
+                        <SelectInput
+                            id='order_number'
+                            label='Order Number'
+                            value={formData.order_number}
+                            placeholder='Select Order Number'
+                            onChange={(val) => handleChangeSelect('order_number', val)}
+                        />
+                        <SelectInput
+                            id='rma_id'
+                            label='RMA ID'
+                            value={formData.rma_id}
+                            placeholder='Select related customer if any'
+                            onChange={(val) => handleChangeSelect('rma_id', val)}
+                        />
+                        <SelectInput
+                            id='supplier_invoice'
+                            label='Supplier Invoice#'
+                            value={formData.supplier_invoice}
+                            placeholder='Select if any'
+                            onChange={(val) => handleChangeSelect('supplier_invoice', val)}
+                        />
+                        <div className='col-span-full grid md:grid-cols-3 gap-2'>
+                            <SelectInput
+                                id='shipping_type'
+                                label='Shipping Type'
+                                value={formData.shipping_type}
+                                placeholder='Select Shipping Type'
+                                onChange={(val) => handleChangeSelect('shipping_type', val)}
+                                options={[
+                                    { label: 'Customer Drop-Ship to Vendor', value: 'Customer Drop-Ship to Vendor' },
+                                    { label: 'Warehouse Ship to Vendor', value: 'Warehouse Ship to Vendor' },
+                                    { label: 'Warehouse Consolidation', value: 'Warehouse Consolidation' },
+                                    { label: 'Vendor-Provided Label', value: 'Vendor-Provided Label' },
+                                    { label: 'Third-Party Logistics', value: 'Third-Party Logistics' },
+                                    { label: 'Drop-Off at Vendor Service Center', value: 'Drop-Off at Vendor Service Center' }
+                                ]}
+                            />
+                            <SelectInput
+                                id='supplier_or_vendor_address'
+                                label='Supplier/Vendor Address'
+                                value={formData.supplier_or_vendor_address}
+                                placeholder='Select Supplier/Vendor Address'
+                                onChange={(val) => handleChangeSelect('supplier_or_vendor_address', val)}
+                            />
+                            <SelectInput
+                                id='return_option'
+                                label='Return Options'
+                                value={formData.return_option}
+                                placeholder='Select Options'
+                                onChange={(val) => handleChangeSelect('return_option', val)}
+                                options={[
+                                    { label: 'Vendor Ships Direct to Warehouse', value: 'Vendor Ships Direct to Warehouse' },
+                                    { label: 'Vendor Ships Direct to Customer (Drop-Ship)', value: 'Vendor Ships Direct to Customer (Drop-Ship)' },
+                                    { label: 'Vendor Pickup & Return via Consolidation', value: 'Vendor Pickup & Return via Consolidation' },
+                                    { label: 'Customer Pickup at Vendor Service Center', value: 'Customer Pickup at Vendor Service Center' },
+                                    { label: 'Vendor Uses 3PL to Deliver to Us', value: 'Vendor Uses 3PL to Deliver to Us' },
+                                    { label: 'Vendor Credit Only – No Physical Return', value: 'Vendor Credit Only – No Physical Return' }
+                                ]}
+                            />
+                        </div>
+
                         {/* <SelectInput
                             id='status'
                             label='Status'
@@ -201,70 +308,82 @@ const FormReturnSupplier: React.FC<FormProps> = ({ mode, initialValues, slug, da
                             options={optionStatus}
                         /> */}
                     </div>
-                    <div className='mt-4'>
-                        <div className='mb-4'>
-                            <h1 className='text-xl font-bold'>Product List</h1>
+                    <div className='flex flex-col gap-4'>
+                        <h1 className='text-xl font-semibold'>Product List</h1>
+                        <Divider />
+                        {
+                            productForm.map((item, index) => {
+                                return (
+                                    <ProductInput
+                                        key={index}
+                                        index={index}
+                                        productForm={item}
+                                        onChange={(updateItem) => handleUpdateRow(index, updateItem)}
+                                        onRemove={() => handleRemoveRow(index)}
+                                        length={productForm.length}
+                                    />
+
+                                )
+                            })
+                        }
+                        <div className='flex justify-end'>
                             <Button
                                 label='Add Product'
-                                btnClassname="!bg-[#86A788] !text-white hover:!bg-[var(--btn-hover-bg)] hover:!text-[#86A788] hover:!border-[#86A788] mt-4"
-                                onClick={() => setShowAddProduct(!showAddProduct)}
+                                icon={<Image
+                                    src={PlusOutlineIcon}
+                                    alt='plus-icon'
+                                    width={15}
+                                />}
+                                onClick={addItem}
                             />
                         </div>
-                        {showAddProduct && (
-                            <ProductInput
-                                productForm={productForm}
-                                setProductForm={setProductForm}
-                                onAddProduct={handleAddProduct}
-                            />
-                        )}
-                        <Table
-                            columns={columns}
-                            dataSource={productList}
-                        />
 
-                        <div className='grid md:grid-cols-2 gap-4 mt-6'>
-                            <div>
-                                <Textarea
-                                    id='notes'
-                                    label='Notes'
-                                    value={formData.notes}
-                                    onChange={handleChange}
-                                />
-                            </div>
-                            <div className='grid md:grid-cols-3 gap-3'>
-                                <Input
-                                    id='subtotal'
-                                    label='Sub Total($)'
-                                    type='text'
-                                    placeholder='Input Sub Total'
-                                    onChange={handleChange}
-                                    value={formData.subtotal}
-
-                                />
-                                <Input
-                                    id='tax_include'
-                                    label='Tax Include($)'
-                                    type='text'
-                                    placeholder='Input Tax Include'
-                                    onChange={handleChange}
-                                    value={formData.tax_include}
-                                />
-                                <Input
-                                    id='total'
-                                    label='Total($)'
-                                    type='text'
-                                    placeholder='Input Total'
-                                    onChange={handleChange}
-                                    value={formData.total}
-                                />
-                            </div>
-
-                        </div>
                     </div>
-                    <div className="mt-6 flex justify-end">
-                        <Button
+                    <div className='grid md:grid-cols-12 gap-3 mt-5'>
+                        <div className='grid md:grid-cols-2 col-span-10 gap-3'>
+                            <Textarea
+                                id='customers_notes'
+                                label='Customer Notes'
+                                value={formData.internal_notes}
+                                onChange={handleChange}
+                                textareaClassname='!h-20'
+                            />
+                            <Textarea
+                                id='internal_notes'
+                                label='Internal Notes'
+                                value={formData.internal_notes}
+                                onChange={handleChange}
+                                textareaClassname='!h-20'
+                            />
+                        </div>
+                        <div className='flex items-center md:col-span-2 gap-3'>
+                            <div className="text-sm text-black w-full">
+                                <div className="flex justify-between mb-1">
+                                    <span>Subtotal</span>
+                                    <span>{formatCurrency(formData.subtotal)}</span>
+                                </div>
 
-                            label={mode === 'create' ? 'Create Return Suppliers' : 'Edit Return Suppliers'}
+                                <div className="flex justify-between mb-1">
+                                    <span>Tax Include</span>
+                                    <span>{formatCurrency(formData.tax_include)}</span>
+                                </div>
+                                <hr className="my-2 border-gray-300" />
+                                <div className="flex justify-between font-bold text-base">
+                                    <span>Total</span>
+                                    <span>{formatCurrency(formData.total)}</span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div className="mt-6 flex justify-end gap-3">
+                        <ButtonAction
+                            label='Cancel'
+                            onClick={() => router.push(routes.eCommerce.returnSupplier)}
+                        />
+                        <Button
+                            label={mode === 'create' ? 'Create RMA Supplier' : 'Edit RMA Supplier'}
                             onClick={handleSubmit}
                         />
                     </div>

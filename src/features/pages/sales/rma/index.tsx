@@ -346,7 +346,7 @@ const index = ({ returnSales }: { returnSales?: any }) => {
                 <div className='flex justify-between items-center'>
                     <div>
                         <h1 className='text-2xl font-bold'>
-                            Return Sales
+                            RMA Sales
                         </h1>
                         <Breadcrumb
                             items={breadcrumb}
@@ -359,7 +359,7 @@ const index = ({ returnSales }: { returnSales?: any }) => {
                             width={15}
                             height={15}
                         />}
-                        label='Add Return'
+                        label='Add RMA Sales'
                         link={routes.eCommerce.createReturnSales}
                     />
                 </div>

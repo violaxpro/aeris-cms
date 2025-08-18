@@ -25,8 +25,9 @@ export type CreditSupplierType = {
 
 export type ReturnSupplierType = {
     id?: number | string | undefined
-    purchase_id: number
+    order_id: string
     supplier_name: string
+    sales_person: string
     total: string
     status: string
     created_at: string
@@ -34,7 +35,7 @@ export type ReturnSupplierType = {
 
 export type PurchasesType = {
     id?: number | string | undefined
-    order_id: number
+    order_id: string
     supplier_name: string
     created: {
         name: string
@@ -90,32 +91,49 @@ export const creditSupplierData = [
 export const returnData = [
     {
         id: 8,
-        purchase_id: 12,
+        order_id: 'ORD890342',
         // user_id: 6,
         // notes: null,
         status: "<span class=\"\">Completed</span>",
         created_at: "2024-01-04T08:55:44.000000Z",
         // updated_at: "2024-01-04T08:56:38.000000Z",
         // deleted_at: null,
-        total: "$45.45",
+        total: "45.45",
         // checkbox: "<div class=\"checkbox\">\n    <input type=\"checkbox\" class=\"select-row\" value=\"8\" id=\"yXn96GJdaey8awd2\">\n    <label for=\"yXn96GJdaey8awd2\"></label>\n</div>\n",
         supplier_name: "Alloys",
+        sales_person: 'Cinta',
         // created: "<span data-toggle=\"tooltip\" title=\"Jan 4, 2024\">\n    1 year ago\n</span>\n"
     },
     {
         id: 7,
-        purchase_id: 12,
+        order_id: 'ORD890343',
         // user_id: 6,
         // notes: null,
         status: "<span class=\"\">Completed</span>",
         created_at: "2023-12-27T09:32:26.000000Z",
         // updated_at: "2023-12-27T09:32:26.000000Z",
         // deleted_at: null,
-        total: "$45.45",
+        total: "45.45",
         // checkbox: "<div class=\"checkbox\">\n    <input type=\"checkbox\" class=\"select-row\" value=\"7\" id=\"0rlNtGQWpEgubc3n\">\n    <label for=\"0rlNtGQWpEgubc3n\"></label>\n</div>\n",
         supplier_name: "Alloys",
+        sales_person: 'Rara',
         // created: "<span data-toggle=\"tooltip\" title=\"Dec 27, 2023\">\n    1 year ago\n</span>\n"
-    }
+    },
+    {
+        id: 6,
+        order_id: 'ORD890344',
+        // user_id: 6,
+        // notes: null,
+        status: "<span class=\"\">Rejected</span>",
+        created_at: "2023-12-27T09:32:26.000000Z",
+        // updated_at: "2023-12-27T09:32:26.000000Z",
+        // deleted_at: null,
+        total: "45.45",
+        // checkbox: "<div class=\"checkbox\">\n    <input type=\"checkbox\" class=\"select-row\" value=\"7\" id=\"0rlNtGQWpEgubc3n\">\n    <label for=\"0rlNtGQWpEgubc3n\"></label>\n</div>\n",
+        supplier_name: "Alloys",
+        sales_person: 'Muna'
+        // created: "<span data-toggle=\"tooltip\" title=\"Dec 27, 2023\">\n    1 year ago\n</span>\n"
+    },
 ]
 
 export const purchases = [
