@@ -202,6 +202,9 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
                 return a?.serial_number.localeCompare(b?.serial_number)
             },
             render: (_: any, row: any) => {
+                const value = serialNumberData.serialNumber[row.id]
+                    ? serialNumberData.serialNumber[row.id] == 'Empty' ? '' : serialNumberData.serialNumber[row.id]
+                    : ''
                 return <Input
                     id='serialNumber'
                     value={serialNumberData.serialNumber[row.id] || ''}
@@ -210,6 +213,15 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
                     onClick={() => {
                         // Buka modal dan kirim row.id
                         openSerialNumberModal(row);
+                    }}
+                    onChange={(e) => {
+                        setSerialNumberData((prev: any) => ({
+                            ...prev,
+                            serialNumber: {
+                                ...prev.serialNumber,
+                                [row.id]: e.target.value
+                            }
+                        }))
                     }}
                 />
             }

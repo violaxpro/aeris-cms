@@ -20,6 +20,9 @@ type FileUploaderProps = {
     errorMessage?: string
     isUpload?: boolean
     fileList?: UploadFile<any>[]
+    required?: boolean
+    iconClassName?: string
+    style?: any
 
 };
 
@@ -33,7 +36,10 @@ const FileUploader: React.FC<FileUploaderProps> = ({
     error = false,
     errorMessage,
     isUpload = false,
-    fileList
+    fileList,
+    required,
+    iconClassName = 'flex-col',
+    style
 }) => {
     const props: UploadProps = {
         name: 'file',
@@ -70,16 +76,17 @@ const FileUploader: React.FC<FileUploaderProps> = ({
 
     return (
         <>
-            <div className='flex flex-col w-full gap-2'>
+            <div className='flex flex-col w-full'>
                 <label className="block text-sm font-medium text-gray-700">
                     {label}
+                    {required && <span className="text-red-500 ml-1">*</span>}
                 </label>
                 <Spin spinning={isUpload}>
-                    <Dragger {...props} className={className}>
-                        <div className="ant-upload-drag-icon flex items-center justify-center w-full h-full mb-4">
-                            <Image src={FileUploadIcon} alt="Upload Icon" width={30} height={30} />
+                    <Dragger {...props} className={className} style={style}>
+                        <div className={` flex ${iconClassName} items-center justify-center w-full h-full gap-2`}>
+                            <Image src={FileUploadIcon} alt="Upload Icon" width={20} height={20} />
+                            <p className="text-sm !text-[#A19F9F] flex gap-1">Drag and drop file here or <p className='text-blue-600'> choose file</p></p>
                         </div>
-                        <p className="ant-upload-text !text-[#A19F9F]">Click or drag file to this area to upload</p>
                     </Dragger>
                 </Spin>
                 {errorMessage && (

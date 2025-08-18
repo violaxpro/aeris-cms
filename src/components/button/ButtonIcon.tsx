@@ -4,7 +4,7 @@ import Image from 'next/image'
 
 type ButtonActionProps = {
     icon?: any
-    onClick?: () => void
+    onClick?: any
     width?: number
     height?: number
     className?: string

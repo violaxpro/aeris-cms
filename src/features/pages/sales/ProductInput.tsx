@@ -437,7 +437,6 @@ const ProductInput = ({
                                     width={15}
                                     height={15}
                                     className='!h-10 !w-15'
-
                                     onClick={onRemove}
                                 />
                         }

@@ -62,16 +62,16 @@ const index = ({ returnSupplierData }: { returnSupplierData?: any }) => {
 
     const breadcrumb = [
         {
-            title: 'Suppliers',
+            title: 'RMA',
         },
         {
-            title: 'Return Suppliers',
+            title: 'RMA Suppliers',
         },
     ]
     const columns: TableColumnsType<ReturnSupplierType> = [
         {
-            title: 'Purchase ID',
-            dataIndex: 'purchase_id',
+            title: 'Order ID',
+            dataIndex: 'order_id',
         },
         {
             title: 'Supplier',

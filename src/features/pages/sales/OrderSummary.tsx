@@ -1,4 +1,5 @@
 import React from 'react';
+import { formatCurrency } from '@/plugins/utils/utils';
 
 type OrderSummaryProps = {
     profitHidden?: boolean;
@@ -10,8 +11,6 @@ type OrderSummaryProps = {
     gstRate: number;
 };
 
-const formatCurrency = (value: number) =>
-    `$${value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
 const OrderSummary: React.FC<OrderSummaryProps> = ({
     profitHidden = true,

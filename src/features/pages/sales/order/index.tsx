@@ -330,11 +330,11 @@ const index = ({ orderData }: { orderData?: any }) => {
             dataIndex: 'created_by',
             defaultSortOrder: 'descend',
             sorter: (a: any, b: any) => {
-                return new Date(a.created_by).getTime() - new Date(b.created_by).getTime()
+                return dayjs(a?.created_by?.date).valueOf() - dayjs(b?.created_by?.date).valueOf()
             },
             render: (_: any, row: any) => {
-                const date = dayjs(row.date).format("DD/MM/YYYY")
-                const user = row.name
+                const date = dayjs(row?.created_by?.date).format("DD/MM/YYYY")
+                const user = row?.created_by?.name
                 return <div className="flex flex-col w-full">
                     <div className="flex justify-start gap-1">
                         <span>{date}</span>
@@ -349,11 +349,11 @@ const index = ({ orderData }: { orderData?: any }) => {
             title: 'Modified By',
             dataIndex: 'modified',
             sorter: (a: any, b: any) => {
-                return new Date(a.modified).getTime() - new Date(b.modified).getTime()
+                return dayjs(a?.modified?.date).valueOf() - dayjs(b?.modified?.date).valueOf()
             },
             render: (val: any) => {
-                const date = dayjs(val.date).format("DD/MM/YYYY")
-                const user = val.name
+                const date = dayjs(val?.date).format("DD/MM/YYYY")
+                const user = val?.name
                 return <div className="flex flex-col w-full">
                     <div className="flex justify-start gap-1">
                         <span>{date}</span>
@@ -394,7 +394,7 @@ const index = ({ orderData }: { orderData?: any }) => {
                             </Link>
                         </Menu.Item>
                         <Menu.Item key="detail">
-                            <Link href={routes.eCommerce.detailOrder(row.id)}>
+                            <Link href={routes.eCommerce.detailOrder(row.invoice_number)}>
                                 Detail
                             </Link>
                         </Menu.Item>
@@ -435,7 +435,7 @@ const index = ({ orderData }: { orderData?: any }) => {
                 );
 
                 return (
-                    <div className='flex items-center gap-2'>
+                    <div className='flex items-center gap-2' onClick={(e) => e.stopPropagation()} >
                         <Dropdown overlay={menu} trigger={['click']} >
                             <ButtonIcon
                                 color='primary'
@@ -449,7 +449,7 @@ const index = ({ orderData }: { orderData?: any }) => {
                             variant='filled'
                             size="small"
                             icon={TrashIconRed}
-                        // onClick={() => setOpenModalDelete(true)}
+                            onClick={(e) => e.stopPropagation()}
                         />
                     </div>
                 );

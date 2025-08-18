@@ -18,10 +18,11 @@ import { brandsAtom, categoriesAtom } from '@/store/DropdownItemStore';
 import { useNotificationAntd } from '@/components/toast';
 import ProductReturn, { ProductForm } from './ProductReturn';
 import Table from '@/components/table'
-import { Divider } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import Divider from '@/components/divider'
+import { PlusOutlineIcon } from '@public/icon';
+import Image from 'next/image';
 import ButtonCancel from '@/components/button/ButtonAction'
-
+import { formatCurrency } from '@/plugins/utils/utils';
 
 const FormReturnSales: React.FC<FormProps> = ({ mode, initialValues, slug, dataTable }) => {
     const [optionBrands] = useAtom(brandsAtom)
@@ -31,10 +32,12 @@ const FormReturnSales: React.FC<FormProps> = ({ mode, initialValues, slug, dataT
     const [optionsCategories] = useAtom(categoriesAtom)
     const [formData, setFormData] = useState({
         order_id: initialValues ? initialValues.order_id : '',
+        customer_submit_request: initialValues ? initialValues.customer_submit_request : '',
         sales_person: initialValues ? initialValues.sales_person : '',
         status: initialValues ? initialValues.status : '',
         product: initialValues ? initialValues.product : [],
-        notes: initialValues ? initialValues.notes : '',
+        internal_notes: initialValues ? initialValues.internal_notes : '',
+        customers_notes: initialValues ? initialValues.customers_notes : '',
         subtotal: initialValues ? initialValues.subtotal : '',
         tax_include: initialValues ? initialValues.tax_include : '',
         total: initialValues ? initialValues.total : ''
@@ -49,12 +52,17 @@ const FormReturnSales: React.FC<FormProps> = ({ mode, initialValues, slug, dataT
         current_serial_number: '',
         reason: '',
         product_return: false,
-        status: ''
+        status: '',
+        evidence: [],
+        product_condition: '',
+        packaging_condition: '',
+        is_no_missing_part: false,
+        is_serial_number_match: false
     }]);
 
     const breadcrumb = [
-        { title: 'Sales' },
-        { title: 'RMA', url: routes.eCommerce.returnSales },
+        { title: 'RMA' },
+        { title: 'RMA Sales', url: routes.eCommerce.returnSales },
         { title: mode === 'create' ? 'Create' : 'Edit' },
     ];
 
@@ -92,7 +100,7 @@ const FormReturnSales: React.FC<FormProps> = ({ mode, initialValues, slug, dataT
                 order_id: formData.order_id,
                 sales_person: formData.sales_person,
                 status: formData.status,
-                notes: formData.notes,
+                internal_notes: formData.internal_notes,
                 prodcut: formData.product,
                 subtotal: formData.subtotal,
                 tax_include: formData.tax_include,
@@ -172,7 +180,12 @@ const FormReturnSales: React.FC<FormProps> = ({ mode, initialValues, slug, dataT
                 current_serial_number: '',
                 reason: '',
                 product_return: false,
-                status: ''
+                status: '',
+                evidence: [],
+                product_condition: '',
+                packaging_condition: '',
+                is_no_missing_part: false,
+                is_serial_number_match: false
             }
         ])
     }
@@ -184,7 +197,7 @@ const FormReturnSales: React.FC<FormProps> = ({ mode, initialValues, slug, dataT
     };
 
     const handleUpdateRow = (index: number, updatedForm: ProductForm) => {
-        const updated = [...productForm];
+        const updated: any = [...productForm];
         updated[index] = updatedForm;
         setProductForm(updated);
     };
@@ -203,8 +216,8 @@ const FormReturnSales: React.FC<FormProps> = ({ mode, initialValues, slug, dataT
     return (
         <>
             {contextHolder}
-            <div className="mt-6 mx-4 mb-0">
-                <h1 className="text-xl font-bold mb-4">{mode === 'create' ? 'Create Return Sales' : 'Edit Return Sales'}</h1>
+            <div className="mt-6 mx-6 mb-0">
+                <h1 className="text-2xl font-bold mb-4">{mode === 'create' ? 'Create Return Sales' : 'Edit Return Sales'}</h1>
                 <Breadcrumb items={breadcrumb} />
                 <Divider />
             </div>
@@ -215,10 +228,28 @@ const FormReturnSales: React.FC<FormProps> = ({ mode, initialValues, slug, dataT
                         <div className='grid md:grid-cols-2 gap-2'>
                             <SelectInput
                                 id='order_id'
-                                label='Order Id'
+                                label='Order ID'
                                 value={formData.order_id}
-                                placeholder='Select Order Id'
+                                placeholder='Select Order ID'
                                 onChange={(val) => handleChangeSelect('order_id', val)}
+                                options={[
+                                    { label: 'ORD890342', value: '1' },
+                                    { label: 'ORD890343', value: '2' },
+                                ]}
+                                required
+                            />
+                            <SelectInput
+                                id='customer_submit_request'
+                                label='Customer Submit Request'
+                                value={formData.customer_submit_request}
+                                placeholder='Select Customer Submit Request'
+                                onChange={(val) => handleChangeSelect('customer_submit_request', val)}
+                                options={[
+                                    { label: 'Web Portal', value: 'web-portal' },
+                                    { label: 'Email', value: 'email' },
+                                    { label: 'Phone', value: 'phone' },
+                                    { label: 'Chat', value: 'chat' },
+                                ]}
                                 required
                             />
                             {/* <SelectInput
@@ -238,8 +269,8 @@ const FormReturnSales: React.FC<FormProps> = ({ mode, initialValues, slug, dataT
                             options={optionStatus}
                         /> */}
                         </div>
-                        <div>
-                            <h1 className='text-lg font-bold'>Product List</h1>
+                        <div className='flex flex-col gap-4'>
+                            <h1 className='text-xl font-semibold'>Product List</h1>
                             <Divider />
                             {
                                 productForm.map((item, index) => {
@@ -256,11 +287,14 @@ const FormReturnSales: React.FC<FormProps> = ({ mode, initialValues, slug, dataT
                                     )
                                 })
                             }
-                            <Divider />
                             <div className='flex justify-end'>
                                 <Button
                                     label='Add Product'
-                                    icon={<PlusOutlined />}
+                                    icon={<Image
+                                        src={PlusOutlineIcon}
+                                        alt='plus-icon'
+                                        width={15}
+                                    />}
                                     onClick={addItem}
                                 />
                             </div>
@@ -327,45 +361,39 @@ const FormReturnSales: React.FC<FormProps> = ({ mode, initialValues, slug, dataT
                         </div>
                     </div> */}
                         <div className='grid md:grid-cols-12 gap-3 mt-5'>
-                            <div className='grid col-span-8 gap-3'>
+                            <div className='grid md:grid-cols-2 col-span-10 gap-3'>
                                 <Textarea
-                                    id='notes'
-                                    label='Notes'
-                                    value={formData.notes}
+                                    id='customers_notes'
+                                    label='Customer Notes'
+                                    value={formData.internal_notes}
+                                    onChange={handleChange}
+                                    textareaClassname='!h-20'
+                                />
+                                <Textarea
+                                    id='internal_notes'
+                                    label='Internal Notes'
+                                    value={formData.internal_notes}
                                     onChange={handleChange}
                                     textareaClassname='!h-20'
                                 />
                             </div>
-                            <div className='flex items-center col-span-4 gap-3'>
-                                <Input
-                                    id='subtotal'
-                                    type='number'
-                                    label='Subtotal'
-                                    value={formData.subtotal}
-                                    onChange={handleChange}
-                                    className='mb-1'
-                                    required
-                                />
-                                <Input
-                                    id='tax_include'
-                                    type='number'
-                                    label='Tax Include'
-                                    value={formData.tax_include}
-                                    onChange={handleChange}
-                                    className='mb-1'
-                                    required
+                            <div className='flex items-center md:col-span-2 gap-3'>
+                                <div className="text-sm text-black w-full">
+                                    <div className="flex justify-between mb-1">
+                                        <span>Subtotal</span>
+                                        <span>{formatCurrency(formData.subtotal)}</span>
+                                    </div>
 
-                                />
-                                <Input
-                                    id='total'
-                                    type='number'
-                                    label='Total'
-                                    value={formData.total}
-                                    onChange={handleChange}
-                                    className='mb-1'
-                                    required
-
-                                />
+                                    <div className="flex justify-between mb-1">
+                                        <span>Tax Include</span>
+                                        <span>{formatCurrency(formData.tax_include)}</span>
+                                    </div>
+                                    <hr className="my-2 border-gray-300" />
+                                    <div className="flex justify-between font-bold text-base">
+                                        <span>Total</span>
+                                        <span>{formatCurrency(formData.total)}</span>
+                                    </div>
+                                </div>
                             </div>
 
 

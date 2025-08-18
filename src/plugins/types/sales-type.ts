@@ -890,7 +890,7 @@ export const transactionDUmmy = [
 export const returnData = [
     {
         id: 8,
-        order_id: 12,
+        order_id: 'ORD890342',
         // user_id: 6,
         // notes: null,
         sales_person: 'Ola',
@@ -904,7 +904,7 @@ export const returnData = [
     },
     {
         id: 7,
-        order_id: 12,
+        order_id: 'ORD890343',
         // user_id: 6,
         // notes: null,
         sales_person: 'Ola',
@@ -914,6 +914,20 @@ export const returnData = [
         total: "$45.45",
         // checkbox: "<div class=\"checkbox\">\n    <input type=\"checkbox\" class=\"select-row\" value=\"7\" id=\"0rlNtGQWpEgubc3n\">\n    <label for=\"0rlNtGQWpEgubc3n\"></label>\n</div>\n",
         supplier_name: "Alloys",
+        // created: "<span data-toggle=\"tooltip\" title=\"Dec 27, 2023\">\n    1 year ago\n</span>\n"
+    },
+    {
+        id: 6,
+        order_id: 'ORD890344',
+        // user_id: 6,
+        // notes: null,
+        sales_person: 'Lala',
+        status: "<span class=\"\">Rejected</span>",
+        // updated_at: "2023-12-27T09:32:26.000000Z",
+        // deleted_at: null,
+        total: "$45.45",
+        // checkbox: "<div class=\"checkbox\">\n    <input type=\"checkbox\" class=\"select-row\" value=\"7\" id=\"0rlNtGQWpEgubc3n\">\n    <label for=\"0rlNtGQWpEgubc3n\"></label>\n</div>\n",
+        supplier_name: "Lulu",
         // created: "<span data-toggle=\"tooltip\" title=\"Dec 27, 2023\">\n    1 year ago\n</span>\n"
     }
 ]

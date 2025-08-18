@@ -97,7 +97,8 @@ export const getDayShort = (dayName: string) => {
 
 console.log(getDayShort('Monday')); // Mon
 
-
+export const formatCurrency = (value: number) =>
+    `$${value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 // Format waktu
 export const dateFormats = [
     { label: 'YYYY-MM-DD', value: 'YYYY-MM-DD' },

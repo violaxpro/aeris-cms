@@ -12,3 +12,10 @@ export type BreadcrumbProps = {
 }
 
 export type Params = Promise<{ slug: string }>
+
+export type ImagesType = {
+    name: string;
+    url: string;
+    default: boolean;
+    alt_image: string;
+};

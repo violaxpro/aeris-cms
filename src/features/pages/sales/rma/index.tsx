@@ -33,6 +33,7 @@ import SearchTable from '@/components/search/SearchTable'
 import ShowPageSize from '@/components/pagination/ShowPageSize'
 import ButtonDelete from '@/components/button/ButtonAction'
 import ButtonFilter from '@/components/button/ButtonAction'
+import ConfirmModal from '@/components/modal/ConfirmModal'
 
 const index = ({ returnSales }: { returnSales?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
@@ -53,12 +54,19 @@ const index = ({ returnSales }: { returnSales?: any }) => {
     const [currentOrder, setCurrentOrder] = useState<any>(null)
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
+    const [openModalDelete, setOpenModalDelete] = useState(false)
+    const [deletedData, setDeletedData] = useState<any>(null)
 
 
     const handleDateChange = (date: any, dateString: string | string[]) => {
         console.log('Selected date:', dateString);
         setDate(date);
     };
+
+    const handleOpenModalDelete = (data: any) => {
+        setOpenModalDelete(true)
+        setDeletedData(data)
+    }
 
     const dataByStatus = activeTab == 'all'
         ? data
@@ -172,25 +180,19 @@ const index = ({ returnSales }: { returnSales?: any }) => {
 
     const breadcrumb = [
         {
-            title: 'Sales',
+            title: 'RMA',
         },
         {
-            title: 'Return Sales',
+            title: 'RMA Sales',
         },
     ]
     const columns: TableColumnsType<ReturnSalesType> = [
         {
             title: 'Order ID',
             dataIndex: 'order_id',
-            sorter: (a: any, b: any) => a.order_id - b.order_id,
+            sorter: (a: any, b: any) => a.order_id.localeCompare(b.order_id),
             render: (_: any, row: any) => {
-                return <div className="flex flex-col w-full">
-                    <div className="flex justify-start gap-1">
-                        <span>Order Id</span>
-                        <span>:</span>
-                        <span>{row.order_id}</span>
-                    </div>
-                </div>
+                return row.order_id
             }
         },
         {
@@ -284,8 +286,8 @@ const index = ({ returnSales }: { returnSales?: any }) => {
                 );
 
                 return (
-                    <div className='flex items-center gap-2'>
-                        <Dropdown overlay={menu} trigger={['click']} >
+                    <div className='flex items-center gap-2' onClick={(e) => e.stopPropagation()}>
+                        <Dropdown overlay={menu} trigger={['click']}>
                             <ButtonIcon
                                 color='primary'
                                 variant='filled'
@@ -298,7 +300,10 @@ const index = ({ returnSales }: { returnSales?: any }) => {
                             variant='filled'
                             size="small"
                             icon={TrashIconRed}
-                        // onClick={() => setOpenModalDelete(true)}
+                            onClick={(e) => {
+                                e.stopPropagation()
+                                handleOpenModalDelete(row.id)
+                            }}
                         />
                     </div>
                 );
@@ -330,10 +335,17 @@ const index = ({ returnSales }: { returnSales?: any }) => {
     return (
         <>
             {contextHolder}
-            <div className="mt-6 mx-4 mb-0">
+            <ConfirmModal
+                open={openModalDelete}
+                onCancel={() => setOpenModalDelete(false)}
+                onSave={handleDelete}
+                action='Delete'
+                text='Are you sure you want to delete this rma sales?'
+            />
+            <div className="mt-6 mx-6 mb-0">
                 <div className='flex justify-between items-center'>
                     <div>
-                        <h1 className='text-xl font-bold'>
+                        <h1 className='text-2xl font-bold'>
                             Return Sales
                         </h1>
                         <Breadcrumb
@@ -352,14 +364,9 @@ const index = ({ returnSales }: { returnSales?: any }) => {
                     />
                 </div>
             </div>
-            <Content className="mt-6 mx-4 mb-0">
+            <Content className="mb-0">
                 <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
                     <div className='flex justify-between mb-4 gap-2'>
-                        {/* <Button
-                                       label='Add Payment'
-                                       onClick={handleClickModalPaid}
-                                   /> */}
-
                         <div className='flex items-center gap-2'>
                             <ShowPageSize
                                 pageSize={pageSize}
