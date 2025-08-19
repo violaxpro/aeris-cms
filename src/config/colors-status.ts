@@ -32,7 +32,9 @@ export const statusMap: Record<string, { color: string; text: string, textColor:
     'Sent Email': { color: '#01933B1A', text: 'Sent', textColor: '#01933B' },
     Done: { color: '#01933B1A', text: 'Done', textColor: '#01933B' },
     'Actived': { color: '#01933B1A', text: 'Actived', textColor: '#01933B' },
-    'Expired': { color: '#C2020514', text: 'Expired', textColor: '#C20205' }
+    'Expired': { color: '#C2020514', text: 'Expired', textColor: '#C20205' },
+    Available: { color: '#00B3061A', text: 'Available', textColor: '#00B306' },
+
 };
 
 export const colorMap: Record<string, any> = {

@@ -15,7 +15,7 @@ import SearchInput from '@/components/search';
 import { deleteBrand } from '@/services/brands-service'
 import { useNotificationAntd } from '@/components/toast'
 import { useAtom } from 'jotai'
-import { brandAtom } from '@/store/BrandAtomStore'
+import { inventoryListAtom } from '@/store/WarehouseAtom'
 import ButtonAction from '@/components/button/ButtonAction'
 import ButtonIcon from '@/components/button/ButtonIcon'
 import { useRouter } from 'next/navigation'
@@ -23,12 +23,16 @@ import ConfirmModal from '@/components/modal/ConfirmModal'
 import Pagination from '@/components/pagination'
 import SearchTable from '@/components/search/SearchTable'
 import ShowPageSize from '@/components/pagination/ShowPageSize'
-import { AddIcon, FilterIcon, TrashIconRed, PencilIconBlue, PencilYellowIcon, EyeIcon } from '@public/icon'
+import { AddIcon, FilterIcon, TrashIconRed, PencilIconBlue, ActivityHistoryYellowIcon } from '@public/icon'
+import Divider from '@/components/divider'
+import dayjs from 'dayjs'
+import StatusTag from '@/components/tag'
+import ModalActivityHistory from './ModalActivityHistory'
 
-const index = ({ inventoryLists }: { inventoryLists?: any }) => {
+const InventoryListsHistory = ({ historyData, slug }: { historyData?: any, slug: string }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
     const router = useRouter()
-    const [data, setData] = useAtom(brandAtom)
+    const [data, setData] = useAtom(inventoryListAtom)
     const [openModalDelete, setOpenModalDelete] = useState(false)
     const [deletedData, setDeletedData] = useState<any>(null)
     const [pageSize, setPageSize] = useState(10);
@@ -37,6 +41,8 @@ const index = ({ inventoryLists }: { inventoryLists?: any }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [filteredData, setFilteredData] = useState<any[]>([]);
     const [search, setSearch] = useState('')
+    const [openActivityHistory, setOpenActivityHistory] = useState(false)
+    const [dataActivityHistory, setDataActivityHistory] = useState(null)
     const handleDelete = async (id: any) => {
         try {
             const res = await deleteBrand(id)
@@ -49,6 +55,11 @@ const index = ({ inventoryLists }: { inventoryLists?: any }) => {
         }
     }
 
+    const handleOpenModalHistory = (data: any) => {
+        setOpenActivityHistory(true)
+        setDataActivityHistory(data)
+
+    }
     const handleOpenModalDelete = (data: any) => {
         setOpenModalDelete(true)
         setDeletedData(data)
@@ -59,56 +70,61 @@ const index = ({ inventoryLists }: { inventoryLists?: any }) => {
             title: 'Warehouse',
         },
         {
-            title: 'Inventory Lists',
+            title: 'Inventory Lists', url: routes.eCommerce.inventoryList
         },
+        {
+            title: slug
+        }
     ]
-    const columns: TableColumnsType<BrandType> = [
+    const columns: TableColumnsType<any> = [
         {
-            title: 'SKU',
-            dataIndex: 'sku',
-            sorter: (a: any, b: any) => a?.sku.localeCompare(b?.sku)
+            title: 'Location',
+            dataIndex: 'location',
+            sorter: (a: any, b: any) => a?.location.localeCompare(b?.location)
         },
         {
-            title: 'Image',
-            dataIndex: 'image',
-            render: (url: string) => {
-                if (!url) return null;
-                return (
-                    <Image
-                        src={url}
-                        alt="product-img"
-                        width={50}
-                        height={50}
-                        className='object-cover rounded-xl'
-                    />
-                )
-            },
+            title: 'Serial Number',
+            dataIndex: 'serial_number',
+            sorter: (a: any, b: any) => a?.serial_number.localeCompare(b?.serial_number)
         },
         {
-            title: 'Name',
-            dataIndex: 'name',
-            sorter: (a: any, b: any) => a?.name.localeCompare(b?.name)
-        },
-        {
-            title: 'In Stock',
-            dataIndex: 'in_stock',
-            sorter: (a: any, b: any) => a?.in_stock - b?.in_stock
-        },
-        {
-            title: 'Sold',
-            dataIndex: 'sold',
-            sorter: (a: any, b: any) => a?.sold - b?.sold
-        },
-        {
-            title: 'Returned',
-            dataIndex: 'returned',
-            sorter: (a: any, b: any) => a?.returned - b?.returned
-        },
-        {
-            title: 'Added',
-            dataIndex: 'added',
-            sorter: (a: any, b: any) => a?.added - b?.added
+            title: 'PO Number',
+            dataIndex: 'po_number',
+            sorter: (a: any, b: any) => a?.po_number.localeCompare(b?.po_number)
 
+        },
+        {
+            title: 'Date',
+            dataIndex: 'date',
+            sorter: (a: any, b: any) => dayjs(a?.date).valueOf() - dayjs(b?.date).valueOf(),
+            render: (_: any, row: any) => {
+                const date = dayjs(row?.date).format('DD/MM/YYYY, HH:mm')
+                return date
+            }
+        },
+        {
+            title: 'Status',
+            dataIndex: 'status',
+            sorter: (a: any, b: any) => {
+                const status = ['Available']
+                return status.indexOf(a?.status) - status.indexOf(b?.status)
+            },
+            render: (_: any, row: any) => {
+                return <StatusTag status={row?.status} type='warehouse' />
+            }
+        },
+        {
+            title: 'Last Updated',
+            dataIndex: 'last_updated',
+            sorter: (a: any, b: any) => dayjs(a?.last_updated?.date).valueOf() - dayjs(b?.last_updated?.date).valueOf(),
+            render: (_: any, row: any) => {
+                const date = dayjs(row?.last_updated?.date).format('MMM DD, YYYY')
+                const name = row?.last_updated?.name
+                return <div className='flex flex-col'>
+                    <span>{date}</span>
+                    <span>by {name}</span>
+                </div>
+            }
         },
         {
             title: 'Action',
@@ -119,19 +135,18 @@ const index = ({ inventoryLists }: { inventoryLists?: any }) => {
                 return (
                     <div className="flex items-center justify-end gap-3 pe-4" onClick={(e) => e.stopPropagation()}>
                         <ButtonIcon
-                            color='primary'
-                            variant='filled'
-                            size="small"
-                            icon={EyeIcon}
-                            width={15}
-                            onClick={() => router.push(routes.eCommerce.inventoryListHistory(row.sku))}
-                        />
-                        <ButtonIcon
                             color='yellow'
                             variant='filled'
                             size="small"
-                            icon={PencilYellowIcon}
+                            icon={ActivityHistoryYellowIcon}
                             width={15}
+                            onClick={() => handleOpenModalHistory(row)}
+                        />
+                        <ButtonIcon
+                            color='primary'
+                            variant='filled'
+                            size="small"
+                            icon={PencilIconBlue}
                             onClick={() => router.push(routes.eCommerce.editPriceLevel(row.id))}
                         />
                         <ButtonIcon
@@ -153,17 +168,24 @@ const index = ({ inventoryLists }: { inventoryLists?: any }) => {
     };
 
     useEffect(() => {
-        setData(inventoryLists)
-    }, [inventoryLists])
+        setData(historyData?.activity_history)
+    }, [historyData])
+
+    console.log(historyData)
     return (
         <>
             {contextHolder}
+            <ModalActivityHistory
+                open={openActivityHistory}
+                data={dataActivityHistory}
+                handleCancel={() => setOpenActivityHistory(false)}
+            />
             <ConfirmModal
                 open={openModalDelete}
                 onCancel={() => setOpenModalDelete(false)}
                 onSave={handleDelete}
                 action='Delete'
-                text='Are you sure you want to delete this inventory list?'
+                text='Are you sure you want to delete this inventory list history?'
             />
             <div className="mt-6 mx-6 mb-0">
                 <h1 className='text-2xl font-bold'>
@@ -173,8 +195,14 @@ const index = ({ inventoryLists }: { inventoryLists?: any }) => {
                     items={breadcrumb}
                 />
             </div>
+
             <Content className="mb-0">
-                <div className=' bg-[#fff] p-6 min-h-[360px'>
+                <div className='flex flex-col gap-4 bg-[#fff] p-6 min-h-[360px]'>
+                    <div className='flex flex-col gap-2'>
+                        <span className='font-semibold text-lg'>{historyData?.sku}</span>
+                        <span>{historyData?.name}</span>
+                        <Divider />
+                    </div>
                     <div className='flex justify-between mb-4'>
                         <div className='flex items-center gap-2'>
                             <ShowPageSize
@@ -221,8 +249,6 @@ const index = ({ inventoryLists }: { inventoryLists?: any }) => {
                         withSelectableRows
                         selectedRowKeys={selectedRowKeys}
                         onSelectChange={setSelectedRowKeys}
-                        detailRoutes={(slug: string) => routes.eCommerce.inventoryListHistory(slug)}
-                        getRowValue={(record: any) => record.sku}
                     />
                     <Pagination
                         current={currentPage}
@@ -236,4 +262,4 @@ const index = ({ inventoryLists }: { inventoryLists?: any }) => {
     )
 }
 
-export default index
+export default InventoryListsHistory

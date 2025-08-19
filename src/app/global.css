@@ -550,3 +550,7 @@ div {
 .ant-layout-sider .ant-layout-sider-zero-width-trigger {
     background-color: var(--default-color) !important;
 }
+
+.ant-timeline .ant-timeline-item-tail {
+    border-inline-start: 2px dashed #3666AA !important;
+}

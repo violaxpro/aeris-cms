@@ -30,10 +30,10 @@ const index = ({
     onOpenPhoto
 }: TimelineType) => {
     return (
-        <div>
-            <Timeline>
+        <div className='max-h-[60vh] overflow-auto p-4'>
+            <Timeline >
                 {data?.map((step: any, idx: any) => {
-                    const isDisabled = !step.device || !step.location || !step.time;
+                    const isDisabled = !step.device && !step.location && !step.time;
                     return (
                         <Timeline.Item
                             key={idx}
@@ -50,7 +50,7 @@ const index = ({
                             <div className='flex flex-col'>
                                 <div className='flex justify-between items-center -mt-2'>
                                     <label className={`text-lg font-semibold ${isDisabled ? 'text-[#787878]' : ''}`}>
-                                        {getLabel ? getLabel(step?.type) : step.type}
+                                        {getLabel ? getLabel(step?.type) : step.title}
                                     </label>
                                     {availableImage &&
                                         <div className='flex gap-2 items-center'>

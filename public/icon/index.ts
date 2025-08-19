@@ -133,6 +133,13 @@ export { default as PauseRoundedYellowIcon } from './PauseRoundedYellowIcon.svg'
 export { default as PlayNextRoundedYellowIcon } from './PlayNextRoundedYellowIcon.svg'
 export { default as SearchHeaderIcon } from './SearchHeaderIcon.svg'
 export { default as TrackingIcon } from './TrackingIcon.svg'
+export { default as ActivityHistoryYellowIcon } from './ActivityHistoryYellowIcon.svg'
+export { default as ArrowReturnIcon } from './ArrowReturnIcon.svg'
+export { default as BoxIcon } from './BoxIcon.svg'
+export { default as BoxOutIcon } from './BoxOutIcon.svg'
+export { default as TransferStockIcon } from './TransferStockIcon.svg'
+export { default as ReservationOrderIcon } from './ReservationOrderIcon.svg'
+export { default as ReturnIcon } from './ReturnIcon.svg'
 
 
 

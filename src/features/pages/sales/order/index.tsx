@@ -467,10 +467,7 @@ const index = ({ orderData }: { orderData?: any }) => {
                             variant='filled'
                             size="small"
                             icon={TrashIconRed}
-                            onClick={(e) => {
-                                e.stopPropagation()
-                                handleOpenModalDelete(row.id)
-                            }}
+                            onClick={() => handleOpenModalDelete(row.id)}
                         />
                     </div>
                 );
