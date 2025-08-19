@@ -61,8 +61,7 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
     const [currentPageWarehouse, setCurrentPageWarehouse] = useState(1);
     const [pageSizeWarehouse, setPageSizeWarehouse] = useState(10);
     const [search, setSearch] = useState('')
-
-    console.log(serialNumberData)
+    const [revealedRows, setRevealedRows] = useState<number[]>([]);
 
     const breadcrumb = [
         { title: 'Sales' },
@@ -109,15 +108,24 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
                 return a?.price - b?.price
             },
             render: (_: any, row: any) => {
+                const isRevealed = revealedRows.includes(row.id);
                 return <div className="flex flex-col w-full">
                     <div className="flex justify-start gap-1">
                         <span>${row.price}</span>
                     </div>
                     <div className="flex justify-start gap-1">
                         {
-                            buyPriceHidden ? <button onClick={() => setBuyPriceHidden(false)} className="text-[#3666AA] font-medium cursor-pointer">
-                                Reveal
-                            </button> : <span onClick={() => setBuyPriceHidden(true)} className='cursor-pointer'>Buy Price : {row?.price?.buying_price || 100}</span>
+                            isRevealed ?
+                                <span
+                                    onClick={() => setRevealedRows(revealedRows.filter((id) => id !== row.id))}
+                                    className='cursor-pointer'>
+                                    Buy Price : {row?.price?.buying_price || 100}
+                                </span>
+                                : <button
+                                    onClick={() => setRevealedRows([...revealedRows, row.id])}
+                                    className="text-[#3666AA] font-medium cursor-pointer">
+                                    Reveal
+                                </button>
                         }
                     </div>
                 </div>
@@ -188,16 +196,16 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
         {
             title: 'Serial Number',
             dataIndex: 'serial_number',
-            sorter: (a: any, b: any) => {
-                return a?.serial_number.localeCompare(b?.serial_number)
-            },
+            // sorter: (a: any, b: any) => {
+            //     return a?.serial_number.localeCompare(b?.serial_number)
+            // },
             render: (_: any, row: any) => {
-                const value = serialNumberData.serialNumber[row.id]
-                    ? serialNumberData.serialNumber[row.id] == 'Empty' ? '' : serialNumberData.serialNumber[row.id]
+                const value = serialNumberData.serialNumber[row.key]
+                    ? serialNumberData.serialNumber[row.key] == 'Empty' ? '' : serialNumberData.serialNumber[row.key]
                     : ''
                 return <Input
                     id='serialNumber'
-                    value={serialNumberData.serialNumber[row.id] || ''}
+                    value={value}
                     type='text'
                     placeholder="Select Serial Number"
                     onClick={() => {
@@ -209,7 +217,7 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
                             ...prev,
                             serialNumber: {
                                 ...prev.serialNumber,
-                                [row.id]: e.target.value
+                                [row.key]: e.target.value
                             }
                         }))
                     }}
@@ -223,7 +231,7 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
                 return a?.product_form.localeCompare(b?.product_form)
             },
             render: (_: any, row: any) => {
-                return serialNumberData.productFrom[row.id] || ''
+                return serialNumberData.productFrom[row.key] || ''
             }
         },
         {
@@ -233,15 +241,15 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
                 return a?.pick - b?.pick
             },
             render: (_: any, row: any) => {
-                const isChecked = serialNumberData.pickId.includes(row.id);
+                const isChecked = serialNumberData.pickId.includes(row.key);
                 return <CheckboxInput
                     checked={isChecked}
                     onChange={(checked) => {
                         setSerialNumberData((prev: any) => ({
                             ...prev,
                             pickId: checked
-                                ? [...prev.pickId, row.id] // add
-                                : prev.pickId.filter((id: any) => id !== row.id) // remove
+                                ? [...prev.pickId, row.key] // add
+                                : prev.pickId.filter((key: any) => key !== row.key) // remove
                         }));
                     }}
                 />
@@ -254,15 +262,15 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
                 return a?.pack - b?.pack
             },
             render: (_: any, row: any) => {
-                const isChecked = serialNumberData.packId.includes(row.id);
+                const isChecked = serialNumberData.packId.includes(row.key);
                 return <CheckboxInput
                     checked={isChecked}
                     onChange={(checked) => {
                         setSerialNumberData((prev: any) => ({
                             ...prev,
                             packId: checked
-                                ? [...prev.packId, row.id] // add
-                                : prev.packId.filter((id: any) => id !== row.id) // remove
+                                ? [...prev.packId, row.key] // add
+                                : prev.packId.filter((key: any) => key !== row.key) // remove
                         }));
                     }}
                 />
@@ -449,7 +457,7 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
                 return <Button
                     label='Choose'
                     onClick={() => handleSelectSerialNumber(
-                        modalSerialNumber?.row?.id,
+                        modalSerialNumber?.row?.key,
                         row.serial_number,
                         row.location,
                         row.po_number
@@ -460,7 +468,6 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
             }
         },
     ]
-
 
     const invoiceData = {
         invoiceNumber: 'INV-2025-001',
@@ -477,6 +484,17 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
         unitPrice: 200,
         quantity: 10
     };
+
+    const serialNumberDataTable = data?.product?.map((item: any, index: number) => {
+        console.log(item)
+        const dataPerQuantity = Array.from({ length: item.qty }).map((_, index) => ({
+            ...item,
+            key: `${item.id}-${index}`, // unique key
+            rowNumber: index + 1,       // nomor urut
+        }));
+
+        return dataPerQuantity
+    })
 
     const openSerialNumberModal = (row: any) => {
         setModalSerialNumber({ open: true, row });
@@ -526,7 +544,7 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
         notifySuccess('Tracking Number has succesfully send!')
     }
 
-    console.log(modalSerialNumber)
+    // console.log(modalSerialNumber, serialNumberData)
     return (
         <>
             {contextHolder}
@@ -558,11 +576,11 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
                 <div className='flex flex-col gap-3'>
                     <Table
                         columns={columnWarehouse}
-                        dataSource={modalSerialNumber?.row?.warehouses}
+                        dataSource={modalSerialNumber?.row?.warehouses || []}
                     />
                     <Pagination
                         current={currentPageWarehouse}
-                        total={modalSerialNumber?.row?.warehouses.length}
+                        total={modalSerialNumber?.row?.warehouses?.length || 0}
                         pageSize={pageSizeWarehouse}
                         onChange={(page) => setCurrentPageWarehouse(page)}
                     />
@@ -797,8 +815,9 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
                         <div>
                             <h4 className='text-xl font-semibold'> Serial Number</h4>
                             <Table
+                                rowkey='key'
                                 columns={columnsSerialNumber}
-                                dataSource={data?.serialNumbers}
+                                dataSource={serialNumberDataTable.length > 0 ? serialNumberDataTable.flat() : []}
                             />
                         </div>
                         <div>

@@ -123,20 +123,107 @@ export const orderDummyData = [
         order_reference: 'Order 1',
         product: [
             {
+                id: 1,
                 sku: '0317-8471',
                 name: 'U-Prox Keyfob - White SMART9412',
                 price: 500,
                 buying_price: 600,
                 qty: 2,
-                total: 1200
+                total: 1200,
+                warehouses: [
+                    {
+                        id: 1,
+                        location: 'Seadan Parramatta',
+                        serial_number: 'SN-8765',
+                        po_number: 'PO 8965',
+                        date: '2023-12-14 15:20'
+                    },
+                    {
+                        id: 2,
+                        location: 'Victorinox',
+                        serial_number: 'SN-2465',
+                        po_number: 'PO 8965',
+                        date: '2023-12-30 10:04'
+                    },
+                    {
+                        id: 3,
+                        location: 'Tenton Sports',
+                        serial_number: 'SN-2450',
+                        po_number: 'PO 8965',
+                        date: '2023-12-08 14:20'
+                    },
+                    {
+                        id: 4,
+                        location: 'Northhampton',
+                        serial_number: 'Empty',
+                        po_number: 'PO 8965',
+                        date: '2023-12-22 11:40'
+                    },
+                    {
+                        id: 5,
+                        location: 'Toronto',
+                        serial_number: 'Empty',
+                        po_number: 'PO 8965',
+                        date: '2023-12-23 17:20'
+                    }
+                ],
             },
             {
+                id: 2,
                 sku: '0317-8472',
+                name: 'U-Prox Keyfob - White SMART9412',
+                price: 500,
+                buying_price: 600,
+                qty: 1,
+                total: 1200,
+                warehouses: [
+                    {
+                        id: 1,
+                        location: 'Seadan Parramatta',
+                        serial_number: 'SN-8765',
+                        po_number: 'PO 8965',
+                        date: '2023-12-14 15:20'
+                    },
+                    {
+                        id: 2,
+                        location: 'Victorinox',
+                        serial_number: 'SN-2465',
+                        po_number: 'PO 8965',
+                        date: '2023-12-30 10:04'
+                    },
+                    {
+                        id: 3,
+                        location: 'Tenton Sports',
+                        serial_number: 'SN-2450',
+                        po_number: 'PO 8965',
+                        date: '2023-12-08 14:20'
+                    },
+                ],
+            },
+            {
+                id: 3,
+                sku: '0317-8473',
                 name: 'Hikvision Wireless Repeater DS-PR1-WB',
                 price: 500,
                 buying_price: 600,
-                qty: 2,
-                total: 1200
+                qty: 3,
+                total: 1200,
+                warehouses: [
+                    {
+                        id: 1,
+                        location: 'Seadan Parramatta',
+                        serial_number: 'SN-8765',
+                        po_number: 'PO 8965',
+                        date: '2023-12-14 15:20'
+                    },
+                    {
+                        id: 2,
+                        location: 'Victorinox',
+                        serial_number: 'SN-2465',
+                        po_number: 'PO 8965',
+                        date: '2023-12-30 10:04'
+                    },
+                ],
             }
         ],
         delivery_note: '',
@@ -243,6 +330,7 @@ export const orderDummyData = [
         order_reference: 'Order 1',
         product: [
             {
+                id: 1,
                 sku: '459834',
                 name: 'Product A',
                 supplier: [
@@ -263,6 +351,7 @@ export const orderDummyData = [
                 total: 1200
             },
             {
+                id: 2,
                 sku: '459835',
                 name: 'Product B',
                 supplier: [
@@ -313,6 +402,7 @@ export const orderDummyData = [
         order_reference: 'Order 1',
         product: [
             {
+                id: 1,
                 sku: '459834',
                 name: 'Product A',
                 price: 500,
@@ -351,6 +441,7 @@ export const orderDummyData = [
         order_reference: 'Order 1',
         product: [
             {
+                id: 1,
                 sku: '459834',
                 name: 'Product A',
                 price: 500,
@@ -389,6 +480,7 @@ export const orderDummyData = [
         order_reference: 'Order 1',
         product: [
             {
+                id: 1,
                 sku: '459834',
                 name: 'Product A',
                 price: 500,
@@ -427,6 +519,7 @@ export const orderDummyData = [
         order_reference: 'Order 1',
         product: [
             {
+                id: 1,
                 sku: '459834',
                 name: 'Product A',
                 price: 500,
@@ -465,6 +558,7 @@ export const orderDummyData = [
         order_reference: 'Order 1',
         product: [
             {
+                id: 1,
                 sku: '459834',
                 name: 'Product A',
                 price: 500,
@@ -503,6 +597,7 @@ export const orderDummyData = [
         order_reference: 'Order 1',
         product: [
             {
+                id: 1,
                 sku: '459834',
                 name: 'Product A',
                 price: 500,
@@ -541,6 +636,7 @@ export const orderDummyData = [
         order_reference: 'Order 1',
         product: [
             {
+                id: 1,
                 sku: '459834',
                 name: 'Product A',
                 price: 500,
@@ -579,6 +675,7 @@ export const orderDummyData = [
         order_reference: 'Order 1',
         product: [
             {
+                id: 1,
                 sku: '459834',
                 name: 'Product A',
                 price: 500,
@@ -617,6 +714,7 @@ export const orderDummyData = [
         order_reference: 'Order 1',
         product: [
             {
+                id: 1,
                 sku: '459834',
                 name: 'Product A',
                 price: 500,
@@ -656,6 +754,7 @@ export const orderDummyData = [
         order_reference: 'Order 1',
         product: [
             {
+                id: 1,
                 sku: '459834',
                 name: 'Product A',
                 price: 500,

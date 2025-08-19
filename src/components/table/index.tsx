@@ -18,6 +18,7 @@ type tableProps<data> = {
     detailRoutes?: (slug: any) => string;
     getRowValue?: (record: any) => any;
     onRowClick?: (record: any) => void;
+    rowkey?: string
 }
 
 const index = <data extends object>({
@@ -31,7 +32,8 @@ const index = <data extends object>({
     expandable,
     detailRoutes,
     getRowValue,
-    onRowClick
+    onRowClick,
+    rowkey = 'id'
 }: tableProps<data>) => {
     const router = useRouter()
     const [selectRowKeys, setSelectRowKey] = useState<React.Key[]>([]);
@@ -67,7 +69,7 @@ const index = <data extends object>({
     };
 
     return <Table
-        rowKey="id"
+        rowKey={rowkey}
         rowSelection={withSelectableRows ? rowSelection : undefined}
         columns={columns}
         dataSource={dataSource}
