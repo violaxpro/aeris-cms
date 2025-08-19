@@ -35,7 +35,6 @@ import SelectDatePicker from '@/components/date-picker/SelectDatePicker'
 import { Avatar } from 'antd'
 import AvatarImage from "public/social-avatar.webp"
 import ModalAttendance from './ModalAttendance'
-import ModalDelete from '@/components/modal/ModalDelete'
 import ConfirmModal from '@/components/modal/ConfirmModal'
 import ModalDetailAttendance from './ModalDetailAttendance'
 

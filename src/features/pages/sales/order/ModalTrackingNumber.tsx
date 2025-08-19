@@ -13,7 +13,6 @@ import Textarea from '@/components/textarea'
 import { addressData } from '@/plugins/types/settings-type';
 import { TrashIconRed, PencilIconBlue, PlusOutlineIcon } from '@public/icon';
 import ButtonIcon from '@/components/button/ButtonIcon';
-import DeleteConfirmModal from '@/components/modal/ModalDelete'
 import Button from '@/components/button'
 
 type ModalTrackingNumberProps = {

@@ -13,7 +13,7 @@ import Textarea from '@/components/textarea'
 import { addressData } from '@/plugins/types/settings-type';
 import { TrashIconRed, PencilIconBlue } from '@public/icon';
 import ButtonAction from '@/components/button/ButtonIcon';
-import DeleteConfirmModal from '@/components/modal/ModalDelete'
+import ConfirmModal from '@/components/modal/ConfirmModal';
 import Button from '@/components/button'
 
 type ModalAddressProps = {
@@ -121,10 +121,12 @@ const ModalAddress = ({
 
     return (
         <>
-            <DeleteConfirmModal
+            <ConfirmModal
                 open={openModalDelete}
                 onCancel={() => setOpenModalDelete(false)}
-                onDelete={handleDelete}
+                onSave={handleDelete}
+                action='Delete'
+                text='Are you sure you want to delete this address?'
             />
             <Modal
                 open={isModalOpen}
