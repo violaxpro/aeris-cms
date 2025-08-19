@@ -432,7 +432,7 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                 <Button
                                                     label='Add New Customer'
                                                     onClick={() => setOpenModalCustomer(true)}
-                                                    hasWidth
+                                                    hasWidth='w-full'
                                                 />
                                             </div>
 
@@ -518,12 +518,12 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                 <Button
                                                     label='Add One of Billing Address'
                                                     onClick={() => handleOpenModal('oneof', 'billing')}
-                                                    hasWidth
+                                                    hasWidth='w-full'
                                                 />
                                                 <Button
                                                     label='Add Billing Address'
                                                     onClick={() => handleOpenModal('new', 'billing')}
-                                                    hasWidth
+                                                    hasWidth='w-full'
                                                 />
                                             </div>
 
@@ -547,12 +547,12 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                 <Button
                                                     label='Add One of Shipping Address'
                                                     onClick={() => handleOpenModal('oneof', 'shipping')}
-                                                    hasWidth
+                                                    hasWidth='w-full'
                                                 />
                                                 <Button
                                                     label='Add Shipping Address'
                                                     onClick={() => handleOpenModal('new', 'shipping')}
-                                                    hasWidth
+                                                    hasWidth='w-full'
                                                 />
                                             </div>
 

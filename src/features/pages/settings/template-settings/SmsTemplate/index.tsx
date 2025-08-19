@@ -180,7 +180,7 @@ const index = ({ smsData }: { smsData?: any }) => {
                                 />}
                                 label='Add Sms Template'
                                 onClick={() => setIsOpenModal(true)}
-                                hasWidth={true}
+                                hasWidth='w-full'
                             />
                         </div>
                     </div>

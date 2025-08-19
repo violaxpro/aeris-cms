@@ -110,14 +110,14 @@ const Sidebar = ({ isMobile = false, onClose }: { isMobile?: boolean; onClose?: 
     const sidebarContent = (
         <>
             <div className="flex items-center justify-center py-1">
-                <div className="w-full max-w-[200px]">
+                <div className="w-full max-w-[200px] p-3">
                     <Image
                         src={logoImg}
                         alt="logo"
-                        width={0}
+                        width={200}
                         height={0}
-                        sizes="100vw"
-                        className="w-full h-auto object-contain max-h-[80px]"
+                    // sizes="100vw"
+                    // className="w-full h-auto object-contain max-h-[80px]"
                     />
                 </div>
             </div>

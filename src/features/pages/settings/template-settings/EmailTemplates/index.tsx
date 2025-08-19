@@ -182,7 +182,7 @@ const index = ({ emailTemplatesData }: { emailTemplatesData?: any }) => {
                                 />}
                                 label='Add Email Template'
                                 onClick={() => setIsOpenModal(true)}
-                                hasWidth={true}
+                                hasWidth='w-full'
                             />
                         </div>
                     </div>

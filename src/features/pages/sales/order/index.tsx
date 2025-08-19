@@ -243,7 +243,12 @@ const index = ({ orderData }: { orderData?: any }) => {
             dataIndex: 'email',
             sorter: (a: any, b: any) => a.email.localeCompare(b.email),
             render: (_: any, row: any) => {
-                return <div className="flex flex-col w-full">
+                const handleCopy = () => {
+                    const text = 'copy email'
+                    navigator.clipboard.writeText(text);
+                    alert(`Copied: ${text}`);
+                }
+                return <div className="flex flex-col w-full" onClick={(e) => e.stopPropagation()}>
                     <div className="flex justify-start gap-1">
                         <span>{row.email}</span>
                         <Image
@@ -251,6 +256,7 @@ const index = ({ orderData }: { orderData?: any }) => {
                             alt='copypaste-icon'
                             width={10}
                             height={10}
+                            onClick={handleCopy}
                         />
                     </div>
                     <div className="flex justify-start gap-1">
@@ -260,6 +266,7 @@ const index = ({ orderData }: { orderData?: any }) => {
                             alt='copypaste-icon'
                             width={10}
                             height={10}
+                            onClick={handleCopy}
                         />
                     </div>
                 </div>

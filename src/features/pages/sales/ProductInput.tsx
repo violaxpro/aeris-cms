@@ -303,7 +303,7 @@ const ProductInput = ({
 
 
             </Modal >
-            <div className='grid md:grid-cols-[1fr_3fr_1fr_1fr_1fr_1fr_1fr_50px] grid-cols-2 md:gap-4 gap-6 mb-2'>
+            <div className='grid md:grid-cols-[2fr_3fr_1fr_1fr_1fr_1fr_1fr_50px] grid-cols-2 md:gap-4 gap-6 mb-2'>
                 <SelectInput
                     id='sku'
                     label='SKU'
@@ -318,16 +318,14 @@ const ProductInput = ({
                     popupRender={(options: any) => (
                         <>
                             {options}
-                            <div className='flex gap-3 p-2'>
+                            <div className='flex gap-1 pt-1'>
                                 <Button
                                     label='Add Product'
                                     onClick={() => handleOpenModal('product')}
-                                    hasWidth
                                 />
                                 <Button
                                     label='Add Service'
                                     onClick={() => handleOpenModal('service')}
-                                    hasWidth
                                 />
                             </div>
 

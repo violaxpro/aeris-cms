@@ -24,6 +24,8 @@ Font.register({
 const styles = StyleSheet.create({
     page: {
         padding: 30,
+    },
+    container: {
         fontSize: 12,
         fontFamily: 'Inter',
         gap: 10,
@@ -236,8 +238,8 @@ export const PackingSlipPDF = ({ orderData, page }: { orderData: any, page: stri
     console.log('ini order ptint', orderData)
     return (
         <Document>
-            <Page size="A4">
-                <View style={styles.page}>
+            <Page size="A4" style={styles.page}>
+                <View style={styles.container}>
                     {/* Header */}
                     <View style={styles.header}>
                         <Image

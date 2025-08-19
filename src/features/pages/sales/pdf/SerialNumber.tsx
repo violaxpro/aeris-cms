@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'flex-start',
-        gap: 8,
+        gap: 10,
     },
     fontHeader: {
         color: '#0A3353',
@@ -181,19 +181,19 @@ const styles = StyleSheet.create({
     },
 
     colProduct: {
-        width: '35%',
+        width: '40%',
         textAlign: 'left',
         paddingHorizontal: 4,
     },
 
-    colUnitPrice: {
-        width: '15%',
+    colSerialNumber: {
+        width: '25%',
         textAlign: 'center',
         paddingHorizontal: 4,
     },
 
     colQty: {
-        width: '10%',
+        width: '20%',
         textAlign: 'center',
         paddingHorizontal: 4,
     },
@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
 
 });
 
-export const InvoicePDF = ({ invoiceData, page }: { invoiceData: any, page: string }) => {
+export const SerialNumberPDF = ({ invoiceData, page }: { invoiceData: any, page: string }) => {
     return (
         <Document>
             <Page size="A4" style={styles.page}>
@@ -246,10 +246,7 @@ export const InvoicePDF = ({ invoiceData, page }: { invoiceData: any, page: stri
                         />
                         <View style={{ width: 200, textAlign: 'right' }}>
                             <Text style={styles.fontHeader}>Invoice</Text>
-                            {
-                                page == 'order' ? <Text style={styles.statusHeader}>Approved</Text>
-                                    : <Text style={[styles.statusHeader, { textTransform: 'uppercase' }]}>Draft</Text>
-                            }
+                            <Text style={styles.statusHeader}>Serial Number</Text>
 
                         </View>
                     </View>
@@ -346,27 +343,29 @@ export const InvoicePDF = ({ invoiceData, page }: { invoiceData: any, page: stri
                         <View style={styles.tableHeader}>
                             <Text style={styles.colSku}>SKU</Text>
                             <Text style={styles.colProduct}>Product</Text>
-                            <Text style={styles.colUnitPrice}>Unit Price</Text>
-                            <Text style={styles.colQty}>Qty</Text>
-                            <Text style={styles.colTotal}>Line Total</Text>
+                            <Text style={styles.colSerialNumber}>Serial Number</Text>
+                            <Text style={styles.colQty}>Quantity</Text>
+                            {/* <Text style={styles.colTotal}>Line Total</Text> */}
                         </View>
 
                         {/* Table Body */}
-                        {invoiceData.items.map((item: any, index: any) => (
-                            <View
-                                style={[
-                                    styles.tableRow,
-                                    index % 2 === 0 ? styles.rowEven : styles.rowOdd,
-                                ]}
-                                key={index}
-                            >
-                                <Text style={styles.colSku}>{item.sku}</Text>
-                                <Text style={styles.colProduct}>{item.name}</Text>
-                                <Text style={styles.colUnitPrice}>${item.unit_price.toFixed(2)}</Text>
-                                <Text style={styles.colQty}>{item.quantity}</Text>
-                                <Text style={styles.colTotal}>${(item.unit_price * item.quantity).toFixed(2)}</Text>
-                            </View>
-                        ))}
+                        {invoiceData.items.map((item: any, index: any) =>
+                            item.serialNumbers.map((sn: string, indexSn: number) => (
+                                <View
+                                    style={[
+                                        styles.tableRow,
+                                        (index + indexSn) % 2 === 0 ? styles.rowEven : styles.rowOdd,
+                                    ]}
+                                    key={`${index}-${indexSn}`}
+                                >
+                                    <Text style={styles.colSku}>{item.sku}</Text>
+                                    <Text style={styles.colProduct}>{item.name}</Text>
+                                    <Text style={styles.colSerialNumber}>{sn}</Text>
+                                    <Text style={styles.colQty}>1</Text>
+                                    {/* <Text style={styles.colTotal}>${(item.unit_price * item.quantity).toFixed(2)}</Text> */}
+                                </View>
+                            ))
+                        )}
 
                     </View>
 
@@ -449,31 +448,7 @@ export const InvoicePDF = ({ invoiceData, page }: { invoiceData: any, page: stri
                     </View>
 
                 </View>
-                {/* <View style={styles.footer} fixed>
-                    <View style={styles.footerItem}>
-                        <Image
-                            src="/image/TelephoneImage.png"
-                            style={{ width: 7, height: 'auto' }}
-                        />
-                        <Text style={styles.footerText}>
-                            1300 843 883
-                        </Text>
-                    </View>
-                    <View style={styles.footerItem}>
-                        <Image
-                            src="/image/EmailImage.png"
-                            style={{ width: 7, height: 'auto' }}
-                        />
-                        <Text style={styles.footerText}> admin@alarmexpert.com.au</Text>
-                    </View>
-                    <View style={styles.footerItem}>
-                        <Image
-                            src="/image/MapsImage.png"
-                            style={{ width: 7, height: 'auto' }}
-                        />
-                        <Text style={styles.footerText}> Church Avenue, Mascot, NSW, 2020</Text>
-                    </View>
-                </View> */}
+
             </Page>
         </Document>
     );

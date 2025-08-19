@@ -4,6 +4,7 @@ import React, { useEffect } from 'react'
 import { InvoicePDF } from '@/features/pages/sales/pdf/Invoice';
 import { PackingSlipPDF } from '@/features/pages/sales/pdf/PackingSlip';
 import { PaySlipPDF } from '@/features/pages/employee-management/pdf/Payslip';
+import { SerialNumberPDF } from '@/features/pages/sales/pdf/SerialNumber';
 import { Params } from '@/plugins/types'
 import { orderDummyData } from '@/plugins/types/sales-type';
 import { PDFViewer } from '@react-pdf/renderer';
@@ -27,8 +28,9 @@ export default async function InvoicePage(props: { params: Params }) {
         customerName: 'John Doe',
         customerEmail: 'john@example.com',
         items: [
-            { sku: '0317-8471', name: 'U-Prox Keyfob - White SMART9412', quantity: 2, unit_price: 141.44 },
-            { sku: '0317-8471', name: 'Hikvision Wireless Repeater DS-PR1-WB', quantity: 3, unit_price: 235.36 },
+            { sku: '0317-8471', name: 'U-Prox Keyfob - White SMART9412', quantity: 2, unit_price: 141.44, serialNumbers: ["SN0293U", "SN0294U"] },
+            { sku: '0317-8472', name: 'U-Prox Keyfob - Black SMART9412', quantity: 1, unit_price: 140, serialNumbers: ["SN0295U"] },
+            { sku: '0317-8473', name: 'Hikvision Wireless Repeater DS-PR1-WB', quantity: 3, unit_price: 235.36, serialNumbers: ["SN0296U", "SN0297U", "SN0298U"] },
         ],
         total: 250,
         subtotal: 879.98,
@@ -135,6 +137,9 @@ export default async function InvoicePage(props: { params: Params }) {
 
     return (
         <div className="h-screen">
+            <PDFViewer width="100%" height="100%">
+                <SerialNumberPDF invoiceData={invoiceData} page='order' />
+            </PDFViewer>
             <PDFViewer width="100%" height="100%">
                 <InvoicePDF invoiceData={invoiceData} page='order' />
             </PDFViewer>

@@ -1,11 +1,13 @@
 import React, { act } from 'react';
 import { Modal } from 'antd';
-import { Button } from 'antd';
+// import { Button } from 'antd';
+import Button from '@/components/button'
+import ButtonAction from '../button/ButtonAction';
 
 type ConfirmModalProps = {
     open: boolean;
     onCancel: () => void;
-    onSave: (id: any) => void;
+    onSave: any
     text: string
     action?: string
 };
@@ -31,15 +33,14 @@ const ConfirmModal = ({
                 <p className="text-gray-500 mb-6">This action cannot be undone.</p>
 
                 <div className="flex justify-center gap-4">
-                    <Button
+                    {/* <Button
                         size="middle"
                         onClick={onCancel}
                         className="min-w-[100px] !text-white !bg-[var(--default-color)] hover:!border-inherit"
                     >
                         Cancel
-                    </Button>
-
-                    <Button
+                    </Button> */}
+                    {/* <Button
                         color='default'
                         variant="outlined"
                         size="middle"
@@ -47,7 +48,17 @@ const ConfirmModal = ({
                         className="btn-delete min-w-[100px]"
                     >
                         {action}
-                    </Button>
+                    </Button> */}
+                    <ButtonAction
+                        onClick={onCancel}
+                        label='Cancel'
+                        btnClassname='min-w-[100px]'
+                    />
+                    <Button
+                        label={action}
+                        onClick={onSave}
+                        hasWidth='min-w-[100px]'
+                    />
                 </div>
             </div>
         </Modal>
