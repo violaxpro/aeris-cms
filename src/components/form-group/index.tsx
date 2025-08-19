@@ -1,4 +1,5 @@
-import { Divider } from "antd";
+// import { Divider } from "antd";
+import Divider from '@/components/divider'
 import Button from '@/components/button'
 
 interface FormGroupProps {
@@ -19,10 +20,12 @@ export default function FormGroup({
     childClassName
 }: FormGroupProps) {
     return (
-        <div className={className}>
-            <div>
-                <h4 className="text-2xl font-semibold">{title}</h4>
-                {description && <p className="mt-2">{description}</p>}
+        <div className={`${className} flex flex-col gap-6`}>
+            <div className='flex flex-col gap-3'>
+                <div className='flex flex-col'>
+                    <h4 className="text-2xl font-semibold">{title}</h4>
+                    {description && <p>{description}</p>}
+                </div>
                 <Divider />
             </div>
             {children && (

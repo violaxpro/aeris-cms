@@ -5,12 +5,15 @@ import Input from '@/components/input'
 import Button from '@/components/button'
 import CheckboxInput from '@/components/checkbox'
 import SelectInput from '@/components/select'
-import FormGroup from '@/components/form'
+import FormGroup from '@/components/form-group'
 import { PlusOutlined, CloseOutlined } from '@ant-design/icons'
 import Tabs, { Tab } from '@/components/tab'
 import { Content } from 'antd/es/layout/layout'
 import { routes } from '@/config/routes'
 import { FormProps } from '@/plugins/types/form-type';
+import ButtonIcon from '@/components/button/ButtonIcon'
+import Image from 'next/image'
+import { CancelGreyIcon } from '@public/icon'
 
 const FormSlider: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const [formData, setFormData] = useState({
@@ -107,7 +110,7 @@ const FormSlider: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
             title: 'Slider', url: routes.eCommerce.slider
         },
         {
-            title: mode == 'create' ? 'Create Slider' : 'Edit Slider'
+            title: mode == 'create' ? 'Create' : 'Edit'
         },
     ]
 
@@ -136,34 +139,36 @@ const FormSlider: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
     return (
         <>
-            <div className="mt-6 mx-4 mb-0">
-                <h1 className='text-xl font-bold'>
+            <div className="mt-6 mx-6 mb-0">
+                <h1 className='text-2xl font-bold'>
                     {mode == 'create' ? 'Create Slider' : 'Edit Slider'}
                 </h1>
                 <Breadcrumb
                     items={breadcrumb}
                 />
             </div>
-            <Content className="mt-6 mx-4 mb-0">
-                <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
-                    <div>
-                        <FormGroup title="Slider Setting" description='Slider Setting'>
-                            <Input
-                                id='name'
-                                label='Name'
-                                type='text'
-                                placeholder='Name'
-                                onChange={handleChange}
-                                value={formData.name}
-                            />
-                            <Input
-                                id='autoplay_speed'
-                                label='Auto Play Speed'
-                                type='text'
-                                placeholder='Auto Play Speed'
-                                onChange={handleChange}
-                                value={formData.autoplay_speed}
-                            />
+            <Content className="mb-0">
+                <div className='bg-[#fff] min-h-[360px] p-6 flex flex-col gap-2'>
+                    <div className='flex flex-col md:gap-10 gap-6'>
+                        <FormGroup title="Slider Setting" description='Slider Setting' childClassName='grid md:grid-cols-3 gap-3'>
+                            <div className='col-span-full grid md:grid-cols-2 gap-3'>
+                                <Input
+                                    id='name'
+                                    label='Name'
+                                    type='text'
+                                    placeholder='Name'
+                                    onChange={handleChange}
+                                    value={formData.name}
+                                />
+                                <Input
+                                    id='autoplay_speed'
+                                    label='Auto Play Speed'
+                                    type='text'
+                                    placeholder='Auto Play Speed'
+                                    onChange={handleChange}
+                                    value={formData.autoplay_speed}
+                                />
+                            </div>
                             <CheckboxInput
                                 label='Fade'
                                 text='Fade slides instead of sliding'
@@ -184,27 +189,33 @@ const FormSlider: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             />
 
                         </FormGroup>
-                        <hr style={{ borderColor: '#E5E7EB', marginTop: '1rem', margin: '1rem 0' }} />
                         <FormGroup title="Image Slide Setting" description='Image Slide Setting'>
                             <div className='space-y-4 col-span-full'>
                                 {formData.image_slide.map((slide, index) => {
                                     return (
                                         <div key={index} className='col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}>
-                                            <div className='col-span-full flex gap-3 justify-between mb-4'>
-                                                <h4 className='text-base font-medium'>Image Slide</h4>
+                                            <div className='col-span-full grid md:grid-cols-[11fr_50px] gap-3 mb-4 items-center'>
+                                                {/* <h4 className='text-base font-medium'>Image Slide</h4> */}
                                                 <div>
-                                                    <CloseOutlined className='cursor-pointer' onClick={() => removeImageSlide(index)} />
-                                                </div>
-                                            </div>
-                                            <div className='grid md:grid-cols-2 gap-2'>
-                                                <div className='col-span-full'>
                                                     <Tabs
                                                         className='!mx-1 !mt-1 !px-1 !py-1'
                                                         tabs={tabs}
                                                         activeTab={activeTab}
                                                         setActiveTab={setActiveTab}
+                                                        borderClass='w-full'
                                                     />
                                                 </div>
+                                                <div>
+                                                    <ButtonIcon
+                                                        icon={CancelGreyIcon}
+                                                        shape='circle'
+                                                        variant='filled'
+                                                        color='default'
+                                                        onClick={() => removeImageSlide(index)}
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className='grid md:grid-cols-2 gap-2'>
                                                 {
                                                     activeTab == 'general' && (
                                                         <div className='col-span-full grid md:grid-cols-3 gap-3'>
@@ -312,7 +323,6 @@ const FormSlider: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 </div>
                             </div>
                         </FormGroup>
-                        <hr style={{ borderColor: '#E5E7EB', marginTop: '1rem', margin: '1rem 0' }} />
                     </div>
 
                     <div className="mt-6 flex justify-end">
