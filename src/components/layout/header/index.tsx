@@ -25,6 +25,7 @@ import TimerBox from '@/components/timer';
 import ModalCheckIn from './ModalCheckIn';
 import ModalStartBreakCheckout from './ModalStartBreakCheckout';
 import ModalFinishBreak from './ModalFinishBreak';
+import ModalNeedSupport from './ModalNeedSupport';
 import dayjs from 'dayjs';
 import { getAttendanceStatus } from '@/plugins/utils/attendance';
 import { formatTime } from '@/plugins/utils/utils';
@@ -37,6 +38,7 @@ export default function HeaderLayout({ onOpenDrawer }: { onOpenDrawer?: () => vo
     const [isScrolled, setIsScrolled] = useState(false);
     const [open, setOpen] = useState(false);
     const [openModalWorking, setOpenModalWorking] = useState(false)
+    const [openModalNeedSupport, setOpenModalNeedSupport] = useState(false)
     const [attendanceType, setAttendanceType] = useState('')
     const screens = useBreakpoint();
     const isMobile = !screens.lg;
@@ -247,6 +249,10 @@ export default function HeaderLayout({ onOpenDrawer }: { onOpenDrawer?: () => vo
 
     return (
         <>
+            <ModalNeedSupport
+                isModalOpen={openModalNeedSupport}
+                handleCancel={() => setOpenModalNeedSupport(false)}
+            />
             {
                 attendanceType == 'checkin'
                 && <ModalCheckIn
@@ -307,7 +313,7 @@ export default function HeaderLayout({ onOpenDrawer }: { onOpenDrawer?: () => vo
                 </div>
 
                 <div className="md:flex justify-between items-center gap-4 mx-6 hidden">
-                    <Button className='!border-none !shadow-none'>
+                    <Button className='!border-none !shadow-none' onClick={() => setOpenModalNeedSupport(true)}>
                         <Image
                             src={HeadphoneIcon}
                             alt='support-icon'
