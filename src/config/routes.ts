@@ -116,6 +116,10 @@ export const routes = {
     createBlogCategories: '/ecommerce/blog-categories/create',
     editBlogCategories: (slug: string) => `/ecommerce/blog-categories/${slug}/edit`,
 
+    managementPages: '/ecommerce/management-pages',
+    createManagementPages: '/ecommerce/management-pages/create',
+    editManagementPages: (slug: string) => `/ecommerce/management-pages/${slug}/edit`,
+
     users: '/ecommerce/users',
     createUsers: '/ecommerce/users/create',
     editUsers: (slug: string) => `/ecommerce/users/${slug}/edit`,

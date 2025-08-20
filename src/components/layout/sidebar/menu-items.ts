@@ -293,7 +293,7 @@ export const menuItems = [
                     {
                         key: 'pages',
                         label: 'Pages',
-                        href: routes.eCommerce.products,
+                        href: routes.eCommerce.managementPages,
                     },
                     {
                         key: 'media',

@@ -2,8 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import Table from "@/components/table"
 import type { TableColumnsType } from 'antd'
-import { BlogType, dummyBlog } from '@/plugins/types/blogs-type'
-import { blogsAtom } from '@/store/BlogsAtom'
+import { PagesType, dummyPages } from '@/plugins/types/pages-type'
 import { routes } from '@/config/routes'
 import Breadcrumb from "@/components/breadcrumb"
 import { Content } from 'antd/es/layout/layout'
@@ -11,6 +10,7 @@ import Button from "@/components/button"
 import { useNotificationAntd } from '@/components/toast'
 import StatusTag from '@/components/tag'
 import { useAtom } from 'jotai'
+import { pagesAtom } from '@/store/PagesAtom'
 import Image from 'next/image'
 import { AddIcon, FilterIcon, TrashIconRed, PencilIconBlue } from '@public/icon'
 import ButtonFilter from '@/components/button/ButtonAction'
@@ -23,11 +23,11 @@ import ConfirmModal from '@/components/modal/ConfirmModal'
 import { useRouter } from 'next/navigation'
 import dayjs from 'dayjs'
 
-const index = ({ blogsData }: { blogsData?: any }) => {
+const index = ({ pageDatas }: { pageDatas?: any }) => {
     const router = useRouter()
     const { contextHolder, notifySuccess } = useNotificationAntd()
-    const [data, setData] = useAtom(blogsAtom)
-    const [filteredData, setFilteredData] = useState<BlogType[]>([]);
+    const [data, setData] = useAtom(pagesAtom)
+    const [filteredData, setFilteredData] = useState<PagesType[]>([]);
     const [search, setSearch] = useState('')
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
@@ -62,18 +62,15 @@ const index = ({ blogsData }: { blogsData?: any }) => {
             title: 'Management',
         },
         {
-            title: 'Blog',
-        },
-        {
-            title: 'Blogs',
+            title: 'Pages',
         },
     ]
-    const columns: TableColumnsType<BlogType> = [
+    const columns: TableColumnsType<PagesType> = [
         {
             title: 'Name',
-            dataIndex: 'title',
+            dataIndex: 'name',
             sorter: (a: any, b: any) => {
-                return a?.title?.localeCompare(b?.title)
+                return a?.name?.localeCompare(b?.name)
             }
         },
         {
@@ -113,7 +110,7 @@ const index = ({ blogsData }: { blogsData?: any }) => {
                             variant='filled'
                             size="small"
                             icon={PencilIconBlue}
-                            onClick={() => router.push(routes.eCommerce.editBlog(row.id))}
+                            onClick={() => router.push(routes.eCommerce.editManagementPages(row.id))}
                         />
                         <ButtonIcon
                             color='danger'
@@ -141,11 +138,11 @@ const index = ({ blogsData }: { blogsData?: any }) => {
     };
 
     useEffect(() => {
-        setData(blogsData)
+        setData(pageDatas)
         if (!search) {
-            setFilteredData(blogsData)
+            setFilteredData(pageDatas)
         }
-    }, [blogsData, search])
+    }, [pageDatas, search])
 
     return (
         <>
@@ -155,13 +152,13 @@ const index = ({ blogsData }: { blogsData?: any }) => {
                 onCancel={() => setOpenModalDelete(false)}
                 onSave={handleDelete}
                 action='Delete'
-                text='Are you sure you want to delete this blog?'
+                text='Are you sure you want to delete this page?'
             />
             <div className="mt-6 mx-6 mb-0">
                 <div className='flex justify-between items-center'>
                     <div>
                         <h1 className='text-2xl font-bold'>
-                            Blogs
+                            Pages
                         </h1>
                         <Breadcrumb
                             items={breadcrumb}
@@ -175,8 +172,8 @@ const index = ({ blogsData }: { blogsData?: any }) => {
                             height={15}
                         />}
 
-                        label='Add Blog'
-                        link={routes.eCommerce.createBlog}
+                        label='Add Page'
+                        link={routes.eCommerce.createManagementPages}
                     />
                 </div>
             </div>
@@ -222,14 +219,14 @@ const index = ({ blogsData }: { blogsData?: any }) => {
                     </div>
                     <Table
                         columns={columns}
-                        dataSource={dummyBlog}
+                        dataSource={dummyPages}
                         withSelectableRows
                         selectedRowKeys={selectedRowKeys}
                         onSelectChange={setSelectedRowKeys}
                     />
                     <Pagination
                         current={currentPage}
-                        total={dummyBlog.length}
+                        total={dummyPages.length}
                         pageSize={pageSize}
                         onChange={(page) => setCurrentPage(page)}
                     />
