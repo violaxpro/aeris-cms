@@ -108,6 +108,14 @@ export const routes = {
 
     storeFront: '/ecommerce/storefront',
 
+    blogs: '/ecommerce/blogs',
+    createBlog: '/ecommerce/blogs/create',
+    editBlog: (slug: string) => `/ecommerce/blogs/${slug}/edit`,
+
+    blogCategories: '/ecommerce/blog-categories',
+    createBlogCategories: '/ecommerce/blog-categories/create',
+    editBlogCategories: (slug: string) => `/ecommerce/blog-categories/${slug}/edit`,
+
     users: '/ecommerce/users',
     createUsers: '/ecommerce/users/create',
     editUsers: (slug: string) => `/ecommerce/users/${slug}/edit`,

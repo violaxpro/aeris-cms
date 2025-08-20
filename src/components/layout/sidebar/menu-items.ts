@@ -276,17 +276,17 @@ export const menuItems = [
                     {
                         key: 'blog',
                         label: 'Blog',
-                        href: routes.eCommerce.products,
+                        href: '#',
                         children: [
                             {
                                 key: 'blogs',
                                 label: 'Blogs',
-                                href: routes.eCommerce.products,
+                                href: routes.eCommerce.blogs,
                             },
                             {
                                 key: 'blog-categories',
                                 label: 'Blog Categories',
-                                href: routes.eCommerce.products,
+                                href: routes.eCommerce.blogCategories,
                             }
                         ]
                     },
