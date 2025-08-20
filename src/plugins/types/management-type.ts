@@ -259,6 +259,18 @@ export type MenusType = {
     created: any
 }
 
+export type FaqCategoriesType = {
+    id: number | string
+    name: string
+}
+
+export type FaqType = {
+    id: number | string
+    category: string
+    question: string
+    answer: string
+}
+
 
 export const dummyMedia: MediaType[] = [
     {
@@ -295,6 +307,43 @@ export const dummyMenus: MenusType[] = [
         background_image: '',
         created: '20 July 2020'
     }
+]
+
+export const dummyFaqCategories: FaqCategoriesType[] = [
+    {
+        id: 1,
+        name: 'General Information'
+    },
+    {
+        id: 2,
+        name: 'Product Installation'
+    },
+    {
+        id: 3,
+        name: 'Troubleshooting'
+    },
+]
+
+
+export const dummyFaq: FaqType[] = [
+    {
+        id: 1,
+        category: 'General Information',
+        question: 'What is Alarm Expert Australia?',
+        answer: ''
+    },
+    {
+        id: 2,
+        category: 'Product Installation',
+        question: 'How long does a standard CCTV installation take?',
+        answer: ''
+    },
+    {
+        id: 3,
+        category: 'Troubleshooting',
+        question: 'Why is my alarm system beeping continuously?',
+        answer: ''
+    },
 ]
 
 

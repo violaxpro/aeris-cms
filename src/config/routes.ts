@@ -128,6 +128,14 @@ export const routes = {
     createMenus: '/ecommerce/menus/create',
     editMenus: (slug: string) => `/ecommerce/menus/${slug}/edit`,
 
+    faq: '/ecommerce/faq',
+    createFaq: '/ecommerce/faq/create',
+    editFaq: (slug: string) => `/ecommerce/faq/${slug}/edit`,
+
+    faqCategories: '/ecommerce/faq-categories',
+    createfaqCategories: '/ecommerce/faq-categories/create',
+    editfaqCategories: (slug: string) => `/ecommerce/faq-categories/${slug}/edit`,
+
     users: '/ecommerce/users',
     createUsers: '/ecommerce/users/create',
     editUsers: (slug: string) => `/ecommerce/users/${slug}/edit`,

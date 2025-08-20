@@ -3,7 +3,7 @@ import { Select } from 'antd';
 
 type Option = {
     label: string;
-    value?: string;
+    value?: any;
     options?: Option[];
 };
 

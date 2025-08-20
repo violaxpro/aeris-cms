@@ -313,12 +313,12 @@ export const menuItems = [
                             {
                                 key: 'faq-categories',
                                 label: 'FAQ Categories',
-                                href: routes.eCommerce.products,
+                                href: routes.eCommerce.faqCategories,
                             },
                             {
                                 key: 'faq-child',
                                 label: 'FAQ',
-                                href: routes.eCommerce.products,
+                                href: routes.eCommerce.faq,
                             }
                         ]
 
