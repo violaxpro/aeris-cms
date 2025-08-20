@@ -298,12 +298,12 @@ export const menuItems = [
                     {
                         key: 'media',
                         label: 'Media',
-                        href: routes.eCommerce.products,
+                        href: routes.eCommerce.media,
                     },
                     {
                         key: 'faq',
                         label: 'FAQ',
-                        href: routes.eCommerce.products,
+                        href: '#',
                         children: [
                             {
                                 key: 'faq-categories',

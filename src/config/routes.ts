@@ -120,6 +120,10 @@ export const routes = {
     createManagementPages: '/ecommerce/management-pages/create',
     editManagementPages: (slug: string) => `/ecommerce/management-pages/${slug}/edit`,
 
+    media: '/ecommerce/media',
+    createMedia: '/ecommerce/media/create',
+    editMedia: (slug: string) => `/ecommerce/media/${slug}/edit`,
+
     users: '/ecommerce/users',
     createUsers: '/ecommerce/users/create',
     editUsers: (slug: string) => `/ecommerce/users/${slug}/edit`,

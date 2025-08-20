@@ -238,6 +238,25 @@ export type StoreFontType = {
     }
 };
 
+export type MediaType = {
+    id?: number | string | undefined,
+    image: string
+    filename: string
+    size: string | number
+    created: any
+}
+
+
+export const dummyMedia: MediaType[] = [
+    {
+        id: 1,
+        image: '/apple-icon.png',
+        filename: 'cctv-outdoor.jpg',
+        size: '1.2MB',
+        created: '20 July 2020'
+    }
+]
+
 
 
 
