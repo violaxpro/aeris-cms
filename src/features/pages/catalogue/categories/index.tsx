@@ -4,6 +4,7 @@ import { DirectoryTreeProps } from '@/plugins/types/treeTypes';
 import Breadcrumb from "@/components/breadcrumb";
 import { Content } from 'antd/es/layout/layout'
 import { Input, Tree, TreeProps, Checkbox } from 'antd';
+import SearchTable from '@/components/search/SearchTable';
 import Button from "@/components/button"
 import { PlusCircleOutlined } from '@ant-design/icons';
 import { buildTree, flattenTree } from '@/plugins/utils/tree';
@@ -101,6 +102,7 @@ const breadcrumb = [
 ];
 
 const CategoriesPage = ({ categories }: { categories?: any }) => {
+    const [search, setSearch] = useState('')
     const [searchValue, setSearchValue] = useState('')
     const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([])
     const [autoExpandParent, setAutoExpandParent] = useState(true);
@@ -375,21 +377,19 @@ const CategoriesPage = ({ categories }: { categories?: any }) => {
     return (
         <>
             {contextHolder}
-            <div className="mt-6 mx-4 mb-0">
-                <h1 className="text-xl font-bold mb-4">Categories</h1>
+            <div className="mt-6 mx-6 mb-0">
+                <h1 className="text-2xl font-bold mb-4">Categories</h1>
                 <Breadcrumb items={breadcrumb} />
             </div>
-            <Content className="mt-6 mx-4 mb-0">
-                <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
+            <Content className="mb-0">
+                <div className='bg-[#fff] min-h-[360px] p-6'>
                     <div className='grid md:grid-cols-2 gap-4'>
                         <div>
-                            <div className='flex gap-2'>
-                                <Search
-                                    placeholder='Search Categories'
+                            <div className='flex gap-2 items-center'>
+                                <SearchTable
+                                    value={search}
                                     onChange={onChange}
-                                    allowClear
-                                    size="middle"
-                                    className="!rounded-md !border !border-[#86A788]"
+                                    onSearch={() => console.log('Searching for:', search)}
                                 />
                                 <Button
                                     label='Add New Top Category'

@@ -198,10 +198,10 @@ const index = ({ brandsData }: { brandsData?: any }) => {
                 text='Are you sure you want to delete this brand?'
             />
 
-            <div className="mt-6 mx-4 mb-0">
+            <div className="mt-6 mx-6 mb-0">
                 <div className='flex justify-between items-center'>
                     <div>
-                        <h1 className='text-xl font-bold'>
+                        <h1 className='text-2xl font-bold'>
                             Brands
                         </h1>
                         <Breadcrumb
@@ -223,7 +223,7 @@ const index = ({ brandsData }: { brandsData?: any }) => {
                 </div>
             </div>
             <Content className="mb-0">
-                <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
+                <div className='bg-[#fff] min-h-[360px] p-6'>
                     <div className='flex justify-between mb-4'>
                         <div className='flex items-center gap-2'>
                             <ShowPageSize

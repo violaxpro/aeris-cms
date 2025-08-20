@@ -19,12 +19,12 @@ const FormOptions: React.FC<FormProps> = ({ mode, initialValues }) => {
     return (
         <>
             <div className="mt-6 mx-6 mb-0">
-                <h1 className="text-xl font-bold mb-4">{mode === 'create' ? 'Create Options' : 'Edit Options'}</h1>
+                <h1 className="text-2xl font-bold mb-4">{mode === 'create' ? 'Create Option' : 'Edit Option'}</h1>
                 <Breadcrumb items={breadcrumb} />
             </div>
 
             <Content className="mb-0">
-                <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
+                <div className='bg-[#fff] min-h-[360px] p-6'>
 
                     {/* Tab Content */}
                     <div>
@@ -36,7 +36,7 @@ const FormOptions: React.FC<FormProps> = ({ mode, initialValues }) => {
                     {/* Submit */}
                     <div className="mt-6 flex justify-end">
                         <Button
-                            label={mode === 'create' ? 'Create Options' : 'Edit Options'}
+                            label={mode === 'create' ? 'Create Option' : 'Edit Option'}
                         />
                     </div>
                 </div>

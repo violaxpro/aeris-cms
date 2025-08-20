@@ -71,10 +71,6 @@ const index = ({ priceLevels }: { priceLevels?: any }) => {
     ]
     const columns: TableColumnsType<PriceLevelType> = [
         {
-            title: 'ID',
-            dataIndex: 'id',
-        },
-        {
             title: 'Name',
             dataIndex: 'name',
             sorter: (a: any, b: any) => {
@@ -158,10 +154,10 @@ const index = ({ priceLevels }: { priceLevels?: any }) => {
                 action='Delete'
                 text='Are you sure you want to delete this price level?'
             />
-            <div className="mt-6 mx-4 mb-0">
+            <div className="mt-6 mx-6 mb-0">
                 <div className='flex justify-between items-center'>
                     <div>
-                        <h1 className='text-xl font-bold'>
+                        <h1 className='text-2xl font-bold'>
                             Price Level
                         </h1>
                         <Breadcrumb
@@ -183,7 +179,7 @@ const index = ({ priceLevels }: { priceLevels?: any }) => {
                 </div>
             </div>
             <Content className="mb-0">
-                <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
+                <div className='bg-[#fff] min-h-[360px] p-6'>
                     <div className='flex justify-between mb-4'>
                         <div className='flex items-center gap-2'>
                             <ShowPageSize

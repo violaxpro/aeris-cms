@@ -1,4 +1,5 @@
 export type BlogType = {
+    id: number | string
     title: string
     shortDescription: string
     body: string
@@ -10,6 +11,7 @@ export type BlogType = {
 }
 
 export type BlogCategoriesType = {
+    id: number | string
     title: string
     metaTitle: string
     metaDescription: string
@@ -17,6 +19,7 @@ export type BlogCategoriesType = {
 
 export const dummyBlog: BlogType[] = [
     {
+        id: 1,
         title: "The Future of AI in Everyday Life",
         shortDescription: "Exploring how artificial intelligence is changing the way we live, work, and interact with technology.",
         body: `
@@ -33,6 +36,7 @@ In this article, we’ll explore real-world applications of AI and what to expec
 
 export const dummyBlogCategories: BlogCategoriesType[] = [
     {
+        id: 1,
         title: "The Future of AI in Everyday Life",
         metaTitle: "Future of AI in Everyday Life - Insights & Trends",
         metaDescription: "Discover how AI is transforming everyday activities, from smart homes to personalized healthcare, and what the future holds."

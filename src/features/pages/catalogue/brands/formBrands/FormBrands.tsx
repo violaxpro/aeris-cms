@@ -120,13 +120,12 @@ const FormBrands: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     return (
         <div>
             {contextHolder}
-            <div className="mt-6 mx-4 mb-0">
-                <h1 className="text-xl font-bold mb-4">{mode === 'create' ? 'Create Brands' : 'Edit Brands'}</h1>
+            <div className="mt-6 mx-6 mb-0">
+                <h1 className="text-2xl font-bold mb-4">{mode === 'create' ? 'Create Brand' : 'Edit Brand'}</h1>
                 <Breadcrumb items={breadcrumb} />
             </div>
             <Content className="mb-0">
-                <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
-
+                <div className='bg-[#fff] min-h-[360px] p-6'>
                     <div>
                         <div className='flex flex-col gap-12'>
                             <FormGroup
@@ -229,7 +228,7 @@ const FormBrands: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                     {/* Submit */}
                     <div className="mt-6 flex justify-end">
                         <Button
-                            label={mode === 'create' ? 'Create Brands' : 'Edit Brands'}
+                            label={mode === 'create' ? 'Create Brand' : 'Edit Brand'}
                             onClick={handleSubmit}
                         />
                     </div>

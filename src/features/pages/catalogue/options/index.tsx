@@ -125,7 +125,7 @@ const index = ({ optionsData }: { optionsData?: any }) => {
             <div className="mt-6 mx-6 mb-0">
                 <div className='flex justify-between items-center'>
                     <div>
-                        <h1 className='text-xl font-bold'>
+                        <h1 className='text-2xl font-bold'>
                             Options
                         </h1>
                         <Breadcrumb
@@ -147,7 +147,7 @@ const index = ({ optionsData }: { optionsData?: any }) => {
                 </div>
             </div>
             <Content className="mb-0">
-                <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
+                <div className='bg-[#fff] min-h-[360px] p-6'>
                     <div className='flex justify-between mb-4'>
                         <div className='flex items-center gap-2'>
                             <ShowPageSize

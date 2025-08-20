@@ -40,13 +40,13 @@ const FormTags: React.FC<FormProps> = ({ mode, initialValues }) => {
     };
     return (
         <>
-            <div className="mt-6 mx-4 mb-0">
-                <h1 className="text-xl font-bold mb-4">{mode === 'create' ? 'Create Tags' : 'Edit Tags'}</h1>
+            <div className="mt-6 mx-6 mb-0">
+                <h1 className="text-2xl font-bold mb-4">{mode === 'create' ? 'Create Tag' : 'Edit Tag'}</h1>
                 <Breadcrumb items={breadcrumb} />
             </div>
 
-            <Content className="mt-4 mx-4 mb-0">
-                <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
+            <Content className="mb-0">
+                <div className='bg-[#fff] min-h-[360px] p-6'>
                     <div>
                         <FormGroup
                             title="General"
@@ -65,7 +65,7 @@ const FormTags: React.FC<FormProps> = ({ mode, initialValues }) => {
                     <div className="mt-6 flex justify-end">
                         <Button
 
-                            label={mode === 'create' ? 'Create Tags' : 'Edit Tags'}
+                            label={mode === 'create' ? 'Create Tag' : 'Edit Tag'}
                         />
                     </div>
                 </div>
