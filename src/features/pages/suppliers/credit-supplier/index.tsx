@@ -86,7 +86,7 @@ const index = ({ creditSuppliersData }: { creditSuppliersData?: any }) => {
             dataIndex: 'status',
             render: (val) => {
                 const status = stripHTML(val);
-                return <StatusTag status={status} type='supplier' />
+                return <StatusTag status={status} />
             }
         },
         {

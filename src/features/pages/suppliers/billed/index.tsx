@@ -114,7 +114,7 @@ const index = ({ billData }: { billData?: any }) => {
             dataIndex: 'status',
             render: (val) => {
                 const status = val ? stripHTML(val) : '';
-                return <StatusTag status={status} type='supplier' />
+                return <StatusTag status={status} />
             }
         },
         {
@@ -122,7 +122,7 @@ const index = ({ billData }: { billData?: any }) => {
             dataIndex: 'email_status',
             render: (val) => {
                 const status = val ? stripHTML(val) : '';
-                return <StatusTag status={status} type='supplier' />
+                return <StatusTag status={status} />
             }
         },
         {

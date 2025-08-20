@@ -1,10 +1,10 @@
 export const statusMap: Record<string, { color: string; text: string, textColor: string }> = {
-    Draft: { color: '#FF6A001A', text: 'Draft', textColor: '#FF6A00' },
+    Draft: { color: '#4E4E4E1A', text: 'Draft', textColor: '#4E4E4ECC' },
     Approved: { color: '#3666AA1A', text: 'Approved', textColor: '#3666AA' },
     Cancelled: { color: '#EA00001A', text: 'Cancelled', textColor: '#EA0000' },
     Invoiced: { color: '#00B3061A', text: 'Invoiced', textColor: '#00B306' },
     Sent: { color: '#9747FF1A', text: 'Sent', textColor: '#9747FF' },
-    'Draft Order': { color: '#4E4E4E1A', text: 'Draft', textColor: '#4E4E4ECC' },
+    'Draft Orange': { color: '#FF6A001A', text: 'Draft', textColor: '#FF6A00' },
     Processing: { color: '#FF6A001A', text: 'Processing', textColor: '#FF6A00' },
     'Awaiting Stock': { color: '#E2E7EE', text: 'Awaiting Stock', textColor: '#3666AA' },
     Packed: { color: '#01DA7C1A', text: 'Packed', textColor: '#01DA7C' },
@@ -32,10 +32,10 @@ export const statusMap: Record<string, { color: string; text: string, textColor:
     'Sent Email': { color: '#01933B1A', text: 'Sent', textColor: '#01933B' },
     Done: { color: '#01933B1A', text: 'Done', textColor: '#01933B' },
     'Actived': { color: '#01933B1A', text: 'Actived', textColor: '#01933B' },
-    'Expired': { color: '#C2020514', text: 'Expired', textColor: '#C20205' },
+    'Expired': { color: '#EA00001A', text: 'Expired', textColor: '#EA0000' },
     Available: { color: '#00B3061A', text: 'Available', textColor: '#00B306' },
     Published: { color: '#00B3061A', text: 'Published', textColor: '#00B306' },
-    Inactive: { color: '#C202051A', text: 'Inactive', textColor: '#C20205' },
+    Inactive: { color: '#EA00001A', text: 'Inactive', textColor: '#EA0000' },
 };
 
 export const colorMap: Record<string, any> = {

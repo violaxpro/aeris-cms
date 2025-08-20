@@ -286,7 +286,7 @@ const index = ({ orderData }: { orderData?: any }) => {
                 const status = val
                 console.log(status)
                 return (
-                    <StatusTag status={status} type='order' />
+                    <StatusTag status={status} />
                 );
                 // kalau dia sudah bayar full baru bisa di lanjut ke processing
                 // kalau processing sudah beres bisa di klik dan lanjut ke proses awaiting stock

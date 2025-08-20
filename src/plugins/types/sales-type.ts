@@ -498,7 +498,7 @@ export const orderDummyData = [
     },
     {
         id: 6,
-        invoice_number: '2568109',
+        invoice_number: '2568110',
         email: 'user@gmail.com',
         mobile_number: '628229019021203',
         payment_method: 'Bank Transfer',
@@ -576,7 +576,7 @@ export const orderDummyData = [
     },
     {
         id: 8,
-        invoice_number: '2568134',
+        invoice_number: '2568135',
         email: 'user@gmail.com',
         mobile_number: '628229019021203',
         payment_method: 'Bank Transfer',
@@ -615,7 +615,7 @@ export const orderDummyData = [
     },
     {
         id: 9,
-        invoice_number: '2568134',
+        invoice_number: '2568136',
         email: 'user@gmail.com',
         mobile_number: '628229019021203',
         payment_method: 'Bank Transfer',
@@ -654,7 +654,7 @@ export const orderDummyData = [
     },
     {
         id: 10,
-        invoice_number: '2568134',
+        invoice_number: '2568120',
         email: 'user@gmail.com',
         mobile_number: '628229019021203',
         payment_method: 'Bank Transfer',
@@ -693,7 +693,7 @@ export const orderDummyData = [
     },
     {
         id: 11,
-        invoice_number: '123456',
+        invoice_number: '5246523',
         email: 'user@gmail.com',
         mobile_number: '628229019021203',
         payment_method: 'Bank Transfer',
@@ -732,7 +732,7 @@ export const orderDummyData = [
     },
     {
         id: 12,
-        invoice_number: '2568211',
+        invoice_number: '254436513',
         email: 'user@gmail.com',
         mobile_number: '628229019021203',
         payment_method: 'Bank Transfer',

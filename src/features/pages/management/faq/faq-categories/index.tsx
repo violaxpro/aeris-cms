@@ -88,7 +88,7 @@ const index = ({ faqCategoryDatas }: { faqCategoryDatas?: any }) => {
             render: (val: any) => {
                 const status = val
                 return (
-                    <StatusTag status={status} type='management' />
+                    <StatusTag status={status} />
                 );
             }
         },

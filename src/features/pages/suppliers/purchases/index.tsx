@@ -109,7 +109,7 @@ const index = ({ purchasesData }: { purchasesData?: any }) => {
             dataIndex: 'status',
             render: (val) => {
                 const status = val ? stripHTML(val) : '';
-                return <StatusTag status={status} type='supplier' />
+                return <StatusTag status={status} />
             }
         },
         {
@@ -117,7 +117,7 @@ const index = ({ purchasesData }: { purchasesData?: any }) => {
             dataIndex: 'email_status',
             render: (val) => {
                 const status = val ? stripHTML(val) : '';
-                return <StatusTag status={status} type='supplier' />
+                return <StatusTag status={status} />
             }
         },
         {

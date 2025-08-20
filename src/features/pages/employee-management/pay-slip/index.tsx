@@ -123,7 +123,7 @@ const index = ({ data }: { data?: any }) => {
             render: (val: any) => {
                 const status = val
                 return (
-                    <StatusTag status={status} type='employee_management' />
+                    <StatusTag status={status} />
                 );
 
             }

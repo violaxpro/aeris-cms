@@ -179,7 +179,7 @@ const index = ({ data }: { data?: any }) => {
             title: 'Status',
             dataIndex: 'status',
             sorter: (a: any, b: any) => {
-                const status = ['Active', 'Non-Activer'];
+                const status = ['Active', 'Non-Active'];
                 return status.indexOf(a.status) - status.indexOf(b.status
                 )
             },
