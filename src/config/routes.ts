@@ -124,6 +124,10 @@ export const routes = {
     createMedia: '/ecommerce/media/create',
     editMedia: (slug: string) => `/ecommerce/media/${slug}/edit`,
 
+    menus: '/ecommerce/menus',
+    createMenus: '/ecommerce/menus/create',
+    editMenus: (slug: string) => `/ecommerce/menus/${slug}/edit`,
+
     users: '/ecommerce/users',
     createUsers: '/ecommerce/users/create',
     editUsers: (slug: string) => `/ecommerce/users/${slug}/edit`,

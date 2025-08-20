@@ -37,7 +37,7 @@ const FormBlog: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     });
 
     const breadcrumb = [
-        { title: 'Managemnet' },
+        { title: 'Management' },
         { title: 'Blog' },
         { title: 'Blogs', url: routes.eCommerce.blogs },
         { title: mode === 'create' ? 'Create' : 'Edit' },
@@ -191,7 +191,7 @@ const FormBlog: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                         <SelectInput
                             id="category"
                             label="Category"
-                            placeholder="Select category"
+                            placeholder="Select Category"
                             value={formData.category}
                             onChange={(val) => handleChangeSelect("category", val)}
                             options={optionsCategories}

@@ -37,7 +37,7 @@ const FormBlogCategory: React.FC<FormProps> = ({ mode, initialValues, slug }) =>
     });
 
     const breadcrumb = [
-        { title: 'Managemnet' },
+        { title: 'Management' },
         { title: 'Blog' },
         { title: 'Blog Categories', url: routes.eCommerce.blogCategories },
         { title: mode === 'create' ? 'Create' : 'Edit' },

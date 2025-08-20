@@ -141,6 +141,9 @@ export { default as TransferStockIcon } from './TransferStockIcon.svg'
 export { default as ReservationOrderIcon } from './ReservationOrderIcon.svg'
 export { default as ReturnIcon } from './ReturnIcon.svg'
 export { default as UploadWhiteIcon } from './UploadWhiteIcon.svg'
+export { default as UploadBlackIcon } from './UploadBlackIcon.svg'
+export { default as BlockGreyIcon } from './BlockGreyIcon.svg'
+export { default as FluidMenuIcon } from './FluidMenuIcon.svg'
 
 
 

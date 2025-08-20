@@ -301,6 +301,11 @@ export const menuItems = [
                         href: routes.eCommerce.media,
                     },
                     {
+                        key: 'menus',
+                        label: 'Menus',
+                        href: routes.eCommerce.menus,
+                    },
+                    {
                         key: 'faq',
                         label: 'FAQ',
                         href: '#',

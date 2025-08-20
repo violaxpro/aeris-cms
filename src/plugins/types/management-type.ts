@@ -246,6 +246,19 @@ export type MediaType = {
     created: any
 }
 
+export type MenusType = {
+    id?: number | string | undefined,
+    name: string
+    type: string
+    category: string
+    target: string
+    parent_menu_item: string
+    status: string
+    logo_favicon: string
+    background_image: string
+    created: any
+}
+
 
 export const dummyMedia: MediaType[] = [
     {
@@ -256,6 +269,34 @@ export const dummyMedia: MediaType[] = [
         created: '20 July 2020'
     }
 ]
+
+export const dummyMenus: MenusType[] = [
+    {
+        id: 1,
+        name: 'SOFTWARE DOWNLOAD',
+        type: '',
+        category: '',
+        target: '',
+        parent_menu_item: '',
+        status: 'Active',
+        logo_favicon: '',
+        background_image: '',
+        created: '20 July 2020'
+    },
+    {
+        id: 2,
+        name: 'KNOWLEDGE BASE',
+        type: '',
+        category: '',
+        target: '',
+        parent_menu_item: '',
+        status: 'Inactive',
+        logo_favicon: '',
+        background_image: '',
+        created: '20 July 2020'
+    }
+]
+
 
 
 
