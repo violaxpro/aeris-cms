@@ -15,8 +15,11 @@ import { useNotificationAntd } from '@/components/toast';
 import FileUploader from '@/components/input-file';
 import DatePickerInput from '@/components/date-picker';
 import { PlusOutlined, MinusCircleOutlined, CloseOutlined, DeleteOutlined } from '@ant-design/icons';
+import { PlusOutlineIcon, CancelGreyIcon } from '@public/icon';
 import dayjs from 'dayjs'
 import { Divider } from 'antd';
+import Image from 'next/image';
+import ButtonIcon from '@/components/button/ButtonIcon';
 
 const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd();
@@ -478,36 +481,32 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     return (
         <>
             {contextHolder}
-            <Content className="mt-4 mx-4 mb-0">
-                <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
-
+            <Content className="mb-0">
+                <div className='bg-[#fff] min-h-[360px] p-6 flex flex-col gap-2'>
                     <div className='flex flex-col md:gap-10 gap-6'>
-                        <div>
-                            <div className='flex justify-between items-center'>
-                                <div>
-                                    <h4 className="text-lg font-semibold">Slide Banners</h4>
-                                    <p className="mt-2">Slide Banners</p>
-                                </div>
-                                <Button
-                                    label='Add Banner'
-                                    icon={<PlusOutlined />}
-                                    onClick={addItem}
-                                />
-                            </div>
-                            <Divider />
+                        <FormGroup
+                            title="Slide Banners"
+                            description="Slide Banners"
+                        >
                             <div className={`col-span-12 md:col-span-8 grid grid-cols-2 gap-4`}>
                                 <div className="space-y-4 col-span-full">
                                     {
                                         formData.banners.map((feat, index: number) => {
                                             return (
-                                                <div key={index} className='col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}>
+                                                <div key={index} className='col-span-full border p-4 rounded-md border-[#E5E7EB]'>
                                                     <div className='col-span-full flex gap-3 justify-between mb-4'>
                                                         <h4 className='text-base font-medium'>Banner {index + 1}</h4>
                                                         <div>
-                                                            <CloseOutlined className='cursor-pointer' onClick={() => removeItem(index)} />
+                                                            <ButtonIcon
+                                                                icon={CancelGreyIcon}
+                                                                shape='circle'
+                                                                variant='filled'
+                                                                color='default'
+                                                                onClick={() => removeItem(index)}
+                                                            />
                                                         </div>
                                                     </div>
-                                                    <div className='grid md:grid-cols-3 gap-2'>
+                                                    <div className='grid md:grid-cols-2 gap-2'>
                                                         <Input
                                                             id='title'
                                                             label='Title'
@@ -516,48 +515,53 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                             onChange={(e) => handleArrayFieldChange('banners', index, 'call_to_action_url', e.target.value)}
                                                             value={feat.call_to_action_url}
                                                         />
+                                                        <div className='row-span-2'>
+                                                            <FileUploader
+                                                                label='Slide Image'
+                                                                action="https://api-dev.alarmexpert.com.au/admin/product/cdn/upload"
+                                                                onSuccess={(file) => handleSuccess(file, 'slide_image', index)}
+                                                                onError={handleError}
+                                                                isUpload={isLoading.slide_image}
+                                                                fileList={feat.slide_image.logo?.map((img: any, index: any) => {
+                                                                    return {
+                                                                        uid: `${index}`,
+                                                                        name: img.name ?? img.url,
+                                                                        status: 'done',
+                                                                        url: img.url
+                                                                    }
+                                                                })}
+                                                            />
+                                                        </div>
                                                         <CheckboxInput
                                                             label='Open in new window'
                                                             text='Enable open in new window'
                                                             checked={feat.open_in_new_window}
                                                             onChange={(checked) => handleArrayFieldChange('banners', index, 'open_in_new_window', checked)}
                                                         />
-                                                        <FileUploader
-                                                            label='Slide Image'
-                                                            action="https://api-dev.alarmexpert.com.au/admin/product/cdn/upload"
-                                                            onSuccess={(file) => handleSuccess(file, 'slide_image', index)}
-                                                            onError={handleError}
-                                                            isUpload={isLoading.slide_image}
-                                                            fileList={feat.slide_image.logo?.map((img: any, index: any) => {
-                                                                return {
-                                                                    uid: `${index}`,
-                                                                    name: img.name ?? img.url,
-                                                                    status: 'done',
-                                                                    url: img.url
-                                                                }
-                                                            })}
-                                                        />
                                                     </div>
-
                                                 </div>
                                             )
                                         })
                                     }
                                 </div>
                             </div>
-                        </div>
+                            <div className='flex justify-end pt-3'>
+                                <Button
+                                    label='Add Banner'
+                                    icon={<Image
+                                        src={PlusOutlineIcon}
+                                        alt='plus-icon'
+
+                                    />}
+                                    onClick={addItem}
+                                />
+                            </div>
+                        </FormGroup>
                         <FormGroup
                             title="Three Column Full Width"
                             description="Three Column Full Width"
-
                         >
-                            <div className='grid  md:grid-cols-3 gap-3'>
-                                <CheckboxInput
-                                    label='Section Status'
-                                    text='Enable features section'
-                                    checked={formData.three_column_full_width.section_status}
-                                    onChange={(checked) => handleCheckbox('section_status', checked)}
-                                />
+                            <div className='grid  md:grid-cols-2 gap-3'>
                                 <Input
                                     id='section_title'
                                     label='Section Title'
@@ -567,41 +571,46 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     value={formData.three_column_full_width.section_title}
                                     className='mb-1'
                                 />
-                                <FileUploader
-                                    label='Background Image'
-                                    action="https://api-dev.alarmexpert.com.au/admin/product/cdn/upload"
-                                    onSuccess={(file) => handleSuccess(file, 'background_image_column_width', undefined, 'three_column_full_width')}
-                                    onError={handleError}
-                                    isUpload={isLoading.background_image_column_width}
-                                    fileList={formData.three_column_full_width.background_image_column_width?.map((img: any, index: any) => {
-                                        return {
-                                            uid: `${index}`,
-                                            name: img.name ?? img.url,
-                                            status: 'done',
-                                            url: img.url
-                                        }
-                                    })}
-                                />
-                                <Button
-                                    label='Add Banner'
-                                    icon={<PlusOutlined />}
-                                    onClick={() => addNestedItem('three_column_full_width', 'banners', {
-                                        call_to_action_url: '',
-                                        open_in_new_window: false,
-                                        image: []
-                                    })}
+                                <div className='row-span-2'>
+                                    <FileUploader
+                                        label='Background Image'
+                                        action="https://api-dev.alarmexpert.com.au/admin/product/cdn/upload"
+                                        onSuccess={(file) => handleSuccess(file, 'background_image_column_width', undefined, 'three_column_full_width')}
+                                        onError={handleError}
+                                        isUpload={isLoading.background_image_column_width}
+                                        fileList={formData.three_column_full_width.background_image_column_width?.map((img: any, index: any) => {
+                                            return {
+                                                uid: `${index}`,
+                                                name: img.name ?? img.url,
+                                                status: 'done',
+                                                url: img.url
+                                            }
+                                        })}
+                                    />
+                                </div>
+                                <CheckboxInput
+                                    label='Section Status'
+                                    text='Enable features section'
+                                    checked={formData.three_column_full_width.section_status}
+                                    onChange={(checked) => handleCheckbox('section_status', checked)}
                                 />
                                 {
                                     formData.three_column_full_width.banners.map((item, index) => {
                                         return (
-                                            <div key={index} className='col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}>
+                                            <div key={index} className='col-span-full border p-4 rounded-md border-[#E5E7EB]'>
                                                 <div className='col-span-full flex gap-3 justify-between mb-4'>
                                                     <h4 className='text-base font-medium'>Banner {index + 1}</h4>
                                                     <div>
-                                                        <CloseOutlined className='cursor-pointer' onClick={() => removeNestedItem('three_column_full_width', 'banners', index)} />
+                                                        <ButtonIcon
+                                                            icon={CancelGreyIcon}
+                                                            shape='circle'
+                                                            variant='filled'
+                                                            color='default'
+                                                            onClick={() => removeNestedItem('three_column_full_width', 'banners', index)}
+                                                        />
                                                     </div>
                                                 </div>
-                                                <div className='grid md:grid-cols-3 gap-2'>
+                                                <div className='grid md:grid-cols-2 gap-2'>
                                                     <Input
                                                         id='title'
                                                         label='Title'
@@ -616,6 +625,23 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                         )}
                                                         value={item.call_to_action_url}
                                                     />
+                                                    <div className='row-span-2'>
+                                                        <FileUploader
+                                                            label='Image'
+                                                            action="https://api-dev.alarmexpert.com.au/admin/product/cdn/upload"
+                                                            onSuccess={(file) => handleSuccess(file, 'image', index, 'three_column_full_width')}
+                                                            onError={handleError}
+                                                            isUpload={isLoading.image}
+                                                            fileList={item.image.map((img: any, index: any) => {
+                                                                return {
+                                                                    uid: `${index}`,
+                                                                    name: img.name ?? img.url,
+                                                                    status: 'done',
+                                                                    url: img.url
+                                                                }
+                                                            })}
+                                                        />
+                                                    </div>
                                                     <CheckboxInput
                                                         label='Open in new window'
                                                         text='Enable open in new window'
@@ -628,21 +654,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                             checked
                                                         )}
                                                     />
-                                                    <FileUploader
-                                                        label='Image'
-                                                        action="https://api-dev.alarmexpert.com.au/admin/product/cdn/upload"
-                                                        onSuccess={(file) => handleSuccess(file, 'image', index, 'three_column_full_width')}
-                                                        onError={handleError}
-                                                        isUpload={isLoading.image}
-                                                        fileList={item.image.map((img: any, index: any) => {
-                                                            return {
-                                                                uid: `${index}`,
-                                                                name: img.name ?? img.url,
-                                                                status: 'done',
-                                                                url: img.url
-                                                            }
-                                                        })}
-                                                    />
+
                                                 </div>
 
                                             </div>
@@ -651,19 +663,27 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 }
 
                             </div>
+                            <div className='flex justify-end pt-3'>
+                                <Button
+                                    label='Add Banner'
+                                    icon={<Image
+                                        src={PlusOutlineIcon}
+                                        alt='plus-icon'
+                                        width={15}
+                                    />}
+                                    onClick={() => addNestedItem('three_column_full_width', 'banners', {
+                                        call_to_action_url: '',
+                                        open_in_new_window: false,
+                                        image: []
+                                    })}
+                                />
+                            </div>
                         </FormGroup>
                         <FormGroup
                             title="Featured Categories"
                             description="Featured categories"
-
                         >
-                            <div className='grid  md:grid-cols-3 gap-3'>
-                                <CheckboxInput
-                                    label='Section Status'
-                                    text='Enable features section'
-                                    checked={formData.featured_categories.section_status}
-                                    onChange={(checked) => handleCheckbox('section_status', checked)}
-                                />
+                            <div className='grid md:grid-cols-[3fr_3fr_1fr] gap-3'>
                                 <Input
                                     id='section_title'
                                     label='Section Title'
@@ -682,22 +702,26 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     value={formData.featured_categories.section_subtitle}
                                     className='mb-1'
                                 />
-                                <Button
-                                    label='Add Category'
-                                    icon={<PlusOutlined />}
-                                    onClick={() => addNestedItem('featured_categories', 'categories', {
-                                        category: '',
-                                        type: '',
-                                    })}
+                                <CheckboxInput
+                                    label='Section Status'
+                                    text='Enable features section'
+                                    checked={formData.featured_categories.section_status}
+                                    onChange={(checked) => handleCheckbox('section_status', checked)}
                                 />
                                 {
                                     formData.featured_categories.categories.map((item, index) => {
                                         return (
-                                            <div key={index} className='col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}>
+                                            <div key={index} className='col-span-full border p-4 rounded-md border-[#E5E7EB]'>
                                                 <div className='col-span-full flex gap-3 justify-between mb-4'>
                                                     <h4 className='text-base font-medium'>Category {index + 1}</h4>
                                                     <div>
-                                                        <CloseOutlined className='cursor-pointer' onClick={() => removeNestedItem('featured_categories', 'categories', index)} />
+                                                        <ButtonIcon
+                                                            icon={CancelGreyIcon}
+                                                            shape='circle'
+                                                            variant='filled'
+                                                            color='default'
+                                                            onClick={() => removeNestedItem('featured_categories', 'categories', index)}
+                                                        />
                                                     </div>
                                                 </div>
                                                 <div className='grid md:grid-cols-2 gap-2'>
@@ -737,19 +761,26 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 }
 
                             </div>
+                            <div className='flex justify-end pt-3'>
+                                <Button
+                                    label='Add Category'
+                                    icon={<Image
+                                        src={PlusOutlineIcon}
+                                        alt='plus-icon'
+                                        width={15}
+                                    />}
+                                    onClick={() => addNestedItem('featured_categories', 'categories', {
+                                        category: '',
+                                        type: '',
+                                    })}
+                                />
+                            </div>
                         </FormGroup>
                         <FormGroup
                             title="Product Tabs One"
                             description="Product Tabs One"
-
                         >
-                            <div className='grid  md:grid-cols-3 gap-3'>
-                                <CheckboxInput
-                                    label='Section Status'
-                                    text='Enable features section'
-                                    checked={formData.featured_categories.section_status}
-                                    onChange={(checked) => handleCheckbox('section_status', checked)}
-                                />
+                            <div className='grid  md:grid-cols-[6fr_1fr] gap-3'>
                                 <Input
                                     id='section_title'
                                     label='Section Title'
@@ -759,23 +790,26 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     value={formData.featured_categories.section_title}
                                     className='mb-1'
                                 />
-                                <Button
-                                    label='Add Tab'
-                                    icon={<PlusOutlined />}
-                                    onClick={() => addNestedItem('product_tabs_one', 'tabs', {
-                                        title: '',
-                                        type: '',
-                                        product: ''
-                                    })}
+                                <CheckboxInput
+                                    label='Section Status'
+                                    text='Enable features section'
+                                    checked={formData.featured_categories.section_status}
+                                    onChange={(checked) => handleCheckbox('section_status', checked)}
                                 />
                                 {
                                     formData.product_tabs_one.tabs.map((item, index) => {
                                         return (
-                                            <div key={index} className='col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}>
+                                            <div key={index} className='col-span-full border p-4 rounded-md border-[#E5E7EB]'>
                                                 <div className='col-span-full flex gap-3 justify-between mb-4'>
                                                     <h4 className='text-base font-medium'>Tab {index + 1}</h4>
                                                     <div>
-                                                        <CloseOutlined className='cursor-pointer' onClick={() => removeNestedItem('product_tabs_one', 'tabs', index)} />
+                                                        <ButtonIcon
+                                                            icon={CancelGreyIcon}
+                                                            shape='circle'
+                                                            variant='filled'
+                                                            color='default'
+                                                            onClick={() => removeNestedItem('product_tabs_one', 'tabs', index)}
+                                                        />
                                                     </div>
                                                 </div>
                                                 <div className='grid md:grid-cols-3 gap-2'>
@@ -828,21 +862,28 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                         )
                                     })
                                 }
-
+                            </div>
+                            <div className='flex justify-end pt-3'>
+                                <Button
+                                    label='Add Tab'
+                                    icon={<Image
+                                        src={PlusOutlineIcon}
+                                        alt='plus-icon'
+                                        width={15}
+                                    />}
+                                    onClick={() => addNestedItem('product_tabs_one', 'tabs', {
+                                        title: '',
+                                        type: '',
+                                        product: ''
+                                    })}
+                                />
                             </div>
                         </FormGroup>
                         <FormGroup
                             title="Top Brands"
                             description="Top Brands"
-
                         >
-                            <div className='grid  md:grid-cols-3 gap-3'>
-                                <CheckboxInput
-                                    label='Section Status'
-                                    text='Enable features section'
-                                    checked={formData.top_brands.section_status}
-                                    onChange={(checked) => handleCheckbox('section_status', checked)}
-                                />
+                            <div className='grid md:grid-cols-[6fr_1fr] gap-3'>
                                 <SelectInput
                                     id='top_brand'
                                     label='Top Brand'
@@ -858,34 +899,30 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     value={formData.top_brands.top_brand || undefined}
                                     options={optionsType}
                                 />
+                                <CheckboxInput
+                                    label='Section Status'
+                                    text='Enable features section'
+                                    checked={formData.top_brands.section_status}
+                                    onChange={(checked) => handleCheckbox('section_status', checked)}
+                                />
                             </div>
                         </FormGroup>
                         <FormGroup
                             title="Flash Sale & Vertical Product"
                             description="Flash Sale & Vertical Product"
-
                         >
-                            <div className='grid md:grid-cols-3 gap-3'>
+                            <div className='grid md:grid-cols-2 gap-3'>
                                 <CheckboxInput
                                     label='Section Status'
                                     text='Enable features section'
                                     checked={formData.flash_sale_vertical_product.section_status}
                                     onChange={(checked) => handleCheckbox('section_status', checked)}
                                 />
-                                <Input
-                                    id='section_title'
-                                    label='Section Title'
-                                    type='text'
-                                    placeholder='Section Title'
-                                    onChange={handleChange}
-                                    value={formData.flash_sale_vertical_product.section_title}
-                                    className='mb-1'
-                                />
-                                <div className='col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}>
+                                <div className='row-span-2 border p-4 rounded-md border-[#E5E7EB]'>
                                     <div className='col-span-full flex gap-3 justify-between mb-4'>
                                         <h4 className='text-base font-medium'>Flash Sale</h4>
                                     </div>
-                                    <div className='grid md:grid-cols-3 gap-2'>
+                                    <div className='col-span-full grid md:grid-cols-2 gap-2'>
                                         <Input
                                             id='title'
                                             label='Title'
@@ -911,23 +948,29 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
                                     </div>
                                 </div>
-                                <Button
-                                    label='Add Vertical Category'
-                                    icon={<PlusOutlined />}
-                                    onClick={() => addNestedItem('flash_sale_vertical_product', 'vertical_product', {
-                                        title: '',
-                                        type: '',
-                                        product: ''
-                                    })}
+                                <Input
+                                    id='section_title'
+                                    label='Section Title'
+                                    type='text'
+                                    placeholder='Section Title'
+                                    onChange={handleChange}
+                                    value={formData.flash_sale_vertical_product.section_title}
+                                    className='mb-1'
                                 />
                                 {
                                     formData.flash_sale_vertical_product.vertical_product.map((item, index) => {
                                         return (
-                                            <div key={index} className='col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}>
+                                            <div key={index} className='col-span-full border p-4 rounded-md border-[#E5E7EB]'>
                                                 <div className='col-span-full flex gap-3 justify-between mb-4'>
                                                     <h4 className='text-base font-medium'>Vertical Category {index + 1}</h4>
                                                     <div>
-                                                        <CloseOutlined className='cursor-pointer' onClick={() => removeNestedItem('flash_sale_vertical_product', 'vertical_product', index)} />
+                                                        <ButtonIcon
+                                                            icon={CancelGreyIcon}
+                                                            shape='circle'
+                                                            variant='filled'
+                                                            color='default'
+                                                            onClick={() => removeNestedItem('flash_sale_vertical_product', 'vertical_product', index)}
+                                                        />
                                                     </div>
                                                 </div>
                                                 <div className='grid md:grid-cols-3 gap-2'>
@@ -982,11 +1025,25 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 }
 
                             </div>
+                            <div className='flex justify-end pt-3'>
+                                <Button
+                                    label='Add Vertical Category'
+                                    icon={<Image
+                                        src={PlusOutlineIcon}
+                                        alt='plus-icon'
+                                        width={15}
+                                    />}
+                                    onClick={() => addNestedItem('flash_sale_vertical_product', 'vertical_product', {
+                                        title: '',
+                                        type: '',
+                                        product: ''
+                                    })}
+                                />
+                            </div>
                         </FormGroup>
                         <FormGroup
                             title="Two Column Banners"
                             description="Two Column Banners"
-
                         >
                             <div className='grid  md:grid-cols-3 gap-3'>
                                 <CheckboxInput
@@ -995,26 +1052,23 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     checked={formData.three_column_full_width.section_status}
                                     onChange={(checked) => handleCheckbox('section_status', checked)}
                                 />
-                                <Button
-                                    label='Add Banner'
-                                    icon={<PlusOutlined />}
-                                    onClick={() => addNestedItem('two_column_banners', 'banners', {
-                                        call_to_action_url: '',
-                                        open_in_new_window: false,
-                                        two_column_banner_image: []
-                                    })}
-                                />
                                 {
                                     formData.two_column_banners.banners.map((item, index) => {
                                         return (
-                                            <div key={index} className='col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}>
+                                            <div key={index} className='col-span-full border p-4 rounded-md border-[#E5E7EB]'>
                                                 <div className='col-span-full flex gap-3 justify-between mb-4'>
                                                     <h4 className='text-base font-medium'>Banner {index + 1}</h4>
                                                     <div>
-                                                        <CloseOutlined className='cursor-pointer' onClick={() => removeNestedItem('two_column_banners', 'banners', index)} />
+                                                        <ButtonIcon
+                                                            icon={CancelGreyIcon}
+                                                            shape='circle'
+                                                            variant='filled'
+                                                            color='default'
+                                                            onClick={() => removeNestedItem('two_column_banners', 'banners', index)}
+                                                        />
                                                     </div>
                                                 </div>
-                                                <div className='grid md:grid-cols-3 gap-2'>
+                                                <div className='grid md:grid-cols-2 gap-2'>
                                                     <Input
                                                         id='title'
                                                         label='Title'
@@ -1029,6 +1083,23 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                         )}
                                                         value={item.call_to_action_url}
                                                     />
+                                                    <div className='row-span-2'>
+                                                        <FileUploader
+                                                            label='Image'
+                                                            action="https://api-dev.alarmexpert.com.au/admin/product/cdn/upload"
+                                                            onSuccess={(file) => handleSuccess(file, 'two_column_banner_image', index, 'two_column_banners')}
+                                                            onError={handleError}
+                                                            isUpload={isLoading.two_column_banner_image}
+                                                            fileList={item.two_column_banner_image.map((img: any, index: any) => {
+                                                                return {
+                                                                    uid: `${index}`,
+                                                                    name: img.name ?? img.url,
+                                                                    status: 'done',
+                                                                    url: img.url
+                                                                }
+                                                            })}
+                                                        />
+                                                    </div>
                                                     <CheckboxInput
                                                         label='Open in new window'
                                                         text='Enable open in new window'
@@ -1041,21 +1112,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                             checked
                                                         )}
                                                     />
-                                                    <FileUploader
-                                                        label='Image'
-                                                        action="https://api-dev.alarmexpert.com.au/admin/product/cdn/upload"
-                                                        onSuccess={(file) => handleSuccess(file, 'two_column_banner_image', index, 'two_column_banners')}
-                                                        onError={handleError}
-                                                        isUpload={isLoading.two_column_banner_image}
-                                                        fileList={item.two_column_banner_image.map((img: any, index: any) => {
-                                                            return {
-                                                                uid: `${index}`,
-                                                                name: img.name ?? img.url,
-                                                                status: 'done',
-                                                                url: img.url
-                                                            }
-                                                        })}
-                                                    />
+
                                                 </div>
 
                                             </div>
@@ -1064,11 +1121,25 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 }
 
                             </div>
+                            <div className='flex justify-end pt-3'>
+                                <Button
+                                    label='Add Banner'
+                                    icon={<Image
+                                        src={PlusOutlineIcon}
+                                        alt='plus-icon'
+                                        width={15}
+                                    />}
+                                    onClick={() => addNestedItem('two_column_banners', 'banners', {
+                                        call_to_action_url: '',
+                                        open_in_new_window: false,
+                                        two_column_banner_image: []
+                                    })}
+                                />
+                            </div>
                         </FormGroup>
                         <FormGroup
                             title="Product Grid"
                             description="Product Grid"
-
                         >
                             <div className='grid  md:grid-cols-3 gap-3'>
                                 <CheckboxInput
@@ -1077,24 +1148,20 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     checked={formData.three_column_full_width.section_status}
                                     onChange={(checked) => handleCheckbox('section_status', checked)}
                                 />
-                                <Button
-                                    label='Add Tab'
-                                    icon={<PlusOutlined />}
-                                    onClick={() => addNestedItem('product_grid', 'tabs', {
-                                        title: '',
-                                        type: '',
-                                        product: '',
-                                        category: ''
-                                    })}
-                                />
                                 {
                                     formData.product_grid.tabs.map((item, index) => {
                                         return (
-                                            <div key={index} className='col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}>
+                                            <div key={index} className='col-span-full border p-4 rounded-md border-[#E5E7EB]'>
                                                 <div className='col-span-full flex gap-3 justify-between mb-4'>
                                                     <h4 className='text-base font-medium'>Tab {index + 1}</h4>
                                                     <div>
-                                                        <CloseOutlined className='cursor-pointer' onClick={() => removeNestedItem('product_grid', 'tabs', index)} />
+                                                        <ButtonIcon
+                                                            icon={CancelGreyIcon}
+                                                            shape='circle'
+                                                            variant='filled'
+                                                            color='default'
+                                                            onClick={() => removeNestedItem('product_grid', 'tabs', index)}
+                                                        />
                                                     </div>
                                                 </div>
                                                 <div className='grid md:grid-cols-3 gap-2'>
@@ -1168,13 +1235,27 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                         )
                                     })
                                 }
-
+                            </div>
+                            <div className='flex justify-end pt-3'>
+                                <Button
+                                    label='Add Tab'
+                                    icon={<Image
+                                        src={PlusOutlineIcon}
+                                        alt='plus-icon'
+                                        width={15}
+                                    />}
+                                    onClick={() => addNestedItem('product_grid', 'tabs', {
+                                        title: '',
+                                        type: '',
+                                        product: '',
+                                        category: ''
+                                    })}
+                                />
                             </div>
                         </FormGroup>
                         <FormGroup
                             title="Three Column Banners"
                             description="Three Column Banners"
-
                         >
                             <div className='grid  md:grid-cols-3 gap-3'>
                                 <CheckboxInput
@@ -1183,26 +1264,23 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     checked={formData.three_column_banner.section_status}
                                     onChange={(checked) => handleCheckbox('three_column_banner', checked)}
                                 />
-                                <Button
-                                    label='Add Banner'
-                                    icon={<PlusOutlined />}
-                                    onClick={() => addNestedItem('three_column_banner', 'banners', {
-                                        call_to_action_url: '',
-                                        open_in_new_window: false,
-                                        three_column_banner_image: []
-                                    })}
-                                />
                                 {
                                     formData.three_column_banner.banners.map((item, index) => {
                                         return (
-                                            <div key={index} className='col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}>
+                                            <div key={index} className='col-span-full border p-4 rounded-md border-[#E5E7EB]'>
                                                 <div className='col-span-full flex gap-3 justify-between mb-4'>
                                                     <h4 className='text-base font-medium'>Banner {index + 1}</h4>
                                                     <div>
-                                                        <CloseOutlined className='cursor-pointer' onClick={() => removeNestedItem('three_column_banner', 'banners', index)} />
+                                                        <ButtonIcon
+                                                            icon={CancelGreyIcon}
+                                                            shape='circle'
+                                                            variant='filled'
+                                                            color='default'
+                                                            onClick={() => removeNestedItem('three_column_banner', 'banners', index)}
+                                                        />
                                                     </div>
                                                 </div>
-                                                <div className='grid md:grid-cols-3 gap-2'>
+                                                <div className='grid md:grid-cols-2 gap-2'>
                                                     <Input
                                                         id='title'
                                                         label='Title'
@@ -1217,6 +1295,23 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                         )}
                                                         value={item.call_to_action_url}
                                                     />
+                                                    <div className='row-span-2'>
+                                                        <FileUploader
+                                                            label='Image'
+                                                            action="https://api-dev.alarmexpert.com.au/admin/product/cdn/upload"
+                                                            onSuccess={(file) => handleSuccess(file, 'three_column_banner_image', index, 'three_column_banner')}
+                                                            onError={handleError}
+                                                            isUpload={isLoading.three_column_banner_image}
+                                                            fileList={item.three_column_banner_image.map((img: any, index: any) => {
+                                                                return {
+                                                                    uid: `${index}`,
+                                                                    name: img.name ?? img.url,
+                                                                    status: 'done',
+                                                                    url: img.url
+                                                                }
+                                                            })}
+                                                        />
+                                                    </div>
                                                     <CheckboxInput
                                                         label='Open in new window'
                                                         text='Enable open in new window'
@@ -1229,34 +1324,33 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                             checked
                                                         )}
                                                     />
-                                                    <FileUploader
-                                                        label='Image'
-                                                        action="https://api-dev.alarmexpert.com.au/admin/product/cdn/upload"
-                                                        onSuccess={(file) => handleSuccess(file, 'three_column_banner_image', index, 'three_column_banner')}
-                                                        onError={handleError}
-                                                        isUpload={isLoading.three_column_banner_image}
-                                                        fileList={item.three_column_banner_image.map((img: any, index: any) => {
-                                                            return {
-                                                                uid: `${index}`,
-                                                                name: img.name ?? img.url,
-                                                                status: 'done',
-                                                                url: img.url
-                                                            }
-                                                        })}
-                                                    />
+
                                                 </div>
 
                                             </div>
                                         )
                                     })
                                 }
-
+                            </div>
+                            <div className='flex justify-end pt-3'>
+                                <Button
+                                    label='Add Banner'
+                                    icon={<Image
+                                        src={PlusOutlineIcon}
+                                        alt='plus-icon'
+                                        width={15}
+                                    />}
+                                    onClick={() => addNestedItem('three_column_banner', 'banners', {
+                                        call_to_action_url: '',
+                                        open_in_new_window: false,
+                                        three_column_banner_image: []
+                                    })}
+                                />
                             </div>
                         </FormGroup>
                         <FormGroup
                             title="Contact Banners"
                             description="Contact Banners"
-
                         >
                             <div className='grid  md:grid-cols-3 gap-3'>
                                 <CheckboxInput
@@ -1265,26 +1359,23 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     checked={formData.contact_banner.section_status}
                                     onChange={(checked) => handleCheckbox('contact_banner', checked)}
                                 />
-                                <Button
-                                    label='Add Banner'
-                                    icon={<PlusOutlined />}
-                                    onClick={() => addNestedItem('contact_banner', 'banners', {
-                                        call_to_action_url: '',
-                                        open_in_new_window: false,
-                                        contact_banner_image: []
-                                    })}
-                                />
                                 {
                                     formData.contact_banner.banners.map((item, index) => {
                                         return (
-                                            <div key={index} className='col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}>
+                                            <div key={index} className='col-span-full border p-4 rounded-md border-[#E5E7EB]'>
                                                 <div className='col-span-full flex gap-3 justify-between mb-4'>
                                                     <h4 className='text-base font-medium'>Banner {index + 1}</h4>
                                                     <div>
-                                                        <CloseOutlined className='cursor-pointer' onClick={() => removeNestedItem('contact_banner', 'banners', index)} />
+                                                        <ButtonIcon
+                                                            icon={CancelGreyIcon}
+                                                            shape='circle'
+                                                            variant='filled'
+                                                            color='default'
+                                                            onClick={() => removeNestedItem('contact_banner', 'banners', index)}
+                                                        />
                                                     </div>
                                                 </div>
-                                                <div className='grid md:grid-cols-3 gap-2'>
+                                                <div className='grid md:grid-cols-2 gap-2'>
                                                     <Input
                                                         id='title'
                                                         label='Title'
@@ -1299,6 +1390,23 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                         )}
                                                         value={item.call_to_action_url}
                                                     />
+                                                    <div className='row-span-2'>
+                                                        <FileUploader
+                                                            label='Image'
+                                                            action="https://api-dev.alarmexpert.com.au/admin/product/cdn/upload"
+                                                            onSuccess={(file) => handleSuccess(file, 'contact_banner_image', index, 'contact_banner')}
+                                                            onError={handleError}
+                                                            isUpload={isLoading.contact_banner_image}
+                                                            fileList={item.contact_banner_image.map((img: any, index: any) => {
+                                                                return {
+                                                                    uid: `${index}`,
+                                                                    name: img.name ?? img.url,
+                                                                    status: 'done',
+                                                                    url: img.url
+                                                                }
+                                                            })}
+                                                        />
+                                                    </div>
                                                     <CheckboxInput
                                                         label='Open in new window'
                                                         text='Enable open in new window'
@@ -1311,42 +1419,33 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                             checked
                                                         )}
                                                     />
-                                                    <FileUploader
-                                                        label='Image'
-                                                        action="https://api-dev.alarmexpert.com.au/admin/product/cdn/upload"
-                                                        onSuccess={(file) => handleSuccess(file, 'contact_banner_image', index, 'contact_banner')}
-                                                        onError={handleError}
-                                                        isUpload={isLoading.contact_banner_image}
-                                                        fileList={item.contact_banner_image.map((img: any, index: any) => {
-                                                            return {
-                                                                uid: `${index}`,
-                                                                name: img.name ?? img.url,
-                                                                status: 'done',
-                                                                url: img.url
-                                                            }
-                                                        })}
-                                                    />
                                                 </div>
-
                                             </div>
                                         )
                                     })
                                 }
-
+                            </div>
+                            <div className='flex justify-end pt-3'>
+                                <Button
+                                    label='Add Banner'
+                                    icon={<Image
+                                        src={PlusOutlineIcon}
+                                        alt='plus-icon'
+                                        width={15}
+                                    />}
+                                    onClick={() => addNestedItem('contact_banner', 'banners', {
+                                        call_to_action_url: '',
+                                        open_in_new_window: false,
+                                        contact_banner_image: []
+                                    })}
+                                />
                             </div>
                         </FormGroup>
                         <FormGroup
                             title="Product Tabs Two"
                             description="Product Tabs Two"
-
                         >
-                            <div className='grid  md:grid-cols-3 gap-3'>
-                                <CheckboxInput
-                                    label='Section Status'
-                                    text='Enable features section'
-                                    checked={formData.product_tabs_two.section_status}
-                                    onChange={(checked) => handleCheckbox('section_status', checked)}
-                                />
+                            <div className='grid  md:grid-cols-[3fr_3fr_1fr] gap-3'>
                                 <Input
                                     id='section_title'
                                     label='Section Title'
@@ -1363,23 +1462,26 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     onChange={handleChange}
                                     value={formData.product_tabs_two.title}
                                 />
-                                <Button
-                                    label='Add Tab'
-                                    icon={<PlusOutlined />}
-                                    onClick={() => addNestedItem('product_tabs_two', 'tabs', {
-                                        title: '',
-                                        type: '',
-                                        category: ''
-                                    })}
+                                <CheckboxInput
+                                    label='Section Status'
+                                    text='Enable features section'
+                                    checked={formData.product_tabs_two.section_status}
+                                    onChange={(checked) => handleCheckbox('section_status', checked)}
                                 />
                                 {
                                     formData.product_tabs_two.tabs.map((item, index) => {
                                         return (
-                                            <div key={index} className='col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}>
+                                            <div key={index} className='col-span-full border p-4 rounded-md border-[#E5E7EB]'>
                                                 <div className='col-span-full flex gap-3 justify-between mb-4'>
                                                     <h4 className='text-base font-medium'>Tab {index + 1}</h4>
                                                     <div>
-                                                        <CloseOutlined className='cursor-pointer' onClick={() => removeNestedItem('product_tabs_two', 'tabs', index)} />
+                                                        <ButtonIcon
+                                                            icon={CancelGreyIcon}
+                                                            shape='circle'
+                                                            variant='filled'
+                                                            color='default'
+                                                            onClick={() => removeNestedItem('product_tabs_two', 'tabs', index)}
+                                                        />
                                                     </div>
                                                 </div>
                                                 <div className='grid md:grid-cols-3 gap-2'>
@@ -1431,13 +1533,26 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                         )
                                     })
                                 }
-
+                            </div>
+                            <div className='flex justify-end pt-3'>
+                                <Button
+                                    label='Add Tab'
+                                    icon={<Image
+                                        src={PlusOutlineIcon}
+                                        alt='plus-icon'
+                                        width={15}
+                                    />}
+                                    onClick={() => addNestedItem('product_tabs_two', 'tabs', {
+                                        title: '',
+                                        type: '',
+                                        category: ''
+                                    })}
+                                />
                             </div>
                         </FormGroup>
                         <FormGroup
                             title="One Column Banner"
                             description="One Column Banner"
-
                         >
                             <div className='grid  md:grid-cols-3 gap-3'>
                                 <CheckboxInput
@@ -1449,14 +1564,20 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 {
                                     formData.one_column_banner.banners.map((item, index) => {
                                         return (
-                                            <div key={index} className='col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}>
+                                            <div key={index} className='col-span-full border p-4 rounded-md border-[#E5E7EB]'>
                                                 <div className='col-span-full flex gap-3 justify-between mb-4'>
                                                     <h4 className='text-base font-medium'>Banner {index + 1}</h4>
                                                     <div>
-                                                        <CloseOutlined className='cursor-pointer' onClick={() => removeNestedItem('one_column_banner', 'banners', index)} />
+                                                        <ButtonIcon
+                                                            icon={CancelGreyIcon}
+                                                            shape='circle'
+                                                            variant='filled'
+                                                            color='default'
+                                                            onClick={() => removeNestedItem('one_column_banner', 'banners', index)}
+                                                        />
                                                     </div>
                                                 </div>
-                                                <div className='grid md:grid-cols-3 gap-2'>
+                                                <div className='grid md:grid-cols-2 gap-2'>
                                                     <Input
                                                         id='title'
                                                         label='Title'
@@ -1471,6 +1592,23 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                         )}
                                                         value={item.call_to_action_url}
                                                     />
+                                                    <div className='row-span-2'>
+                                                        <FileUploader
+                                                            label='Image'
+                                                            action="https://api-dev.alarmexpert.com.au/admin/product/cdn/upload"
+                                                            onSuccess={(file) => handleSuccess(file, 'one_column_banner_image', index, 'one_column_banner')}
+                                                            onError={handleError}
+                                                            isUpload={isLoading.one_column_banner_image}
+                                                            fileList={item.one_column_banner_image.map((img: any, index: any) => {
+                                                                return {
+                                                                    uid: `${index}`,
+                                                                    name: img.name ?? img.url,
+                                                                    status: 'done',
+                                                                    url: img.url
+                                                                }
+                                                            })}
+                                                        />
+                                                    </div>
                                                     <CheckboxInput
                                                         label='Open in new window'
                                                         text='Enable open in new window'
@@ -1483,28 +1621,27 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                             checked
                                                         )}
                                                     />
-                                                    <FileUploader
-                                                        label='Image'
-                                                        action="https://api-dev.alarmexpert.com.au/admin/product/cdn/upload"
-                                                        onSuccess={(file) => handleSuccess(file, 'one_column_banner_image', index, 'one_column_banner')}
-                                                        onError={handleError}
-                                                        isUpload={isLoading.one_column_banner_image}
-                                                        fileList={item.one_column_banner_image.map((img: any, index: any) => {
-                                                            return {
-                                                                uid: `${index}`,
-                                                                name: img.name ?? img.url,
-                                                                status: 'done',
-                                                                url: img.url
-                                                            }
-                                                        })}
-                                                    />
                                                 </div>
-
                                             </div>
                                         )
                                     })
                                 }
 
+                            </div>
+                            <div className='flex justify-end pt-3'>
+                                <Button
+                                    label='Add Banner'
+                                    icon={<Image
+                                        src={PlusOutlineIcon}
+                                        alt='plus-icon'
+                                        width={15}
+                                    />}
+                                    onClick={() => addNestedItem('one_column_banner', 'banners', {
+                                        call_to_action_url: '',
+                                        open_in_new_window: false,
+                                        one_column_banner_image: []
+                                    })}
+                                />
                             </div>
                         </FormGroup>
                     </div>

@@ -6,7 +6,7 @@ import GeneralSetting from './general-setting'
 import HomepageSetting from './homepage-section'
 
 const index = ({ taxesData }: { taxesData?: any }) => {
-    const [activeTab, setActiveTab] = useState<string>('homepage');
+    const [activeTab, setActiveTab] = useState<string>('general');
 
     const tabs: Tab[] = [
         { key: 'general', label: 'General Setting' },
@@ -27,8 +27,8 @@ const index = ({ taxesData }: { taxesData?: any }) => {
 
     return (
         <>
-            <div className="mt-6 mx-4 mb-0">
-                <h1 className='text-xl font-bold'>
+            <div className="mt-6 mx-6 mb-0">
+                <h1 className='text-2xl font-bold'>
                     Storefront
                 </h1>
                 <Breadcrumb

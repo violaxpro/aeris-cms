@@ -15,7 +15,10 @@ import { useNotificationAntd } from '@/components/toast';
 import FileUploader from '@/components/input-file';
 import DatePickerInput from '@/components/date-picker';
 import { PlusOutlined, MinusCircleOutlined, CloseOutlined } from '@ant-design/icons';
+import Image from 'next/image';
+import { PlusOutlineIcon, CancelGreyIcon } from '@public/icon';
 import dayjs from 'dayjs'
+import ButtonIcon from '@/components/button/ButtonIcon';
 
 const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd();
@@ -241,10 +244,9 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     return (
         <>
             {contextHolder}
-            <Content className="mt-4 mx-4 mb-0">
-                <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
-
-                    <div>
+            <Content className="mb-0">
+                <div className='bg-[#fff] min-h-[360px] p-6'>
+                    <div className='flex flex-col gap-8'>
                         <FormGroup
                             title="Default Setting"
                             description="Default Setting"
@@ -266,38 +268,40 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     onChange={handleChange}
                                     value={formData.middle_top_text}
                                 />
-                                <SelectInput
-                                    id='theme_color'
-                                    label='Theme Color'
-                                    onChange={(val) => handleChangeSelect('theme_color', val)}
-                                    value={formData.theme_color}
-                                    options={optionsColor}
-                                    className='mb-1'
-                                />
-                                <SelectInput
-                                    id='mail_theme_color'
-                                    label='Mail Theme Color'
-                                    onChange={(val) => handleChangeSelect('mail_theme_color', val)}
-                                    value={formData.mail_theme_color}
-                                    options={optionsColor}
-                                    className='mb-1'
-                                />
-                                <SelectInput
-                                    id='slider'
-                                    label='Slider'
-                                    onChange={(val) => handleChangeSelect('slider', val)}
-                                    value={formData.slider}
-                                    options={optionsSlider}
-                                    className='mb-1'
-                                />
-                                <SelectInput
-                                    id='term_conditions_page'
-                                    label='Terms & Conditions Page'
-                                    onChange={(val) => handleChangeSelect('term_conditions_page', val)}
-                                    value={formData.term_conditions_page}
-                                    options={optionsTermConditions}
-                                    className='mb-1'
-                                />
+                                <div className='col-span-full grid md:grid-cols-4 gap-3'>
+                                    <SelectInput
+                                        id='theme_color'
+                                        label='Theme Color'
+                                        onChange={(val) => handleChangeSelect('theme_color', val)}
+                                        value={formData.theme_color}
+                                        options={optionsColor}
+                                        className='mb-1'
+                                    />
+                                    <SelectInput
+                                        id='mail_theme_color'
+                                        label='Mail Theme Color'
+                                        onChange={(val) => handleChangeSelect('mail_theme_color', val)}
+                                        value={formData.mail_theme_color}
+                                        options={optionsColor}
+                                        className='mb-1'
+                                    />
+                                    <SelectInput
+                                        id='slider'
+                                        label='Slider'
+                                        onChange={(val) => handleChangeSelect('slider', val)}
+                                        value={formData.slider}
+                                        options={optionsSlider}
+                                        className='mb-1'
+                                    />
+                                    <SelectInput
+                                        id='term_conditions_page'
+                                        label='Terms & Conditions Page'
+                                        onChange={(val) => handleChangeSelect('term_conditions_page', val)}
+                                        value={formData.term_conditions_page}
+                                        options={optionsTermConditions}
+                                        className='mb-1'
+                                    />
+                                </div>
                                 <div className='col-span-full'>
                                     <TextArea
                                         label='Address'
@@ -311,7 +315,6 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                         <FormGroup
                             title="Logo"
                             description="Logo"
-                            className='mt-4'
                         >
                             <div className='grid  md:grid-cols-3 gap-3'>
                                 <FileUploader
@@ -364,7 +367,6 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                         <FormGroup
                             title="Menus"
                             description="Menus"
-                            className='mt-4'
                         >
                             <div className='grid md:grid-cols-2 gap-3'>
                                 <Input
@@ -383,73 +385,74 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     value={formData.primary_menu}
                                     options={optionsCategory}
                                 />
-                                <SelectInput
-                                    id='primary_category_menu'
-                                    label='Primary Category Meny'
-                                    onChange={(val) => handleChangeSelect('primary_category_menu', val)}
-                                    value={formData.primary_category_menu}
-                                    options={optionsCategory}
-                                    className='mb-1'
-                                />
-                                <SelectInput
-                                    id='popular_categories'
-                                    label='Popular Categories'
-                                    onChange={(val) => handleChangeSelect('popular_categories', val)}
-                                    value={formData.popular_categories}
-                                    options={optionsCategory}
-                                    className='mb-1'
-                                />
-                                <SelectInput
-                                    id='category_menu'
-                                    label='Category Menu'
-                                    onChange={(val) => handleChangeSelect('category_menu', val)}
-                                    value={formData.category_menu}
-                                    options={optionsCategory}
-                                    className='mb-1'
-                                />
-                                <Input
-                                    id='footer_menu_one_title'
-                                    label='Footer Menu One Title'
-                                    type='text'
-                                    placeholder='Footer Menu One Title'
-                                    onChange={handleChange}
-                                    value={formData.footer_menu_one_title}
-                                    className='mb-1'
+                                <div className='col-span-full grid md:grid-cols-3 gap-3'>
+                                    <SelectInput
+                                        id='primary_category_menu'
+                                        label='Primary Category Meny'
+                                        onChange={(val) => handleChangeSelect('primary_category_menu', val)}
+                                        value={formData.primary_category_menu}
+                                        options={optionsCategory}
+                                        className='mb-1'
+                                    />
+                                    <SelectInput
+                                        id='popular_categories'
+                                        label='Popular Categories'
+                                        onChange={(val) => handleChangeSelect('popular_categories', val)}
+                                        value={formData.popular_categories}
+                                        options={optionsCategory}
+                                        className='mb-1'
+                                    />
+                                    <SelectInput
+                                        id='category_menu'
+                                        label='Category Menu'
+                                        onChange={(val) => handleChangeSelect('category_menu', val)}
+                                        value={formData.category_menu}
+                                        options={optionsCategory}
+                                        className='mb-1'
+                                    />
+                                </div>
+                                <div className='col-span-full grid md:grid-cols-4 gap-3'>
+                                    <Input
+                                        id='footer_menu_one_title'
+                                        label='Footer Menu One Title'
+                                        type='text'
+                                        placeholder='Footer Menu One Title'
+                                        onChange={handleChange}
+                                        value={formData.footer_menu_one_title}
+                                        className='mb-1'
 
-                                />
-
-                                <SelectInput
-                                    id='footer_menu_one'
-                                    label='Footer Menu One'
-                                    onChange={(val) => handleChangeSelect('footer_menu_one', val)}
-                                    value={formData.footer_menu_one}
-                                    options={optionsCategory}
-                                    className='mb-1'
-                                />
-                                <Input
-                                    id='footer_menu_two_title'
-                                    label='Footer Menu Two Title'
-                                    type='text'
-                                    placeholder='Footer Menu Two Title'
-                                    onChange={handleChange}
-                                    value={formData.footer_menu_two_title}
-                                    className='mb-1'
-                                />
-
-                                <SelectInput
-                                    id='footer_menu_two'
-                                    label='Footer Menu Two'
-                                    onChange={(val) => handleChangeSelect('footer_menu_two', val)}
-                                    value={formData.footer_menu_two}
-                                    options={optionsCategory}
-                                    className='mb-1'
-                                />
+                                    />
+                                    <SelectInput
+                                        id='footer_menu_one'
+                                        label='Footer Menu One'
+                                        onChange={(val) => handleChangeSelect('footer_menu_one', val)}
+                                        value={formData.footer_menu_one}
+                                        options={optionsCategory}
+                                        className='mb-1'
+                                    />
+                                    <Input
+                                        id='footer_menu_two_title'
+                                        label='Footer Menu Two Title'
+                                        type='text'
+                                        placeholder='Footer Menu Two Title'
+                                        onChange={handleChange}
+                                        value={formData.footer_menu_two_title}
+                                        className='mb-1'
+                                    />
+                                    <SelectInput
+                                        id='footer_menu_two'
+                                        label='Footer Menu Two'
+                                        onChange={(val) => handleChangeSelect('footer_menu_two', val)}
+                                        value={formData.footer_menu_two}
+                                        options={optionsCategory}
+                                        className='mb-1'
+                                    />
+                                </div>
                             </div>
                         </FormGroup>
                         <FormGroup
                             title="Footer"
                             description="Footer"
-                            className='mt-4'
                         >
                             <div className='grid md:grid-cols-2 gap-3'>
                                 <SelectInput
@@ -460,6 +463,23 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     value={formData.footer_tags || undefined}
                                     options={optionsCategory}
                                 />
+                                <div className='row-span-2'>
+                                    <FileUploader
+                                        label='Accept Payment Method Image'
+                                        action="https://api-dev.alarmexpert.com.au/admin/product/cdn/upload"
+                                        onSuccess={(file) => handleSuccess(file, 'payment_method_image')}
+                                        onError={handleError}
+                                        isUpload={isLoading.payment_method_image}
+                                        fileList={formData.payment_method_image?.map((img: any, index: any) => {
+                                            return {
+                                                uid: `${index}`,
+                                                name: img.name ?? img.url,
+                                                status: 'done',
+                                                url: img.url
+                                            }
+                                        })}
+                                    />
+                                </div>
                                 <Input
                                     id='footer_copyright_text'
                                     label='Footer Copyright Text'
@@ -469,28 +489,11 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     value={formData.footer_copyright_text}
                                     className='mb-1'
                                 />
-
-                                <FileUploader
-                                    label='Accept Payment Method Image'
-                                    action="https://api-dev.alarmexpert.com.au/admin/product/cdn/upload"
-                                    onSuccess={(file) => handleSuccess(file, 'payment_method_image')}
-                                    onError={handleError}
-                                    isUpload={isLoading.payment_method_image}
-                                    fileList={formData.payment_method_image?.map((img: any, index: any) => {
-                                        return {
-                                            uid: `${index}`,
-                                            name: img.name ?? img.url,
-                                            status: 'done',
-                                            url: img.url
-                                        }
-                                    })}
-                                />
                             </div>
                         </FormGroup>
                         <FormGroup
                             title="Newsletter"
                             description="Newsletter"
-                            className='mt-4'
                         >
                             <FileUploader
                                 label='Background Image'
@@ -511,7 +514,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                         <FormGroup
                             title="Section Status"
                             description="Section Status"
-                            className='mt-4'
+                            childClassName='flex flex-col gap-2'
                         >
                             <CheckboxInput
                                 label='Section Status'
@@ -527,7 +530,13 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                 <div className='col-span-full flex gap-3 justify-between mb-4'>
                                                     <h4 className='text-base font-medium'>Feature {index + 1}</h4>
                                                     <div>
-                                                        <CloseOutlined className='cursor-pointer' onClick={() => removeItem(index)} />
+                                                        <ButtonIcon
+                                                            icon={CancelGreyIcon}
+                                                            shape='circle'
+                                                            variant='filled'
+                                                            color='default'
+                                                            onClick={() => removeItem(index)}
+                                                        />
                                                     </div>
                                                 </div>
                                                 <div className='grid md:grid-cols-3 gap-2'>
@@ -565,7 +574,11 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 <div className="flex justify-end mt-4">
                                     <Button
                                         label='Add Feature'
-                                        icon={<PlusOutlined />}
+                                        icon={<Image
+                                            src={PlusOutlineIcon}
+                                            alt='plus-icon'
+                                            width={15}
+                                        />}
                                         onClick={addItem}
                                     />
                                 </div>
@@ -574,13 +587,9 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                         <FormGroup
                             title="Product Page"
                             description="Product Page"
-                            className='mt-4'
                         >
-                            <div className='col-span-full border p-4 rounded-md' style={{ borderColor: '#E5E7EB' }}>
-                                <div className='col-span-full flex gap-3 justify-between mb-4'>
-                                    <h4 className='text-base font-medium'>Product Page Banner</h4>
-                                </div>
-                                <div className='flex gap-3 items-center'>
+                            <div className='col-span-full'>
+                                <div className='grid md:grid-cols-2 gap-3'>
                                     <FileUploader
                                         label='Product Page Banner Image'
                                         action="https://api-dev.alarmexpert.com.au/admin/product/cdn/upload"
@@ -596,7 +605,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                             }
                                         })}
                                     />
-                                    <div className='col-span-full flex items-center flex-col justify-start'>
+                                    <div className='flex flex-col gap-2'>
                                         <Input
                                             id='call_to_action_url'
                                             label='Call to Action URL'
