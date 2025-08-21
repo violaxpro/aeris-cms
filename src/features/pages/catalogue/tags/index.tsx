@@ -21,6 +21,7 @@ import ConfirmModal from '@/components/modal/ConfirmModal'
 import { useRouter } from 'next/navigation'
 import { useNotificationAntd } from '@/components/toast'
 import dayjs from 'dayjs'
+import ModalTags from './ModalTags'
 
 const index = () => {
     const [tagsData, setTagsData] = useState([])
@@ -34,6 +35,10 @@ const index = () => {
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
     const [openModalDelete, setOpenModalDelete] = useState(false)
     const [deletedData, setDeletedData] = useState<any>(null)
+    const [openModalTag, setOpenModalTag] = useState(false)
+    const [actionType, setActionType] = useState('create')
+    const [detailData, setDetailData] = useState<any>(null)
+
     console.log(tagsData)
 
     useEffect(() => {
@@ -65,10 +70,6 @@ const index = () => {
     ]
     const columns: TableColumnsType<tagsType> = [
         {
-            title: 'ID',
-            dataIndex: 'id',
-        },
-        {
             title: 'Name',
             dataIndex: 'name',
         },
@@ -92,7 +93,7 @@ const index = () => {
                         variant='filled'
                         size="small"
                         icon={PencilIconBlue}
-                        onClick={() => router.push(routes.eCommerce.editTags(row.id))}
+                        onClick={() => handleOpenModal('edit', row)}
                     />
                     <ButtonIcon
                         color='danger'
@@ -107,6 +108,12 @@ const index = () => {
 
     ]
 
+    const handleOpenModal = (action: string, data?: any) => {
+        setOpenModalTag(true)
+        setActionType(action)
+        setDetailData(data)
+    }
+
     const handleSearch = (query: string) => {
         console.log('User mencari:', query);
     };
@@ -118,6 +125,10 @@ const index = () => {
                 onSave={handleDelete}
                 action='Delete'
                 text='Are you sure you want to delete this tag?'
+            />
+            <ModalTags
+                isModalOpen={openModalTag}
+                handleCancel={() => setOpenModalTag(false)}
             />
             {contextHolder}
             <div className="mt-6 mx-6 mb-0">
@@ -139,8 +150,7 @@ const index = () => {
                         />}
 
                         label='Add Tag'
-                        link={routes.eCommerce.createTags}
-
+                        onClick={() => handleOpenModal('create')}
                     />
                 </div>
             </div>
