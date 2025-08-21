@@ -37,6 +37,7 @@ import AvatarImage from "public/social-avatar.webp"
 import { downloadPayslipPDF, previewAndPrintPDF } from '@/services/pay-slip-service'
 import { Dropdown, Menu } from 'antd'
 import ButtonIcon from '@/components/button/ButtonIcon'
+import ConfirmModal from '@/components/modal/ConfirmModal'
 
 const index = ({ data }: { data?: any }) => {
     const router = useRouter()
@@ -54,6 +55,8 @@ const index = ({ data }: { data?: any }) => {
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
     const [search, setSearch] = useState('')
     const [openModalForm, setOpenModalForm] = useState(false)
+    const [openModalDelete, setOpenModalDelete] = useState(false)
+    const [deletedData, setDeletedData] = useState<any>(null)
     const [formData, setFormData] = useState({
         nik: '',
         full_name: '',
@@ -133,7 +136,7 @@ const index = ({ data }: { data?: any }) => {
             dataIndex: 'action',
             render: (_: any, row: any) => {
                 return (
-                    <div className='flex items-center gap-2 cursor-pointer'>
+                    <div className='flex items-center gap-2 cursor-pointer' onClick={(e) => e.stopPropagation()}>
                         <ButtonIcon
                             icon={EyeIcon}
                             width={20}
@@ -155,19 +158,22 @@ const index = ({ data }: { data?: any }) => {
                             icon={TrashIconRed}
                             width={15}
                             height={20}
-                            onClick={() => router.push(routes.eCommerce.detailPaySlip(row.id))}
+                            onClick={() => setOpenModalDelete(true)}
                             color='danger'
                             variant='filled'
                             size="middle"
                         />
                     </div>
 
-                );
+                )
 
             }
         },
     ]
 
+    const handleDelete = (id: any) => {
+        console.log('delete', id)
+    }
     const handleChange = (field: string) => (
         e: any | React.ChangeEvent<HTMLTextAreaElement>
     ) => {
@@ -249,17 +255,17 @@ const index = ({ data }: { data?: any }) => {
     return (
         <>
             {contextHolder}
-            {/* <ModalEmployee
-                open={openModalForm}
-                handleChange={handleChange}
-                formData={formData}
-                handleCancel={() => setOpenModalForm(false)}
-                handleSubmit={() => setOpenModalForm(false)}
-            /> */}
+            <ConfirmModal
+                open={openModalDelete}
+                onCancel={() => setOpenModalDelete(false)}
+                onSave={handleDelete}
+                action='Delete'
+                text='Are you sure you want to delete this pay slip?'
+            />
             <div className="mt-6 mx-6 mb-0">
                 <div className='flex justify-between items-center'>
                     <div>
-                        <h1 className='text-xl font-bold'>
+                        <h1 className='text-2xl font-bold'>
                             Payslip
                         </h1>
                         <Breadcrumb
@@ -279,14 +285,14 @@ const index = ({ data }: { data?: any }) => {
                                 height={15}
                             />}
                             label='Create Payslip'
-                            onClick={() => setOpenModalForm(true)}
+                            link={routes.eCommerce.createPaySlip}
                         />
                     </div>
 
                 </div>
             </div>
             <Content className="mb-0">
-                <div style={{ padding: 24, minHeight: 360 }}>
+                <div className='min-h-[360px] p-6'>
                     <div className='flex flex-col gap-4'>
                         <div className='flex justify-between mb-4 gap-2'>
                             <div className='flex items-center gap-2'>
@@ -308,7 +314,7 @@ const index = ({ data }: { data?: any }) => {
                                             height={15}
                                         />}
                                         label='Print'
-                                        onClick={() => console.log('hi')}
+                                        onClick={() => handlePreview(payslipData)}
                                     />
                                     <ButtonAction
                                         icon={<Image
@@ -372,6 +378,8 @@ const index = ({ data }: { data?: any }) => {
                             withSelectableRows
                             selectedRowKeys={selectedRowKeys}
                             onSelectChange={setSelectedRowKeys}
+                            detailRoutes={(slug) => routes.eCommerce.detailPaySlip(slug)}
+                            getRowValue={(record) => record.id}
                         />
                         <Pagination
                             current={currentPage}

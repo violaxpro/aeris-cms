@@ -52,7 +52,10 @@ const index = ({ data, slug }: { data?: any, slug: any }) => {
             title: 'Employee Management',
         },
         {
-            title: 'Timesheet',
+            title: 'Timesheet', url: routes.eCommerce.timesheet
+        },
+        {
+            title: 'Detail',
         },
     ]
 
@@ -225,8 +228,8 @@ const index = ({ data, slug }: { data?: any, slug: any }) => {
             <div className="mt-6 mx-6 mb-0">
                 <div className='flex md:flex-row flex-col md:justify-between md:items-center items-start'>
                     <div>
-                        <h1 className='text-xl font-bold'>
-                            Timesheet
+                        <h1 className='text-2xl font-bold'>
+                            Detail Timesheet
                         </h1>
                         <Breadcrumb
                             items={breadcrumb}

@@ -249,7 +249,15 @@ export const employeeData = [
         email: 'marcella@gmail.com',
         joining_date: 'June 02, 2025',
         status: 'Active',
-        slip_status: 'Draft'
+        slip_status: 'Draft',
+        phone: "081234567890",
+        address: "Jl. Melati No. 45, Jakarta",
+        basic_salary: 8000000,
+        overtime: 1200000,
+        late_fee: 200000,
+        bpjs_kesehatan: 300000,
+        bpjs_ketenagakerjaan: 400000,
+        pph21: 500000,
     },
     {
         id: 2,
@@ -259,8 +267,15 @@ export const employeeData = [
         email: 'yuliana@gmail.com',
         joining_date: 'June 02, 2025',
         status: 'Leave',
-        slip_status: 'Completed'
-
+        slip_status: 'Completed',
+        phone: "081234567890",
+        address: "Jl. Melati No. 45, Jakarta",
+        basic_salary: 8000000,
+        overtime: 1200000,
+        late_fee: 200000,
+        bpjs_kesehatan: 300000,
+        bpjs_ketenagakerjaan: 400000,
+        pph21: 500000,
     },
     {
         id: 3,
@@ -270,8 +285,15 @@ export const employeeData = [
         email: 'lili@gmail.com',
         joining_date: 'June 02, 2025',
         status: 'Resign',
-        slip_status: 'Completed'
-
+        slip_status: 'Completed',
+        phone: "081234567890",
+        address: "Jl. Melati No. 45, Jakarta",
+        basic_salary: 8000000,
+        overtime: 1200000,
+        late_fee: 200000,
+        bpjs_kesehatan: 300000,
+        bpjs_ketenagakerjaan: 400000,
+        pph21: 500000,
     },
 
     {
@@ -282,8 +304,15 @@ export const employeeData = [
         email: 'viola@gmail.com',
         joining_date: 'June 02, 2025',
         status: 'Resign',
-        slip_status: 'Completed'
-
+        slip_status: 'Completed',
+        phone: "081234567890",
+        address: "Jl. Melati No. 45, Jakarta",
+        basic_salary: 8000000,
+        overtime: 1200000,
+        late_fee: 200000,
+        bpjs_kesehatan: 300000,
+        bpjs_ketenagakerjaan: 400000,
+        pph21: 500000,
     }
 
 ]
