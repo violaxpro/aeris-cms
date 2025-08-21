@@ -34,9 +34,10 @@ const StatusTag: React.FC<StatusTagProps> = ({ status, type = 'quote', ...props 
     let config;
 
     // Kondisi khusus untuk status 'Draft'
-    if (status === 'Draft' && (type)) {
-        config = statusMap['Draft Orange'];
-    } else if (status === 'Sent' && type === 'supplier') {
+    // if (status === 'Draft' && (type)) {
+    //     config = statusMap['Draft Orange'];
+    // } 
+    if (status === 'Sent' && type === 'supplier') {
         config = statusMap['Sent Email'];
     } else if (status === 'Approved' && type === 'time') {
         config = statusMap['Approved Permit'];
