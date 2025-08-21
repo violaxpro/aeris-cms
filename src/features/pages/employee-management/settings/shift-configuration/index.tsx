@@ -96,9 +96,8 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                 handleChange={handleChange}
                 formData={formData}
             /> */}
-            <Content className="mt-4 mx-4 mb-0">
-                <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
-
+            <Content className="mb-0">
+                <div className='min-h-[360px] p-6'>
                     <div className='flex flex-col gap-8'>
                         <FormGroup
                             title="Shift Configuration"

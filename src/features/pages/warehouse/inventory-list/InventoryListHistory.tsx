@@ -249,6 +249,11 @@ const InventoryListsHistory = ({ historyData, slug }: { historyData?: any, slug:
                         withSelectableRows
                         selectedRowKeys={selectedRowKeys}
                         onSelectChange={setSelectedRowKeys}
+                        onRowClick={(record) => {
+                            // setDataDetail(record)
+                            // setFormMode('detail')
+                            setOpenActivityHistory(true);
+                        }}
                     />
                     <Pagination
                         current={currentPage}

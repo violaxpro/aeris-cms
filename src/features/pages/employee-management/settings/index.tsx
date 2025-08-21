@@ -29,8 +29,8 @@ const index = ({ data }: { data?: any }) => {
 
     return (
         <>
-            <div className="mt-6 mx-8 mb-0">
-                <h1 className='text-xl font-bold'>
+            <div className="mt-6 mx-6 mb-0">
+                <h1 className='text-2xl font-bold'>
                     Settings
                 </h1>
                 <Breadcrumb

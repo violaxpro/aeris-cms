@@ -178,13 +178,6 @@ const index = ({ data }: { data?: any }) => {
         },
     ]
 
-    const months = [
-        { value: 0, label: 'January' },
-        { value: 1, label: 'February' },
-        { value: 2, label: 'March' },
-        // dst...
-    ];
-
     const handleChange = (field: string) => (
         e: any | React.ChangeEvent<HTMLTextAreaElement>
     ) => {
@@ -213,7 +206,7 @@ const index = ({ data }: { data?: any }) => {
             <div className="mt-6 mx-6 mb-0">
                 <div className='flex justify-between items-center'>
                     <div>
-                        <h1 className='text-xl font-bold'>
+                        <h1 className='text-2xl font-bold'>
                             Employee
                         </h1>
                         <Breadcrumb
@@ -233,7 +226,7 @@ const index = ({ data }: { data?: any }) => {
                 </div>
             </div>
             <Content className="mb-0">
-                <div style={{ padding: 24, minHeight: 360 }}>
+                <div className='min-h-[360px] p-6'>
                     <div className='flex flex-col gap-4'>
                         <div className='grid md:grid-cols-4 gap-4'>
                             <Card title='Total Employees' icon={EmployeeIcon}>

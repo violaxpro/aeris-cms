@@ -65,7 +65,7 @@ const FormEmployee: React.FC<FormProps> = ({ mode, initialValues }) => {
             <div className="mt-6 mx-6 mb-0">
                 <div className='flex md:flex-row flex-col md:justify-between md:items-center items-start'>
                     <div>
-                        <h1 className='text-xl font-bold'>
+                        <h1 className='text-2xl font-bold'>
                             Employee
                         </h1>
                         <Breadcrumb
@@ -85,7 +85,7 @@ const FormEmployee: React.FC<FormProps> = ({ mode, initialValues }) => {
             </div>
 
             <Content className="mb-0">
-                <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
+                <div className='min-h-[360px] p-6'>
                     <div className='grid grid-cols-1 md:grid-cols-12 gap-4'>
                         <div className='flex flex-col gap-3 md:col-span-3'>
                             <div className='flex items-center gap-4'>

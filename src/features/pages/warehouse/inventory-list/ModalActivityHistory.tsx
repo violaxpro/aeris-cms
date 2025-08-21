@@ -9,12 +9,7 @@ import {
     TransferStockIcon,
     ReservationOrderIcon,
     ReturnIcon,
-    CheckinIcon,
-    BreakfastIcon,
-    FinishBreakIcon,
-    CheckoutBlueIcon,
-    CheckoutGreyIcon,
-    ProgressIcon
+    StatusAvailableIcon
 } from '@public/icon'
 import Button from '@/components/button'
 import dayjs from 'dayjs'
@@ -75,7 +70,7 @@ const ModalActivityHistory = ({ open, data, handleCancel }: ModalActivityHistory
                         label={data.status}
                         icon={
                             <Image
-                                src={ProgressIcon}
+                                src={StatusAvailableIcon}
                                 alt='icon'
                             />
                         }
