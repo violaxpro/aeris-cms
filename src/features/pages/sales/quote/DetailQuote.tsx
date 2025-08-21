@@ -201,7 +201,8 @@ const DetailQuote = ({ slug, data }: { slug?: string | number, data: any }) => {
                             />
                         }
                         {
-                            data?.status && data?.status?.toLowerCase() == 'approved' && <ButtonAction
+                            data?.status && data?.status?.toLowerCase() == 'approved' ||
+                            data?.status?.toLowerCase() == 'accepted' && <ButtonAction
                                 icon={<Image
                                     src={ConvertIcon}
                                     alt='convert-icon'
