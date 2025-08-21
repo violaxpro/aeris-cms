@@ -91,13 +91,19 @@ const index = <data extends object>({
                             <Image
                                 src={CaretDownIcon}
                                 alt='caret-down-icon'
-                                onClick={(e) => onExpand(record, e)}
+                                onClick={(e) => {
+                                    e.stopPropagation()
+                                    onExpand(record, e)
+                                }}
                             />
                         ) : (
                             <Image
                                 src={CaretRightIcon}
                                 alt='caret-right-icon'
-                                onClick={(e) => onExpand(record, e)}
+                                onClick={(e) => {
+                                    e.stopPropagation()
+                                    onExpand(record, e)
+                                }}
                             />
                         ),
                     ...expandable

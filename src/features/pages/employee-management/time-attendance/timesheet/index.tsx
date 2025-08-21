@@ -206,7 +206,7 @@ const index = ({ data }: { data?: any }) => {
             width: 50,
             key: 'action',
             render: (_: any, row: any) => {
-                return <div className="flex flex-col w-full items-center">
+                return <div className="flex flex-col w-full items-center" onClick={(e) => e.stopPropagation()}>
                     <ButtonIcon
                         icon={EyeIcon}
                         width={20}
@@ -256,47 +256,6 @@ const index = ({ data }: { data?: any }) => {
         setModalType(type)
         setFormMode(mode)
     }
-
-    const dataChart = [
-        {
-            label: 'Insurance',
-            sublabel: 'Health Insurance',
-            value: 24,
-            color: '#002B49',
-        },
-        {
-            label: 'Allowance',
-            sublabel: 'Transport Allowance',
-            value: 12,
-            color: '#5583F0',
-        },
-        {
-            label: 'Scholarship',
-            sublabel: 'Academic Support',
-            value: 6,
-            color: '#79ACFF',
-        },
-    ]
-
-    const dataBenefitEmployee = [
-        {
-            id: 1,
-            employee_id: '323212',
-            employee_name: 'Yuliana Dwi',
-            role: 'Front End Developer',
-            status: 'Done',
-            final_score: 90
-        },
-        {
-            id: 2,
-            employee_id: '323213',
-            employee_name: 'Marcella Indarwati',
-            role: 'UI/UX Designer',
-            status: 'Pending',
-            final_score: ''
-        }
-    ]
-
 
     const mobileMenu = (
         <Menu>
@@ -624,6 +583,8 @@ const index = ({ data }: { data?: any }) => {
                                         },
                                         // rowExpandable: (record) => record.attendance && record.attendance.length > 0
                                     }}
+                                    detailRoutes={(slug) => routes.eCommerce.detailTimesheet(slug)}
+                                    getRowValue={(record) => record.id}
                                 />
                             </div>
                         </div>

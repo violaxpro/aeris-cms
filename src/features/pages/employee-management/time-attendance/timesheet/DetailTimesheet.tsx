@@ -26,9 +26,10 @@ import { Divider } from 'antd'
 import dayjs, { Dayjs } from 'dayjs'
 import Table from '@/components/table'
 import SelectRangePicker from '@/components/date-picker/SelectRangePicker'
+import ButtonTab from '@/components/tab/ButtonTab'
 
 const index = ({ data, slug }: { data?: any, slug: any }) => {
-    const [activeTab, setActiveTab] = useState('week');
+    const [activeTab, setActiveTab] = useState('day');
     const [selectedRange, setSelectedRange] = useState<[dayjs.Dayjs, dayjs.Dayjs] | null>(null);
     const router = useRouter()
     const { contextHolder, notifySuccess } = useNotificationAntd()
@@ -58,6 +59,12 @@ const index = ({ data, slug }: { data?: any, slug: any }) => {
             title: 'Detail',
         },
     ]
+
+    const tabs = [
+        { key: 'day', label: 'Day' },
+        { key: 'week', label: 'Week' },
+        { key: 'month', label: 'Month' },
+    ];
 
 
     const handleRangeChange = (dates: [dayjs.Dayjs, dayjs.Dayjs]) => {
@@ -346,42 +353,30 @@ const index = ({ data, slug }: { data?: any, slug: any }) => {
                                 </div>
                             </div>
                         </div>
-                        <div className='flex justify-center gap-4'>
-                            <button
-                                key='week'
-                                onClick={() => setActiveTab('week')}
-                                className={`px-3 py-1 rounded-md border transition-all ${activeTab == 'week'
-                                    ? 'bg-[#EEF2F7] text-[#2E5AAC] border-[#C8D3E0]'
-                                    : 'bg-transparent text-black border-transparent'
-                                    }`}
-                            >
-                                <div className="flex items-center gap-1 relative">
-                                    <span>Week</span>
-                                </div>
-                            </button>
+                        <div className='flex justify-around gap-4'>
                             <SelectRangePicker
                                 picker='date'
                                 format='MMMM DD,YYYY'
                                 onChange={handleRangeChange}
                             />
-                            <button
-                                key='month'
-                                onClick={() => setActiveTab('month')}
-                                className={`px-3 rounded-md border transition-all ${activeTab == 'month'
-                                    ? 'bg-[#EEF2F7] text-[#2E5AAC] border-[#C8D3E0]'
-                                    : 'bg-transparent text-black border-transparent'
-                                    }`}
-                            >
-                                <div className="flex items-center gap-1 relative">
-                                    <span>Month</span>
-                                </div>
-                            </button>
+                            <ButtonTab
+                                tabs={tabs}
+                                activeKey={activeTab}
+                                onTabClick={setActiveTab}
+                            />
                         </div>
                         <div className='grid md:grid-cols-[1fr_1fr] grid-cols-1 gap-4 items-start'>
                             <div className='rounded-lg border border-[#E5E7EB] h-auto p-5 flex flex-col gap-3 overflow-auto'>
                                 <div className='flex flex-col justify-between mb-4 gap-2'>
                                     <div className='flex justify-between'>
-                                        <h4 className='text-lg font-semibold'>{`${activeTab == 'week' ? 'Weekly' : 'Monthly'}`} Activity Log</h4>
+                                        <h4 className='text-lg font-semibold'>{`
+                                        ${activeTab == 'week'
+                                                ? 'Weekly ' :
+                                                activeTab == 'day' ? 'Daily '
+                                                    : 'Monthly '}`
+                                        }
+                                            Activity Log
+                                        </h4>
                                     </div>
                                     <Table
                                         columns={columnsActivityLog}
@@ -391,7 +386,12 @@ const index = ({ data, slug }: { data?: any, slug: any }) => {
                             </div>
                             <div className='rounded-lg border border-[#E5E7EB] md:h-[490px] p-5 flex flex-col gap-3 overflow-auto'>
                                 <div className='flex flex-col mb-3 gap-4'>
-                                    <h4 className='text-lg font-semibold'>{`${activeTab == 'week' ? 'Weekly' : 'Monthly'}`} Total Summary</h4>
+                                    <h4 className='text-lg font-semibold'>{`${activeTab == 'week'
+                                        ? 'Weekly  '
+                                        : activeTab == 'day'
+                                            ? 'Daily '
+                                            : 'Monthly '}`}
+                                        Total Summary</h4>
                                 </div>
                                 <div className='w-full flex flex-col gap-4'>
                                     <Table
