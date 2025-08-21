@@ -14,6 +14,7 @@ type inputProps = {
     error?: boolean
     errorMessage?: string
     className?: string,
+    inputClassname?: string,
     disabled?: boolean
     divClassName?: string
     labelClassName?: string
@@ -43,7 +44,8 @@ const index = ({ label,
     suffix,
     required,
     segmented,
-    onClick
+    onClick,
+    inputClassname
 }: inputProps) => {
 
     return (
@@ -60,7 +62,7 @@ const index = ({ label,
 
                 </label>)
             }
-            <div>
+            <div className={inputClassname}>
                 <Input
                     id={id}
                     disabled={disabled}

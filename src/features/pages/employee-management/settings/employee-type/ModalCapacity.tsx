@@ -19,6 +19,7 @@ type ModalCapacityProps = {
         thursday: number
         friday: number
         saturday: number
+        sunday: number
         weekly_total: string
         weekly_hours: string
     }
@@ -34,7 +35,6 @@ const ModalCapacity = ({
     handleSubmit,
     leaveType = 'full_time'
 }: ModalCapacityProps) => {
-
     return (
         <div>
             <Modal
@@ -59,7 +59,7 @@ const ModalCapacity = ({
                     />
                     {
                         formData.capacity == 'daily' ?
-                            <div className='grid grid-cols-2 gap-3'>
+                            <div className='grid md:grid-cols-2 gap-3'>
                                 <Input
                                     id="monday"
                                     label="Monday"
@@ -68,7 +68,7 @@ const ModalCapacity = ({
                                     onChange={handleChange("monday")}
                                     type='text'
                                     divClassName='flex gap-4'
-                                    labelClassName='w-20'
+                                    labelClassName='w-40'
                                 />
                                 <Input
                                     id="thursday"
@@ -78,7 +78,7 @@ const ModalCapacity = ({
                                     onChange={handleChange("thursday")}
                                     type='text'
                                     divClassName='flex gap-4'
-                                    labelClassName='w-20'
+                                    labelClassName='w-40'
                                 />
                                 <Input
                                     id="tuesday"
@@ -88,7 +88,7 @@ const ModalCapacity = ({
                                     onChange={handleChange("tuesday")}
                                     type='text'
                                     divClassName='flex gap-4'
-                                    labelClassName='w-20'
+                                    labelClassName='w-40'
                                 />
                                 <Input
                                     id="friday"
@@ -98,7 +98,7 @@ const ModalCapacity = ({
                                     onChange={handleChange("friday")}
                                     type='text'
                                     divClassName='flex gap-4'
-                                    labelClassName='w-20'
+                                    labelClassName='w-40'
                                 />
                                 <Input
                                     id="wednesday"
@@ -107,7 +107,7 @@ const ModalCapacity = ({
                                     value={formData.wednesday}
                                     onChange={handleChange("wednesday")}
                                     type='text'
-                                    labelClassName='w-20'
+                                    labelClassName='w-40'
                                     divClassName='flex gap-4'
                                 />
                                 <Input
@@ -118,8 +118,21 @@ const ModalCapacity = ({
                                     onChange={handleChange("saturday")}
                                     type='text'
                                     divClassName='flex gap-4'
-                                    labelClassName='w-20'
+                                    labelClassName='w-40'
                                 />
+                                <div className='col-span-full'>
+                                    <Input
+                                        id="sunday"
+                                        label="Sunday"
+                                        placeholder="0h"
+                                        value={formData.sunday}
+                                        onChange={handleChange("sunday")}
+                                        type='text'
+                                        divClassName='flex gap-4'
+                                        labelClassName='w-38'
+                                        inputClassname='md:w-full'
+                                    />
+                                </div>
                                 <div className='col-span-full flex justify-between mt-3'>
                                     <label className='text-sm font-medium text-gray-700'>Weekly Total</label>
                                     <span>0h</span>
@@ -138,8 +151,6 @@ const ModalCapacity = ({
                                 />
                             </div>
                     }
-
-
                 </div>
             </Modal>
 
