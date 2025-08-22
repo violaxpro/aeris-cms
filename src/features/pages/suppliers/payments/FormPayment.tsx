@@ -216,7 +216,7 @@ const FormPayment: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 onChange={(val) => handleChangeSelect('supplier', val)}
                                 value={formData.supplier}
                                 options={optionSupplier}
-                                disabled={isDisabled}
+                                disabled={mode == 'edit' && isDisabled}
                             />
                             <Input
                                 id='funding_account'
@@ -225,14 +225,14 @@ const FormPayment: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 placeholder='Input Funding Account'
                                 onChange={handleChange}
                                 value={formData.funding_account}
-                                disabled={isDisabled}
+                                disabled={mode == 'edit' && isDisabled}
                             />
                             <DatePickerInput
                                 id='payment_date'
                                 label='Payment / Scheduled Date '
                                 value={formData.payment_date ? dayjs(formData.payment_date, 'DD-MM-YYYY') : null}
                                 onChange={(value: any, dateString: any) => handleDateChange('payment_date', value, dateString)}
-                                disabled={isDisabled}
+                                disabled={mode == 'edit' && isDisabled}
                             />
                             <SelectInput
                                 id='method'
