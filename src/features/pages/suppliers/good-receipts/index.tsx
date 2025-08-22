@@ -11,11 +11,11 @@ import Breadcrumb from "@/components/breadcrumb"
 import { Content } from 'antd/es/layout/layout'
 import Button from "@/components/button"
 import SearchInput from '@/components/search';
-import { BillType } from '@/plugins/types/suppliers-type'
+import { purchases, PurchasesType } from '@/plugins/types/suppliers-type'
 import { deletePurchases } from '@/services/purchases-service'
 import { useNotificationAntd } from '@/components/toast'
 import { useAtom } from 'jotai'
-import { billAtom } from '@/store/SuppliersAtom'
+import { purchaseSupplierAtom } from '@/store/SuppliersAtom'
 import { stripHTML } from '@/plugins/validators/common-rules'
 import StatusTag from '@/components/tag'
 import dayjs from 'dayjs'
@@ -37,11 +37,11 @@ import ButtonAction from '@/components/button/ButtonAction'
 import SearchTable from '@/components/search/SearchTable'
 import ShowPageSize from '@/components/pagination/ShowPageSize'
 
-const index = ({ billData }: { billData?: any }) => {
+const index = ({ purchasesData }: { purchasesData?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
-    const [data, setData] = useAtom(billAtom)
+    const [data, setData] = useAtom(purchaseSupplierAtom)
     const [search, setSearch] = useState('')
-    const [filteredData, setFilteredData] = useState<BillType[]>([])
+    const [filteredData, setFilteredData] = useState<PurchasesType[]>([])
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
     const [currentOrder, setCurrentOrder] = useState<any>(null)
     const [currentPage, setCurrentPage] = useState(1);
@@ -50,16 +50,11 @@ const index = ({ billData }: { billData?: any }) => {
     const [deletedData, setDeletedData] = useState<any>(null)
 
     const handleDelete = async (id: any) => {
-        if (!deletedData) return;
         try {
             const res = await deletePurchases(id)
             if (res.success == true) {
                 notifySuccess(res.message)
                 setData(prev => prev.filter(item => item.id !== id))
-
-                //  setFilteredData(updatedData.filter(item =>
-                //         item.name.toLowerCase().includes(search.toLowerCase())
-                //     ));
             }
         } catch (error) {
             console.error(error)
@@ -90,10 +85,10 @@ const index = ({ billData }: { billData?: any }) => {
             title: 'Suppliers',
         },
         {
-            title: 'Bills',
+            title: 'Good Receipts',
         },
     ]
-    const columns: TableColumnsType<BillType> = [
+    const columns: TableColumnsType<PurchasesType> = [
         {
             title: 'Order ID',
             dataIndex: 'order_id',
@@ -133,8 +128,8 @@ const index = ({ billData }: { billData?: any }) => {
                 return dayjs(a.created).valueOf() - dayjs(b.created).valueOf()
             },
             render: (val: any) => {
-                const date = dayjs(val.date).format("DD/MM/YYYY")
-                const user = val.name
+                const date = dayjs(val?.date).format("DD/MM/YYYY")
+                const user = val?.name
                 return <div className="flex flex-col w-full">
                     <div className="flex justify-start gap-1">
                         <span>{date}</span>
@@ -227,8 +222,8 @@ const index = ({ billData }: { billData?: any }) => {
     };
 
     useEffect(() => {
-        setData(billData)
-    }, [billData])
+        setData(purchases)
+    }, [purchases])
     return (
         <>
             {contextHolder}
@@ -236,7 +231,7 @@ const index = ({ billData }: { billData?: any }) => {
                 <div className='flex justify-between items-center'>
                     <div>
                         <h1 className='text-2xl font-bold'>
-                            Bills
+                            Good Receipts
                         </h1>
                         <Breadcrumb
                             items={breadcrumb}
@@ -249,8 +244,8 @@ const index = ({ billData }: { billData?: any }) => {
                             width={15}
                             height={15}
                         />}
-                        label='Add Bill'
-                        link={routes.eCommerce.createBill}
+                        label='Add Good Receipt'
+                        link={routes.eCommerce.createPurchases}
                     />
                 </div>
             </div>

@@ -66,7 +66,7 @@ const FormPurchases: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const breadcrumb = [
         { title: 'Supplier' },
         {
-            title: 'Purchases', url: routes.eCommerce.purchases
+            title: 'Purchase Orders', url: routes.eCommerce.purchases
         },
         { title: mode == 'create' ? 'Create' : 'Edit' },
     ];
@@ -280,12 +280,12 @@ const FormPurchases: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         <>
             {contextHolder}
             <div className="mt-6 mx-6 mb-0">
-                <h1 className="text-xl font-bold mb-4">{mode == 'create' ? 'Create Purchases' : 'Edit Purchases'}</h1>
+                <h1 className="text-2xl font-bold mb-4">{mode == 'create' ? 'Create Purchase Order' : 'Edit Purchase Order'}</h1>
                 <Breadcrumb items={breadcrumb} />
             </div>
 
-            <Content className=" mb-0">
-                <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
+            <Content className="mb-0">
+                <div className='min-h-[360px] p-6'>
                     <div>
                         <div className='grid grid-cols-4 gap-3'>
                             <SelectInput
@@ -480,7 +480,7 @@ const FormPurchases: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                     <div className="mt-6 flex justify-end">
                         <Button
 
-                            label={mode == 'create' ? 'Create Purchases' : 'Edit Purchases'}
+                            label={mode == 'create' ? 'Create Purchase Order' : 'Edit Purchase Order'}
                             onClick={handleSubmit}
                         />
                     </div>

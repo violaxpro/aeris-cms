@@ -130,25 +130,40 @@ export const menuItems = [
                 icon: ShoppingOutlined,
                 children: [
                     {
-                        key: 'billed',
-                        label: 'Billed',
-                        href: routes.eCommerce.bill,
+                        key: 'good-receipts',
+                        label: 'Good Receipts',
+                        href: '#',
                     },
                     {
-                        key: 'purchases',
-                        label: 'Purchases',
+                        key: 'purchase-order',
+                        label: 'Purchase Orders',
                         href: routes.eCommerce.purchases,
                     },
                     {
-                        key: 'credit-notes',
-                        label: 'Credit Notes',
-                        href: routes.eCommerce.creditSupplierList,
+                        key: 'bills',
+                        label: 'Bills',
+                        href: routes.eCommerce.bill,
                     },
                     {
-                        key: 'supplier-lists',
-                        label: 'Supplier Lists',
+                        key: 'payments',
+                        label: 'Payments',
+                        href: '#'
+                    },
+                    {
+                        key: 'suppliers',
+                        label: 'Suppliers',
                         href: routes.eCommerce.supplierList,
                     },
+                    {
+                        key: 'supplier-rma',
+                        label: 'Supplier RMA(s)',
+                        href: '#',
+                    },
+                    // {
+                    //     key: 'credit-notes',
+                    //     label: 'Credit Notes',
+                    //     href: routes.eCommerce.creditSupplierList,
+                    // },
                 ],
             },
             {
@@ -158,45 +173,65 @@ export const menuItems = [
                 icon: DropboxOutlined,
                 children: [
                     {
-                        key: 'delivery-activity',
-                        label: 'Delivery Activity',
+                        key: 'outbound',
+                        label: 'Outbound',
                         href: '#'
                     },
                     {
-                        key: 'stock-transferred',
-                        label: 'Stock Transferred',
-                        href: '#'
-                    },
-                    {
-                        key: 'inventory-lists',
-                        label: 'Inventory Lists',
+                        key: 'inventory-management',
+                        label: 'Inventory Management',
                         href: routes.eCommerce.inventoryList,
                     },
                     {
-                        key: 'warehouse-branch-lists',
-                        label: 'Warehouse Branch Lists',
+                        key: 'inbound',
+                        label: 'Inbound',
+                        href: '#'
+                    },
+                    {
+                        key: 'stock-transfers',
+                        label: 'Stock Transfers',
+                        href: '#'
+                    },
+                    {
+                        key: 'stock-adjusment',
+                        label: 'Stock Adjustment',
+                        href: '#'
+                    },
+                    {
+                        key: 'rma-warehouse',
+                        label: 'Return',
+                        href: '#'
+                    },
+                    {
+                        key: 'branch-management',
+                        label: 'Branch Management',
                         href: routes.eCommerce.warehouseBranchList,
                     },
+                    {
+                        key: 'report-analytics',
+                        label: 'Reporting & Analytics',
+                        href: '#'
+                    }
                 ],
             },
-            {
-                key: 'return',
-                label: 'RMA',
-                href: routes.eCommerce.customers,
-                icon: TeamOutlined,
-                children: [
-                    {
-                        key: 'rma-sales',
-                        label: 'RMA Sales',
-                        href: routes.eCommerce.returnSales,
-                    },
-                    {
-                        key: 'rma-suppliers',
-                        label: 'RMA Suppliers',
-                        href: routes.eCommerce.returnSupplier,
-                    },
-                ]
-            },
+            // {
+            //     key: 'return',
+            //     label: 'RMA',
+            //     href: routes.eCommerce.customers,
+            //     icon: TeamOutlined,
+            //     children: [
+            //         {
+            //             key: 'rma-sales',
+            //             label: 'RMA Sales',
+            //             href: routes.eCommerce.returnSales,
+            //         },
+            //         {
+            //             key: 'rma-suppliers',
+            //             label: 'RMA Suppliers',
+            //             href: routes.eCommerce.returnSupplier,
+            //         },
+            //     ]
+            // },
             {
                 key: 'customer',
                 label: 'Customers',

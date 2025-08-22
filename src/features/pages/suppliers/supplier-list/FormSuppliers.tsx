@@ -38,8 +38,9 @@ const FormSuppliers: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     });
 
     const breadcrumb = [
-        { title: 'Supplier List', url: routes.eCommerce.supplierList },
-        { title: mode === 'create' ? 'Create Supplier List' : 'Edit Supplier List' },
+        { title: 'Suppliers' },
+        { title: 'Suppliers', url: routes.eCommerce.supplierList },
+        { title: mode === 'create' ? 'Create' : 'Edit' },
     ];
 
     const handleChange = (e: any) => {
@@ -99,19 +100,19 @@ const FormSuppliers: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     return (
         <>
             {contextHolder}
-            <div className="mt-6 mx-4 mb-0">
-                <h1 className="text-xl font-bold mb-4">{mode === 'create' ? 'Create Supplier List' : 'Edit Supplier List'}</h1>
+            <div className="mt-6 mx-6 mb-0">
+                <h1 className="text-2xl font-bold mb-4">{mode === 'create' ? 'Create Suppliers' : 'Edit Suppliers'}</h1>
                 <Breadcrumb items={breadcrumb} />
             </div>
 
-            <Content className="mt-4 mx-4 mb-0">
-                <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
+            <Content className="mb-0">
+                <div className='min-h-[360px] p-6'>
 
                     {/* Tab Content */}
                     <div>
                         <FormGroup
-                            title="Supplier List"
-                            description="Supplier List information"
+                            title="Suppliers"
+                            description="Supplier information"
                         >
                             <Input
                                 id='name'

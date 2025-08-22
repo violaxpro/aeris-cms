@@ -61,14 +61,10 @@ const index = ({ warehouseBranchList }: { warehouseBranchList?: any }) => {
             title: 'Warehouse',
         },
         {
-            title: 'Warehouse Branch Lists',
+            title: 'Branch Management',
         },
     ]
     const columns: TableColumnsType<WarehouseBranchListType> = [
-        {
-            title: 'ID',
-            dataIndex: 'id',
-        },
         {
             title: 'Warehouse Name',
             dataIndex: 'name',
@@ -134,7 +130,7 @@ const index = ({ warehouseBranchList }: { warehouseBranchList?: any }) => {
             />
             <div className="mt-6 mx-6 mb-0">
                 <h1 className='text-2xl font-bold'>
-                    Warehouse Branch Lists
+                    Branch Management
                 </h1>
                 <Breadcrumb
                     items={breadcrumb}

@@ -64,7 +64,7 @@ const index = ({ suppliersData }: { suppliersData?: any }) => {
             title: 'Suppliers',
         },
         {
-            title: 'Supplier Lists',
+            title: 'Suppliers',
         },
     ]
     const columns: TableColumnsType<SupplierListType> = [
@@ -133,8 +133,8 @@ const index = ({ suppliersData }: { suppliersData?: any }) => {
             <div className="mt-6 mx-6 mb-0">
                 <div className='flex justify-between items-center'>
                     <div>
-                        <h1 className='text-xl font-bold'>
-                            Supplier List
+                        <h1 className='text-2xl font-bold'>
+                            Suppliers
                         </h1>
                         <Breadcrumb
                             items={breadcrumb}
@@ -153,7 +153,7 @@ const index = ({ suppliersData }: { suppliersData?: any }) => {
                 </div>
             </div>
             <Content className="mb-0">
-                <div style={{ padding: 24, minHeight: 360 }}>
+                <div className='min-h-[360px] p-6'>
                     <div className='flex justify-between mb-4 gap-2'>
                         <div className='flex items-center gap-2'>
                             <ShowPageSize

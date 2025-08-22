@@ -67,12 +67,12 @@ export const routes = {
     editQuote: (slug: string) => `/ecommerce/quote/${slug}/edit`,
     detailQuote: (slug: string) => `/ecommerce/quote/${slug}/detail`,
 
-    purchases: '/ecommerce/purchases',
-    createPurchases: '/ecommerce/purchases/create',
-    editPurchases: (slug: string) => `/ecommerce/purchases/${slug}/edit`,
-    createSerialNumber: (slug: string) => `/ecommerce/purchases/${slug}/serial-number`,
-    sendEmail: (slug: string) => `/ecommerce/purchases/${slug}/send-email`,
-    print: (slug: string) => `/ecommerce/purchases/${slug}/print`,
+    purchases: '/ecommerce/purchase-orders',
+    createPurchases: '/ecommerce/purchase-orders/create',
+    editPurchases: (slug: string) => `/ecommerce/purchase-orders/${slug}/edit`,
+    createSerialNumber: (slug: string) => `/ecommerce/purchase-orders/${slug}/serial-number`,
+    sendEmail: (slug: string) => `/ecommerce/purchase-orders/${slug}/send-email`,
+    print: (slug: string) => `/ecommerce/purchase-orders/${slug}/print`,
 
     bill: '/ecommerce/bill',
     createBill: '/ecommerce/bill/create',
@@ -90,11 +90,35 @@ export const routes = {
     createCreditSalesList: '/ecommerce/credit-sales/create',
     editCreditSalesList: (slug: string) => `/ecommerce/credit-sales/${slug}/edit`,
 
-    inventoryList: '/ecommerce/inventory-list',
-    inventoryListHistory: (slug: string) => `/ecommerce/inventory-list/${slug}/history`,
+    outbound: '/ecommerce/outbound',
+    createOutbound: '/ecommerce/outbound/create',
+    editOutbound: (slug: string) => `/ecommerce/outbound/${slug}/edit`,
+
+    inventoryList: '/ecommerce/inventory-management',
+    inventoryListHistory: (slug: string) => `/ecommerce/inventory-management/${slug}/history`,
     warehouses: (slug: string) => `/ecommerce/warehouse/${slug}/edit`,
 
-    warehouseBranchList: '/ecommerce/warehouse-branch-list',
+    inbound: '/ecommerce/inbound',
+    createInbound: '/ecommerce/inbound/create',
+    editInbound: (slug: string) => `/ecommerce/inbound/${slug}/edit`,
+
+    stockTransfer: '/ecommerce/stock-transfer',
+    createStockTransfer: '/ecommerce/stock-transfer/create',
+    editStockTransfer: (slug: string) => `/ecommerce/stock-transfer/${slug}/edit`,
+
+    stockAdjustment: '/ecommerce/stock-adjustment',
+    createStockAdjustment: '/ecommerce/stock-adjustment/create',
+    editStockAdjustment: (slug: string) => `/ecommerce/stock-adjustment/${slug}/edit`,
+
+    rmaWarehouse: '/ecommerce/rma-warehouse',
+    createRmaWarehouse: '/ecommerce/rma-warehouse/create',
+    editRmaWarehouse: (slug: string) => `/ecommerce/rma-warehouse/${slug}/edit`,
+
+    warehouseBranchList: '/ecommerce/warehouse-branch-management',
+
+    reportingAnalytics: '/ecommerce/report-analytics',
+    createReportingAnalytics: '/ecommerce/report-analytics/create',
+    editReportingAnalytics: (slug: string) => `/ecommerce/report-analytics/${slug}/edit`,
 
     customers: '/ecommerce/customers',
     createCustomers: '/ecommerce/customers/create',

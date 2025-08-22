@@ -56,7 +56,7 @@ const FormBilled: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const breadcrumb = [
         { title: 'Supplier' },
         {
-            title: 'Bill', url: routes.eCommerce.bill
+            title: 'Bills', url: routes.eCommerce.bill
         },
         { title: mode == 'create' ? 'Create' : 'Edit' },
     ];
@@ -273,12 +273,12 @@ const FormBilled: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         <>
             {contextHolder}
             <div className="mt-6 mx-6 mb-0">
-                <h1 className="text-xl font-bold mb-4">{mode == 'create' ? 'Create Bill' : 'Edit Bill'}</h1>
+                <h1 className="text-2xl font-bold mb-4">{mode == 'create' ? 'Create Bills' : 'Edit Bills'}</h1>
                 <Breadcrumb items={breadcrumb} />
             </div>
 
             <Content className="mb-0">
-                <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
+                <div className='min-h-[360px] p-6'>
                     <div>
                         <div className='grid grid-cols-2 gap-3'>
                             <div className='flex flex-col gap-2'>

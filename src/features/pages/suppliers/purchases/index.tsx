@@ -85,7 +85,7 @@ const index = ({ purchasesData }: { purchasesData?: any }) => {
             title: 'Suppliers',
         },
         {
-            title: 'Purchases',
+            title: 'Purchase Orders',
         },
     ]
     const columns: TableColumnsType<PurchasesType> = [
@@ -227,11 +227,11 @@ const index = ({ purchasesData }: { purchasesData?: any }) => {
     return (
         <>
             {contextHolder}
-            <div className="mt-6 mx-4 mb-0">
+            <div className="mt-6 mx-6 mb-0">
                 <div className='flex justify-between items-center'>
                     <div>
-                        <h1 className='text-xl font-bold'>
-                            Purchases
+                        <h1 className='text-2xl font-bold'>
+                            Purchase Orders
                         </h1>
                         <Breadcrumb
                             items={breadcrumb}
@@ -244,13 +244,13 @@ const index = ({ purchasesData }: { purchasesData?: any }) => {
                             width={15}
                             height={15}
                         />}
-                        label='Add Purchase'
+                        label='Add Purchase Order'
                         link={routes.eCommerce.createPurchases}
                     />
                 </div>
             </div>
             <Content className="mb-0">
-                <div style={{ padding: 24, minHeight: 360 }}>
+                <div className='min-h-[360px] p-6'>
                     <div className='flex justify-between mb-4 gap-2'>
                         <div className='flex items-center gap-2'>
                             <ShowPageSize

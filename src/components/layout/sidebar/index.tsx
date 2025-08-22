@@ -80,7 +80,7 @@ const Sidebar = ({ isMobile = false, onClose }: { isMobile?: boolean; onClose?: 
                     ) : item.icon ? (
                         <item.icon />
                     ) : null,
-                    label: <span className=''>{item.label}</span>,
+                    label: <span>{item.label}</span>,
                     children: renderMenuItems(item.children, true), // Rekursif untuk sub-menu
                 };
             } else {

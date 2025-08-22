@@ -2,9 +2,10 @@
 import React, { useState, useEffect } from 'react'
 import Table from "@/components/table"
 import type { TableColumnsType } from 'antd'
-import { BrandType } from '@/data/brands-data'
+import { Dropdown, Menu } from 'antd'
+import { WarehouseBranchListType } from '@/plugins/types/warehouse-type'
 import Image from 'next/image'
-import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons'
+import { EditOutlined, PlusCircleOutlined, MoreOutlined } from '@ant-design/icons'
 import DeletePopover from '@/components/popover'
 import { routes } from '@/config/routes'
 import Link from 'next/link'
@@ -15,7 +16,7 @@ import SearchInput from '@/components/search';
 import { deleteBrand } from '@/services/brands-service'
 import { useNotificationAntd } from '@/components/toast'
 import { useAtom } from 'jotai'
-import { brandAtom } from '@/store/BrandAtomStore'
+import { branchListAtom } from '@/store/WarehouseAtom'
 import ButtonAction from '@/components/button/ButtonAction'
 import ButtonIcon from '@/components/button/ButtonIcon'
 import { useRouter } from 'next/navigation'
@@ -23,12 +24,12 @@ import ConfirmModal from '@/components/modal/ConfirmModal'
 import Pagination from '@/components/pagination'
 import SearchTable from '@/components/search/SearchTable'
 import ShowPageSize from '@/components/pagination/ShowPageSize'
-import { AddIcon, FilterIcon, TrashIconRed, PencilIconBlue, PencilYellowIcon, EyeIcon } from '@public/icon'
+import { AddIcon, FilterIcon, TrashIconRed, PencilIconBlue } from '@public/icon'
 
-const index = ({ inventoryLists }: { inventoryLists?: any }) => {
+const index = ({ warehouseBranchList }: { warehouseBranchList?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
     const router = useRouter()
-    const [data, setData] = useAtom(brandAtom)
+    const [data, setData] = useAtom(branchListAtom)
     const [openModalDelete, setOpenModalDelete] = useState(false)
     const [deletedData, setDeletedData] = useState<any>(null)
     const [pageSize, setPageSize] = useState(10);
@@ -37,6 +38,7 @@ const index = ({ inventoryLists }: { inventoryLists?: any }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [filteredData, setFilteredData] = useState<any[]>([]);
     const [search, setSearch] = useState('')
+
     const handleDelete = async (id: any) => {
         try {
             const res = await deleteBrand(id)
@@ -59,79 +61,39 @@ const index = ({ inventoryLists }: { inventoryLists?: any }) => {
             title: 'Warehouse',
         },
         {
-            title: 'Inventory Management',
+            title: 'Outbound (Order Fullfilment)',
         },
     ]
-    const columns: TableColumnsType<BrandType> = [
+    const columns: TableColumnsType<WarehouseBranchListType> = [
         {
-            title: 'SKU',
-            dataIndex: 'sku',
-            sorter: (a: any, b: any) => a?.sku.localeCompare(b?.sku)
-        },
-        {
-            title: 'Image',
-            dataIndex: 'image',
-            render: (url: string) => {
-                if (!url) return null;
-                return (
-                    <Image
-                        src={url}
-                        alt="product-img"
-                        width={50}
-                        height={50}
-                        className='object-cover rounded-xl'
-                    />
-                )
-            },
-        },
-        {
-            title: 'Name',
+            title: 'Warehouse Name',
             dataIndex: 'name',
-            sorter: (a: any, b: any) => a?.name.localeCompare(b?.name)
         },
         {
-            title: 'In Stock',
-            dataIndex: 'in_stock',
-            sorter: (a: any, b: any) => a?.in_stock - b?.in_stock
+            title: 'Address',
+            dataIndex: 'address',
         },
         {
-            title: 'Sold',
-            dataIndex: 'sold',
-            sorter: (a: any, b: any) => a?.sold - b?.sold
+            title: 'Phone Number',
+            dataIndex: 'phone_number',
         },
         {
-            title: 'Returned',
-            dataIndex: 'returned',
-            sorter: (a: any, b: any) => a?.returned - b?.returned
+            title: 'Email',
+            dataIndex: 'email',
         },
         {
-            title: 'Added',
-            dataIndex: 'added',
-            sorter: (a: any, b: any) => a?.added - b?.added
-
-        },
-        {
-            title: 'Action',
+            title: 'Actions',
             dataIndex: 'action',
             key: 'action',
             width: 120,
             render: (_: string, row: any) => {
                 return (
-                    <div className="flex items-center justify-end gap-3 pe-4" onClick={(e) => e.stopPropagation()}>
+                    <div className="flex items-center justify-end gap-3 pe-4">
                         <ButtonIcon
                             color='primary'
                             variant='filled'
                             size="small"
-                            icon={EyeIcon}
-                            width={15}
-                            onClick={() => router.push(routes.eCommerce.inventoryListHistory(row.sku))}
-                        />
-                        <ButtonIcon
-                            color='yellow'
-                            variant='filled'
-                            size="small"
-                            icon={PencilYellowIcon}
-                            width={15}
+                            icon={PencilIconBlue}
                             onClick={() => router.push(routes.eCommerce.editPriceLevel(row.id))}
                         />
                         <ButtonIcon
@@ -143,7 +105,8 @@ const index = ({ inventoryLists }: { inventoryLists?: any }) => {
                         />
                     </div >
                 );
-            }
+
+            },
         },
 
     ]
@@ -153,8 +116,8 @@ const index = ({ inventoryLists }: { inventoryLists?: any }) => {
     };
 
     useEffect(() => {
-        setData(inventoryLists)
-    }, [inventoryLists])
+        setData(warehouseBranchList)
+    }, [warehouseBranchList])
     return (
         <>
             {contextHolder}
@@ -163,18 +126,18 @@ const index = ({ inventoryLists }: { inventoryLists?: any }) => {
                 onCancel={() => setOpenModalDelete(false)}
                 onSave={handleDelete}
                 action='Delete'
-                text='Are you sure you want to delete this inventory list?'
+                text='Are you sure you want to delete this warehouse branch list?'
             />
             <div className="mt-6 mx-6 mb-0">
                 <h1 className='text-2xl font-bold'>
-                    Inventory Management
+                    Outbound (Order Fullfilment)
                 </h1>
                 <Breadcrumb
                     items={breadcrumb}
                 />
             </div>
             <Content className="mb-0">
-                <div className=' bg-[#fff] p-6 min-h-[360px'>
+                <div className='p-6 min-h-[360px'>
                     <div className='flex justify-between mb-4'>
                         <div className='flex items-center gap-2'>
                             <ShowPageSize
@@ -221,8 +184,6 @@ const index = ({ inventoryLists }: { inventoryLists?: any }) => {
                         withSelectableRows
                         selectedRowKeys={selectedRowKeys}
                         onSelectChange={setSelectedRowKeys}
-                        detailRoutes={(slug: string) => routes.eCommerce.inventoryListHistory(slug)}
-                        getRowValue={(record: any) => record.sku}
                     />
                     <Pagination
                         current={currentPage}
