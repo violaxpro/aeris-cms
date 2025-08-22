@@ -724,9 +724,8 @@ export const dummyPayments = [
         fxRate: 1,
         status: "Released",
         remittanceSent: false,
-        appliedBills: [
-            { billId: 601, billNo: "BILL-2001", originalAmount: 5000, paidAmount: 3500, remaining: 1500 }
-        ],
+        appliedBills:
+            { billId: 601, billNo: "BILL-2001", originalAmount: 5000, paidAmount: 3500, remaining: 1500 },
         totals: {
             paymentAmount: 3500,
             fees: 25
