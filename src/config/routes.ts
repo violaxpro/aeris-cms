@@ -46,9 +46,9 @@ export const routes = {
     createSupplierList: '/ecommerce/suppliers/create',
     editSupplierList: (slug: string) => `/ecommerce/suppliers/${slug}/edit`,
 
-    creditSupplierList: '/ecommerce/credit-suppliers',
-    // createCreditSupplierList: '/ecommerce/credit-suppliers/create',
-    // editCreditSupplierList: (slug: string) => `/ecommerce/credit-suppliers/${slug}/edit`,
+    creditSupplierList: '/ecommerce/credit-supplier-notes',
+    // createCreditSupplierList: '/ecommerce/credit-notes/create',
+    // editCreditSupplierList: (slug: string) => `/ecommerce/credit-notes/${slug}/edit`,
 
     returnSupplier: '/ecommerce/return-suppliers',
     createReturnSupplier: '/ecommerce/return-suppliers/create',

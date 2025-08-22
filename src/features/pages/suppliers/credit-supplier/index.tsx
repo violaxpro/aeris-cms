@@ -65,7 +65,7 @@ const index = ({ creditSuppliersData }: { creditSuppliersData?: any }) => {
             title: 'Suppliers',
         },
         {
-            title: 'Credit Suppliers',
+            title: 'Credit Notes',
         },
     ]
     const columns: TableColumnsType<CreditSupplierType> = [
@@ -135,8 +135,8 @@ const index = ({ creditSuppliersData }: { creditSuppliersData?: any }) => {
             <div className="mt-6 mx-6 mb-0">
                 <div className='flex justify-between items-center'>
                     <div>
-                        <h1 className='text-xl font-bold'>
-                            Credit Suppliers
+                        <h1 className='text-2xl font-bold'>
+                            Credit Notes
                         </h1>
                         <Breadcrumb
                             items={breadcrumb}
@@ -155,7 +155,7 @@ const index = ({ creditSuppliersData }: { creditSuppliersData?: any }) => {
                 </div>
             </div>
             <Content className="mb-0">
-                <div style={{ padding: 24, minHeight: 360 }}>
+                <div className='min-h-[360px] p-6'>
                     <div className='flex justify-between mb-4 gap-2'>
                         <div className='flex items-center gap-2'>
                             <ShowPageSize

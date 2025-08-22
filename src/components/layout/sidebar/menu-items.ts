@@ -140,8 +140,8 @@ export const menuItems = [
                         href: routes.eCommerce.purchases,
                     },
                     {
-                        key: 'credit-suppliers',
-                        label: 'Credit Suppliers',
+                        key: 'credit-notes',
+                        label: 'Credit Notes',
                         href: routes.eCommerce.creditSupplierList,
                     },
                     {
