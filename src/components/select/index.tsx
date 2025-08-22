@@ -22,6 +22,7 @@ type SelectInputProps = {
     error?: string
     selectClassName?: string
     required?: boolean
+    disabled?: boolean
 };
 
 const SelectInput: React.FC<SelectInputProps> = ({
@@ -37,7 +38,8 @@ const SelectInput: React.FC<SelectInputProps> = ({
     popupRender,
     error,
     selectClassName,
-    required
+    required,
+    disabled
 }) => {
     return (
         <div className={className}>
@@ -64,6 +66,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
                     // }
                     mode={modeType}
                     popupRender={popupRender}
+                    disabled={disabled}
                 />
             </div>
 

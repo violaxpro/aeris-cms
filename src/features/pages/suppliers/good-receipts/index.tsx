@@ -11,11 +11,11 @@ import Breadcrumb from "@/components/breadcrumb"
 import { Content } from 'antd/es/layout/layout'
 import Button from "@/components/button"
 import SearchInput from '@/components/search';
-import { purchases, PurchasesType } from '@/plugins/types/suppliers-type'
+import { dummyGoodReceipts } from '@/plugins/types/suppliers-type'
 import { deletePurchases } from '@/services/purchases-service'
 import { useNotificationAntd } from '@/components/toast'
 import { useAtom } from 'jotai'
-import { purchaseSupplierAtom } from '@/store/SuppliersAtom'
+import { goodReceiptAtom } from '@/store/SuppliersAtom'
 import { stripHTML } from '@/plugins/validators/common-rules'
 import StatusTag from '@/components/tag'
 import dayjs from 'dayjs'
@@ -36,12 +36,15 @@ import ButtonIcon from '@/components/button/ButtonIcon'
 import ButtonAction from '@/components/button/ButtonAction'
 import SearchTable from '@/components/search/SearchTable'
 import ShowPageSize from '@/components/pagination/ShowPageSize'
+import ConfirmModal from '@/components/modal/ConfirmModal'
+import { useRouter } from 'next/navigation'
 
-const index = ({ purchasesData }: { purchasesData?: any }) => {
+const index = ({ goodReceiptDatas }: { goodReceiptDatas?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
-    const [data, setData] = useAtom(purchaseSupplierAtom)
+    const router = useRouter()
+    const [data, setData] = useAtom(goodReceiptAtom)
     const [search, setSearch] = useState('')
-    const [filteredData, setFilteredData] = useState<PurchasesType[]>([])
+    const [filteredData, setFilteredData] = useState<any[]>([])
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
     const [currentOrder, setCurrentOrder] = useState<any>(null)
     const [currentPage, setCurrentPage] = useState(1);
@@ -51,11 +54,11 @@ const index = ({ purchasesData }: { purchasesData?: any }) => {
 
     const handleDelete = async (id: any) => {
         try {
-            const res = await deletePurchases(id)
-            if (res.success == true) {
-                notifySuccess(res.message)
-                setData(prev => prev.filter(item => item.id !== id))
-            }
+            // const res = await deletePurchases(id)
+            // if (res.success == true) {
+            //     notifySuccess(res.message)
+            //     setData(prev => prev.filter(item => item.id !== id))
+            // }
         } catch (error) {
             console.error(error)
         }
@@ -88,40 +91,26 @@ const index = ({ purchasesData }: { purchasesData?: any }) => {
             title: 'Good Receipts',
         },
     ]
-    const columns: TableColumnsType<PurchasesType> = [
+    const columns: TableColumnsType<any> = [
         {
-            title: 'Order ID',
-            dataIndex: 'order_id',
+            title: 'GRN No',
+            dataIndex: 'grnNo',
+            sorter: (a: any, b: any) => a?.grnNo.localeCompare(b?.grnNo)
+        },
+        {
+            title: 'PO No',
+            dataIndex: 'poNo',
+            sorter: (a: any, b: any) => a?.poNo.localeCompare(b?.poNo)
+
         },
         {
             title: 'Supplier',
-            dataIndex: 'supplier_name',
+            dataIndex: 'supplier',
+            sorter: (a: any, b: any) => a?.supplier.localeCompare(b?.supplier)
+
         },
         {
-            title: 'Total',
-            dataIndex: 'total',
-            render: (val) => {
-                return <span>${val}</span>
-            }
-        },
-        {
-            title: 'Status',
-            dataIndex: 'status',
-            render: (val) => {
-                const status = val ? stripHTML(val) : '';
-                return <StatusTag status={status} />
-            }
-        },
-        {
-            title: 'Email Status',
-            dataIndex: 'email_status',
-            render: (val) => {
-                const status = val ? stripHTML(val) : '';
-                return <StatusTag status={status} />
-            }
-        },
-        {
-            title: 'Created',
+            title: 'Receipt Date/Time',
             dataIndex: 'created',
             defaultSortOrder: 'descend',
             sorter: (a: any, b: any) => {
@@ -141,6 +130,42 @@ const index = ({ purchasesData }: { purchasesData?: any }) => {
             }
         },
         {
+            title: 'Received By',
+            dataIndex: 'receivedBy',
+            sorter: (a: any, b: any) => a?.receivedBy.localeCompare(b?.receivedBy)
+
+        },
+        {
+            title: 'QTY Expected / QTY Received / Variance',
+            width: 200,
+            dataIndex: 'qty',
+            sorter: (a: any, b: any) => a?.qty - b?.qty
+
+        },
+        {
+            title: 'QC Status',
+            dataIndex: 'qcStatus',
+            sorter: (a: any, b: any) => {
+                const status = ['Pending', 'Accepted', 'Rejected', 'Short'];
+                return status.indexOf(a.status) - status.indexOf(b.status)
+            },
+            render: (val) => {
+                return <StatusTag status={val} />
+            }
+        },
+        {
+            title: 'Putaway Status',
+            dataIndex: 'putawayStatus',
+            sorter: (a: any, b: any) => {
+                const status = ['Not Started', 'In Progress', 'Completed'];
+                return status.indexOf(a.status) - status.indexOf(b.status)
+            },
+            render: (val) => {
+                return <StatusTag status={val} />
+            }
+        },
+
+        {
             title: 'Actions',
             dataIndex: 'action',
             key: 'action',
@@ -155,48 +180,25 @@ const index = ({ purchasesData }: { purchasesData?: any }) => {
                 const actionStatus = status[row.status] || ''
                 const menu = (
                     <Menu>
-                        <Menu.Item key="status" onClick={actionStatus}>
-                            {stripHTML(row?.status)}
-                        </Menu.Item>
                         <Menu.Item key="edit">
                             <Link href={routes.eCommerce.editPurchases(row.id)}>
                                 Edit
                             </Link>
                         </Menu.Item>
-                        <Menu.Item key="sendEmail">
-                            <Link href={routes.eCommerce.sendEmail(row.id)}>
-                                Send Email
-                            </Link>
-                        </Menu.Item>
-                        <Menu.Item key="print">
-                            <Link href={routes.eCommerce.print(row.id)}>
-                                Packing Slip
-                            </Link>
-                        </Menu.Item>
-                        <Menu.Item key="serialNumber">
-                            <Link href={routes.eCommerce.createSerialNumber(row.id)}>
-                                Serial Number
-                            </Link>
-                        </Menu.Item>
-                        <Menu.Item key="delete">
-                            <DeletePopover
-                                title='Delete Return Supplier'
-                                description='Are you sure to delete this data?'
-                                onDelete={() => handleDelete(row.id)}
-                                label='Delete'
-                            />
+                        <Menu.Item key="delete" onClick={() => handleOpenModalDelete(row.id)}>
+                            Delete
                         </Menu.Item>
                     </Menu>
                 );
 
                 return (
-                    <div className="flex items-center justify-end gap-3 pe-4">
+                    <div className="flex items-center justify-end gap-3 pe-4" onClick={(e) => e.stopPropagation()}>
                         <ButtonIcon
                             color='primary'
                             variant='filled'
                             size="small"
                             icon={PencilIconBlue}
-                        // onClick={() => router.push(routes.eCommerce.editAttributes(row.id))}
+                            onClick={() => router.push(routes.eCommerce.editGoodReceipt(row.grnNo))}
                         />
                         <ButtonIcon
                             color='danger'
@@ -222,11 +224,18 @@ const index = ({ purchasesData }: { purchasesData?: any }) => {
     };
 
     useEffect(() => {
-        setData(purchases)
-    }, [purchases])
+        setData(dummyGoodReceipts)
+    }, [dummyGoodReceipts])
     return (
         <>
             {contextHolder}
+            <ConfirmModal
+                open={openModalDelete}
+                onCancel={() => setOpenModalDelete(false)}
+                onSave={handleDelete}
+                action='Delete'
+                text='Are you sure you want to delete this good receipt?'
+            />
             <div className="mt-6 mx-6 mb-0">
                 <div className='flex justify-between items-center'>
                     <div>
@@ -245,7 +254,7 @@ const index = ({ purchasesData }: { purchasesData?: any }) => {
                             height={15}
                         />}
                         label='Add Good Receipt'
-                        link={routes.eCommerce.createPurchases}
+                        link={routes.eCommerce.createGoodReceipt}
                     />
                 </div>
             </div>
@@ -347,6 +356,8 @@ const index = ({ purchasesData }: { purchasesData?: any }) => {
                         withSelectableRows
                         selectedRowKeys={selectedRowKeys}
                         onSelectChange={setSelectedRowKeys}
+                        detailRoutes={(slug) => routes.eCommerce.detailGoodReceipt(slug)}
+                        getRowValue={(record) => record.grnNo}
                     />
                     <Pagination
                         current={currentPage}

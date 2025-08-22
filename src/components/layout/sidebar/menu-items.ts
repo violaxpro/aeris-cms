@@ -132,7 +132,7 @@ export const menuItems = [
                     {
                         key: 'good-receipts',
                         label: 'Good Receipts',
-                        href: '#',
+                        href: routes.eCommerce.goodReceipt,
                     },
                     {
                         key: 'purchase-order',

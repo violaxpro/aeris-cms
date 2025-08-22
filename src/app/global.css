@@ -554,3 +554,7 @@ div {
 .ant-timeline .ant-timeline-item-tail {
     border-inline-start: 2px dashed #3666AA !important;
 }
+
+.ant-steps-item-title::after {
+    background-color: var(--default-color) !important;
+}

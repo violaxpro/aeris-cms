@@ -59,6 +59,10 @@ export type BillType = {
     email_status: string
 }
 
+// export type GoodReceiptType = {
+//      id?: number | string | undefined
+// }
+
 export const creditSupplierData = [
     {
         id: 2,
@@ -365,3 +369,228 @@ export const billedDummy = [
         // "deleted_at": null,
     }
 ]
+
+export const dummyGoodReceipts = [
+    {
+        id: 1,
+        "grnNo": "GRN-001",
+        "poNo": "PO-1001",
+        "supplier": "ABC Supplies Ltd",
+        "dockRef": "Dock-01",
+        "receiptDateTime": "2025-08-20T10:15:00",
+        "receivedBy": "John Doe",
+        "receivingWarehouse": "Main Warehouse A",
+        "qcStatus": "Accepted",
+        "putawayStatus": "Completed",
+        "qty": 495,
+        "products": [
+            {
+                "sku": "ITEM-100-A",
+                "description": "Steel Bolts 10mm",
+                "uom": "Box",
+                "poQty": 500,
+                "qtyReceived": 495,
+                "qtyRejected": 5,
+                "variance": -5,
+                "qcResult": "Accepted",
+                "reasonCode": "Damaged Packaging",
+                "serialsLots": [
+                    { "lotNo": "LOT-001-A" }
+                ],
+                "expiry": null
+            },
+            {
+                "sku": "ITEM-101-B",
+                "description": "Nuts 10mm",
+                "uom": "Box",
+                "poQty": 200,
+                "qtyReceived": 200,
+                "qtyRejected": 0,
+                "variance": 0,
+                "qcResult": "Pending",
+                "reasonCode": null,
+                "serialsLots": []
+            }
+        ],
+        "attachments": [
+            { "type": "Photo", "url": "/apple-icon.png" },
+            { "type": "DeliveryNote", "url": "/apple-icon.png" }
+        ],
+        "inventoryMovements": [
+            { "from": "Inbound Dock", "to": "QA/Quarantine", "date": "2025-08-20T10:20:00" },
+            { "from": "QA/Quarantine", "to": "Sellable", "date": "2025-08-20T13:30:00" }
+        ],
+        "links": {
+            "relatedPO": "PO-1001",
+            "relatedBills": ["BILL-5001"],
+            "supplierRMA": 'RMA-9001'
+        },
+        "updateEditable": {
+            "qcPending": {
+                "canEdit": true,
+                "allowedFields": [
+                    "qcResult",
+                    "qtyReceived",
+                    "qtyRejected",
+                    "reasonCode",
+                    "serialsLots"
+                ]
+            },
+            "afterPutaway": {
+                "canEdit": true,
+                "allowedFields": [
+                    "notes",
+                    "tags"
+                ],
+                "lockedFields": [
+                    "qtyReceived",
+                    "qtyRejected"
+                ]
+            }
+        }
+    },
+    {
+        id: 2,
+        "grnNo": "GRN-002",
+        "poNo": "PO-1002",
+        "supplier": "Fresh Foods Ltd",
+        "dockRef": "Dock-02",
+        "receiptDateTime": "2025-08-21T09:00:00",
+        "receivedBy": "Sarah Lee",
+        "receivingWarehouse": "Cold Storage B",
+        "qcStatus": "Short",
+        "qty": 95,
+        "putawayStatus": "In Progress",
+        "products": [
+            {
+                "sku": "FOOD-200",
+                "description": "Frozen Chicken Breast",
+                "uom": "Carton",
+                "poQty": 150,
+                "qtyReceived": 145,
+                "qtyRejected": 5,
+                "variance": -5,
+                "qcResult": "Short",
+                "reasonCode": "Expired on Arrival",
+                "serialsLots": [
+                    { "lotNo": "LOT-FD-2025-01" }
+                ],
+                "expiry": "2025-12-31"
+            }
+        ],
+        "attachments": [
+            { "type": "Photo", "url": "/apple-icon.png" },
+            { "type": "DeliveryNote", "url": "/apple-icon.png" }
+        ],
+        "inventoryMovements": [
+            { "from": "Inbound Dock", "to": "QA/Quarantine", "date": "2025-08-21T09:15:00" }
+        ],
+        "links": {
+            "relatedPO": "PO-1002",
+            "relatedBills": ["BILL-5002"],
+            "supplierRMA": "RMA-9001"
+        },
+        "updateEditable": {
+            "qcPending": {
+                "canEdit": true,
+                "allowedFields": [
+                    "qcResult",
+                    "qtyReceived",
+                    "qtyRejected",
+                    "reasonCode",
+                    "serialsLots"
+                ]
+            },
+            "afterPutaway": {
+                "canEdit": false,
+                "allowedFields": ["notes", "tags"],
+                "lockedFields": ["qtyReceived", "qtyRejected"]
+            }
+        }
+    },
+    {
+        id: 3,
+        "grnNo": "GRN-003",
+        "poNo": "PO-1003",
+        "supplier": "Global Parts Inc.",
+        "dockRef": "Dock-03",
+        "receiptDateTime": "2025-08-22T14:30:00",
+        "receivedBy": "Michael Chan",
+        "receivingWarehouse": "Central Warehouse",
+        "qcStatus": "Pending",
+        "putawayStatus": "Not Started",
+        "products": [
+            {
+                "sku": "ITEM-202",
+                "description": "Hydraulic Pump",
+                "uom": "Unit",
+                "poQty": 20,
+                "qtyReceived": 20,
+                "qtyRejected": 0,
+                "variance": 0,
+                "qcResult": "Pending",
+                "reasonCode": null,
+                "serialsLots": []
+            },
+            {
+                "sku": "ITEM-203",
+                "description": "Pressure Gauge",
+                "uom": "Unit",
+                "poQty": 50,
+                "qtyReceived": 50,
+                "qtyRejected": 0,
+                "variance": 0,
+                "qcResult": "Pending",
+                "reasonCode": null,
+                "serialsLots": []
+            }
+        ]
+    },
+    {
+        id: 4,
+        "grnNo": "GRN-004",
+        "poNo": "PO-1004",
+        "supplier": "TechGear Supplies",
+        "dockRef": "Dock-04",
+        "receiptDateTime": "2025-08-22T16:00:00",
+        "receivedBy": "Alex Johnson",
+        "receivingWarehouse": "Electronics Warehouse",
+        "qcStatus": "Rejected",
+        "putawayStatus": "Not Started",
+        "products": [
+            {
+                "sku": "ELEC-501",
+                "description": "Smartphone LCD Screen",
+                "uom": "Piece",
+                "poQty": 100,
+                "qtyReceived": 100,
+                "qtyRejected": 15,
+                "variance": 0,
+                "qcResult": "Rejected",
+                "reasonCode": "Cracked / Damaged on Arrival",
+                "serialsLots": [
+                    { "lotNo": "LOT-LCD-2025-01" }
+                ],
+                "expiry": null
+            },
+            {
+                "sku": "ELEC-502",
+                "description": "Battery Pack 5000mAh",
+                "uom": "Piece",
+                "poQty": 200,
+                "qtyReceived": 200,
+                "qtyRejected": 20,
+                "variance": 0,
+                "qcResult": "Rejected",
+                "reasonCode": "Swollen Battery / Safety Issue",
+                "serialsLots": [
+                    { "lotNo": "LOT-BAT-2025-02" }
+                ],
+                "expiry": "2027-01-01"
+            }
+        ]
+    }
+
+
+]
+

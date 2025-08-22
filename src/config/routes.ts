@@ -42,6 +42,11 @@ export const routes = {
 
     reviews: '/ecommerce/reviews',
 
+    goodReceipt: '/ecommerce/good-receipts',
+    createGoodReceipt: '/ecommerce/good-receipts/create',
+    editGoodReceipt: (slug: string) => `/ecommerce/good-receipts/${slug}/edit`,
+    detailGoodReceipt: (slug: string) => `/ecommerce/good-receipts/${slug}/detail`,
+
     supplierList: '/ecommerce/suppliers',
     createSupplierList: '/ecommerce/suppliers/create',
     editSupplierList: (slug: string) => `/ecommerce/suppliers/${slug}/edit`,

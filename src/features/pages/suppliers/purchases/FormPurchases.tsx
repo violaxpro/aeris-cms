@@ -378,7 +378,7 @@ const FormPurchases: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             </div>
                         </div>
 
-                        ` <div className='grid grid-cols-[4fr_1fr] gap-4 mt-2'>
+                        <div className='grid grid-cols-[4fr_1fr] gap-4 mt-2'>
                             <div className='grid md:grid-cols-2 gap-2'>
                                 <Textarea
                                     id='delivery_note'
@@ -472,7 +472,7 @@ const FormPurchases: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     className='w-full'
                                 />
                             </div>
-                        </div>`
+                        </div>
 
                     </div>
 
