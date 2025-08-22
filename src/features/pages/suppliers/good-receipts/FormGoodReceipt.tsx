@@ -232,8 +232,8 @@ const FormGoodReceipt: React.FC<FormProps> = ({ mode, initialValues, slug }) => 
                         <div className='grid grid-cols-3 gap-3'>
                             <SelectInput
                                 id='po_reference'
-                                label='Po Reference'
-                                placeholder="Select Reference"
+                                label='PO Reference'
+                                placeholder="Select PO Reference"
                                 onChange={(val) => handleChangeSelect('po_reference', val)}
                                 value={formData.po_reference}
                                 options={[
@@ -244,7 +244,7 @@ const FormGoodReceipt: React.FC<FormProps> = ({ mode, initialValues, slug }) => 
                             <DatePickerInput
                                 id='receipt_date_time'
                                 label='Receipt Date/Time '
-                                value={formData.receipt_date_time ? dayjs(formData.receipt_date_time) : null}
+                                value={formData.receipt_date_time ? dayjs(formData.receipt_date_time, 'DD-MM-YYYY') : null}
                                 onChange={(value: any, dateString: any) => handleDateChange('receipt_date_time', value, dateString)}
                                 disabled={isDisabled}
                             />
@@ -291,16 +291,20 @@ const FormGoodReceipt: React.FC<FormProps> = ({ mode, initialValues, slug }) => 
                                 />
                             </div>
                         </div>
-                        <div className='grid gap-4'>
-                            <Textarea
-                                id='notes'
-                                label='Notes / Tags'
-                                placeholder='Input Notes / Tags'
-                                onChange={handleChange}
-                                value={formData.notes}
-                                textareaClassname='!h-20'
-                            />
-                        </div>
+                        {
+                            mode == 'edit' && initialValues?.putawayStatus == 'Completed' &&
+                            <div className='grid gap-4'>
+                                <Textarea
+                                    id='notes'
+                                    label='Notes / Tags'
+                                    placeholder='Input Notes / Tags'
+                                    onChange={handleChange}
+                                    value={formData.notes}
+                                    textareaClassname='!h-20'
+                                />
+                            </div>
+                        }
+
                         {/* <div className='grid grid-cols-2 gap-4 mt-2'>
                             <Input
                                 id='serial'

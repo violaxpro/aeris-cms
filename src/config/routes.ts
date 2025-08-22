@@ -42,11 +42,6 @@ export const routes = {
 
     reviews: '/ecommerce/reviews',
 
-    goodReceipt: '/ecommerce/good-receipts',
-    createGoodReceipt: '/ecommerce/good-receipts/create',
-    editGoodReceipt: (slug: string) => `/ecommerce/good-receipts/${slug}/edit`,
-    detailGoodReceipt: (slug: string) => `/ecommerce/good-receipts/${slug}/detail`,
-
     supplierList: '/ecommerce/suppliers',
     createSupplierList: '/ecommerce/suppliers/create',
     editSupplierList: (slug: string) => `/ecommerce/suppliers/${slug}/edit`,
@@ -72,6 +67,11 @@ export const routes = {
     editQuote: (slug: string) => `/ecommerce/quote/${slug}/edit`,
     detailQuote: (slug: string) => `/ecommerce/quote/${slug}/detail`,
 
+    goodReceipt: '/ecommerce/good-receipts',
+    createGoodReceipt: '/ecommerce/good-receipts/create',
+    editGoodReceipt: (slug: string) => `/ecommerce/good-receipts/${slug}/edit`,
+    detailGoodReceipt: (slug: string) => `/ecommerce/good-receipts/${slug}/detail`,
+
     purchases: '/ecommerce/purchase-orders',
     createPurchases: '/ecommerce/purchase-orders/create',
     editPurchases: (slug: string) => `/ecommerce/purchase-orders/${slug}/edit`,
@@ -82,6 +82,11 @@ export const routes = {
     bill: '/ecommerce/bill',
     createBill: '/ecommerce/bill/create',
     editBill: (slug: string) => `/ecommerce/bill/${slug}/edit`,
+
+    payments: '/ecommerce/payments',
+    createPayments: '/ecommerce/payments/create',
+    editPayments: (slug: string) => `/ecommerce/payments/${slug}/edit`,
+    detailPayments: (slug: string) => `/ecommerce/payments/${slug}/detail`,
 
     transaction: '/ecommerce/transaction',
     createTransaction: '/ecommerce/transaction/create',

@@ -11,11 +11,11 @@ import Breadcrumb from "@/components/breadcrumb"
 import { Content } from 'antd/es/layout/layout'
 import Button from "@/components/button"
 import SearchInput from '@/components/search';
-import { dummyGoodReceipts } from '@/plugins/types/suppliers-type'
+import { dummyPayments } from '@/plugins/types/suppliers-type'
 import { deletePurchases } from '@/services/purchases-service'
 import { useNotificationAntd } from '@/components/toast'
 import { useAtom } from 'jotai'
-import { goodReceiptAtom } from '@/store/SuppliersAtom'
+import { paymentAtom } from '@/store/SuppliersAtom'
 import { stripHTML } from '@/plugins/validators/common-rules'
 import StatusTag from '@/components/tag'
 import dayjs from 'dayjs'
@@ -39,10 +39,10 @@ import ShowPageSize from '@/components/pagination/ShowPageSize'
 import ConfirmModal from '@/components/modal/ConfirmModal'
 import { useRouter } from 'next/navigation'
 
-const index = ({ goodReceiptDatas }: { goodReceiptDatas?: any }) => {
+const index = ({ paymentDatas }: { paymentDatas?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
     const router = useRouter()
-    const [data, setData] = useAtom(goodReceiptAtom)
+    const [data, setData] = useAtom(paymentAtom)
     const [search, setSearch] = useState('')
     const [filteredData, setFilteredData] = useState<any[]>([])
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
@@ -88,65 +88,50 @@ const index = ({ goodReceiptDatas }: { goodReceiptDatas?: any }) => {
             title: 'Suppliers',
         },
         {
-            title: 'Good Receipts',
+            title: 'Payments',
         },
     ]
     const columns: TableColumnsType<any> = [
         {
-            title: 'GRN Number',
-            dataIndex: 'grnNo',
-            sorter: (a: any, b: any) => a?.grnNo.localeCompare(b?.grnNo)
-        },
-        {
-            title: 'PO Number',
-            dataIndex: 'poNo',
-            sorter: (a: any, b: any) => a?.poNo.localeCompare(b?.poNo)
-
+            title: 'Payment Number',
+            dataIndex: 'paymentNo',
+            sorter: (a: any, b: any) => a?.paymentNo.localeCompare(b?.paymentNo)
         },
         {
             title: 'Supplier',
-            dataIndex: 'supplier',
-            sorter: (a: any, b: any) => a?.supplier.localeCompare(b?.supplier)
+            dataIndex: 'supplierName',
+            sorter: (a: any, b: any) => a?.supplierName.localeCompare(b?.supplierName)
 
         },
         {
-            title: 'Receipt Date/Time',
-            dataIndex: 'created',
-            defaultSortOrder: 'descend',
+            title: 'Payment / Scheduled Date',
+            dataIndex: 'paymentDate',
             sorter: (a: any, b: any) => {
-                return dayjs(a.created).valueOf() - dayjs(b.created).valueOf()
+                return dayjs(a.paymentDate).valueOf() - dayjs(b.paymentDate).valueOf()
             },
-            render: (val: any) => {
-                const date = dayjs(val?.date).format("DD/MM/YYYY")
-                const user = val?.name
-                return <div className="flex flex-col w-full">
-                    <div className="flex justify-start gap-1">
-                        <span>{date}</span>
-                    </div>
-                    <div className="flex justify-start gap-1">
-                        <span>by {user || '-'}</span>
-                    </div>
-                </div>
+            render: (_: any, row: any) => {
+                const date = dayjs(row?.paymentDate).format('DD/MM/YYYY')
+                return date
             }
         },
         {
-            title: 'Received By',
-            dataIndex: 'receivedBy',
-            sorter: (a: any, b: any) => a?.receivedBy.localeCompare(b?.receivedBy)
+            title: 'Method',
+            dataIndex: 'method',
+            sorter: (a: any, b: any) => a?.method.localeCompare(b?.method)
 
         },
         {
-            title: 'QTY Expected / QTY Received / Variance',
+            title: 'Currency / Amount',
             width: 200,
-            dataIndex: 'qty',
-            sorter: (a: any, b: any) => a?.qty - b?.qty
+            dataIndex: 'currency',
+            sorter: (a: any, b: any) => a?.currency.localeCompare(b?.currency)
 
         },
         {
-            title: 'QC Status',
-            dataIndex: 'qcStatus',
+            title: 'Status',
+            dataIndex: 'status',
             sorter: (a: any, b: any) => {
-                const status = ['Pending', 'Accepted', 'Rejected', 'Short'];
+                const status = ['Scheduled', 'Pending', 'Approval', 'Released', 'Failed', 'Reconciled'];
                 return status.indexOf(a.status) - status.indexOf(b.status)
             },
             render: (val) => {
@@ -154,14 +139,15 @@ const index = ({ goodReceiptDatas }: { goodReceiptDatas?: any }) => {
             }
         },
         {
-            title: 'Putaway Status',
-            dataIndex: 'putawayStatus',
+            title: 'Remittance Sent',
+            dataIndex: 'remittanceSent',
             sorter: (a: any, b: any) => {
-                const status = ['Not Started', 'In Progress', 'Completed'];
+                const status = [true, false];
                 return status.indexOf(a.status) - status.indexOf(b.status)
             },
             render: (val) => {
-                return <StatusTag status={val} />
+                const status = val == true ? 'Y' : 'N'
+                return <span>{status}</span>
             }
         },
 
@@ -171,13 +157,6 @@ const index = ({ goodReceiptDatas }: { goodReceiptDatas?: any }) => {
             key: 'action',
             width: 120,
             render: (_: string, row: any) => {
-                const status: Record<string, () => void> = {
-                    'Draft': () => handleStatusAction('Draft', row.id),
-                    'Waiting for Approval': () => handleStatusAction('Waiting for Approval', row.id),
-                    'Approved': () => handleStatusAction('Approved', row.id),
-                    'Billed': () => handleStatusAction('Billed', row.id),
-                }
-                const actionStatus = status[row.status] || ''
                 const menu = (
                     <Menu>
                         <Menu.Item key="edit">
@@ -198,7 +177,7 @@ const index = ({ goodReceiptDatas }: { goodReceiptDatas?: any }) => {
                             variant='filled'
                             size="small"
                             icon={PencilIconBlue}
-                            onClick={() => router.push(routes.eCommerce.editGoodReceipt(row.grnNo))}
+                            onClick={() => router.push(routes.eCommerce.editPayments(row.paymentNo))}
                         />
                         <ButtonIcon
                             color='danger'
@@ -224,8 +203,8 @@ const index = ({ goodReceiptDatas }: { goodReceiptDatas?: any }) => {
     };
 
     useEffect(() => {
-        setData(dummyGoodReceipts)
-    }, [dummyGoodReceipts])
+        setData(dummyPayments)
+    }, [dummyPayments])
     return (
         <>
             {contextHolder}
@@ -234,13 +213,13 @@ const index = ({ goodReceiptDatas }: { goodReceiptDatas?: any }) => {
                 onCancel={() => setOpenModalDelete(false)}
                 onSave={handleDelete}
                 action='Delete'
-                text='Are you sure you want to delete this good receipt?'
+                text='Are you sure you want to delete this payment?'
             />
             <div className="mt-6 mx-6 mb-0">
                 <div className='flex justify-between items-center'>
                     <div>
                         <h1 className='text-2xl font-bold'>
-                            Good Receipts
+                            Payments
                         </h1>
                         <Breadcrumb
                             items={breadcrumb}
@@ -253,8 +232,8 @@ const index = ({ goodReceiptDatas }: { goodReceiptDatas?: any }) => {
                             width={15}
                             height={15}
                         />}
-                        label='Add Good Receipt'
-                        link={routes.eCommerce.createGoodReceipt}
+                        label='Add Payment'
+                        link={routes.eCommerce.createPayments}
                     />
                 </div>
             </div>
@@ -356,8 +335,8 @@ const index = ({ goodReceiptDatas }: { goodReceiptDatas?: any }) => {
                         withSelectableRows
                         selectedRowKeys={selectedRowKeys}
                         onSelectChange={setSelectedRowKeys}
-                        detailRoutes={(slug) => routes.eCommerce.detailGoodReceipt(slug)}
-                        getRowValue={(record) => record.grnNo}
+                        detailRoutes={(slug) => routes.eCommerce.detailPayments(slug)}
+                        getRowValue={(record) => record.paymentNo}
                     />
                     <Pagination
                         current={currentPage}

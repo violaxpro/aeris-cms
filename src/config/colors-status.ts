@@ -37,8 +37,13 @@ export const statusMap: Record<string, { color: string; text: string, textColor:
     Published: { color: '#00B3061A', text: 'Published', textColor: '#00B306' },
     Inactive: { color: '#EA00001A', text: 'Inactive', textColor: '#EA0000' },
     Short: { color: '#FF6A001A', text: 'Short', textColor: '#FF6A00' },
+    Failed: { color: '#EA00001A', text: 'Failed', textColor: '#EA0000' },
+    Scheduled: { color: '#FF6A001A', text: 'Scheduled', textColor: '#FF6A00' },
+    Approval: { color: '#3666AA1A', text: 'Approval', textColor: '#3666AA' },
+    Released: { color: '#01933B1A', text: 'Released', textColor: '#01933B' },
+    Reconciled: { color: '#5C4AFF1A', text: 'Reconciled', textColor: '#5C4AFF' },
     'In Progress': { color: '#FF6A001A', text: 'In Progress', textColor: '#FF6A00' },
-
+    'PendingApproval': { color: '#FF9E021A', text: 'PendingApproval', textColor: '#FF9E02' },
 };
 
 export const colorMap: Record<string, any> = {

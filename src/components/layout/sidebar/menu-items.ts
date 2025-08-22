@@ -147,7 +147,7 @@ export const menuItems = [
                     {
                         key: 'payments',
                         label: 'Payments',
-                        href: '#'
+                        href: routes.eCommerce.payments
                     },
                     {
                         key: 'suppliers',

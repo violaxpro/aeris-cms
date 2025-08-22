@@ -14,6 +14,7 @@ export const returnSupplierAtom = atom<ReturnSupplierType[]>([])
 export const purchaseSupplierAtom = atom<PurchasesType[]>([])
 export const billAtom = atom<BillType[]>([])
 export const goodReceiptAtom = atom<any[]>([])
+export const paymentAtom = atom<any[]>([])
 
 
 

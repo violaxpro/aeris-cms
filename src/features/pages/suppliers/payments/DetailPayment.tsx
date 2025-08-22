@@ -39,7 +39,7 @@ import StatusTag from '@/components/tag'
 import exampleImage from '@public/apple-icon.png';
 import StepComponent from '@/components/step'
 
-const DetailGoodReceipt = ({ slug, data }: { slug?: any, data: any }) => {
+const DetailPayment = ({ slug, data }: { slug?: any, data: any }) => {
     const router = useRouter()
     const { contextHolder, notifySuccess } = useNotificationAntd()
     const [profitHidden, setProfitHidden] = useState(true)
@@ -76,7 +76,7 @@ const DetailGoodReceipt = ({ slug, data }: { slug?: any, data: any }) => {
     const breadcrumb = [
         { title: 'Suppliers' },
         {
-            title: 'Good Receipts', url: routes.eCommerce.goodReceipt
+            title: 'Payments', url: routes.eCommerce.payments
         },
         { title: 'Detail' },
     ];
@@ -195,6 +195,196 @@ const DetailGoodReceipt = ({ slug, data }: { slug?: any, data: any }) => {
 
     ]
 
+    const columnLogs: TableColumnsType<any> = [
+        {
+            title: 'Staff',
+            dataIndex: 'staff',
+            sorter: (a: any, b: any) => {
+                return a?.staff.localeCompare(b?.staff)
+            },
+            render: (_: any, row: any) => {
+                return <div className="flex flex-col w-full">
+                    <div className="flex justify-start gap-1">
+                        <span>{row.staff}</span>
+                    </div>
+                </div>
+            }
+        },
+        {
+            title: 'Internal Notes',
+            dataIndex: 'internal_notes',
+            sorter: (a: any, b: any) => {
+                return a?.internal_notes.localeCompare(b?.internal_notes)
+            },
+            render: (_: any, row: any) => {
+                return <div className="flex flex-col w-full">
+                    <div className="flex justify-start gap-1">
+                        <span>{row.internal_notes}</span>
+                    </div>
+                </div>
+            }
+        },
+        {
+            title: 'Update',
+            dataIndex: 'update',
+            sorter: (a: any, b: any) => {
+                return a?.update.localeCompare(b?.update)
+            },
+            render: (_: any, row: any) => {
+                return <div className="flex flex-col w-full">
+                    <div className="flex justify-start gap-1">
+                        <span>{row.update}</span>
+                    </div>
+                </div>
+            }
+        },
+        {
+            title: 'Action',
+            dataIndex: 'action',
+            sorter: (a: any, b: any) => {
+                return a?.action.localeCompare(b?.action)
+            },
+            render: (_: any, row: any) => {
+                return <div className="flex flex-col w-full">
+                    <div className="flex justify-start gap-1">
+                        <span>{row.action}</span>
+                    </div>
+                </div>
+            }
+        },
+    ]
+
+    const columnSuppliers: TableColumnsType<any> = [
+        {
+            title: 'SKU',
+            dataIndex: 'sku',
+            sorter: (a: any, b: any) => {
+                return a?.sku.localeCompare(b?.sku)
+            },
+            render: (_: any, row: any) => {
+                return <div className="flex flex-col w-full">
+                    <div className="flex justify-start gap-1">
+                        <span>{row.sku}</span>
+                    </div>
+                </div>
+            }
+        },
+        {
+            title: 'Desc',
+            dataIndex: 'description',
+            sorter: (a: any, b: any) => {
+                return a?.description.localeCompare(b?.description)
+            },
+            render: (_: any, row: any) => {
+                return <div className="flex flex-col w-full">
+                    <div className="flex justify-start gap-1">
+                        <span>{row.description}</span>
+                    </div>
+                </div>
+            }
+        },
+        {
+            title: 'Supplier & Buying Price',
+            dataIndex: 'supplier',
+            sorter: (a: any, b: any) => {
+                const aName = a?.supplier?.[0]?.name || '';
+                const bName = b?.supplier?.[0]?.name || '';
+                return aName.localeCompare(bName);
+            },
+            render: (_: any, row: any) => {
+                const suppliers = row?.supplier || []
+                return <div className="flex flex-col w-full">
+                    {
+                        suppliers?.map((item: any, index: number) => (
+                            <div key={index} className="flex justify-start gap-1">
+                                {/* <HoverPopover
+                                    key={index}
+                                    content={<p>Buying Price : {item?.buying_price}</p>}
+                                >
+                                    <span>{item?.name}</span>
+                                </HoverPopover> */}
+                                <div className="flex justify-between w-full">
+                                    <span className='w-25'>{item.name}</span>
+                                    <span>:</span>
+                                    <span className="whitespace-nowrap">${item.buying_price}</span>
+                                </div>
+                            </div>
+                        ))
+                    }
+
+                </div>
+            }
+        },
+    ]
+
+    const columnWarehouse: TableColumnsType<any> = [
+        {
+            title: 'Warehouse Location',
+            dataIndex: 'location',
+            sorter: (a: any, b: any) => {
+                return a?.location.localeCompare(b?.location)
+            },
+            render: (_: any, row: any) => {
+                return <div className="flex flex-col w-full">
+                    <div className="flex justify-start gap-1">
+                        <span>{row.location}</span>
+                    </div>
+                </div>
+            }
+        },
+        {
+            title: 'Serial Number',
+            dataIndex: 'serial_number',
+            sorter: (a: any, b: any) => {
+                return a?.serial_number.localeCompare(b?.serial_number)
+            },
+            render: (_: any, row: any) => {
+                return <div className="flex flex-col w-full">
+                    <div className="flex justify-start gap-1">
+                        <span>{row.serial_number}</span>
+                    </div>
+                </div>
+            }
+        },
+        {
+            title: 'PO Number',
+            dataIndex: 'po_number',
+            sorter: (a: any, b: any) => {
+                const aName = a?.supplier?.[0]?.name || '';
+                const bName = b?.supplier?.[0]?.name || '';
+                return a?.po_number.localeCompare(b?.po_number);
+            },
+            render: (_: any, row: any) => {
+                return row.po_number
+            }
+        },
+        {
+            title: 'Date',
+            dataIndex: 'date',
+            sorter: (a: any, b: any) => {
+                return dayjs(a.created_at).valueOf() - dayjs(b.created_at).valueOf();
+            },
+            render: (_: any, row: any) => {
+                return row.date
+            }
+        },
+        {
+            render: (_: any, row: any) => {
+                return <Button
+                    label='Choose'
+                    onClick={() => handleSelectSerialNumber(
+                        modalSerialNumber?.row?.key,
+                        row.serial_number,
+                        row.location,
+                        row.po_number
+                    )}
+                    shape='round'
+                    hasHeight={false}
+                />
+            }
+        },
+    ]
+
     const invoiceData = {
         invoiceNumber: 'INV-2025-001',
         customerName: 'John Doe',
@@ -209,21 +399,6 @@ const DetailGoodReceipt = ({ slug, data }: { slug?: any, data: any }) => {
         freight: 15.00,
         unitPrice: 200,
         quantity: 10
-    };
-
-    const serialNumberDataTable = data?.product?.map((item: any, index: number) => {
-        console.log(item)
-        const dataPerQuantity = Array.from({ length: item.qty }).map((_, index) => ({
-            ...item,
-            key: `${item.id}-${index}`, // unique key
-            rowNumber: index + 1,       // nomor urut
-        }));
-
-        return dataPerQuantity
-    })
-
-    const openSerialNumberModal = (row: any) => {
-        setModalSerialNumber({ open: true, row });
     };
 
     // Saat user pilih serial number di modal:
@@ -274,11 +449,12 @@ const DetailGoodReceipt = ({ slug, data }: { slug?: any, data: any }) => {
     return (
         <>
             {contextHolder}
+
             <div className="mt-6 mx-6 mb-0">
                 <div className='flex justify-between items-center'>
                     <div>
                         <h1 className='text-2xl font-bold'>
-                            Good Receipt Detail
+                            Payment Detail
                         </h1>
                         <Breadcrumb
                             items={breadcrumb}
@@ -404,26 +580,27 @@ const DetailGoodReceipt = ({ slug, data }: { slug?: any, data: any }) => {
             <Content className="mb-5">
                 <div className='flex flex-col gap-6 min-h-[360px] p-6'>
                     <div className='grid gap-4'>
-                        <Card title='Good Receipt Information' gridcols='grid-cols-5' >
-                            <InfoItem label='GRN Number' value={data.grnNo} />
-                            <InfoItem label='PO Number' value={data.poNo} />
-                            <InfoItem label='Supplier' value={data.supplier} />
-                            <InfoItem label='Dock/Ref' value={data.dockRef} />
-                            <InfoItem label='Receiver' value={data.receivedBy} />
+                        <Card title='Payment Information' gridcols='grid-cols-5' >
+                            <InfoItem label='Payment Number' value={data.paymentNo} />
+                            <InfoItem label='Supplier' value={data.supplierName} />
+                            <InfoItem label='Method' value={data.method} />
+                            <InfoItem label='Funding Account' value={data.fundingAccount} />
+                            <InfoItem label='Value' value={data.valueDate} />
                         </Card>
                     </div>
-                    <div>
-                        <div className='flex justify-between my-2'>
-                            <h4 className='text-xl font-semibold'>Product Lists</h4>
-                        </div>
-                        <Table
-                            columns={columns}
-                            dataSource={data?.products}
-                        />
-                    </div>
-                    <div className='grid md:grid-cols-12 gap-4'>
-                        <Card title='Attachment' className='col-span-5'>
-                            <InfoItem label='Photos' value={
+                    <div className='grid grid-cols-2 gap-4'>
+                        <Card title='Applied Bills'>
+                            <InfoItem label='Bill Number' value={data?.appliedBills?.billNo} />
+                            <InfoItem label='Original Amount' value={data?.appliedBills?.originalAmount} />
+                            <InfoItem label='Paid Amount' value={data?.appliedBills?.paidAmount} />
+                            <InfoItem label='Remaining' value={data?.appliedBills?.remaining} />
+                        </Card>
+                        <Card title='Total'>
+                            <InfoItem label='Payment Amount' value={data?.totals?.paymentAmount} />
+                            <InfoItem label='Fees' value={data?.totals?.fees} />
+                        </Card>
+                        <Card title='Remittance Advice'>
+                            <InfoItem label='Attachment' value={
                                 <div className='max-w-100'>
                                     <Image
                                         src={exampleImage}
@@ -433,24 +610,16 @@ const DetailGoodReceipt = ({ slug, data }: { slug?: any, data: any }) => {
                                     />
                                 </div>
                             } />
-                            <InfoItem label='Delivery Notes' value='33AA1111111111111' />
                         </Card>
-                        <Card title='Inventory Movements' gridcols='grid-cols-1' className='col-span-7'>
-                            <StepComponent items={stepItems} current={stepItems.length} size="small" />
-                        </Card>
-                    </div>
-                    <div className='grid gap-4'>
-                        <Card title='Links' className='flex flex-col justify-center' gridcols='grid-cols-3'>
-                            <InfoItem label='Related PO' value={data?.links?.relatedPO} />
-                            <InfoItem label='Related Bills (3-way match)' value='BILL-5002' />
-                            <InfoItem label='Any Supplier RMA Created' value={data?.links?.supplierRMA} />
+                        <Card title='Bank Info'>
+                            <InfoItem label='Bank Reference' value={data?.bankReference} />
+                            <InfoItem label='Reconciliation Info' value={data?.reconciliationInfo?.matched} />
                         </Card>
                     </div>
-
                 </div>
             </Content>
         </>
     )
 }
 
-export default DetailGoodReceipt
+export default DetailPayment

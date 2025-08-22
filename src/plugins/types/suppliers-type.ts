@@ -594,3 +594,274 @@ export const dummyGoodReceipts = [
 
 ]
 
+export const dummyPayments = [
+    {
+        id: 1,
+        paymentNo: "PAY-001",
+        supplierId: 101,
+        supplierName: "PT Sumber Makmur",
+        fundingAccount: "BCA-123456789",
+        paymentDate: "2025-08-20",
+        valueDate: "2025-08-20",
+        method: "Bank Transfer",
+        currency: "IDR",
+        amount: 25000000,
+        fxRate: 1,
+        status: "Scheduled",
+        remittanceSent: false,
+        appliedBills: [
+            { billId: 501, billNo: "BILL-1001", originalAmount: 15000000, paidAmount: 15000000, remaining: 0 },
+            { billId: 502, billNo: "BILL-1002", originalAmount: 10000000, paidAmount: 10000000, remaining: 0 }
+        ],
+        totals: {
+            paymentAmount: 25000000,
+            fees: 50000
+        },
+        remittanceAdvice: {
+            preview: "Preview Link PAY-001",
+            attachment: "remittance_PAY-001.pdf"
+        },
+        bankReference: "TRX-001-ABC",
+        reconciliationInfo: {
+            bankStatementId: "STM-20250820-01",
+            matched: false,
+            matchDate: null
+        },
+        notes: null,
+        metadata: {
+            createdBy: "admin",
+            createdAt: "2025-08-18T09:00:00",
+            updatedAt: "2025-08-19T10:30:00"
+        }
+    },
+    {
+        id: 2,
+        paymentNo: "PAY-002",
+        supplierId: 102,
+        supplierName: "CV Elektronik Jaya",
+        fundingAccount: "Mandiri-987654321",
+        paymentDate: "2025-08-21",
+        valueDate: "2025-08-21",
+        method: "Check",
+        currency: "USD",
+        amount: 3500,
+        fxRate: 1,
+        status: "Pending",
+        remittanceSent: false,
+        appliedBills: [
+            { billId: 601, billNo: "BILL-2001", originalAmount: 5000, paidAmount: 3500, remaining: 1500 }
+        ],
+        totals: {
+            paymentAmount: 3500,
+            fees: 25
+        },
+        remittanceAdvice: {
+            preview: "Preview Link PAY-002",
+            attachment: null
+        },
+        bankReference: "TRX-002-XYZ",
+        reconciliationInfo: {
+            bankStatementId: null,
+            matched: false,
+            matchDate: null
+        },
+        notes: "Waiting CFO approval",
+        metadata: {
+            createdBy: "finance01",
+            createdAt: "2025-08-19T12:00:00",
+            updatedAt: "2025-08-20T15:45:00"
+        }
+    },
+    {
+        id: 3,
+        paymentNo: "PAY-003",
+        supplierId: 102,
+        supplierName: "CV Elektronik Jaya",
+        fundingAccount: "Mandiri-987654321",
+        paymentDate: "2025-08-21",
+        valueDate: "2025-08-21",
+        method: "Check",
+        currency: "USD",
+        amount: 3500,
+        fxRate: 1,
+        status: "Approval",
+        remittanceSent: false,
+        appliedBills: [
+            { billId: 601, billNo: "BILL-2001", originalAmount: 5000, paidAmount: 3500, remaining: 1500 }
+        ],
+        totals: {
+            paymentAmount: 3500,
+            fees: 25
+        },
+        remittanceAdvice: {
+            preview: "Preview Link PAY-002",
+            attachment: null
+        },
+        bankReference: "TRX-002-XYZ",
+        reconciliationInfo: {
+            bankStatementId: null,
+            matched: false,
+            matchDate: null
+        },
+        notes: "Waiting CFO approval",
+        metadata: {
+            createdBy: "finance01",
+            createdAt: "2025-08-19T12:00:00",
+            updatedAt: "2025-08-20T15:45:00"
+        }
+    },
+    {
+        id: 4,
+        paymentNo: "PAY-004",
+        supplierId: 102,
+        supplierName: "CV Elektronik Jaya",
+        fundingAccount: "Mandiri-987654321",
+        paymentDate: "2025-08-21",
+        valueDate: "2025-08-21",
+        method: "Check",
+        currency: "USD",
+        amount: 3500,
+        fxRate: 1,
+        status: "Released",
+        remittanceSent: false,
+        appliedBills: [
+            { billId: 601, billNo: "BILL-2001", originalAmount: 5000, paidAmount: 3500, remaining: 1500 }
+        ],
+        totals: {
+            paymentAmount: 3500,
+            fees: 25
+        },
+        remittanceAdvice: {
+            preview: "Preview Link PAY-002",
+            attachment: null
+        },
+        bankReference: "TRX-002-XYZ",
+        reconciliationInfo: {
+            bankStatementId: null,
+            matched: false,
+            matchDate: null
+        },
+        notes: "Waiting CFO approval",
+        metadata: {
+            createdBy: "finance01",
+            createdAt: "2025-08-19T12:00:00",
+            updatedAt: "2025-08-20T15:45:00"
+        }
+    },
+    {
+        id: 5,
+        paymentNo: "PAY-005",
+        supplierId: 102,
+        supplierName: "CV Elektronik Jaya",
+        fundingAccount: "Mandiri-987654321",
+        paymentDate: "2025-08-21",
+        valueDate: "2025-08-21",
+        method: "Check",
+        currency: "USD",
+        amount: 3500,
+        fxRate: 1,
+        status: "Failed",
+        remittanceSent: false,
+        appliedBills: [
+            { billId: 601, billNo: "BILL-2001", originalAmount: 5000, paidAmount: 3500, remaining: 1500 }
+        ],
+        totals: {
+            paymentAmount: 3500,
+            fees: 25
+        },
+        remittanceAdvice: {
+            preview: "Preview Link PAY-002",
+            attachment: null
+        },
+        bankReference: "TRX-002-XYZ",
+        reconciliationInfo: {
+            bankStatementId: null,
+            matched: false,
+            matchDate: null
+        },
+        notes: "Waiting CFO approval",
+        metadata: {
+            createdBy: "finance01",
+            createdAt: "2025-08-19T12:00:00",
+            updatedAt: "2025-08-20T15:45:00"
+        }
+    },
+    {
+        id: 6,
+        paymentNo: "PAY-006",
+        supplierId: 103,
+        supplierName: "Global Logistics Ltd",
+        fundingAccount: "HSBC-44556677",
+        paymentDate: "2025-08-22",
+        valueDate: "2025-08-22",
+        method: "Gateway",
+        currency: "EUR",
+        amount: 1250,
+        fxRate: 0.95,
+        status: "Reconciled",
+        remittanceSent: true,
+        appliedBills: [
+            { billId: 701, billNo: "BILL-3001", originalAmount: 2000, paidAmount: 1250, remaining: 750 }
+        ],
+        totals: {
+            paymentAmount: 1250,
+            fees: 15
+        },
+        remittanceAdvice: {
+            preview: "Preview Link PAY-003",
+            attachment: "remittance_PAY-003.pdf"
+        },
+        bankReference: "TRX-003-UVW",
+        reconciliationInfo: {
+            bankStatementId: "STM-20250822-01",
+            matched: true,
+            matchDate: "2025-08-23"
+        },
+        notes: "Reconciled successfully",
+        metadata: {
+            createdBy: "system",
+            createdAt: "2025-08-20T08:30:00",
+            updatedAt: "2025-08-23T11:20:00"
+        }
+    },
+    {
+        id: 7,
+        paymentNo: "PAY-007",
+        supplierId: 102,
+        supplierName: "CV Elektronik Jaya",
+        fundingAccount: "Mandiri-987654321",
+        paymentDate: "2025-08-21",
+        valueDate: "2025-08-21",
+        method: "Check",
+        currency: "USD",
+        amount: 3500,
+        fxRate: 1,
+        status: "PendingApproval",
+        remittanceSent: false,
+        appliedBills: [
+            { billId: 601, billNo: "BILL-2001", originalAmount: 5000, paidAmount: 3500, remaining: 1500 }
+        ],
+        totals: {
+            paymentAmount: 3500,
+            fees: 25
+        },
+        remittanceAdvice: {
+            preview: "Preview Link PAY-002",
+            attachment: null
+        },
+        bankReference: "TRX-002-XYZ",
+        reconciliationInfo: {
+            bankStatementId: null,
+            matched: false,
+            matchDate: null
+        },
+        notes: "Waiting CFO approval",
+        metadata: {
+            createdBy: "finance01",
+            createdAt: "2025-08-19T12:00:00",
+            updatedAt: "2025-08-20T15:45:00"
+        }
+    },
+]
+
+
