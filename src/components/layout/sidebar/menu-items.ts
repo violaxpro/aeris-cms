@@ -23,7 +23,12 @@ import {
     UnlockOutlined,
     CarOutlined,
     DashboardOutlined,
-    SnippetsOutlined
+    SnippetsOutlined,
+    TransactionOutlined,
+    BuildOutlined,
+    AccountBookOutlined,
+    NotificationOutlined,
+    AreaChartOutlined
 } from '@ant-design/icons';
 import { DashboardIcon } from '@/components/icon';
 
@@ -130,15 +135,16 @@ export const menuItems = [
                 icon: ShoppingOutlined,
                 children: [
                     {
-                        key: 'good-receipts',
-                        label: 'Good Receipts',
-                        href: routes.eCommerce.goodReceipt,
-                    },
-                    {
                         key: 'purchase-order',
                         label: 'Purchase Orders',
                         href: routes.eCommerce.purchases,
                     },
+                    {
+                        key: 'good-receipts',
+                        label: 'Good Receipts',
+                        href: routes.eCommerce.goodReceipt,
+                    },
+
                     {
                         key: 'bills',
                         label: 'Bills',
@@ -401,35 +407,107 @@ export const menuItems = [
         type: 'group',
         children: [
             {
-                key: 'marketing',
-                label: 'Marketing',
+                key: 'campaign-management',
+                label: 'Campaign Management',
                 href: '#',
-                icon: ShopOutlined,
+                icon: NotificationOutlined,
                 children: [
                     {
-                        key: 'flash-sale',
-                        label: 'Flash Sale',
-                        href: routes.eCommerce.flashSale,
-                    },
-                    {
-                        key: 'coupon',
-                        label: 'Coupon',
-                        href: routes.eCommerce.coupon,
-                    },
-                    {
-                        key: 'email-marketing',
-                        label: 'Email Marketing',
-                        // href: routes.eCommerce.emailMarketing,
+                        key: 'email-campaigns,',
+                        label: ' Email Campaigns',
                         href: '#'
                     },
                     {
-                        key: 'sms-marketing',
-                        label: 'SMS Marketing',
-                        // href: routes.eCommerce.smsMarketing,
+                        key: 'sms-wa-campaigns',
+                        label: 'SMS / WhatsApp Campaigns',
+                        href: '#'
+                    },
+                    {
+                        key: 'push-notifications',
+                        label: 'Push Notifications',
+                        href: '#'
+                    },
+                    {
+                        key: 'social-media-campaigns',
+                        label: 'Social Media Campaigns',
+                        href: '#'
+                    },
+                    {
+                        key: 'flash-sale-campaigns',
+                        label: 'Seasonal / Flash Sale Campaigns',
+                        href: routes.eCommerce.flashSale,
+
+                    },
+
+                ]
+
+            },
+            {
+                key: 'customer-engagement',
+                label: 'Customer Engagement',
+                href: '#',
+                icon: TeamOutlined,
+                children: [
+                    {
+                        key: 'loyalty-rewards',
+                        label: 'Loyalty & Rewards',
+                        href: '#'
+                    },
+                    {
+                        key: 'referral-program',
+                        label: 'Referral Program',
+                        href: '#'
+                    },
+                    {
+                        key: 'promotion-discount',
+                        label: 'Promotions & Discounts',
+                        href: '#'
+                    },
+                    {
+                        key: 'gift-cards',
+                        label: 'Gift Cards',
+                        href: '#'
+                    },
+                    {
+                        key: 'personalized-reccommendations',
+                        label: 'Personalized Recommendations',
                         href: '#'
                     },
                 ]
             },
+            {
+                key: 'analytics-insight',
+                label: 'Analytics & Insights',
+                href: '#',
+                icon: AreaChartOutlined,
+                children: [
+                    {
+                        key: 'campaign-performance-tracking',
+                        label: 'Campaign Performance Tracking',
+                        href: '#'
+                    },
+                    {
+                        key: 'conversation-tracking',
+                        label: 'Conversion Tracking',
+                        href: '#'
+                    },
+                    {
+                        key: 'customer-segmentation',
+                        label: 'Customer Segmentation',
+                        href: '#'
+                    },
+                    {
+                        key: 'marketing-funnel-reports',
+                        label: 'Marketing Funnel Reports',
+                        href: '#'
+                    },
+                    {
+                        key: 'roi-budget-tracking',
+                        label: 'ROI & Budget Tracking',
+                        href: '#'
+                    },
+                ]
+            }
         ]
     },
     {
@@ -438,10 +516,86 @@ export const menuItems = [
         type: 'group',
         children: [
             {
-                key: 'chart-of-account',
-                label: 'Chart of Account (Comming Soon)',
+                key: 'setup-structure',
+                label: 'Setup & Structure',
                 href: '#',
-                icon: ScheduleOutlined
+                icon: BuildOutlined,
+                children: [
+                    {
+                        key: 'chart-of-account',
+                        label: 'Chart of Account',
+                        href: '#',
+                    },
+                    {
+                        key: 'taxes',
+                        label: 'Taxes',
+                        href: '#',
+                    },
+                    {
+                        key: 'fixed-assets',
+                        label: 'Fixed Assets',
+                        href: '#',
+                    },
+                ]
+            },
+            {
+                key: 'transactions',
+                label: 'Transactions',
+                href: '#',
+                icon: TransactionOutlined,
+                children: [
+                    {
+                        key: 'account-receivable',
+                        label: 'Accounts Receivable',
+                        href: '#',
+                    },
+                    {
+                        key: 'account-payable',
+                        label: 'Accounts Payable ',
+                        href: '#',
+                    },
+                    {
+                        key: 'bank-cash-management',
+                        label: 'Bank & Cash Management',
+                        href: '#',
+                    },
+                ]
+            },
+            {
+                key: 'general-ledger',
+                label: 'General Ledger',
+                href: '#',
+                icon: AccountBookOutlined,
+                children: [
+                    {
+                        key: 'general-ledger-child',
+                        label: 'General Ledger',
+                        href: '#',
+                    },
+                    {
+                        key: 'journal-entries',
+                        label: 'Journal Entries',
+                        href: '#',
+                    },
+                ]
+            },
+            {
+                key: 'report-controls',
+                label: 'Report & Controls',
+                href: '#',
+                icon: FileTextOutlined,
+                children: [
+                    {
+                        key: 'financial-reports',
+                        label: 'Financial Reports',
+                        href: '#',
+                    },
+                    {
+                        key: 'budgeting-forecasting',
+                        label: 'Budgeting & Forecasting',
+                        href: '#',
+                    },
+                ]
             }
         ]
     },

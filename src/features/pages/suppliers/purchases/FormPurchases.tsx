@@ -17,8 +17,11 @@ import ProductInput, { ProductForm } from './ProductInput';
 import { getSupplier } from '@/services/supplier-list-service';
 import DatePickerInput from '@/components/date-picker';
 import dayjs from 'dayjs'
-import { Divider } from 'antd';
+import Divider from '@/components/divider';
 import { PlusOutlined } from '@ant-design/icons';
+import Image from 'next/image';
+import { PlusOutlineIcon } from '@public/icon';
+import TotalSummary from '../TotalSummary';
 
 const FormPurchases: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const router = useRouter()
@@ -294,7 +297,7 @@ const FormPurchases: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
             <Content className="mb-0">
                 <div className='min-h-[360px] p-6'>
-                    <div>
+                    <div className='flex flex-col gap-5'>
                         <div className='grid grid-cols-4 gap-3'>
                             <SelectInput
                                 id='supplierName'
@@ -358,8 +361,8 @@ const FormPurchases: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             />
                         </div>
 
-                        <div className='md:my-10'>
-                            <h1 className='text-lg font-bold'>Product List</h1>
+                        <div className='flex flex-col gap-3 md:my-5'>
+                            <h1 className='text-2xl font-semibold'>Product List</h1>
                             <Divider />
                             {
                                 productForm.map((item, index) => {
@@ -376,17 +379,21 @@ const FormPurchases: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     )
                                 })
                             }
-                            <Divider />
                             <div className='flex justify-end'>
                                 <Button
                                     label='Add Product'
-                                    icon={<PlusOutlined />}
+                                    icon={<Image
+                                        src={PlusOutlineIcon}
+                                        alt='plus-icon'
+                                        width={15}
+                                    />}
                                     onClick={addItem}
+                                // disabled={isDisabled}
                                 />
                             </div>
                         </div>
 
-                        <div className='grid grid-cols-[4fr_1fr] gap-4 mt-2'>
+                        <div className='grid grid-cols-[4fr_1fr] gap-4 items-center justify-center'>
                             <div className='grid md:grid-cols-2 gap-2'>
                                 <Textarea
                                     id='delivery_note'
@@ -431,53 +438,14 @@ const FormPurchases: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 </div>
                             </div>
                             <div className='grid'>
-                                <Input
-                                    id='subtotal'
-                                    label='Subtotal'
-                                    type='number'
-                                    onChange={handleChange}
-                                    value={Number(formData.subtotal).toFixed(2)}
-                                    disabled
-                                    divClassName='flex gap-3 items-center'
-                                    className='w-full'
-                                />
-                                <Input
-                                    id='discount'
-                                    label='Discount'
-                                    type='number'
-                                    onChange={handleChange}
-                                    value={formData.discount}
-                                    divClassName='flex gap-3 items-center'
-                                    className='w-full'
-
-                                />
-                                <Input
-                                    id='shipping_fee'
-                                    label='Shipping Fee'
-                                    type='number'
-                                    onChange={handleChange}
-                                    value={formData.shipping_fee}
-                                    divClassName='flex gap-3 items-center'
-                                    className='w-full'
-                                />
-                                <Input
-                                    id='gst'
-                                    label='GST or Tax'
-                                    type='number'
-                                    onChange={handleChange}
-                                    value={formData.gst}
-                                    divClassName='flex gap-3 items-center'
-                                    className='w-full'
-                                />
-                                <Input
-                                    id='total'
-                                    label='Total'
-                                    type='number'
-                                    onChange={handleChange}
-                                    value={Number(formData.total).toFixed(2)}
-                                    disabled
-                                    divClassName='flex gap-3 items-center'
-                                    className='w-full'
+                                <TotalSummary
+                                    // profitHidden={profitHidden}
+                                    // onReveal={() => setProfitHidden(false)}
+                                    profit={100}
+                                    subtotal={1130.4}
+                                    shippingFee={50}
+                                    discount={5}
+                                    gstRate={0.1}
                                 />
                             </div>
                         </div>

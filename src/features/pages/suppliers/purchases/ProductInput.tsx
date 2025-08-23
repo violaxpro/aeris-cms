@@ -6,7 +6,7 @@ import SelectInput from '@/components/select';
 import DatePickerInput from '@/components/date-picker';
 import CheckboxInput from '@/components/checkbox';
 import Button from '@/components/button'
-import { TrashIcon, TrashIconRed } from '@public/icon';
+import { TrashIcon, TrashIconRed, CancelGreyIcon } from '@public/icon';
 import ButtonIcon from '@/components/button/ButtonIcon';
 import dayjs from 'dayjs'
 
@@ -72,8 +72,8 @@ const ProductInput = ({
     // };
 
     return (
-        <div>
-            <div className='grid md:grid-cols-7 gap-4 mb-2'>
+        <div className='col-span-full border p-6 rounded-xl border-[#E5E7EB] flex flex-col gap-3'>
+            <div className='grid md:grid-cols-[1fr_2fr_1fr_70px_1fr_1fr_1fr_1fr_1fr_50px] gap-4 mb-2'>
                 <Input
                     id='sku'
                     type='text'
@@ -145,7 +145,7 @@ const ProductInput = ({
                     onChange={handleProductChange}
                 />
                 {
-                    onRemove && <div className='flex item-ends justify-center mt-4 '>
+                    onRemove && <div className='flex item-ends justify-center pt-5 '>
                         {
                             length && length <= 1 ?
                                 <ButtonIcon

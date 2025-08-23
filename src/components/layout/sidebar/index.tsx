@@ -4,7 +4,8 @@ import Sider from 'antd/es/layout/Sider';
 import { menuItems } from './menu-items';
 import Link from 'next/link';
 import Image from 'next/image';
-import logoImg from '@public/logo/Logo Xpro Group.png';
+import logoImg from '@public/logo/Logo Xpro Group Test.png';
+// import logoAeris from '@public/logo/Logo Aeris.png';
 
 const style: React.CSSProperties = {
     position: 'sticky',
@@ -110,11 +111,12 @@ const Sidebar = ({ isMobile = false, onClose }: { isMobile?: boolean; onClose?: 
     const sidebarContent = (
         <>
             <div className="flex items-center justify-center py-1">
-                <div className="w-full max-w-[200px] p-3">
+                <div className="w-full max-w-[150px] p-3">
                     <Image
                         src={logoImg}
                         alt="logo"
-                        width={200}
+                        // width={300}
+                        width={150}
                         height={0}
                     // sizes="100vw"
                     // className="w-full h-auto object-contain max-h-[80px]"
@@ -126,7 +128,7 @@ const Sidebar = ({ isMobile = false, onClose }: { isMobile?: boolean; onClose?: 
                 mode="inline"
                 defaultSelectedKeys={['1']}
                 items={items}
-                style={{ ...scrollAreaStyle, width: 280 }}
+                style={{ ...scrollAreaStyle, width: 290 }}
                 className="!bg-background my-4"
             />
         </>
@@ -141,7 +143,7 @@ const Sidebar = ({ isMobile = false, onClose }: { isMobile?: boolean; onClose?: 
             className="sidebar !bg-background"
             breakpoint="lg"
             collapsedWidth="0"
-            width={280}
+            width={290}
             onBreakpoint={(broken) => {
                 console.log('ini borken', broken);
             }}
