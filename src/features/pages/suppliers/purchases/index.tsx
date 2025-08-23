@@ -90,16 +90,33 @@ const index = ({ purchasesData }: { purchasesData?: any }) => {
     ]
     const columns: TableColumnsType<PurchasesType> = [
         {
-            title: 'Order ID',
-            dataIndex: 'order_id',
+            title: 'PO Number',
+            dataIndex: 'po_number',
+            sorter: (a: any, b: any) => a?.po_number.localeCompare(b?.po_number)
         },
         {
             title: 'Supplier',
-            dataIndex: 'supplier_name',
+            dataIndex: 'supplier',
+            sorter: (a: any, b: any) => a?.supplier?.supplier_name.localeCompare(b?.supplier?.supplier_name),
+            render: (supplier: any) => {
+                return supplier.supplier_name
+            }
+        },
+        {
+            title: 'Buyer',
+            dataIndex: 'buyer',
+            sorter: (a: any, b: any) => a?.buyer.localeCompare(b?.buyer)
+
+        },
+        {
+            title: 'Currency',
+            dataIndex: 'currency',
+            sorter: (a: any, b: any) => a?.currency.localeCompare(b?.currency)
         },
         {
             title: 'Total',
             dataIndex: 'total',
+            sorter: (a: any, b: any) => a?.total - b?.total,
             render: (val) => {
                 return <span>${val}</span>
             }
@@ -107,21 +124,45 @@ const index = ({ purchasesData }: { purchasesData?: any }) => {
         {
             title: 'Status',
             dataIndex: 'status',
+            sorter: (a: any, b: any) => {
+                const status = ['Draft', 'PendingApproval', 'Approved', 'Sent', 'PartiallyReceived', 'Closed', 'Cancelled'];
+                return status.indexOf(a.status) - status.indexOf(b.status)
+            },
             render: (val) => {
                 const status = val ? stripHTML(val) : '';
                 return <StatusTag status={status} />
             }
         },
         {
-            title: 'Email Status',
-            dataIndex: 'email_status',
+            title: 'Tags',
+            dataIndex: 'tags',
+            sorter: (a: any, b: any) => a?.tags.localeCompare(b?.tags),
             render: (val) => {
-                const status = val ? stripHTML(val) : '';
-                return <StatusTag status={status} />
+                return val
             }
         },
         {
-            title: 'Created',
+            title: 'ETA / Promised Date',
+            dataIndex: 'created',
+            defaultSortOrder: 'descend',
+            sorter: (a: any, b: any) => {
+                return dayjs(a.created).valueOf() - dayjs(b.created).valueOf()
+            },
+            render: (val: any) => {
+                const date = dayjs(val?.date).format("DD/MM/YYYY")
+                const user = val?.name
+                return <div className="flex flex-col w-full">
+                    <div className="flex justify-start gap-1">
+                        <span>{date}</span>
+                    </div>
+                    <div className="flex justify-start gap-1">
+                        <span>by {user || '-'}</span>
+                    </div>
+                </div>
+            }
+        },
+        {
+            title: 'Order Date',
             dataIndex: 'created',
             defaultSortOrder: 'descend',
             sorter: (a: any, b: any) => {

@@ -1,18 +1,26 @@
 import React, { useState } from 'react'
+import { useAtom } from 'jotai';
+import { taxSetAtom } from '@/store/DropdownItemStore';
 import Input from "@/components/input"
 import SelectInput from '@/components/select';
+import DatePickerInput from '@/components/date-picker';
 import CheckboxInput from '@/components/checkbox';
 import Button from '@/components/button'
 import { TrashIcon, TrashIconRed } from '@public/icon';
 import ButtonIcon from '@/components/button/ButtonIcon';
+import dayjs from 'dayjs'
 
 export interface ProductForm {
     sku: string
     name: string
+    uom: string
     price: number
     buying_price: number
     qty: number
     total: number
+    tax_rate: string
+    warehouse: string
+    promised_date: string
 }
 
 interface ProductInputProps {
@@ -29,6 +37,8 @@ const ProductInput = ({
     onChange,
     length
 }: ProductInputProps) => {
+    const [optionsTax] = useAtom(taxSetAtom)
+
     const handleProductChange = (e: any) => {
         const { id, value } = e.target;
 
@@ -47,6 +57,16 @@ const ProductInput = ({
         onChange(updatedProductForm);
     };
 
+    const handleChangeSelect = (id: string, value: any) => {
+        let updatedProductForm = {
+            ...productForm,
+            [id]: value
+        };
+
+        onChange(updatedProductForm);
+    };
+
+
     // const handleAddProduct = () => {
     //     onAddProduct()
     // };
@@ -60,32 +80,22 @@ const ProductInput = ({
                     label='SKU'
                     value={productForm.sku}
                     onChange={handleProductChange}
-                    className='mb-1'
                 />
                 <Input
                     id='name'
                     type='text'
-                    label='Name'
+                    label='Description'
                     value={productForm.name}
                     onChange={handleProductChange}
-                    className='mb-1'
-
                 />
                 <Input
-                    id='price'
+                    id='uom'
                     type='text'
-                    label='Price'
-                    value={productForm.price}
+                    label='UOM'
+                    value={productForm.uom}
                     onChange={handleProductChange}
-                    className='mb-1'
-                />
-                <Input
-                    id='buying_price'
-                    type='text'
-                    label='Buying Price'
-                    value={productForm.buying_price}
-                    onChange={handleProductChange}
-                    className='mb-1'
+                    required
+                // disabled={isDisabled}
                 />
                 <Input
                     id='qty'
@@ -93,16 +103,46 @@ const ProductInput = ({
                     label='QTY'
                     value={productForm.qty}
                     onChange={handleProductChange}
-                    className='mb-1'
 
+                />
+                <Input
+                    id='price'
+                    type='text'
+                    label='Unit Cost'
+                    value={productForm.price}
+                    onChange={handleProductChange}
+                />
+                <SelectInput
+                    id="tax_rate"
+                    label="Tax Rate"
+                    placeholder="Select Tax Rate"
+                    value={productForm.tax_rate}
+                    onChange={(val) => handleChangeSelect('tax_rate', val)}
+                    options={optionsTax}
+                />
+                <SelectInput
+                    id="warehouse"
+                    label="Warehouse / Bin"
+                    placeholder="Select Warehouse/Bin"
+                    value={productForm.warehouse}
+                    onChange={(val) => handleChangeSelect('warehouse', val)}
+                    options={[
+                        { label: 'Seadan Pranatta', value: 1 }
+                    ]}
+                />
+                <DatePickerInput
+                    id='expiry'
+                    label='Expiry '
+                    value={productForm.promised_date ? dayjs(productForm.promised_date) : null}
+                    onChange={handleProductChange}
+                // disabled={isDisabled}
                 />
                 <Input
                     id='total'
                     type='text'
-                    label='Total'
+                    label='Amount'
                     value={productForm.total}
                     onChange={handleProductChange}
-                    className='mb-1'
                 />
                 {
                     onRemove && <div className='flex item-ends justify-center mt-4 '>

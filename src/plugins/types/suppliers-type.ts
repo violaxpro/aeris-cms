@@ -34,16 +34,29 @@ export type ReturnSupplierType = {
 }
 
 export type PurchasesType = {
-    id?: number | string | undefined
-    order_id: string
-    supplier_name: string
-    created: {
-        name: string
-        date: string
+    id: string
+    po_number: string
+    supplier: {
+        supplier_id: string
+        supplier_name: string
+        supplier_code: string
     }
+    buyer: string
+    order_date: string
+    eta_date: string
+    currency: string
+    subtotal: number
+    tax: number
     total: number
     status: string
-    email_status: string
+    tags: string[]
+    payment_terms: string
+    ship_to: {
+        warehouse: string
+        address: string
+    }
+    lines: any[]
+    detail_view?: any
 }
 
 export type BillType = {
@@ -142,118 +155,346 @@ export const returnData = [
 
 export const purchases = [
     {
-        id: 2286,
-        // user_id: 2,
-        // supplier: 1,
-        order_id: '3893',
-        supplier_name: 'Company A',
-        // subtotal: 1250.18,
-        total: 1250.18,
-        // "delivery_method": "Pick Up",
-        // "payment_method": "COD",
-        status: "<span class=\"\">Draft</span>",
-        email_status: "Not yet Sent",
-        // "notes": null,
-        // "date": "2023-12-14",
-        // "delivery_date": "2023-12-21",
-        // "po_number": null,
-        // "address": "34 Osborne street, NSW, Wollongong, 2500, AU",
-        // "attention": null,
-        // "phone": "0468561816",
-        // "delivery_note": null,
-        // "email_count": 0,
-        created: {
-            name: 'User',
-            date: "2023-12-14T11:29:01.000000Z"
+        "id": "po_001",
+        "po_number": "PO-2025-001",
+        "supplier": {
+            "supplier_id": "sup_1001",
+            "supplier_name": "PT Maju Jaya",
+            "supplier_code": "MJ001"
         },
-        // "updated_at": "2023-12-14T12:02:10.000000Z",
-        // "deleted_at": null,
+        "buyer": "andi_saputra",
+        "order_date": "2025-08-01",
+        "eta_date": "2025-08-15",
+        "currency": "IDR",
+        "subtotal": 5000000,
+        "tax": 500000,
+        "total": 5500000,
+        "status": "Draft",
+        "tags": ["urgent", "electronics"],
+        "payment_terms": "30 days",
+        "ship_to": {
+            "warehouse": "wh_01",
+            "address": "Jl. Merdeka No. 45, Jakarta"
+        },
+        "lines": [
+            {
+                "id": "line_001",
+                "sku": "ELEC-001",
+                "description": "Monitor LED 24 inch",
+                "uom": "pcs",
+                "qty": 10,
+                "unit_cost": 1500000,
+                "tax_code": "PPN11",
+                "warehouse": "wh_01",
+                "bin": "R1-B2",
+                "promised_date": "2025-08-12"
+            },
+            {
+                "id": "line_002",
+                "sku": "ELEC-002",
+                "description": "Keyboard Mechanical",
+                "uom": "pcs",
+                "qty": 20,
+                "unit_cost": 500000,
+                "tax_code": "PPN11",
+                "warehouse": "wh_01",
+                "bin": "R1-B3",
+                "promised_date": "2025-08-12"
+            }
+        ],
+        "detail_view": {
+            "header": {
+                "po_number": "PO-2025-001",
+                "supplier": "PT Maju Jaya (MJ001)",
+                "buyer": "andi_saputra",
+                "incoterms": "FOB Jakarta",
+                "payment_terms": "30 days",
+                "currency": "IDR",
+                "notes": "Harap dikirim sesuai jadwal."
+            },
+            "logistics": {
+                "ship_to": "WH-01 - Jl. Merdeka No. 45, Jakarta",
+                "carrier": "JNE Trucking",
+                "freight_terms": "Prepaid",
+                "eta": "2025-08-15"
+            },
+            "lines": [
+                {
+                    "id": "detail_line_001",
+                    "sku": "ELEC-001",
+                    "supplier_sku": "SUP-ELEC-01",
+                    "desc": "Monitor LED 24 inch",
+                    "uom": "pcs",
+                    "qty_ordered": 10,
+                    "qty_received": 0,
+                    "unit_cost": 1500000,
+                    "discount": 0,
+                    "tax": 165000,
+                    "line_total": 15165000
+                },
+                {
+                    "id": "detail_line_002",
+                    "sku": "ELEC-002",
+                    "supplier_sku": "SUP-ELEC-02",
+                    "desc": "Keyboard Mechanical",
+                    "uom": "pcs",
+                    "qty_ordered": 20,
+                    "qty_received": 0,
+                    "unit_cost": 500000,
+                    "discount": 50000,
+                    "tax": 99000,
+                    "line_total": 10049000
+                }
+            ],
+            "totals": {
+                "subtotal": 25200000,
+                "discount": 50000,
+                "tax": 264000,
+                "freight": 200000,
+                "grand_total": 25474000
+            },
+            "audit": {
+                "created_by": "andi_saputra",
+                "created_date": "2025-08-01T10:30:00",
+                "approved_by": null,
+                "approved_date": null,
+                "sent_timestamp": null,
+                "change_orders": []
+            },
+            "links": {
+                "attachments": [
+                    { "id": "att_001", "file_name": "invoice_preview.pdf" },
+                    { "id": "att_002", "file_name": "spec_sheet.xlsx" }
+                ],
+                "related_grns": [],
+                "related_bills": []
+            }
+        }
     },
     {
-        id: 2287,
-        // user_id: 2,
-        // supplier: 1,
-        order_id: '3894',
-        supplier_name: 'Company B',
-        // subtotal: 1250.18,
-        total: 1250.18,
-        // "delivery_method": "Pick Up",
-        // "payment_method": "COD",
-        status: "<span class=\"\">Waiting for Approval</span>",
-        email_status: "Not yet Sent",
-        // "notes": null,
-        // "date": "2023-12-14",
-        // "delivery_date": "2023-12-21",
-        // "po_number": null,
-        // "address": "34 Osborne street, NSW, Wollongong, 2500, AU",
-        // "attention": null,
-        // "phone": "0468561816",
-        // "delivery_note": null,
-        // "email_count": 0,
-        created: {
-            name: 'User B',
-            date: "2023-12-16T11:29:01.000000Z"
+        "id": "po_002",
+        "po_number": "PO-2025-002",
+        "supplier": {
+            "supplier_id": "sup_1002",
+            "supplier_name": "PT Sejahtera Abadi",
+            "supplier_code": "SA002"
         },
-        // "updated_at": "2023-12-14T12:02:10.000000Z",
-        // "deleted_at": null,
+        "buyer": "budi_santoso",
+        "order_date": "2025-08-05",
+        "eta_date": "2025-08-20",
+        "currency": "USD",
+        "subtotal": 2000,
+        "tax": 200,
+        "total": 2200,
+        "status": "PendingApproval",
+        "tags": ["import", "office_supplies"],
+        "payment_terms": "60 days",
+        "ship_to": {
+            "warehouse": "wh_02",
+            "address": "Jl. Asia Afrika No. 10, Bandung"
+        },
+        "lines": [
+            {
+                "id": "line_003",
+                "sku": "OFF-101",
+                "description": "Office Chair Ergonomic",
+                "uom": "pcs",
+                "qty": 5,
+                "unit_cost": 250,
+                "tax_code": "VAT10",
+                "warehouse": "wh_02",
+                "bin": "R2-C1",
+                "promised_date": "2025-08-18"
+            }
+        ]
     },
     {
-        id: 2288,
-        // user_id: 2,
-        // supplier: 1,
-        order_id: '3895',
-        supplier_name: 'Company C',
-        // subtotal: 1250.18,
-        total: 1250.18,
-        // "delivery_method": "Pick Up",
-        // "payment_method": "COD",
-        status: "<span class=\"\">Approved</span>",
-        email_status: "Sent",
-        // "notes": null,
-        // "date": "2023-12-14",
-        // "delivery_date": "2023-12-21",
-        // "po_number": null,
-        // "address": "34 Osborne street, NSW, Wollongong, 2500, AU",
-        // "attention": null,
-        // "phone": "0468561816",
-        // "delivery_note": null,
-        // "email_count": 0,
-        created: {
-            name: 'User C',
-            date: "2023-12-18T11:29:01.000000Z"
+        "id": "po_003",
+        "po_number": "PO-2025-003",
+        "supplier": {
+            "supplier_id": "sup_1003",
+            "supplier_name": "CV Aneka Tools",
+            "supplier_code": "AT003"
         },
-        // "updated_at": "2023-12-14T12:02:10.000000Z",
-        // "deleted_at": null,
+        "buyer": "siti_wulandari",
+        "order_date": "2025-08-10",
+        "eta_date": "2025-08-25",
+        "currency": "IDR",
+        "subtotal": 1500000,
+        "tax": 165000,
+        "total": 1665000,
+        "status": "Approved",
+        "tags": ["maintenance"],
+        "payment_terms": "Cash on Delivery",
+        "ship_to": {
+            "warehouse": "wh_03",
+            "address": "Jl. Industri No. 88, Surabaya"
+        },
+        "lines": [
+            {
+                "id": "line_004",
+                "sku": "TOOL-501",
+                "description": "Electric Drill",
+                "uom": "pcs",
+                "qty": 3,
+                "unit_cost": 500000,
+                "tax_code": "PPN11",
+                "warehouse": "wh_03",
+                "bin": "R3-A5",
+                "promised_date": "2025-08-22"
+            }
+        ]
     },
     {
-        id: 2289,
-        // user_id: 2,
-        // supplier: 1,
-        order_id: '3896',
-        supplier_name: 'Company D',
-        // subtotal: 1250.18,
-        total: 1250.18,
-        // "delivery_method": "Pick Up",
-        // "payment_method": "COD",
-        status: "<span class=\"\">Billed</span>",
-        email_status: "Sent",
-        // "notes": null,
-        // "date": "2023-12-14",
-        // "delivery_date": "2023-12-21",
-        // "po_number": null,
-        // "address": "34 Osborne street, NSW, Wollongong, 2500, AU",
-        // "attention": null,
-        // "phone": "0468561816",
-        // "delivery_note": null,
-        // "email_count": 0,
-        created: {
-            name: 'User D',
-            date: "2023-12-19T11:29:01.000000Z"
+        "id": "po_004",
+        "po_number": "PO-2025-004",
+        "supplier": {
+            "supplier_id": "sup_1003",
+            "supplier_name": "CV Aneka Tools",
+            "supplier_code": "AT003"
         },
-        // "updated_at": "2023-12-14T12:02:10.000000Z",
-        // "deleted_at": null,
+        "buyer": "siti_wulandari",
+        "order_date": "2025-08-10",
+        "eta_date": "2025-08-25",
+        "currency": "IDR",
+        "subtotal": 1500000,
+        "tax": 165000,
+        "total": 1665000,
+        "status": "Sent",
+        "tags": ["maintenance"],
+        "payment_terms": "Cash on Delivery",
+        "ship_to": {
+            "warehouse": "wh_03",
+            "address": "Jl. Industri No. 88, Surabaya"
+        },
+        "lines": [
+            {
+                "id": "line_004",
+                "sku": "TOOL-501",
+                "description": "Electric Drill",
+                "uom": "pcs",
+                "qty": 3,
+                "unit_cost": 500000,
+                "tax_code": "PPN11",
+                "warehouse": "wh_03",
+                "bin": "R3-A5",
+                "promised_date": "2025-08-22"
+            }
+        ]
+    },
+    {
+        "id": "po_005",
+        "po_number": "PO-2025-005",
+        "supplier": {
+            "supplier_id": "sup_1003",
+            "supplier_name": "CV Aneka Tools",
+            "supplier_code": "AT003"
+        },
+        "buyer": "siti_wulandari",
+        "order_date": "2025-08-10",
+        "eta_date": "2025-08-25",
+        "currency": "IDR",
+        "subtotal": 1500000,
+        "tax": 165000,
+        "total": 1665000,
+        "status": "ParticiallyReceived",
+        "tags": ["maintenance"],
+        "payment_terms": "Cash on Delivery",
+        "ship_to": {
+            "warehouse": "wh_03",
+            "address": "Jl. Industri No. 88, Surabaya"
+        },
+        "lines": [
+            {
+                "id": "line_004",
+                "sku": "TOOL-501",
+                "description": "Electric Drill",
+                "uom": "pcs",
+                "qty": 3,
+                "unit_cost": 500000,
+                "tax_code": "PPN11",
+                "warehouse": "wh_03",
+                "bin": "R3-A5",
+                "promised_date": "2025-08-22"
+            }
+        ]
+    },
+    {
+        "id": "po_006",
+        "po_number": "PO-2025-006",
+        "supplier": {
+            "supplier_id": "sup_1003",
+            "supplier_name": "CV Aneka Tools",
+            "supplier_code": "AT003"
+        },
+        "buyer": "siti_wulandari",
+        "order_date": "2025-08-10",
+        "eta_date": "2025-08-25",
+        "currency": "IDR",
+        "subtotal": 1500000,
+        "tax": 165000,
+        "total": 1665000,
+        "status": "Closed",
+        "tags": ["maintenance"],
+        "payment_terms": "Cash on Delivery",
+        "ship_to": {
+            "warehouse": "wh_03",
+            "address": "Jl. Industri No. 88, Surabaya"
+        },
+        "lines": [
+            {
+                "id": "line_004",
+                "sku": "TOOL-501",
+                "description": "Electric Drill",
+                "uom": "pcs",
+                "qty": 3,
+                "unit_cost": 500000,
+                "tax_code": "PPN11",
+                "warehouse": "wh_03",
+                "bin": "R3-A5",
+                "promised_date": "2025-08-22"
+            }
+        ]
+    },
+    {
+        "id": "po_007",
+        "po_number": "PO-2025-007",
+        "supplier": {
+            "supplier_id": "sup_1003",
+            "supplier_name": "CV Aneka Tools",
+            "supplier_code": "AT003"
+        },
+        "buyer": "siti_wulandari",
+        "order_date": "2025-08-10",
+        "eta_date": "2025-08-25",
+        "currency": "IDR",
+        "subtotal": 1500000,
+        "tax": 165000,
+        "total": 1665000,
+        "status": "Cancelled",
+        "tags": ["maintenance"],
+        "payment_terms": "Cash on Delivery",
+        "ship_to": {
+            "warehouse": "wh_03",
+            "address": "Jl. Industri No. 88, Surabaya"
+        },
+        "lines": [
+            {
+                "id": "line_004",
+                "sku": "TOOL-501",
+                "description": "Electric Drill",
+                "uom": "pcs",
+                "qty": 3,
+                "unit_cost": 500000,
+                "tax_code": "PPN11",
+                "warehouse": "wh_03",
+                "bin": "R3-A5",
+                "promised_date": "2025-08-22"
+            }
+        ]
     }
 ]
+
 
 export const billedDummy = [
     {
@@ -271,7 +512,7 @@ export const billedDummy = [
         // "notes": null,
         // "date": "2023-12-14",
         // "delivery_date": "2023-12-21",
-        // "po_number": null,
+        po_number: 'PO-123',
         // "address": "34 Osborne street, NSW, Wollongong, 2500, AU",
         // "attention": null,
         // "phone": "0468561816",
@@ -299,7 +540,7 @@ export const billedDummy = [
         // "notes": null,
         // "date": "2023-12-14",
         // "delivery_date": "2023-12-21",
-        // "po_number": null,
+        po_number: 'PO-124',
         // "address": "34 Osborne street, NSW, Wollongong, 2500, AU",
         // "attention": null,
         // "phone": "0468561816",
@@ -327,7 +568,7 @@ export const billedDummy = [
         // "notes": null,
         // "date": "2023-12-14",
         // "delivery_date": "2023-12-21",
-        // "po_number": null,
+        po_number: 'PO-125',
         // "address": "34 Osborne street, NSW, Wollongong, 2500, AU",
         // "attention": null,
         // "phone": "0468561816",
@@ -355,7 +596,7 @@ export const billedDummy = [
         // "notes": null,
         // "date": "2023-12-14",
         // "delivery_date": "2023-12-21",
-        // "po_number": null,
+        po_number: 'PO-126',
         // "address": "34 Osborne street, NSW, Wollongong, 2500, AU",
         // "attention": null,
         // "phone": "0468561816",

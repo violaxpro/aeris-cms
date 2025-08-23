@@ -30,10 +30,14 @@ const FormPurchases: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const [productForm, setProductForm] = useState([{
         sku: '',
         name: '',
+        uom: '',
         price: 0,
         buying_price: 0,
         qty: 0,
         total: 0,
+        tax_rate: '',
+        warehouse: '',
+        promised_date: '',
     }]);
     const [editIndex, setEditIndex] = useState<number | null>(null)
     const [formData, setFormData] = useState({
@@ -201,6 +205,7 @@ const FormPurchases: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
             {
                 sku: '',
                 name: '',
+                uom: '',
                 price: 0,
                 buying_price: 0,
                 // trade: 0,
@@ -212,6 +217,9 @@ const FormPurchases: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                 // tax_rate: '',
                 // tax_amount: 0,
                 total: 0,
+                tax_rate: '',
+                warehouse: '',
+                promised_date: '',
             }
         ])
     }
