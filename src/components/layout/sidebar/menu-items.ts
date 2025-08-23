@@ -512,7 +512,7 @@ export const menuItems = [
     },
     {
         key: 'group-accounting',
-        label: 'Accounting (Coming Soon)',
+        label: 'Accounting',
         type: 'group',
         children: [
             {

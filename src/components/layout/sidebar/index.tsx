@@ -5,7 +5,7 @@ import { menuItems } from './menu-items';
 import Link from 'next/link';
 import Image from 'next/image';
 import logoImg from '@public/logo/Logo Xpro Group Test.png';
-// import logoAeris from '@public/logo/Logo Aeris.png';
+import Divider from '@/components/divider'
 
 const style: React.CSSProperties = {
     position: 'sticky',
@@ -68,7 +68,10 @@ const Sidebar = ({ isMobile = false, onClose }: { isMobile?: boolean; onClose?: 
                 // Jika item adalah grup (label abu-abu)
                 return {
                     key: item.key,
-                    label: item.label,
+                    label: <span>
+                        {item.label}
+                        <Divider />
+                    </span>,
                     type: 'group',
                     children: item.children ? renderMenuItems(item.children, false) : undefined,
                 };
