@@ -68,10 +68,12 @@ const Sidebar = ({ isMobile = false, onClose }: { isMobile?: boolean; onClose?: 
                 // Jika item adalah grup (label abu-abu)
                 return {
                     key: item.key,
-                    label: <span>
-                        {item.label}
+                    label: <div className='flex flex-col'>
+                        <span>
+                            {item.label}
+                        </span>
                         <Divider />
-                    </span>,
+                    </div>,
                     type: 'group',
                     children: item.children ? renderMenuItems(item.children, false) : undefined,
                 };
@@ -148,7 +150,7 @@ const Sidebar = ({ isMobile = false, onClose }: { isMobile?: boolean; onClose?: 
             collapsedWidth="0"
             width={290}
             onBreakpoint={(broken) => {
-                console.log('ini borken', broken);
+                console.log('ini broken', broken);
             }}
             onCollapse={(collapsed, type) => {
                 console.log('ini coolapset', collapsed, type);

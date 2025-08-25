@@ -78,14 +78,14 @@ const InventoryListsHistory = ({ historyData, slug }: { historyData?: any, slug:
     ]
     const columns: TableColumnsType<any> = [
         {
-            title: 'Location',
-            dataIndex: 'location',
-            sorter: (a: any, b: any) => a?.location.localeCompare(b?.location)
-        },
-        {
             title: 'Serial Number',
             dataIndex: 'serial_number',
             sorter: (a: any, b: any) => a?.serial_number.localeCompare(b?.serial_number)
+        },
+        {
+            title: 'Location',
+            dataIndex: 'location',
+            sorter: (a: any, b: any) => a?.location.localeCompare(b?.location)
         },
         {
             title: 'PO Number',

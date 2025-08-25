@@ -338,7 +338,7 @@ const ProductInput = ({
                 <Input
                     id='name'
                     type='text'
-                    label='Title Product / Short Description Service *'
+                    label='Title Product / Short Description Service'
                     value={productForm.name}
                     onChange={handleProductChange}
                     className='mb-1'
@@ -409,6 +409,7 @@ const ProductInput = ({
                     onChange={(val) => handleChangeSelect("tax_rate", val)}
                     options={optionsTax}
                     error={taxError}
+                    required
                 />
                 <Input
                     id='tax_amount'

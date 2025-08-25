@@ -1,6 +1,7 @@
 import React from 'react';
 import { Modal } from 'antd';
 import Button from "@/components/button"
+import Image from 'next/image';
 
 type ModalProps = {
     title?: string
@@ -19,6 +20,7 @@ type ModalProps = {
     handleDelete?: () => void
     rightButton?: any
     date?: any
+    iconLeftTitle?: any
 }
 
 const index = ({
@@ -37,7 +39,8 @@ const index = ({
     isBtnReset = false,
     handleDelete,
     rightButton,
-    date
+    date,
+    iconLeftTitle
 }: ModalProps) => {
 
     return (
@@ -46,7 +49,17 @@ const index = ({
                 title={
                     <div className='flex justify-between items-center my-5  mx-5'>
                         <div className='flex flex-col'>
-                            <span className='text-2xl font-semibold'>{title}</span>
+                            {
+                                iconLeftTitle ? <div className='flex items-center gap-1'>
+                                    <Image
+                                        src={iconLeftTitle}
+                                        alt='icon-left'
+                                    />
+                                    <span className='text-2xl font-semibold'>{title}</span>
+                                </div>
+                                    :
+                                    <span className='text-2xl font-semibold'>{title}</span>
+                            }
                             {
                                 date && <span className='text-sm font-normal'>{date}</span>
                             }

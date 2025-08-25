@@ -735,9 +735,9 @@ export const orderDummyData = [
         invoice_number: '254436513',
         email: 'user@gmail.com',
         mobile_number: '628229019021203',
-        payment_method: 'Bank Transfer',
+        payment_method: 'Credit Card',
         status: 'Approved',
-        payment_status: 'Waiting for Payment',
+        payment_status: 'Paid',
         paid_amount: 200,
         total: 1000,
         created_by: {

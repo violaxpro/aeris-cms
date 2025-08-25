@@ -102,7 +102,7 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const breadcrumb = [
         { title: 'Sales' },
         {
-            title: 'Order', url: routes.eCommerce.order
+            title: 'Invoice / Order', url: routes.eCommerce.order
         },
         { title: mode == 'create' ? 'Create' : 'Edit' },
     ];
@@ -392,7 +392,7 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                 formData={formCustomer}
             />
             <div className="mt-6 mx-6 mb-0">
-                <h1 className="text-2xl font-bold mb-4">{mode == 'create' ? 'Create Order' : 'Edit Order'}</h1>
+                <h1 className="text-2xl font-bold mb-4">{mode == 'create' ? 'Create Invoice / Order' : 'Edit Invoice / Order'}</h1>
                 <Breadcrumb items={breadcrumb} />
                 <Divider />
             </div>
@@ -729,7 +729,7 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             onClick={() => router.push(routes.eCommerce.order)}
                         />
                         <Button
-                            label={mode == 'create' ? 'Create Order' : 'Edit Order'}
+                            label={mode == 'create' ? 'Create Invoice / Order' : 'Edit Invoice / Order'}
                             onClick={handleSubmit}
                         />
                     </div>

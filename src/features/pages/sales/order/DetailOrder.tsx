@@ -15,7 +15,8 @@ import {
     ApproveIcon,
     DownloadIcon,
     TrackingIcon,
-    SendIcon
+    SendIcon,
+    DownloadPdfIcon
 } from '@public/icon'
 import Button from '@/components/button'
 import Table from '@/components/table'
@@ -36,7 +37,12 @@ import Pagination from '@/components/pagination'
 import SearchTable from '@/components/search/SearchTable'
 import ShowPageSize from '@/components/pagination/ShowPageSize'
 import ModalTrackingNumber from './ModalTrackingNumber'
+import ModalSendTrackingNumber from './ModalSendTrackingNumber'
 import { useNotificationAntd } from '@/components/toast'
+import {
+    downloadPackingSlipPDF,
+    previewAndPrintPDF as previewAndPrintPackingSlip
+} from '@/services/packing-slip-service'
 
 const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
     const router = useRouter()
@@ -45,6 +51,7 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
     const [buyPriceHidden, setBuyPriceHidden] = useState(true)
     const [isOpenModalSupplier, setIsOpenModalSupplier] = useState(false)
     const [isOpenModalTracking, setIsOpenModalTracking] = useState(false)
+    const [isOpenModalSendTracking, setIsOpenModalSendTracking] = useState(false)
     const [serialNumberData, setSerialNumberData] = useState<any>({
         pickId: [],
         packId: [],
@@ -52,7 +59,7 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
         productFrom: ''
     })
     const [trackingNumberData, setTrackingNumberData] = useState<any>({
-        courier: '',
+        courier_name: '',
         tracking_number: [{ value: '' }],
     })
     const [isSendTrackingNumber, setIsSendTrackingNumber] = useState(false)
@@ -66,7 +73,7 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
     const breadcrumb = [
         { title: 'Sales' },
         {
-            title: 'Order', url: routes.eCommerce.order
+            title: 'Invoice / Order', url: routes.eCommerce.order
         },
         { title: 'Detail' },
     ];
@@ -281,7 +288,7 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
 
     const columnLogs: TableColumnsType<any> = [
         {
-            title: 'Staff',
+            title: 'User',
             dataIndex: 'staff',
             sorter: (a: any, b: any) => {
                 return a?.staff.localeCompare(b?.staff)
@@ -295,7 +302,7 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
             }
         },
         {
-            title: 'Internal Notes',
+            title: 'Activity',
             dataIndex: 'internal_notes',
             sorter: (a: any, b: any) => {
                 return a?.internal_notes.localeCompare(b?.internal_notes)
@@ -309,7 +316,7 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
             }
         },
         {
-            title: 'Update',
+            title: 'Create / Update',
             dataIndex: 'update',
             sorter: (a: any, b: any) => {
                 return a?.update.localeCompare(b?.update)
@@ -526,7 +533,6 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
     };
 
     const handleSubmitTracking = () => {
-        console.log("Tracking data dikirim:", trackingNumberData);
         setIsSendTrackingNumber(true)
         setIsOpenModalTracking(false)
         // TODO: kirim ke API di sini
@@ -540,11 +546,19 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
         await previewAndPrintPDF(data, 'order');
     }
 
+    const handlePrintPackingSlip = async (data: any) => {
+        await downloadPackingSlipPDF(data, 'order');
+    }
+
+    const handlePreviewPackingSlip = async (data: any) => {
+        await previewAndPrintPackingSlip(data, 'order');
+    }
+
     const handleSendTrackingNumber = () => {
         notifySuccess('Tracking Number has succesfully send!')
     }
 
-    // console.log(modalSerialNumber, serialNumberData)
+    console.log(trackingNumberData)
     return (
         <>
             {contextHolder}
@@ -603,11 +617,16 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
                 handleSubmit={handleSubmitTracking}
                 formData={trackingNumberData}
             />
+            <ModalSendTrackingNumber
+                isModalOpen={isOpenModalSendTracking}
+                handleCancel={() => setIsOpenModalSendTracking(false)}
+                trackingData={trackingNumberData}
+            />
             <div className="mt-6 mx-6 mb-0">
                 <div className='flex justify-between items-center'>
                     <div>
                         <h1 className='text-2xl font-bold'>
-                            Order Detail
+                            Invoice / Order Detail
                         </h1>
                         <Breadcrumb
                             items={breadcrumb}
@@ -648,7 +667,7 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
                                     height={15}
                                 />}
                                 label='Send Tracking Number'
-                                onClick={handleSendTrackingNumber}
+                                onClick={() => setIsOpenModalSendTracking(true)}
                             />
                         }
                         {
@@ -663,16 +682,6 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
                                     />}
                                     label='Tracking Number'
                                     onClick={() => setIsOpenModalTracking(true)}
-                                />
-                                <ButtonAction
-                                    icon={<Image
-                                        src={ConvertIcon}
-                                        alt='convert-icon'
-                                        width={15}
-                                        height={15}
-                                    />}
-                                    label='Convert to Invoice'
-                                // link={routes.eCommerce.editQuote}
                                 />
                             </div>
                         }
@@ -755,11 +764,25 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
                     {
                         data?.status == 'Approved' &&
                         <div className='grid gap-4'>
-                            <Card title='Tracking Number Information' gridcols='grid-cols-4'>
-                                <InfoItem label='Customer Name' value='James Smith' />
-                                <InfoItem label='Tracking Number 1' value='33AA1111111111111' />
-                                <InfoItem label='Tracking Number 2' value='33AB2222222222222' />
-                                <InfoItem label='Tracking Number 3' value='33AC3333333333333' />
+                            <Card title='Tracking Number Information' gridcols='grid-cols-3'>
+                                <InfoItem label='Tracking Number 1' value={
+                                    <div className='flex flex-col'>
+                                        <span>Australian Post</span>
+                                        <span>33AA1111111111111</span>
+                                    </div>
+                                } />
+                                <InfoItem label='Tracking Number 2' value={
+                                    <div className='flex flex-col'>
+                                        <span>DHL Express</span>
+                                        <span>33AB2222222222222</span>
+                                    </div>
+                                } />
+                                <InfoItem label='Tracking Number 3' value={
+                                    <div className='flex flex-col'>
+                                        <span>DHL Express</span>
+                                        <span>33AC3333333333333</span>
+                                    </div>
+                                } />
                             </Card>
                         </div>
                     }
@@ -810,10 +833,34 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
                             />
                         </div>
                     </div>
-                    <Divider />
                     <div className='grid gap-6'>
-                        <div>
-                            <h4 className='text-xl font-semibold'> Serial Number</h4>
+                        <div className='flex flex-col gap-2'>
+                            <div className='flex justify-between items-center'>
+                                <h4 className='text-xl font-semibold'> Serial Number</h4>
+                                <div className='flex gap-3'>
+                                    <ButtonAction
+                                        icon={<Image
+                                            src={PrintIconBlack}
+                                            alt='print-icon'
+                                            width={15}
+                                            height={15}
+                                        />}
+                                        label='Print'
+                                        onClick={() => handlePreviewPackingSlip(data)}
+                                    />
+                                    <Button
+                                        icon={<Image
+                                            src={ExportIcon}
+                                            alt='download-icon'
+                                            width={15}
+                                            height={15}
+                                        />}
+                                        label='Download PDF'
+                                        onClick={() => handlePrintPackingSlip(data)}
+                                    />
+                                </div>
+                            </div>
+
                             <Table
                                 rowkey='key'
                                 columns={columnsSerialNumber}

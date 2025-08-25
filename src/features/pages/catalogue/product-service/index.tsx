@@ -19,7 +19,7 @@ const index = ({ products }: { products?: any }) => {
             title: 'Catalogue',
         },
         {
-            title: 'Products/Services',
+            title: 'Products / Services',
         },
     ]
 
@@ -29,7 +29,7 @@ const index = ({ products }: { products?: any }) => {
                 <div className='flex justify-between items-center'>
                     <div>
                         <h1 className='text-2xl font-bold'>
-                            Product/Services
+                            Product / Services
                         </h1>
                         <Breadcrumb
                             items={breadcrumb}

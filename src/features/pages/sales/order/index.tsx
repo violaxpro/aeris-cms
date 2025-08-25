@@ -210,7 +210,7 @@ const index = ({ orderData }: { orderData?: any }) => {
             title: 'Sales',
         },
         {
-            title: 'Order',
+            title: 'Invoice / Order',
         },
     ]
     const columns: TableColumnsType<OrderType> = [
@@ -239,7 +239,7 @@ const index = ({ orderData }: { orderData?: any }) => {
             }
         },
         {
-            title: 'Contact',
+            title: 'Contact Detail',
             dataIndex: 'email',
             sorter: (a: any, b: any) => a.email.localeCompare(b.email),
             render: (_: any, row: any) => {
@@ -273,7 +273,7 @@ const index = ({ orderData }: { orderData?: any }) => {
             }
         },
         {
-            title: 'Status',
+            title: 'Order Status',
             dataIndex: 'status',
             sorter: (a: any, b: any) => {
                 const status = ['Draft', 'Approved', 'Processing', 'Awaiting Stock', 'Packed', 'Ready for Pickup', 'Shipped', 'In Transit',
@@ -298,7 +298,7 @@ const index = ({ orderData }: { orderData?: any }) => {
             }
         },
         {
-            title: 'Payment',
+            title: 'Payment Status',
             dataIndex: 'payment_method',
             sorter: (a: any, b: any) => {
                 const paymentMethod = ['Bank Transfer', 'Credit Card', 'Paypal'];
@@ -536,7 +536,7 @@ const index = ({ orderData }: { orderData?: any }) => {
                 <div className='flex justify-between items-center'>
                     <div>
                         <h1 className='text-2xl font-bold'>
-                            Order
+                            Invoice / Order
                         </h1>
                         <Breadcrumb
                             items={breadcrumb}
@@ -549,7 +549,7 @@ const index = ({ orderData }: { orderData?: any }) => {
                             width={15}
                             height={15}
                         />}
-                        label='Add Order'
+                        label='Add Invoice / Order'
                         link={routes.eCommerce.createOrder}
                     />
                 </div>

@@ -145,6 +145,8 @@ export { default as UploadBlackIcon } from './UploadBlackIcon.svg'
 export { default as BlockGreyIcon } from './BlockGreyIcon.svg'
 export { default as FluidMenuIcon } from './FluidMenuIcon.svg'
 export { default as StatusAvailableIcon } from './StatusAvailableIcon.svg'
+export { default as GmailIcon } from './GmailIcon.svg'
+export { default as SentEmailWhiteIcon } from './SentEmailWhiteIcon.svg'
 
 
 

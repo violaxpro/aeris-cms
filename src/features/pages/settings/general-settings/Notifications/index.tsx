@@ -30,6 +30,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const [orderConfirm, setOrderConfirm] = useState(false)
     const [paymentReceive, setPaymentReceive] = useState(false)
     const [orderProcessing, setOrderProcessing] = useState(false)
+    const [trackingNumber, setTrackingNumber] = useState(false)
     const [orderPacked, setOrderPacked] = useState(false)
     const [outOfDelivery, setOutOfDelivery] = useState(false)
     const [orderShipped, setOrderShipped] = useState(false)
@@ -49,6 +50,8 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         smsPayment: false,
         emailOrderProcess: false,
         smsOrderProcess: false,
+        emailTrackingNumber: false,
+        smsTrackingNumber: false,
         emailOrderPacked: false,
         smsOrderPacked: false,
         emailOutofDelivery: false,
@@ -75,6 +78,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         order_confirm: '',
         payment_receive: '',
         order_processing: '',
+        tracking_number: '',
         outof_delivery: '',
         order_packed: '',
         order_shipped: '',
@@ -90,6 +94,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         order_confirm_template: initialValues ? initialValues.order_confirm_template : '',
         payment_receive_template: initialValues ? initialValues.payment_receive_template : '',
         order_processing_template: initialValues ? initialValues.order_processing_template : '',
+        tracking_number_template: initialValues ? initialValues.tracking_number_template : '',
         outof_delivery_template: initialValues ? initialValues.outof_delivery_template : '',
         order_packed_template: initialValues ? initialValues.order_packed_template : '',
         order_shipped_template: initialValues ? initialValues.order_shipped_template : '',
@@ -141,6 +146,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         appointment_order_test: "<p>This is the appointment order test template.</p>",
         payment_receive: "<p>This is the payment order template.</p>",
         order_processing: "<p>This is the order processing template.</p>",
+        tracking_number: "<p>This is the tacking number template.</p>",
         outof_delivery: "<p>This is the outof delivery template.</p>",
         order_packed: "<p>This is the order packed template.</p>",
         order_shipped: "<p>This is the order shipped template.</p>",
@@ -299,6 +305,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
             order_confirm: 'Order Confirmation',
             payment_receive: 'Payment Receive',
             order_processing: 'Order Processing',
+            tracking_number: 'Tracking Number',
             outof_delivery: 'Out of Delivery',
             order_packed: 'Order Packed',
             order_shipped: 'Order Shipped',
@@ -367,7 +374,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                         <div className='flex flex-col gap-4'>
 
                             {/* order confirm payment */}
-                            <div className='flex flex-col col-span-full border p-8 rounded-xl' style={{ borderColor: '#E5E7EB' }}  >
+                            <div className='flex flex-col col-span-full border p-8 rounded-xl border-[#E5E7EB]' >
                                 <div className='col-span-full flex justify-between items-center'>
                                     <h4 className='text-lg font-semibold'>Order Confirmation</h4>
                                     <div className='flex gap-4'>
@@ -438,7 +445,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             </div>
 
                             {/* payment receive */}
-                            <div className='flex flex-col col-span-full border p-8 rounded-xl' style={{ borderColor: '#E5E7EB' }}  >
+                            <div className='flex flex-col col-span-full border p-8 rounded-xl border-[#E5E7EB]'  >
                                 <div className='col-span-full flex justify-between items-center'>
                                     <h4 className='text-lg font-semibold'>Payment Received</h4>
                                     <div className='flex gap-4'>
@@ -508,7 +515,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             </div>
 
                             {/* order processing */}
-                            <div className='flex flex-col col-span-full border p-8 rounded-xl' style={{ borderColor: '#E5E7EB' }}  >
+                            <div className='flex flex-col col-span-full border p-8 rounded-xl border-[#E5E7EB]'  >
                                 <div className='col-span-full flex justify-between items-center'>
                                     <h4 className='text-lg font-semibold'>Order Processing</h4>
                                     <div className='flex gap-4'>
@@ -577,8 +584,78 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 )}
                             </div>
 
+                            {/*tracking number */}
+                            <div className='flex flex-col col-span-full border p-8 rounded-xl border-[#E5E7EB]'  >
+                                <div className='col-span-full flex justify-between items-center'>
+                                    <h4 className='text-lg font-semibold'>Tracking Number</h4>
+                                    <div className='flex gap-4'>
+                                        <SwitchInput
+                                            label='Enable'
+                                            checked={trackingNumber}
+                                            onChange={(checked) => setTrackingNumber(checked)}
+                                        />
+                                    </div>
+                                </div>
+                                {trackingNumber == true && (
+                                    <>
+                                        <div className='flex flex-col gap-3 mt-4'>
+                                            <div className='flex justify-between'>
+                                                <label className='text-md font-semibold'>Via SMS</label>
+                                                <div className='flex items-center gap-3'>
+                                                    <div className='flex items-center gap-3'>
+                                                        <Button
+                                                            label='Edit'
+                                                            onClick={() => handleOpenModal('tracking_number', 'sms')}
+                                                            icon={<Image
+                                                                src={PencilIcon}
+                                                                alt='edit-icon'
+                                                                width={15}
+                                                                height={15}
+                                                            />}
+                                                            shape='round'
+                                                            hasHeight={false}
+
+                                                        />
+                                                    </div>
+                                                    <SwitchInput
+                                                        label='Enable'
+                                                        checked={notifikasi.smsTrackingNumber}
+                                                        onChange={(value) => handleChangeNotifikasi("smsTrackingNumber", value)}
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className='flex justify-between'>
+                                                <label className='text-md font-semibold'>Via Email</label>
+                                                <div className='flex items-center gap-3'>
+                                                    <div className='flex items-center gap-3'>
+                                                        <Button
+                                                            label='Edit'
+                                                            onClick={() => handleOpenModal('tracking_number', 'email')}
+                                                            icon={<Image
+                                                                src={PencilIcon}
+                                                                alt='edit-icon'
+                                                                width={15}
+                                                                height={15}
+                                                            />}
+                                                            shape='round'
+                                                            hasHeight={false}
+
+                                                        />
+                                                    </div>
+                                                    <SwitchInput
+                                                        label='Enable'
+                                                        checked={notifikasi.emailTrackingNumber}
+                                                        onChange={(value) => handleChangeNotifikasi("emailTrackingNumber", value)}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
+                            </div>
+
                             {/* order packed */}
-                            <div className='flex flex-col col-span-full border p-8 rounded-xl' style={{ borderColor: '#E5E7EB' }}  >
+                            <div className='flex flex-col col-span-full border p-8 rounded-xl border-[#E5E7EB]'>
                                 <div className='col-span-full flex justify-between items-center'>
                                     <h4 className='text-lg font-semibold'>Order Packed</h4>
                                     <div className='flex gap-4'>
@@ -649,7 +726,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
 
                             {/* outof delivery */}
-                            <div className='flex flex-col col-span-full border p-8 rounded-xl' style={{ borderColor: '#E5E7EB' }}  >
+                            <div className='flex flex-col col-span-full border p-8 rounded-xl border-[#E5E7EB]' >
                                 <div className='col-span-full flex justify-between items-center'>
                                     <h4 className='text-lg font-semibold'>Out of Delivery</h4>
                                     <div className='flex gap-4'>
@@ -720,7 +797,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             </div>
 
                             {/* order shipped */}
-                            <div className='flex flex-col col-span-full border p-8 rounded-xl' style={{ borderColor: '#E5E7EB' }}  >
+                            <div className='flex flex-col col-span-full border p-8 rounded-xl border-[#E5E7EB]' >
                                 <div className='col-span-full flex justify-between items-center'>
                                     <h4 className='text-lg font-semibold'>Order Shipped</h4>
                                     <div className='flex gap-4'>
@@ -791,7 +868,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             </div>
 
                             {/* order delivered */}
-                            <div className='flex flex-col col-span-full border p-8 rounded-xl' style={{ borderColor: '#E5E7EB' }}  >
+                            <div className='flex flex-col col-span-full border p-8 rounded-xl border-[#E5E7EB]'  >
                                 <div className='col-span-full flex justify-between items-center'>
                                     <h4 className='text-lg font-semibold'>Order Delivered</h4>
                                     <div className='flex gap-4'>
@@ -861,7 +938,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
 
                             {/* order cancelled */}
-                            <div className='flex flex-col col-span-full border p-8 rounded-xl' style={{ borderColor: '#E5E7EB' }}  >
+                            <div className='flex flex-col col-span-full border p-8 rounded-xl border-[#E5E7EB]' >
                                 <div className='col-span-full flex justify-between items-center'>
                                     <h4 className='text-lg font-semibold'>Order Cancelled</h4>
                                     <div className='flex gap-4'>
@@ -932,7 +1009,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
 
                             {/* order refund process */}
-                            <div className='flex flex-col col-span-full border p-8 rounded-xl' style={{ borderColor: '#E5E7EB' }}  >
+                            <div className='flex flex-col col-span-full border p-8 rounded-xl border-[#E5E7EB]' >
                                 <div className='col-span-full flex justify-between items-center'>
                                     <h4 className='text-lg font-semibold'>Order Refund Processed</h4>
                                     <div className='flex gap-4'>
@@ -1006,7 +1083,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                         >
                             <div className='flex flex-col gap-4'>
                                 {/* account regist */}
-                                <div className='flex flex-col col-span-full border p-8 rounded-xl' style={{ borderColor: '#E5E7EB' }}  >
+                                <div className='flex flex-col col-span-full border p-8 rounded-xl border-[#E5E7EB]'  >
                                     <div className='col-span-full flex justify-between items-center'>
                                         <h4 className='text-lg font-semibold'>Account Registration Confirmation</h4>
                                         <div className='flex gap-4'>
@@ -1076,7 +1153,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 </div>
 
                                 {/* password reset */}
-                                <div className='flex flex-col col-span-full border p-8 rounded-xl' style={{ borderColor: '#E5E7EB' }}  >
+                                <div className='flex flex-col col-span-full border p-8 rounded-xl border-[#E5E7EB]' >
                                     <div className='col-span-full flex justify-between items-center'>
                                         <h4 className='text-lg font-semibold'>Password Reset Request</h4>
                                         <div className='flex gap-4'>
@@ -1144,7 +1221,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 </div>
 
                                 {/* email verification */}
-                                <div className='flex flex-col col-span-full border p-8 rounded-xl' style={{ borderColor: '#E5E7EB' }}  >
+                                <div className='flex flex-col col-span-full border p-8 rounded-xl border-[#E5E7EB]' >
                                     <div className='col-span-full flex justify-between items-center'>
                                         <h4 className='text-lg font-semibold'>Email Verification</h4>
                                         <div className='flex gap-4'>

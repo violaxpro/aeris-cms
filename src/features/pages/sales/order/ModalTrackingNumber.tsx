@@ -99,7 +99,16 @@ const ModalTrackingNumber = ({
                                     />
                                     <div className='flex pt-4 items-center'>
                                         {
-                                            index !== 0 ?
+                                            index === formData.tracking_number.length - 1 ?
+                                                <Button
+                                                    icon={<Image
+                                                        src={PlusOutlineIcon}
+                                                        alt='plus-icon'
+                                                        width={15}
+                                                    />}
+                                                    onClick={addItem}
+                                                />
+                                                :
                                                 <ButtonIcon
                                                     color='danger'
                                                     variant='filled'
@@ -109,14 +118,6 @@ const ModalTrackingNumber = ({
                                                     height={15}
                                                     className='!h-10 !w-10'
                                                     onClick={() => removeItem(index)}
-                                                />
-                                                : <Button
-                                                    icon={<Image
-                                                        src={PlusOutlineIcon}
-                                                        alt='plus-icon'
-                                                        width={15}
-                                                    />}
-                                                    onClick={addItem}
                                                 />
                                         }
                                     </div>

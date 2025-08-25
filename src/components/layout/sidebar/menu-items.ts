@@ -28,7 +28,9 @@ import {
     BuildOutlined,
     AccountBookOutlined,
     NotificationOutlined,
-    AreaChartOutlined
+    AreaChartOutlined,
+    GlobalOutlined,
+    ToolOutlined
 } from '@ant-design/icons';
 import { DashboardIcon } from '@/components/icon';
 
@@ -55,7 +57,7 @@ export const menuItems = [
                 children: [
                     {
                         key: 'order',
-                        label: 'Order',
+                        label: 'Invoice / Order',
                         href: routes.eCommerce.order,
                     },
                     {
@@ -83,7 +85,7 @@ export const menuItems = [
                 children: [
                     {
                         key: 'products-services',
-                        label: 'Products/Services',
+                        label: 'Products / Services',
                         href: routes.eCommerce.products,
                     },
                     // {
@@ -245,68 +247,11 @@ export const menuItems = [
                 icon: TeamOutlined,
             },
             {
-                key: 'management',
-                label: 'Management',
+                key: 'website-content',
+                label: 'Website Content',
                 href: '#',
-                icon: ControlOutlined,
+                icon: GlobalOutlined,
                 children: [
-                    {
-                        key: 'stock-update',
-                        label: 'Stock Update',
-                        href: routes.eCommerce.stockUpdate,
-                    },
-                    {
-                        key: 'tools',
-                        label: 'Tools',
-                        href: routes.eCommerce.products,
-                        children: [
-                            {
-                                key: 'importer',
-                                label: 'Importer',
-                                href: routes.eCommerce.products,
-                            },
-                            {
-                                key: 'scrape',
-                                label: 'Scrape',
-                                href: routes.eCommerce.products,
-                            },
-                            {
-                                key: 'scrape-url-list',
-                                label: 'Scrape URL List',
-                                href: routes.eCommerce.products,
-                            },
-                            {
-                                key: 'scrape-trade',
-                                label: 'Scrape Trade',
-                                href: routes.eCommerce.products,
-                            },
-                            {
-                                key: 'scrape-trade-url-list',
-                                label: 'Scrape Trade URL List',
-                                href: routes.eCommerce.products,
-                            },
-                            {
-                                key: 'scrape-buy-price',
-                                label: 'Scrape Buy Price',
-                                href: routes.eCommerce.products,
-                            },
-                            {
-                                key: 'scrape-buy-price-url-list',
-                                label: 'Scrape Buy URL List',
-                                href: routes.eCommerce.products,
-                            },
-                            {
-                                key: 'google-merchant',
-                                label: 'Google Merchant',
-                                href: routes.eCommerce.products,
-                            }
-                        ]
-                    },
-                    {
-                        key: 'report-management',
-                        label: 'Report',
-                        href: routes.eCommerce.products,
-                    },
                     {
                         key: 'appearance',
                         label: 'Appearance',
@@ -375,6 +320,79 @@ export const menuItems = [
 
                     },
                 ],
+            },
+            {
+                key: 'reporting-parent',
+                label: 'Reporting',
+                href: '#',
+                icon: FileTextOutlined,
+                children: [
+                    {
+                        key: 'report-management',
+                        label: 'Report',
+                        href: routes.eCommerce.products,
+                    }
+                ]
+            },
+            {
+                key: 'tools-integration',
+                label: 'Tools & Integration',
+                href: '#',
+                icon: ToolOutlined,
+                children: [
+                    {
+                        key: 'scrape',
+                        label: 'Scrape',
+                        href: routes.eCommerce.products,
+                        children: [
+                            {
+                                key: 'importer',
+                                label: 'Importer',
+                                href: routes.eCommerce.products,
+                            },
+                            {
+                                key: 'scrape',
+                                label: 'Scrape',
+                                href: routes.eCommerce.products,
+                            },
+                            {
+                                key: 'scrape-url-list',
+                                label: 'Scrape URL List',
+                                href: routes.eCommerce.products,
+                            },
+                            {
+                                key: 'scrape-trade',
+                                label: 'Scrape Trade',
+                                href: routes.eCommerce.products,
+                            },
+                            {
+                                key: 'scrape-trade-url-list',
+                                label: 'Scrape Trade URL List',
+                                href: routes.eCommerce.products,
+                            },
+                            {
+                                key: 'scrape-buy-price',
+                                label: 'Scrape Buy Price',
+                                href: routes.eCommerce.products,
+                            },
+                            {
+                                key: 'scrape-buy-price-url-list',
+                                label: 'Scrape Buy URL List',
+                                href: routes.eCommerce.products,
+                            },
+                            {
+                                key: 'google-merchant',
+                                label: 'Google Merchant',
+                                href: routes.eCommerce.products,
+                            }
+                        ]
+                    },
+                    {
+                        key: 'stock-update',
+                        label: 'Stock Update',
+                        href: routes.eCommerce.stockUpdate,
+                    },
+                ]
             },
             {
                 key: 'users-parent',
