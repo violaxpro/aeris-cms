@@ -147,6 +147,8 @@ export { default as FluidMenuIcon } from './FluidMenuIcon.svg'
 export { default as StatusAvailableIcon } from './StatusAvailableIcon.svg'
 export { default as GmailIcon } from './GmailIcon.svg'
 export { default as SentEmailWhiteIcon } from './SentEmailWhiteIcon.svg'
+export { default as ArrowPreviewIcon } from './ArrowPreviewIcon.svg'
+export { default as CloudDownloadIcon } from './CloudDownloadIcon.svg'
 
 
 

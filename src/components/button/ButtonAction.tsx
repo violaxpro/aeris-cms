@@ -27,7 +27,7 @@ const index = ({ btnClassname, icon, label, link, type, onClick, shape, style, p
             iconPosition={position}
         >
             {icon ?? icon}
-            {label && <span>
+            {label && <span className='truncate block'>
                 {label}
             </span>
             }

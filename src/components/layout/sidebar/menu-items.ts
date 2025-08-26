@@ -270,6 +270,21 @@ export const menuItems = [
                         ]
                     },
                     {
+                        key: 'pages',
+                        label: 'Pages',
+                        href: routes.eCommerce.managementPages,
+                    },
+                    {
+                        key: 'media',
+                        label: 'Media',
+                        href: routes.eCommerce.media,
+                    },
+                    {
+                        key: 'menus',
+                        label: 'Menus',
+                        href: routes.eCommerce.menus,
+                    },
+                    {
                         key: 'blog',
                         label: 'Blog',
                         href: '#',
@@ -287,34 +302,19 @@ export const menuItems = [
                         ]
                     },
                     {
-                        key: 'pages',
-                        label: 'Pages',
-                        href: routes.eCommerce.managementPages,
-                    },
-                    {
-                        key: 'media',
-                        label: 'Media',
-                        href: routes.eCommerce.media,
-                    },
-                    {
-                        key: 'menus',
-                        label: 'Menus',
-                        href: routes.eCommerce.menus,
-                    },
-                    {
                         key: 'faq',
                         label: 'FAQ',
                         href: '#',
                         children: [
                             {
-                                key: 'faq-categories',
-                                label: 'FAQ Categories',
-                                href: routes.eCommerce.faqCategories,
-                            },
-                            {
                                 key: 'faq-child',
                                 label: 'FAQ',
                                 href: routes.eCommerce.faq,
+                            },
+                            {
+                                key: 'faq-categories',
+                                label: 'FAQ Categories',
+                                href: routes.eCommerce.faqCategories,
                             }
                         ]
 

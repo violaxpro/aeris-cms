@@ -1,22 +1,12 @@
 import React, { useState } from 'react'
 import Modal from '@/components/modal'
-import { InfoItem } from '@/components/card/InfoItem';
 import Input from "@/components/input"
 import Avatar from '@/components/avatar'
 import AvatarImage from "public/social-avatar.webp"
 import Divider from '@/components/divider'
-import SelectInput from '@/components/select';
-import Table from '@/components/table'
-import type { TableColumnsType } from 'antd'
-import Popover from '@/components/popover'
 import Link from 'next/link'
 import Image from 'next/image';
-import { routes } from '@/config/routes';
-import { EditOutlined } from '@ant-design/icons';
-import Textarea from '@/components/textarea'
-import { addressData } from '@/plugins/types/settings-type';
-import { TrashIconRed, PencilIconBlue, PlusOutlineIcon, GmailIcon, SentEmailWhiteIcon } from '@public/icon';
-import ButtonIcon from '@/components/button/ButtonIcon';
+import { GmailIcon, SentEmailWhiteIcon } from '@public/icon';
 import ButtonAction from '@/components/button/ButtonAction';
 import Button from '@/components/button'
 
@@ -24,12 +14,14 @@ type ModalSendTrackingNumberProps = {
     isModalOpen: boolean
     handleCancel: () => void
     trackingData: any
+    handleSubmit?: any
 }
 
 const ModalSendTrackingNumber = ({
     handleCancel,
     isModalOpen,
     trackingData,
+    handleSubmit
 }: ModalSendTrackingNumberProps) => {
     const [chooseTracking, setChooseTracking] = useState<any>({})
     const [openModalPreviewEmail, setOpenModalPreviewEmail] = useState(false)
@@ -75,9 +67,12 @@ const ModalSendTrackingNumber = ({
         }))
     }
 
-    console.log(chooseTracking)
     return (
         <>
+            {/* {
+                isModalOpen &&
+              
+            } */}
             <Modal
                 open={openModalPreviewEmail}
                 title='New Message'
@@ -159,7 +154,10 @@ const ModalSendTrackingNumber = ({
                     <div className='flex justify-end gap-3 items-center'>
                         <ButtonAction
                             label='Cancel'
-                            onClick={() => setOpenModalPreviewEmail(false)}
+                            onClick={() => {
+                                setOpenModalPreviewEmail(false)
+                                setChooseTracking({})
+                            }}
                         />
                         <Button
                             label='Send Now'
@@ -169,10 +167,15 @@ const ModalSendTrackingNumber = ({
                                 width={15}
                                 height={15}
                             />}
+                            onClick={() => {
+                                handleSubmit()
+                                // setChooseTracking({})
+                                setOpenModalPreviewEmail(false)
+                                // handleCancel()
+                            }}
                         />
                     </div>
                 </div>
-
             </Modal>
             <Modal
                 open={isModalOpen}

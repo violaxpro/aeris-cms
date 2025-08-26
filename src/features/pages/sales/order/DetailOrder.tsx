@@ -621,6 +621,7 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
                 isModalOpen={isOpenModalSendTracking}
                 handleCancel={() => setIsOpenModalSendTracking(false)}
                 trackingData={trackingNumberData}
+                handleSubmit={handleSendTrackingNumber}
             />
             <div className="mt-6 mx-6 mb-0">
                 <div className='flex justify-between items-center'>

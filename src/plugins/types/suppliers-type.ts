@@ -846,7 +846,7 @@ export const dummyPayments = [
         valueDate: "2025-08-20",
         method: "Bank Transfer",
         currency: "IDR",
-        amount: 25000000,
+        amount: 250,
         fxRate: 1,
         status: "Scheduled",
         remittanceSent: false,
@@ -855,8 +855,8 @@ export const dummyPayments = [
             { billId: 502, billNo: "BILL-1002", originalAmount: 10000000, paidAmount: 10000000, remaining: 0 }
         ],
         totals: {
-            paymentAmount: 25000000,
-            fees: 50000
+            paymentAmount: 250,
+            fees: 50
         },
         remittanceAdvice: {
             preview: "Preview Link PAY-001",
@@ -877,7 +877,7 @@ export const dummyPayments = [
     },
     {
         id: 2,
-        paymentNo: "PAY-002",
+        paymentNo: "PAY-007",
         supplierId: 102,
         supplierName: "CV Elektronik Jaya",
         fundingAccount: "Mandiri-987654321",
@@ -887,45 +887,7 @@ export const dummyPayments = [
         currency: "USD",
         amount: 3500,
         fxRate: 1,
-        status: "Pending",
-        remittanceSent: false,
-        appliedBills: [
-            { billId: 601, billNo: "BILL-2001", originalAmount: 5000, paidAmount: 3500, remaining: 1500 }
-        ],
-        totals: {
-            paymentAmount: 3500,
-            fees: 25
-        },
-        remittanceAdvice: {
-            preview: "Preview Link PAY-002",
-            attachment: null
-        },
-        bankReference: "TRX-002-XYZ",
-        reconciliationInfo: {
-            bankStatementId: null,
-            matched: false,
-            matchDate: null
-        },
-        notes: "Waiting CFO approval",
-        metadata: {
-            createdBy: "finance01",
-            createdAt: "2025-08-19T12:00:00",
-            updatedAt: "2025-08-20T15:45:00"
-        }
-    },
-    {
-        id: 3,
-        paymentNo: "PAY-003",
-        supplierId: 102,
-        supplierName: "CV Elektronik Jaya",
-        fundingAccount: "Mandiri-987654321",
-        paymentDate: "2025-08-21",
-        valueDate: "2025-08-21",
-        method: "Check",
-        currency: "USD",
-        amount: 3500,
-        fxRate: 1,
-        status: "Approval",
+        status: "PendingApproval",
         remittanceSent: false,
         appliedBills: [
             { billId: 601, billNo: "BILL-2001", originalAmount: 5000, paidAmount: 3500, remaining: 1500 }
@@ -1064,44 +1026,7 @@ export const dummyPayments = [
             updatedAt: "2025-08-23T11:20:00"
         }
     },
-    {
-        id: 7,
-        paymentNo: "PAY-007",
-        supplierId: 102,
-        supplierName: "CV Elektronik Jaya",
-        fundingAccount: "Mandiri-987654321",
-        paymentDate: "2025-08-21",
-        valueDate: "2025-08-21",
-        method: "Check",
-        currency: "USD",
-        amount: 3500,
-        fxRate: 1,
-        status: "PendingApproval",
-        remittanceSent: false,
-        appliedBills: [
-            { billId: 601, billNo: "BILL-2001", originalAmount: 5000, paidAmount: 3500, remaining: 1500 }
-        ],
-        totals: {
-            paymentAmount: 3500,
-            fees: 25
-        },
-        remittanceAdvice: {
-            preview: "Preview Link PAY-002",
-            attachment: null
-        },
-        bankReference: "TRX-002-XYZ",
-        reconciliationInfo: {
-            bankStatementId: null,
-            matched: false,
-            matchDate: null
-        },
-        notes: "Waiting CFO approval",
-        metadata: {
-            createdBy: "finance01",
-            createdAt: "2025-08-19T12:00:00",
-            updatedAt: "2025-08-20T15:45:00"
-        }
-    },
+
 ]
 
 
