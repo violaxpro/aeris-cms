@@ -99,6 +99,17 @@ console.log(getDayShort('Monday')); // Mon
 
 export const formatCurrency = (value: number) =>
     `$${value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+export const toCapitalize = (str: string) => {
+    if (!str) return str;
+    return str
+        .split(" ")
+        .map(
+            word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+        )
+        .join(" ");
+};
+
 // Format waktu
 export const dateFormats = [
     { label: 'YYYY-MM-DD', value: 'YYYY-MM-DD' },

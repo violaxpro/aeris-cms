@@ -770,6 +770,137 @@ export const orderDummyData = [
         shipping_fee: 400,
         gst: 10
     },
+    {
+
+        "id": 19,
+
+        "admin_created_id": 2,
+
+        "admin_modified_id": null,
+
+        "user_id": 1,
+
+        "billing_address_id": 1,
+
+        "shipping_address_id": 1,
+
+        "invoice_number": "INV-2025-0003",
+
+        "order_reference": "ORD-0001",
+
+        "purchase_order_number": "PO-2025-0001",
+
+        "date": "2025-09-01",
+
+        "due_date": "2025-09-01",
+
+        "amount": 12.00,
+
+        "tax_type": "TAX-EXCLUSIVE",
+
+        "tax_id": 1,
+
+        "tax_value": 10.00,
+
+        "tax_amount": 0.50,
+
+        "coupon_code": "SUMMER2025",
+
+        "coupon_discount_type": "PERCENT",
+
+        "coupon_discount_value": 10.00,
+
+        "coupon_discount_amount": 0.50,
+
+        "discount_type": "PERCENT",
+
+        "discount_value": 10.00,
+
+        "discount_amount": 0.50,
+
+        "shipping_method_id": 1,
+
+        "shipping_fee": 1.00,
+
+        "total_amount": 12.50,
+
+        "profit": 3.50,
+
+        "delivery_notes": "Picked 1 U-Prox Keyflo for Order #9821",
+
+        "internal_notes": "Picked 1 U-Prox Keyflo for Order #9821",
+
+        "payment_method_id": 1,
+
+        "status": "PROCESSING",
+
+        "payment_status": "UNPAID",
+
+        "items": [
+
+            {
+
+                "id": 18,
+
+                "invoice_id": 19,
+
+                "product_id": 1,
+
+                "name": "U-Prox Keyfob - White SMART9412",
+
+                "code": "0317-8471",
+
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+
+                "buy_price": 4.50,
+
+                "price": 5.50,
+
+                "qty": 1,
+
+                "tax_id": 1,
+
+                "tax_value": 10.00,
+
+                "tax_amount": 0.50,
+
+                "total_amount": 6.00
+
+            },
+
+            {
+
+                "id": null,
+
+                "invoice_id": 19,
+
+                "product_id": 2,
+
+                "name": "U-Prox Keyfob - White SMART9412",
+
+                "code": "0317-8472",
+
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+
+                "buy_price": 4.50,
+
+                "price": 5.50,
+
+                "qty": 1,
+
+                "tax_id": 1,
+
+                "tax_value": 10.00,
+
+                "tax_amount": 0.50,
+
+                "total_amount": 6.00
+
+            }
+
+        ]
+
+    }
 ]
 
 export const quoteDummyData = [

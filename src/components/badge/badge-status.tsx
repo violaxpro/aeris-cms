@@ -2,7 +2,7 @@ import React from 'react';
 import { Badge } from 'antd';
 
 export type StatusBadgeProps = {
-    status: 'Pending' | 'Draft' | 'Publish' | 'Yes' | 'No' | 1 | 0 | 'Paid' | 'Unpaid' | 'Partially Paid';
+    status: string
 };
 
 const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {

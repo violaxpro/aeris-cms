@@ -43,6 +43,7 @@ import ButtonAction from '@/components/button/ButtonAction'
 import SearchTable from '@/components/search/SearchTable'
 import ShowPageSize from '@/components/pagination/ShowPageSize'
 import ConfirmModal from '@/components/modal/ConfirmModal'
+import { toCapitalize } from '@/plugins/utils/utils'
 
 const index = ({ orderData }: { orderData?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
@@ -250,7 +251,7 @@ const index = ({ orderData }: { orderData?: any }) => {
                 }
                 return <div className="flex flex-col w-full" onClick={(e) => e.stopPropagation()}>
                     <div className="flex justify-start gap-1">
-                        <span>{row.email}</span>
+                        <span>{row.email || 'user@gmail.com'}</span>
                         <Image
                             src={CopyPasteIcon}
                             alt='copypaste-icon'
@@ -260,7 +261,7 @@ const index = ({ orderData }: { orderData?: any }) => {
                         />
                     </div>
                     <div className="flex justify-start gap-1">
-                        <span>{row.mobile_number}</span>
+                        <span>{row.mobile_number || '628229019021203'}</span>
                         <Image
                             src={CopyPasteIcon}
                             alt='copypaste-icon'
@@ -279,11 +280,10 @@ const index = ({ orderData }: { orderData?: any }) => {
                 const status = ['Draft', 'Approved', 'Processing', 'Awaiting Stock', 'Packed', 'Ready for Pickup', 'Shipped', 'In Transit',
                     'Out of Delivery'
                 ];
-                return status.indexOf(a.status) - status.indexOf(b.status
-                )
+                return status.indexOf(toCapitalize(a.status)) - status.indexOf(toCapitalize(b.status))
             },
             render: (val: any) => {
-                const status = val
+                const status = toCapitalize(val)
                 console.log(status)
                 return (
                     <StatusTag status={status} />
@@ -314,13 +314,14 @@ const index = ({ orderData }: { orderData?: any }) => {
                 // } else if (row.paid_amount >= row.total) {
                 //     payment_status = 'Paid'
                 // }
+                const payment_status = toCapitalize(row?.payment_status)
                 return (
                     <div className="flex flex-col w-full">
                         <div className="flex justify-start gap-1">
-                            <span>{row.payment_method}</span>
+                            <span>{row.payment_method || 'Credit Card'}</span>
                         </div>
                         <div className="flex justify-start gap-1">
-                            <StatusBadge status={row.payment_status} />
+                            <StatusBadge status={payment_status} />
                         </div>
                     </div>
                 )
@@ -335,7 +336,7 @@ const index = ({ orderData }: { orderData?: any }) => {
             render: (_: any, row: any) => {
                 return <div className="flex flex-col w-full">
                     <div className="flex justify-start gap-1">
-                        <span>${row.total}</span>
+                        <span>${row.total || row.total_amount}</span>
                     </div>
                 </div>
             }

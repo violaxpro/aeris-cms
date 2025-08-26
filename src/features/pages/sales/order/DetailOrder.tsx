@@ -43,6 +43,7 @@ import {
     downloadPackingSlipPDF,
     previewAndPrintPDF as previewAndPrintPackingSlip
 } from '@/services/packing-slip-service'
+import { toCapitalize } from '@/plugins/utils/utils'
 
 const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
     const router = useRouter()
@@ -751,7 +752,7 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
                             <InfoItem label='Payment Method' value='Bank Transfer' />
                             <InfoItem label='PO Number' value='PO-2025-0034' />
                             <InfoItem label='Sales Person' value='Sales A' />
-                            <InfoItem label='Order Status' value={data.status} textColor={statusMap[data?.status].textColor} />
+                            <InfoItem label='Order Status' value={toCapitalize(data.status)} textColor={statusMap[toCapitalize(data?.status)]?.textColor} />
                             <InfoItem label='Payment Status' value='Unpaid' />
                         </Card>
 
@@ -865,7 +866,7 @@ const DetailOrder = ({ slug, data }: { slug?: any, data: any }) => {
                             <Table
                                 rowkey='key'
                                 columns={columnsSerialNumber}
-                                dataSource={serialNumberDataTable.length > 0 ? serialNumberDataTable.flat() : []}
+                                dataSource={serialNumberDataTable?.length > 0 ? serialNumberDataTable?.flat() : []}
                             />
                         </div>
                         <div>

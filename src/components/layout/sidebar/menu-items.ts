@@ -341,7 +341,7 @@ export const menuItems = [
                 icon: ToolOutlined,
                 children: [
                     {
-                        key: 'scrape',
+                        key: 'scrape-parent',
                         label: 'Scrape',
                         href: routes.eCommerce.products,
                         children: [
