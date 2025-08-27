@@ -157,7 +157,7 @@ const index = ({ orderData }: { orderData?: any }) => {
         setData(prev =>
             prev.map(order => {
                 if (order.id === id) {
-                    const newPaidAmount = Number(order.paid_amount || 0) + Number(paid);
+                    const newPaidAmount = Number(order.amount || 0) + Number(paid);
                     return { ...order, paid_amount: newPaidAmount };
                 }
                 return order;
