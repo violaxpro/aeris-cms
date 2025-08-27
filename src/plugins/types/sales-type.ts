@@ -1,33 +1,86 @@
+export type ItemType = {
+    id: number;
+    invoice_id: number;
+    product_id: number;
+    name: string;
+    code: string;
+    description: string;
+    buy_price: number;
+    price: number;
+    qty: number;
+    tax_id: number;
+    tax_value: number;
+    tax_amount: number;
+    total_amount: number;
+}
+
 export type OrderType = {
     id?: string | number | undefined
-    po_number: string
-    email: string
-    mobile_number: string
-    payment_method: string
-    status: string
-    payment_status: string
-    paid_amount: number
-    total: number
-    created_by: {
-        date: string
-        name: string
-    }
-    modified: {
-        date: string
-        name: string
-    }
-    user: string
-    billing_address: string
-    shipping_address: string
-    order_reference: string
-    product: ProductOrderType[]
-    delivery_note: string
-    internal_note: string
-    subtotal: number
-    discount: number
-    shipping_fee: number
-    gst: number
+    admin_created_id: number;
+    admin_modified_id: number | null;
+    user_id: number;
+    billing_address_id: number;
+    shipping_address_id: number;
+    invoice_number: string;
+    order_reference: string;
+    purchase_order_number: string;
+    date: string; // format "YYYY-MM-DD"
+    due_date: string; // format "YYYY-MM-DD"
+    amount: number;
+    tax_type: "TAX-EXCLUSIVE" | "TAX-INCLUSIVE" | "NO-TAX" | string;
+    tax_id: number;
+    tax_value: number;
+    tax_amount: number;
+    coupon_code: string;
+    coupon_discount_type: "PERCENT" | "FIXED" | string;
+    coupon_discount_value: number;
+    coupon_discount_amount: number;
+    discount_type: "PERCENT" | "FIXED" | string;
+    discount_value: number;
+    discount_amount: number;
+    shipping_method_id: number;
+    shipping_fee: number;
+    total_amount: number;
+    profit: number;
+    delivery_notes: string;
+    internal_notes: string;
+    payment_method_id: number;
+    status: string;
+    payment_status: "UNPAID" | "PAID" | "PARTIAL" | string;
+    items: ItemType[];
 }
+
+
+// export type OrderType = {
+//     id?: string | number | undefined
+//     po_number: string
+//     email: string
+//     mobile_number: string
+//     payment_method: string
+//     status: string
+//     payment_status: string
+//     paid_amount: number
+//     total: number
+//     created_by: {
+//         date: string
+//         name: string
+//     }
+//     modified: {
+//         date: string
+//         name: string
+//     }
+//     user: string
+//     billing_address: string
+//     shipping_address: string
+//     order_reference: string
+//     product: ProductOrderType[]
+//     delivery_note: string
+//     internal_note: string
+//     subtotal: number
+//     discount: number
+//     shipping_fee: number
+//     gst: number
+// }
 
 export type QuoteType = {
     id?: string | number | undefined

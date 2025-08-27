@@ -272,7 +272,7 @@ const BasicInformationProduct = ({ dataById, onChange, formDataCreate }: ChildFo
             <FormGroup
                 title="Inventory"
                 description="Add your product inventory info here for the product."
-                childClassName='grid md:grid-cols-2 gap-4'
+                childClassName='grid md:grid-cols-3 gap-4'
             >
                 <Input
                     id='sku'
@@ -304,47 +304,14 @@ const BasicInformationProduct = ({ dataById, onChange, formDataCreate }: ChildFo
                     onChange={handleChange}
                     value={formDataCreate.tab_basic_information.mpn}
                 />
-                <Select
-                    id="inventoryManagement"
-                    label="Inventory Management"
-                    placeholder="Select Inventory Management"
-                    value={formDataCreate.tab_basic_information.inventory_management}
-                    onChange={(val) => handleChangeSelect("inventory_management", val)}
-                    options={optionsInventoryManagement}
-                />
-                {
-                    formDataCreate.tab_basic_information.inventory_management == '2' &&
-                    <Input
-                        id='qty'
-                        label='Qty'
-                        type='number'
-                        placeholder='qty'
-                        // onChange={handleChange}
-                        // value={formData.qty}
-                        onChange={handleChange}
-                        value={formDataCreate.tab_basic_information.qty}
-                    />
-                }
             </FormGroup>
 
             <FormGroup
-                title="Stock Availability"
-                description="Add your stock info here"
+                title="Product Status"
+                description="Product status info here"
                 childClassName='grid md:grid-cols-12 gap-4'
                 className='md:my-12'
             >
-                <div className='col-span-8'>
-                    <Select
-                        id="stock"
-                        label="Stock Availability"
-                        placeholder="Select Stock Availability"
-                        // value={formData.stock}
-                        value={formDataCreate.tab_basic_information.stock}
-                        onChange={(val) => handleChangeSelect("stock", val)}
-                        options={options}
-                    />
-                </div>
-
                 <div className='flex col-span-4 w-full gap-2 items-center justify-start'>
                     <CheckboxInput
                         text="Best Seller"

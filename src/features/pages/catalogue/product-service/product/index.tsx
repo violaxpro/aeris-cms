@@ -241,7 +241,7 @@ const index = ({ products }: { products?: any }) => {
     }, [data, search]);
 
 
-    console.log(deletedData, openModalDelete, products, data)
+    console.log('ini data products', products, data, filteredData)
 
     return (
         <>

@@ -35,25 +35,37 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const [showAddProduct, setShowAddProduct] = useState(false)
     const [productList, setProductList] = useState<any[]>([]);
     const [productForm, setProductForm] = useState([{
-        sku: '',
+        // sku: '',
+        // name: '',
+        // price: 0,
+        // buying_price: 0,
+        // trade: 0,
+        // silver: 0,
+        // gold: 0,
+        // platinum: 0,
+        // diamond: 0,
+        // qty: 0,
+        // tax_rate: '',
+        // tax_amount: 0,
+        // total: 0,
+        invoice_id: '',
+        product_id: '',
         name: '',
+        code: '',
+        description: '',
+        buy_price: 0,
         price: 0,
-        buying_price: 0,
-        trade: 0,
-        silver: 0,
-        gold: 0,
-        platinum: 0,
-        diamond: 0,
         qty: 0,
-        tax_rate: '',
+        tax_id: '',
+        tax_value: 0,
         tax_amount: 0,
-        total: 0,
+        total_amount: 0,
     }]);
     const [editIndex, setEditIndex] = useState<number | null>(null)
     const [selectedDiscountType, setSelectedDiscountType] = useState('percent')
     const [formData, setFormData] = useState({
         customer_name: initialValues ? initialValues.customer_name : '',
-        user: initialValues ? initialValues.user : '',
+        user_id: initialValues ? initialValues.user_id : '',
         payment_method: initialValues ? initialValues.payment_method : '',
         po_number: initialValues ? initialValues.po_number : '',
         expiry_date: initialValues ? initialValues.expiry_date : '',
@@ -75,7 +87,7 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         shipping_method: initialValues ? initialValues.shipping_method : '',
         delivery_note: initialValues ? initialValues.delivery_note : '',
         internal_note: initialValues ? initialValues.internal_note : '',
-
+        items: initialValues ? initialValues.items : productForm,
     });
     const [profitHidden, setProfitHidden] = useState(true)
     const [optionsTaxRate] = useAtom(taxSetAtom)
@@ -210,7 +222,7 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const handleSubmit = async () => {
         try {
             const submitData = {
-                user: formData.user,
+                user_id: formData.user_id,
                 po_number: formData.po_number,
                 billing_address: formData.billing_address,
                 shipping_address: formData.shipping_address,
@@ -242,36 +254,61 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     }
 
     const addItem = () => {
-        setProductForm([
-            ...productForm,
-            {
-                sku: '',
-                name: '',
-                price: 0,
-                buying_price: 0,
-                trade: 0,
-                silver: 0,
-                gold: 0,
-                platinum: 0,
-                diamond: 0,
-                qty: 0,
-                tax_rate: '',
-                tax_amount: 0,
-                total: 0,
-            }
-        ])
-    }
+        const newItem: ProductForm = {
+            // code: '',
+            // name: '',
+            // price: 0,
+            // buying_price: 0,
+            // trade: 0,
+            // silver: 0,
+            // gold: 0,
+            // platinum: 0,
+            // diamond: 0,
+            // qty: 0,
+            // tax_rate: '',
+            // tax_amount: 0,
+            // total: 0,
+            invoice_id: '',
+            product_id: '',
+            name: '',
+            code: '',
+            description: '',
+            buy_price: 0,
+            price: 0,
+            qty: 0,
+            tax_id: '',
+            tax_value: 0,
+            tax_amount: 0,
+            total_amount: 0,
+        };
+
+        setFormData((prev: any) => ({
+            ...prev,
+            items: [...prev.items, newItem]
+        }));
+    };
+
 
     const handleRemoveRow = (index: number) => {
-        const updated = [...productForm];
-        updated.splice(index, 1);
-        setProductForm(updated);
+        setFormData((prev) => {
+            const updatedItems = [...prev.items];
+            updatedItems.splice(index, 1)
+            return {
+                ...prev,
+                items: updatedItems,
+            };
+        });
     };
 
     const handleUpdateRow = (index: number, updatedForm: ProductForm) => {
-        const updated = [...productForm];
-        updated[index] = updatedForm;
-        setProductForm(updated);
+        setFormData((prev) => {
+            const updatedItems = [...prev.items];
+            updatedItems[index] = updatedForm;
+            return {
+                ...prev,
+                items: updatedItems,
+            };
+        });
     };
 
     const handleChangeAddress = (e: any) => {
@@ -307,7 +344,7 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         //     return acc + Number(item?.total || 0), 0
         // });
         const newSubtotal = productForm?.length > 0
-            ? productForm.reduce((acc, item) => acc + Number(item?.total || 0), 0)
+            ? productForm.reduce((acc, item) => acc + Number(item?.total_amount || 0), 0)
             : 0;
 
         const discount_value = Number(formData.discount_value || 0)
@@ -324,6 +361,7 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         }));
     }, [productForm, formData.discount_type, formData.discount_value, formData.shipping_fee, formData.tax_rate]);
 
+    console.log(formData)
     return (
         <>
             {contextHolder}
@@ -355,11 +393,11 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                         <div className='grid gap-3'>
                             <div className='grid md:grid-cols-[3fr_repeat(3,1fr)] gap-4 mt-2'>
                                 <SelectInput
-                                    id='customer_name'
+                                    id='user_id'
                                     label='Customer Name'
                                     placeholder='Select Customer Name'
-                                    onChange={(selected) => handleChangeSelect('customer_name', selected)}
-                                    value={formData.customer_name}
+                                    onChange={(selected) => handleChangeSelect('user_id', selected)}
+                                    value={formData.user_id}
                                     options={[
                                         { label: 'Customer Beli', value: 'Customer Beli' }
                                     ]}
@@ -618,7 +656,7 @@ const FormQuote: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     subtotal={Number(formData.subtotal)}
                                     shippingFee={Number(formData.shipping_fee)}
                                     discount={formData.discount_total}
-                                    gstRate={formData.tax_rate}
+                                    taxAmount={formData.tax_rate}
                                 />
                             </div>
 

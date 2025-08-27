@@ -183,7 +183,7 @@ export const menuItems = [
                     {
                         key: 'outbound',
                         label: 'Outbound',
-                        href: '#'
+                        href: routes.eCommerce.outbound
                     },
                     {
                         key: 'inventory-management',

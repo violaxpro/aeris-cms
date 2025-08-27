@@ -630,6 +630,7 @@ const DetailPayment = ({ slug, data }: { slug?: any, data: any }) => {
                                             />}
                                             position='end'
                                             btnClassname='w-full'
+                                            labelClassname='truncate block'
                                         />
                                     </div>
                                 } />

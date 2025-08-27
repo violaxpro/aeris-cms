@@ -2,7 +2,7 @@ type Mode = 'create' | 'edit' | 'detail'
 export type FormProps = {
     mode: Mode;
     initialValues?: any;
-    slug?: string | number
+    slug?: any
     dataTable?: any;
 }
 

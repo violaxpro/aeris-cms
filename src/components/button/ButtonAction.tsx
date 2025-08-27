@@ -14,8 +14,9 @@ type buttonProps = {
     shape?: any
     style?: any
     position?: 'start' | 'end'
+    labelClassname?: string
 }
-const index = ({ btnClassname, icon, label, link, type, onClick, shape, style, position = 'start' }: buttonProps) => {
+const index = ({ btnClassname, icon, label, link, type, onClick, shape, style, position = 'start', labelClassname }: buttonProps) => {
     // hover:!bg-inherit hover:!text-inherit hover:!border-inherit
     const button = (
         <Button
@@ -27,7 +28,7 @@ const index = ({ btnClassname, icon, label, link, type, onClick, shape, style, p
             iconPosition={position}
         >
             {icon ?? icon}
-            {label && <span className='truncate block'>
+            {label && <span className={labelClassname}>
                 {label}
             </span>
             }

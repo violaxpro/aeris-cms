@@ -66,20 +66,44 @@ const index = ({ warehouseBranchList }: { warehouseBranchList?: any }) => {
     ]
     const columns: TableColumnsType<WarehouseBranchListType> = [
         {
-            title: 'Warehouse Name',
-            dataIndex: 'name',
+            title: 'Order Number',
+            dataIndex: 'invoie_number',
         },
         {
-            title: 'Address',
-            dataIndex: 'address',
+            title: 'Customer',
+            dataIndex: 'customer',
         },
         {
-            title: 'Phone Number',
-            dataIndex: 'phone_number',
+            title: 'Warehouse',
+            dataIndex: 'warehouse',
         },
         {
-            title: 'Email',
-            dataIndex: 'email',
+            title: 'Status',
+            dataIndex: 'status',
+        },
+        {
+            title: 'SKU / QTY',
+            dataIndex: 'status',
+        },
+        {
+            title: 'Carrier / Service',
+            dataIndex: 'status',
+        },
+        {
+            title: 'Tracking Number',
+            dataIndex: 'status',
+        },
+        {
+            title: 'Requested Ship / Shipped Date',
+            dataIndex: 'status',
+        },
+        {
+            title: 'Age (days)',
+            dataIndex: 'status',
+        },
+        {
+            title: 'Total Value (Currency)',
+            dataIndex: 'status',
         },
         {
             title: 'Actions',
@@ -129,12 +153,27 @@ const index = ({ warehouseBranchList }: { warehouseBranchList?: any }) => {
                 text='Are you sure you want to delete this warehouse branch list?'
             />
             <div className="mt-6 mx-6 mb-0">
-                <h1 className='text-2xl font-bold'>
-                    Outbound (Order Fullfilment)
-                </h1>
-                <Breadcrumb
-                    items={breadcrumb}
-                />
+                <div className='flex justify-between items-center'>
+                    <div>
+                        <h1 className='text-2xl font-bold'>
+                            Outbound (Order Fullfilment)
+                        </h1>
+                        <Breadcrumb
+                            items={breadcrumb}
+                        />
+                    </div>
+                    <Button
+                        icon={<Image
+                            src={AddIcon}
+                            alt='add-icon'
+                            width={15}
+                            height={15}
+                        />}
+                        label='Add Outbound'
+                        link={routes.eCommerce.createOutbound}
+                    />
+                </div>
+
             </div>
             <Content className="mb-0">
                 <div className='p-6 min-h-[360px'>

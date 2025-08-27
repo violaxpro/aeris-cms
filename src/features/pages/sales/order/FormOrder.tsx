@@ -25,6 +25,7 @@ import DatePickerInput from '@/components/date-picker';
 import dayjs from 'dayjs'
 import ModalAddress from './ModalAddress';
 import ModalCustomer from './ModalCustomer';
+import { addOrder, updateOrder } from '@/services/order-service';
 
 const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const router = useRouter()
@@ -32,44 +33,62 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const [showAddProduct, setShowAddProduct] = useState(false)
     const [productList, setProductList] = useState<any[]>([]);
     const [productForm, setProductForm] = useState([{
-        sku: '',
+        // sku: '',
+        // name: '',
+        // price: 0,
+        // buying_price: 0,
+        // trade: 0,
+        // silver: 0,
+        // gold: 0,
+        // platinum: 0,
+        // diamond: 0,
+        // qty: 0,
+        // tax_rate: '',
+        // tax_amount: 0,
+        // total: 0,
+        invoice_id: '',
+        product_id: '',
         name: '',
+        code: '',
+        description: '',
+        buy_price: 0,
         price: 0,
-        buying_price: 0,
-        trade: 0,
-        silver: 0,
-        gold: 0,
-        platinum: 0,
-        diamond: 0,
         qty: 0,
-        tax_rate: '',
+        tax_id: '',
+        tax_value: 0,
         tax_amount: 0,
-        total: 0,
+        total_amount: 0,
     }]);
     const [editIndex, setEditIndex] = useState<number | null>(null)
     const [formData, setFormData] = useState({
         customer_name: initialValues ? initialValues.customer_name : '',
-        user: initialValues ? initialValues.user : '',
-        payment_method: initialValues ? initialValues.payment_method : '',
-        po_number: initialValues ? initialValues.po_number : '',
-        issues_date: initialValues ? initialValues.issues_date : dayjs().format('DD-MM-YYYY'),
+        user_id: initialValues ? initialValues.user_id : '',
+        po_number: initialValues ? initialValues.purchase_order_number : 'PO-2025-0002',
+        issues_date: initialValues ? initialValues.date : dayjs(),
         due_date: initialValues ? initialValues.due_date : '',
         billing_address: initialValues ? initialValues.billing_address : '',
         shipping_address: initialValues ? initialValues.shipping_address : '',
         order_reference: initialValues ? initialValues.order_reference : '',
-        subtotal: initialValues ? initialValues.subtotal : '',
-        product: initialValues ? initialValues.product : [],
-        discount: initialValues ? initialValues.discount : '',
-        shipping_fee: initialValues ? initialValues.shipping_fee : '',
-        tax: initialValues ? initialValues.tax : '',
-        tax_rate: initialValues ? initialValues.tax_rate : '',
-        gst: initialValues ? initialValues.gst : '',
-        total: initialValues ? initialValues.total : '',
-        coupon_apply: initialValues ? initialValues.coupon_apply : '',
-        discount_type: initialValues ? initialValues.discount_type : '',
-        shipping_method: initialValues ? initialValues.shipping_method : '',
-        delivery_note: initialValues ? initialValues.delivery_note : '',
-        internal_note: initialValues ? initialValues.internal_note : '',
+        items: initialValues ? initialValues.items : productForm,
+        tax_type: initialValues ? initialValues.tax_type : '',
+        tax_rate: initialValues ? initialValues.tax_rate : 10,
+        coupon_code: initialValues ? initialValues.coupon_code : '',
+        coupon_discount_type: initialValues ? initialValues.coupon_discount_type : 'PERCENT',
+        coupon_discount_value: initialValues ? initialValues.coupon_discount_value : 10,
+        coupon_discount_amount: initialValues ? initialValues.coupon_discount_amount : 0.50,
+        discount_type: initialValues ? initialValues.discount_type : 'PERCENT',
+        discount_value: initialValues ? initialValues.discount_value : '',
+        discount_amount: initialValues ? initialValues.discount_amount : 0,
+        shipping_method: initialValues ? initialValues.shipping_method_id : '',
+        profit: initialValues ? initialValues.profit : 0,
+        delivery_notes: initialValues ? initialValues.delivery_notes : '',
+        internal_notes: initialValues ? initialValues.internal_notes : '',
+        payment_method: initialValues ? initialValues.payment_method : 1,
+        payment_status: initialValues ? initialValues.payment_status : '',
+        shipping_fee: initialValues ? initialValues.shipping_fee : 0,
+        tax_amount: initialValues ? initialValues.tax_amount : 0,
+        amount: initialValues ? initialValues.amount : 0,
+        total_amount: initialValues ? initialValues.total_amount : '',
 
     });
     const [formErrors, setFormErrors] = useState({
@@ -82,7 +101,6 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         gst: '',
         total: '',
     });
-    const [selectedDiscountType, setSelectedDiscountType] = useState('percent')
     const [profitHidden, setProfitHidden] = useState(true)
     const [openModal, setOpenModal] = useState(false)
     const [modalType, setModalType] = useState<'billing' | 'shipping' | null>(null);
@@ -97,6 +115,7 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const [formCustomer, setFormCustomer] = useState({
         name: '',
     })
+    const invoice_number = 'INV-2025-0004'
     const [openModalCustomer, setOpenModalCustomer] = useState(false)
 
     const breadcrumb = [
@@ -108,9 +127,9 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     ];
 
     const optionsTax = [
-        { label: 'Tax Exclusive', value: 'tax-exclusive' },
-        { label: 'Tax Inclusive', value: 'tax-inclusive' },
-        { label: 'No Tax', value: 'no-tax' }
+        { label: 'Tax Exclusive', value: 'TAX-EXCLUSIVE' },
+        { label: 'Tax Inclusive', value: 'TAX-INCLUSIVE' },
+        { label: 'No Tax', value: 'NO-TAX' }
     ]
 
     const columns: TableColumnsType<ProductForm> = [
@@ -200,10 +219,16 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     };
 
     const handleChangeSelect = (id: string, value: string | string[]) => {
-        setFormData((prev) => ({
-            ...prev,
-            [id]: value,
-        }));
+        let updatedForm = {
+            ...formData,
+            [id]: value
+        }
+
+        // if (updatedForm.tax_type == 'TAX-EXCLUSIVE') {
+        //     updatedForm.tax_amount = 
+        // }
+        console.log(updatedForm.tax_type)
+        setFormData(updatedForm);
     };
 
     const handleSubmit = async () => {
@@ -218,62 +243,85 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
             total: '',
         };
 
-        if (!formData.user.trim()) newErrors.user = 'User is required';
-        if (!formData.billing_address.trim()) newErrors.billing_address = 'Billing Address is required';
-        if (!formData.shipping_address.trim()) newErrors.shipping_address = 'Shipping Address is required';
+        // if (!formData.user_id.trim()) newErrors.user = 'User is required';
+        // if (!formData.billing_address.trim()) newErrors.billing_address = 'Billing Address is required';
+        // if (!formData.shipping_address.trim()) newErrors.shipping_address = 'Shipping Address is required';
 
-        if (!formData.subtotal || Number(formData.subtotal) <= 0) newErrors.subtotal = 'Subtotal must be greater than 0';
-        if (productList.length === 0) newErrors.product = 'At least one product is required';
-        if (!formData.shipping_fee || Number(formData.shipping_fee) <= 0) newErrors.shipping_fee = 'Shipping Fee is required';
-        if (!formData.gst || Number(formData.gst) <= 0) newErrors.gst = 'GST/Tax is required';
-        if (!formData.total || Number(formData.total) <= 0) newErrors.total = 'Total must be greater than 0';
+        // if (!formData.amount || Number(formData.amount) <= 0) newErrors.subtotal = 'Subtotal must be greater than 0';
+        // if (productList.length === 0) newErrors.product = 'At least one product is required';
+        // if (!formData.shipping_fee || Number(formData.shipping_fee) <= 0) newErrors.shipping_fee = 'Shipping Fee is required';
+        // if (!formData.tax_amount || Number(formData.tax_amount) <= 0) newErrors.gst = 'GST/Tax is required';
+        // if (!formData.total_amount || Number(formData.total_amount) <= 0) newErrors.total = 'Total must be greater than 0';
 
-        const hasErrors = Object.values(newErrors).some((v) => v !== '');
+        // const hasErrors = Object.values(newErrors).some((v) => v !== '');
 
-        if (hasErrors) {
-            setFormErrors(newErrors);
-            return;
-        } else {
-            setFormErrors({
-                user: '',
-                billing_address: '',
-                shipping_address: '',
-                subtotal: '',
-                product: '',
-                shipping_fee: '',
-                gst: '',
-                total: '',
-            });
-        }
+        // if (hasErrors) {
+        //     setFormErrors(newErrors);
+        //     return;
+        // } else {
+        //     setFormErrors({
+        //         user: '',
+        //         billing_address: '',
+        //         shipping_address: '',
+        //         subtotal: '',
+        //         product: '',
+        //         shipping_fee: '',
+        //         gst: '',
+        //         total: '',
+        //     });
+        // }
         try {
             const submitData = {
-                user: formData.user,
-                po_number: formData.po_number,
-                billing_address: formData.billing_address,
-                shipping_address: formData.shipping_address,
+                admin_created_id: 1,
+                admin_modified_id: null,
+                user_id: formData.user_id,
+                billing_address_id: formData.user_id,
+                shipping_address_id: formData.user_id,
+                invoice_number: invoice_number,
                 order_reference: formData.order_reference,
-                product: productList,
-                delivery_note: formData.delivery_note,
-                internal_note: formData.internal_note,
-                subtotal: Number(formData.subtotal),
-                discount: Number(formData.discount),
-                shipping_fee: Number(formData.shipping_fee),
-                gst: Number(formData.gst),
-                total: Number(formData.total)
+                purchase_order_number: formData.po_number,
+                date: dayjs(formData.issues_date).format('YYYY-MM-DD'),
+                due_date: dayjs(formData.due_date).format('YYYY-MM-DD'),
+                amount: formData.amount,
+                tax_type: formData.tax_type,
+                tax_id: 1,
+                tax_value: formData.tax_rate,
+                tax_amount: formData.tax_amount,
+                coupon_code: formData.coupon_code,
+                coupon_discount_type: formData.coupon_discount_type,
+                coupon_discount_value: formData.coupon_discount_value,
+                coupon_discount_amount: formData.coupon_discount_amount,
+                discount_type: formData.discount_type,
+                discount_value: formData.discount_value,
+                discount_amount: formData.discount_amount,
+                shipping_method_id: formData.shipping_method,
+                shipping_fee: formData.shipping_fee,
+                total_amount: formData.total_amount,
+                profit: formData.profit,
+                delivery_notes: formData.delivery_notes,
+                internal_notes: formData.internal_notes,
+                payment_method_id: formData.payment_method,
+                status: 'DRAFT',
+                payment_status: 'Not Yet Issued',
+                items: formData.items,
+
             }
 
             console.log(submitData)
-            localStorage.setItem('products', JSON.stringify(submitData))
-            router.push(routes.eCommerce.order)
-            // let response;
-            // response = await updatePriceLevel(slug, submitData)
+            let response;
+            if (mode == 'edit') {
+                response = await updateOrder(slug, submitData)
 
-            // if (response.success == true) {
-            //     notifySuccess(response.message)
-            //     setTimeout(() => {
-            //         router.push(routes.eCommerce.priceLevel)
-            //     }, 2000);
-            // }
+            } else {
+                response = await addOrder(submitData)
+            }
+
+            if (response.success == true) {
+                notifySuccess(response.message)
+                setTimeout(() => {
+                    router.push(routes.eCommerce.order)
+                }, 2000);
+            }
         } catch (error) {
             console.error(error)
         }
@@ -281,42 +329,67 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     }
 
     const addItem = () => {
-        setProductForm([
-            ...productForm,
-            {
-                sku: '',
-                name: '',
-                price: 0,
-                buying_price: 0,
-                trade: 0,
-                silver: 0,
-                gold: 0,
-                platinum: 0,
-                diamond: 0,
-                qty: 0,
-                tax_rate: '',
-                tax_amount: 0,
-                total: 0,
-            }
-        ])
-    }
+        const newItem: ProductForm = {
+            // code: '',
+            // name: '',
+            // price: 0,
+            // buying_price: 0,
+            // trade: 0,
+            // silver: 0,
+            // gold: 0,
+            // platinum: 0,
+            // diamond: 0,
+            // qty: 0,
+            // tax_rate: '',
+            // tax_amount: 0,
+            // total: 0,
+            invoice_id: '',
+            product_id: '',
+            name: '',
+            code: '',
+            description: '',
+            buy_price: 0,
+            price: 0,
+            qty: 0,
+            tax_id: '',
+            tax_value: 0,
+            tax_amount: 0,
+            total_amount: 0,
+        };
+
+        setFormData((prev: any) => ({
+            ...prev,
+            items: [...prev.items, newItem]
+        }));
+    };
+
 
     const handleRemoveRow = (index: number) => {
-        const updated = [...productForm];
-        updated.splice(index, 1);
-        setProductForm(updated);
+        setFormData((prev) => {
+            const updatedItems = [...prev.items];
+            updatedItems.splice(index, 1)
+            return {
+                ...prev,
+                items: updatedItems,
+            };
+        });
     };
 
     const handleUpdateRow = (index: number, updatedForm: ProductForm) => {
-        const updated = [...productForm];
-        updated[index] = updatedForm;
-        setProductForm(updated);
+        setFormData((prev) => {
+            const updatedItems = [...prev.items];
+            updatedItems[index] = updatedForm;
+            return {
+                ...prev,
+                items: updatedItems,
+            };
+        });
     };
 
     const handleDateChange = (field: string, value: any, dateString: string) => {
         setFormData(prev => ({
             ...prev,
-            [field]: dateString,
+            [field]: value ? dayjs(value).format("YYYY-MM-DD") : null,
         }));
     };
 
@@ -346,20 +419,36 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     console.log(formData, productForm)
 
     useEffect(() => {
-        const newSubtotal = productList.reduce((acc, item) => acc + Number(item.total || 0), 0);
-        const discount = Number(formData.discount || 0)
+        const newSubtotal = formData?.items?.length > 0
+            ? formData?.items.reduce((acc: any, item: any) => acc + Number(item?.total_amount || 0), 0)
+            : 0;
+        const totalTaxAmount = formData?.items?.length > 0
+            ? formData?.items.reduce((acc: any, item: any) => acc + Number(item?.tax_amount || 0), 0)
+            : 0;
+
+        const discount_value = Number(formData.discount_value || 0)
         const shipping_fee = Number(formData.shipping_fee || 0)
-        const tax = Number(formData.gst || 0)
-        const total = newSubtotal - discount + shipping_fee + tax
+        const tax = Number(formData.tax_amount || 0)
+        const calculateDiscount = formData.discount_type == 'PERCENT' ? (discount_value / 100 * newSubtotal) : discount_value
+        const total = Number(newSubtotal) - calculateDiscount + shipping_fee + tax
         setFormData(prev => ({
             ...prev,
-            subtotal: newSubtotal.toString(),
-            total: total.toString()
+            amount: newSubtotal,
+            discount_amount: calculateDiscount,
+            tax_amount: totalTaxAmount,
+            total_amount: total
         }));
-    }, [productList, formData.discount, formData.shipping_fee, formData.gst]);
+    }, [formData.items,
+    formData.tax_type,
+    formData.discount_type,
+    formData.discount_value,
+    formData.shipping_fee,
+    formData.tax_rate
+    ]);
 
     const dataCustomer = [
         {
+            id: 1,
             name: 'Ola',
             billing_address: 'Jl.Rambutan',
             shipping_address: 'Jl. Cempaka'
@@ -368,7 +457,7 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
     const optionsCustomer = dataCustomer.map((customer) => ({
         label: customer.name,
-        value: customer.name,
+        value: customer.id,
         billing_address: customer.billing_address,
         shipping_address: customer.shipping_address
     }));
@@ -398,32 +487,32 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
             </div>
 
             <Content className="mb-0">
-                <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
+                <div className='min-h-[360px] p-6'>
                     <div className='flex flex-col gap-3'>
                         <h1 className='text-xl font-semibold'>Customer Details</h1>
                         <Divider />
                         <div className='grid gap-3'>
                             <div className={`grid md:grid-cols-[2fr_1fr_repeat(3,1fr)] gap-4 mt-2`}>
                                 <SelectInput
-                                    id='customer_name'
+                                    id='user_id'
                                     label='Customer Name'
                                     placeholder='Select Customer Name'
                                     onChange={(selected) => {
-                                        handleChangeSelect('customer_name', selected);
+                                        handleChangeSelect('user_id', selected);
 
                                         // cari data lengkap customer yang dipilih
-                                        const selectedCustomer = optionsCustomer.find((item) => item.value === selected);
+                                        const selectedCustomer = optionsCustomer.find((item: any) => item.value === selected);
 
                                         if (selectedCustomer) {
                                             setFormData((prev) => ({
                                                 ...prev,
-                                                customer_name: selectedCustomer.value,
+                                                user_id: selectedCustomer.value,
                                                 billing_address: selectedCustomer.billing_address,
                                                 shipping_address: selectedCustomer.shipping_address
                                             }));
                                         }
                                     }}
-                                    value={formData.customer_name}
+                                    value={formData.user_id}
                                     options={optionsCustomer}
                                     popupRender={(options: any) => (
                                         <>
@@ -482,21 +571,21 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 <DatePickerInput
                                     id='issues_date'
                                     label='Issues Date'
-                                    value={formData.issues_date ? dayjs(formData.issues_date, 'DD-MM-YYYY') : null}
+                                    value={formData.issues_date ? dayjs(formData.issues_date) : null}
                                     onChange={(value: any, dateString: any) => handleDateChange('issues_date', value, dateString)}
                                 />
                                 <DatePickerInput
                                     id='due_date'
                                     label='Due Date'
-                                    value={formData.due_date ? dayjs(formData.due_date, 'DD-MM-YYYY') : null}
+                                    value={formData.due_date ? dayjs(formData.due_date) : null}
                                     onChange={(value: any, dateString: any) => handleDateChange('due_date', value, dateString)}
                                 />
                                 <SelectInput
-                                    id='tax'
+                                    id='tax_type'
                                     label='Tax'
                                     placeholder='Select Tax'
-                                    onChange={(selected) => handleChangeSelect('tax', selected)}
-                                    value={formData.tax}
+                                    onChange={(selected) => handleChangeSelect('tax_type', selected)}
+                                    value={formData.tax_type}
                                     options={optionsTax}
                                     required
                                 />
@@ -583,7 +672,7 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             <h1 className='text-xl font-semibold'>Product List</h1>
                             <Divider />
                             {
-                                productForm.map((item, index) => {
+                                formData.items.map((item: any, index: number) => {
                                     return (
                                         <ProductInput
                                             key={index}
@@ -591,7 +680,8 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                             productForm={item}
                                             onChange={(updateItem) => handleUpdateRow(index, updateItem)}
                                             onRemove={() => handleRemoveRow(index)}
-                                            length={productForm.length}
+                                            length={formData.items.length}
+                                            taxType={formData.tax_type}
                                         />
 
                                     )
@@ -624,11 +714,11 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
                         <div className='grid md:grid-cols-[3fr_3fr_6fr] gap-3'>
                             <Input
-                                id='coupon_apply'
+                                id='coupon_code'
                                 label='Coupon Apply'
-                                type='number'
+                                type='text'
                                 onChange={handleChange}
-                                value={formData.coupon_apply}
+                                value={formData.coupon_code}
                                 suffix={
                                     <Button
                                         label='Apply'
@@ -639,16 +729,16 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
                             />
                             <Input
-                                id='discount_type'
+                                id='discount_value'
                                 label='Discount Type'
                                 type='number'
                                 onChange={handleChange}
-                                value={formData.discount_type}
+                                value={formData.discount_value}
                                 suffix={
-                                    selectedDiscountType == 'percent' && <PercentageOutlined />
+                                    formData.discount_type == 'PERCENT' && <PercentageOutlined />
                                 }
                                 prefix={
-                                    selectedDiscountType == 'fixed' &&
+                                    formData.discount_type == 'FIXED' &&
                                     <Image
                                         src={DollarIcon}
                                         alt='dollar-icon'
@@ -660,11 +750,16 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     <div className='mb-2'>
                                         <Segmented
                                             size='small'
-                                            value={selectedDiscountType}
-                                            onChange={(selected: any) => setSelectedDiscountType(selected)}
+                                            value={formData.discount_type}
+                                            onChange={(selected: any) => {
+                                                setFormData((prev: any) => ({
+                                                    ...prev,
+                                                    discount_type: selected
+                                                }))
+                                            }}
                                             options={[
-                                                { label: 'Percent', value: 'percent' },
-                                                { label: 'Fixed', value: 'fixed' }
+                                                { label: 'Percent', value: 'PERCENT' },
+                                                { label: 'Fixed', value: 'FIXED' }
                                             ]}
                                         />
                                     </div>
@@ -678,10 +773,10 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 onChange={(selected) => handleChangeSelect('shipping_method', selected)}
                                 value={formData.shipping_method}
                                 options={[
-                                    { label: 'Free Shipping', value: 'Free SHipping' },
-                                    { label: 'Local Pickup', value: 'Local Pickup' },
-                                    { label: 'Drop Off', value: 'Drop Off' },
-                                    { label: 'Flat Rate', value: 'Flat Rate' }
+                                    { label: 'Free Shipping', value: 1 },
+                                    { label: 'Local Pickup', value: 2 },
+                                    { label: 'Drop Off', value: 3 },
+                                    { label: 'Flat Rate', value: 4 }
                                 ]}
                                 selectClassName='!mt-[1rem]'
                                 required
@@ -691,30 +786,31 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                         <div className='grid md:grid-cols-12 gap-3 mt-5'>
                             <div className='grid md:grid-cols-2 md:col-span-9 gap-3'>
                                 <Textarea
-                                    id='delivery_note'
+                                    id='delivery_notes'
                                     label='Delivery Notes'
-                                    value={formData.delivery_note}
+                                    value={formData.delivery_notes}
                                     onChange={handleChange}
                                     textareaClassname='!h-20'
                                 />
                                 <Textarea
-                                    id='internal_note'
+                                    id='internal_notes'
                                     label='Internal Notes'
-                                    value={formData.internal_note}
+                                    value={formData.internal_notes}
                                     onChange={handleChange}
                                     textareaClassname='!h-20'
                                 />
                             </div>
 
-                            <div className='grid md:col-span-3 gap-1 '>
+                            <div className='grid md:col-span-3 gap-1'>
                                 <OrderSummary
                                     profitHidden={profitHidden}
-                                    onReveal={() => setProfitHidden(false)}
-                                    profit={100}
-                                    subtotal={1130.4}
-                                    shippingFee={50}
-                                    discount={5}
-                                    gstRate={0.1}
+                                    onReveal={() => setProfitHidden(!profitHidden)}
+                                    profit={formData.profit}
+                                    subtotal={formData.amount}
+                                    shippingFee={formData.shipping_fee}
+                                    discount={formData.discount_amount}
+                                    taxAmount={formData.tax_amount}
+                                    taxType={formData.tax_type}
                                 />
                             </div>
 
@@ -733,8 +829,8 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             onClick={handleSubmit}
                         />
                     </div>
-                </div>
-            </Content>
+                </div >
+            </Content >
         </>
     );
 };

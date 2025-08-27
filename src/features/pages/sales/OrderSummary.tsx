@@ -8,21 +8,29 @@ type OrderSummaryProps = {
     subtotal: number;
     shippingFee: number;
     discount: number;
-    gstRate: number;
+    taxAmount: number;
+    taxType?: string
 };
 
 
 const OrderSummary: React.FC<OrderSummaryProps> = ({
     profitHidden = true,
     onReveal,
-    profit = 456.97,
+    profit = 0,
     subtotal,
     shippingFee,
     discount,
-    gstRate,
+    taxAmount,
+    taxType
 }) => {
-    const gst = subtotal * (gstRate / 100);
-    const total = subtotal + shippingFee + gst - discount;
+    // const gst = subtotal * (gstRate / 100);
+    const totalTax = Number(taxAmount)
+    let total = 0
+    if (taxType == 'TAX-EXCLUSIVE') {
+        total = Number(subtotal) + Number(shippingFee) + totalTax - Number(discount);
+    } else if (taxType == 'TAX-INCLUSIVE' || taxType == 'NO-TAX' || taxType == '') {
+        total = Number(subtotal) + Number(shippingFee) - Number(discount);
+    }
 
     return (
         <div className="text-sm text-black max-w-xs">
@@ -52,11 +60,13 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
                 <span>{formatCurrency(discount)}</span>
             </div>
 
-            <div className="flex justify-between mb-1">
-                {/* <span>Tax ({(gstRate * 100).toFixed(0)}%)</span> */}
-                <span>Tax ({gstRate}%)</span>
-                <span>{formatCurrency(gst)}</span>
-            </div>
+            {
+                (taxType == 'TAX-EXCLUSIVE' || taxType == 'TAX-INCLUSIVE')
+                && <div className="flex justify-between mb-1">
+                    <span>{taxType == 'TAX-EXCLUSIVE' ? 'Total GST or Income' : 'Include GST or Income'}</span>
+                    <span>{formatCurrency(totalTax)}</span>
+                </div>
+            }
 
             <hr className="my-2 border-gray-300" />
 

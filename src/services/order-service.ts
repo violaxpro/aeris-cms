@@ -1,7 +1,7 @@
 import baseService from "./base-service";
 import { OrderType } from "@/plugins/types/sales-type";
 
-const api = '/admin/sales/order'
+const api = '/admin/invoice'
 
 export async function getOrder(param?: string | number) {
     const url = param ? `${api}/${param}` : api

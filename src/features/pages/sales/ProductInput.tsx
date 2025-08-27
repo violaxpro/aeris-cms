@@ -13,20 +13,33 @@ import Button from '@/components/button'
 import Modal from '@/components/modal'
 import { CalculatorOutlined } from '@ant-design/icons';
 export interface ProductForm {
-    sku: string
+    // sku: string
+    // name: string
+    // price: number
+    // buying_price: number
+    // trade: number
+    // silver: number
+    // gold: number
+    // platinum: number
+    // diamond: number
+    // qty: number
+    // total: number
+    // tax_rate: string;
+    // tax_amount: number;
+    invoice_id: string
+    product_id: string
     name: string
+    code: string
+    description: string
+    buy_price: number
     price: number
-    buying_price: number
-    trade: number
-    silver: number
-    gold: number
-    platinum: number
-    diamond: number
     qty: number
-    total: number
-    tax_rate: string;
-    tax_amount: number;
+    tax_id: string
+    tax_value: number
+    tax_amount: number
+    total_amount: number
 }
+
 
 export interface NewProductType {
     sku: string
@@ -44,6 +57,7 @@ interface ProductInputProps {
     onRemove?: () => void;
     index: number;
     length?: number
+    taxType?: string
 }
 
 const ProductInput = ({
@@ -52,7 +66,8 @@ const ProductInput = ({
     // onAddProduct,
     onRemove,
     onChange,
-    length
+    length,
+    taxType
 }: ProductInputProps) => {
     const [optionsTax] = useAtom(taxSetAtom)
     const [items, setItems] = useState([])
@@ -81,11 +96,11 @@ const ProductInput = ({
             [id]: value
         };
 
-        if (id === 'qty' || id === 'buying_price') {
+        if (id === 'qty' || id === 'price') {
             const qty = Number(id === 'qty' ? value : updatedProductForm.qty);
-            const buyingPrice = Number(id === 'buying_price' ? value : updatedProductForm.buying_price);
-            const total = qty * buyingPrice;
-            updatedProductForm.total = Number(total.toFixed(2))
+            const price = Number(id === 'price' ? value : updatedProductForm.price);
+            const total = qty * price;
+            updatedProductForm.total_amount = Number(total.toFixed(2))
         }
 
         onChange(updatedProductForm);
@@ -111,6 +126,16 @@ const ProductInput = ({
             [id]: value
         };
 
+        console.log(id, value)
+        if (id == 'code') {
+            const selectedProduct: any = items.find((p: any) => p.sku === value);
+            if (selectedProduct) {
+                updatedProductForm.name = selectedProduct.name;
+                updatedProductForm.product_id = selectedProduct.id;
+                updatedProductForm.price = selectedProduct.price;
+            }
+        }
+
         // Cari data tax di options
         const selectedTax: any = optionsTax.find((t: any) => t.value === value);
 
@@ -118,12 +143,13 @@ const ProductInput = ({
 
         // Re-hit total dengan tax kalau ada qty & buying_price
         const qty = Number(updatedProductForm.qty) || 0;
-        const buyingPrice = Number(updatedProductForm.buying_price) || 0;
-        const baseTotal = qty * buyingPrice;
+        const price = Number(updatedProductForm.price) || 0;
+        const baseTotal = qty * price;
 
         const taxAmount = (baseTotal * taxRate) / 100;
 
-        updatedProductForm.total = Number((baseTotal + taxAmount).toFixed(2));
+        updatedProductForm.total_amount = Number((baseTotal).toFixed(2));
+        updatedProductForm.tax_amount = Number((taxAmount).toFixed(2));
 
         onChange(updatedProductForm);
     };
@@ -140,6 +166,8 @@ const ProductInput = ({
             onChange(updatedForm);
         }
     };
+
+    console.log(items)
 
     const handleOpenModal = (type: 'product' | 'service') => {
         setModalType(type)
@@ -172,6 +200,10 @@ const ProductInput = ({
         }
 
         fetchData()
+
+    }, [])
+
+    useEffect(() => {
 
     }, [])
 
@@ -303,16 +335,17 @@ const ProductInput = ({
 
 
             </Modal >
-            <div className='grid md:grid-cols-[2fr_3fr_1fr_1fr_1fr_1fr_1fr_50px] grid-cols-2 md:gap-4 gap-6 mb-2'>
+            <div className={`grid md:grid-cols-[2fr_3fr_1fr_1fr_1fr_1fr_1fr_50px] grid-cols-2 md:gap-4 gap-6 mb-2`}>
                 <SelectInput
-                    id='sku'
+                    id='code'
                     label='SKU'
-                    value={productForm.sku}
-                    onChange={(val) => handleChangeSelect('sku', val)}
+                    value={productForm.code}
+                    onChange={(val) => handleChangeSelect('code', val)}
                     options={[
                         ...items.map((item: any) => ({
                             label: item.sku,
                             value: item.sku,
+                            data: item
                         }))
                     ]}
                     popupRender={(options: any) => (
@@ -402,30 +435,32 @@ const ProductInput = ({
                     required
                 />
                 <SelectInput
-                    id="tax_rate"
+                    id="tax_id"
                     label="Tax Rate"
                     placeholder="Select Tax Rate"
-                    value={productForm.tax_rate}
-                    onChange={(val) => handleChangeSelect("tax_rate", val)}
+                    value={taxType == 'NO-TAX' ? '' : productForm.tax_id}
+                    onChange={(val) => handleChangeSelect("tax_id", val)}
                     options={optionsTax}
                     error={taxError}
+                    disabled={taxType == 'NO-TAX'}
                     required
                 />
                 <Input
                     id='tax_amount'
                     type='text'
                     label='Tax Amount'
-                    value={productForm.tax_amount}
+                    value={taxType == 'NO-TAX' ? 0 : productForm.tax_amount}
                     onChange={handleProductChange}
                     className='mb-1'
+                    disabled={taxType == 'NO-TAX'}
                     required
                 />
                 <div className='flex flex-col items-start'>
                     <Input
-                        id='total'
+                        id='total_amount'
                         type='text'
                         label='Amount'
-                        value={productForm.total}
+                        value={productForm.total_amount}
                         onChange={handleProductChange}
                         className='mb-1'
                         required
