@@ -117,21 +117,21 @@ const index = ({ orderData }: { orderData?: any }) => {
         setPaid(value)
     }
 
-    const handleSavePaid = (id: number | string) => {
-        setData(prev =>
-            prev.map(order => {
-                if (order.id === id) {
-                    const newPaidAmount = Number(order.paid_amount || 0) + Number(paid);
-                    return { ...order, paid_amount: newPaidAmount };
-                }
-                return order;
-            })
-        );
-        notifySuccess('Balance is accepted')
-        setTimeout(() => {
-            setisOpenModalPaid(false)
-        }, 2000);
-    }
+    // const handleSavePaid = (id: number | string) => {
+    //     setData(prev =>
+    //         prev.map(order => {
+    //             if (order.id === id) {
+    //                 const newPaidAmount = Number(order.paid_amount || 0) + Number(paid);
+    //                 return { ...order, paid_amount: newPaidAmount };
+    //             }
+    //             return order;
+    //         })
+    //     );
+    //     notifySuccess('Balance is accepted')
+    //     setTimeout(() => {
+    //         setisOpenModalPaid(false)
+    //     }, 2000);
+    // }
 
     const handleApplyFilter = () => {
         if (valueStatus === 'all') {
