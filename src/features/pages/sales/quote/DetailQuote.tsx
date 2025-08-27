@@ -299,7 +299,7 @@ const DetailQuote = ({ slug, data }: { slug?: string | number, data: any }) => {
                                 subtotal={1130.4}
                                 shippingFee={50}
                                 discount={5}
-                                gstRate={0.1}
+                                taxAmount={0.1}
                             />
                         </div>
                     </div>
