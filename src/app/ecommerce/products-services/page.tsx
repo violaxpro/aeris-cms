@@ -36,6 +36,6 @@ export default async function ProductPageRoute() {
 
   return (
     // <ProductPage products={products} />
-    <ProductsServices products={products} />
+    <ProductsServices productDatas={products} />
   );
 }

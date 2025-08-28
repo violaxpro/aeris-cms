@@ -43,9 +43,13 @@ export const statusMap: Record<string, { color: string; text: string, textColor:
     Released: { color: '#01933B1A', text: 'Released', textColor: '#01933B' },
     Reconciled: { color: '#5C4AFF1A', text: 'Reconciled', textColor: '#5C4AFF' },
     'In Progress': { color: '#FF6A001A', text: 'In Progress', textColor: '#FF6A00' },
-    'PendingApproval': { color: '#FF9E021A', text: 'PendingApproval', textColor: '#FF9E02' },
-    'ParticiallyReceived': { color: '#0A33531A', text: 'ParticiallyReceived', textColor: '#0A3353' },
+    'Pending Approval': { color: '#FF9E021A', text: 'Pending Approval', textColor: '#FF9E02' },
+    'Particially Received': { color: '#0A33531A', text: 'Particially Received', textColor: '#0A3353' },
     'Closed': { color: '#01933B1A', text: 'Closed', textColor: '#01933B' },
+    'Allocated': { color: '#FF9E021A', text: 'Allocated', textColor: '#FF9E02' },
+    Picking: { color: '#3666AA1A', text: 'Picking', textColor: '#3666AA' },
+    Returned: { color: '#FF4AC31A', text: 'Returned', textColor: '#FF4AC3' },
+
 };
 
 export const colorMap: Record<string, any> = {

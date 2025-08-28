@@ -134,7 +134,7 @@ const BoundList = ({
 
     console.log(optionsTax)
     return (
-        <div className='grid md:grid-cols-[1fr_150px_150px_1fr_1fr_50px] gap-4 mb-2'>
+        <div className='grid md:grid-cols-[1fr_150px_150px_150px_1fr_50px] gap-4 mb-2'>
             <Input
                 id='sku'
                 type='text'

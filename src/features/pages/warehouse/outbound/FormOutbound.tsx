@@ -49,6 +49,14 @@ const FormOutbound: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         carrier_service: initialValues ? initialValues.carrier_service : '',
         request_ship_date: initialValues ? initialValues.request_ship_date : '',
         notes: initialValues ? initialValues.notes : '',
+        bin: initialValues ? initialValues.bin : '',
+        qty: initialValues ? initialValues.qty : '',
+        reassign_picker: initialValues ? initialValues.reassign_picker : '',
+        adjust_pick_task: initialValues ? initialValues.adjust_pick_task : '',
+        carton: initialValues ? initialValues.carton : '',
+        weight_dimension: initialValues ? initialValues.weight_dimension : '',
+        tracking_number: initialValues ? initialValues.tracking_number : '',
+        delivery_notes: initialValues ? initialValues.delivery_notes : '',
         bills: initialValues ? initialValues.bills : '',
         currency: initialValues ? initialValues.currency : '',
         attach_remittance: initialValues ? initialValues.attach_remittance : [],
@@ -58,7 +66,7 @@ const FormOutbound: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
     const breadcrumb = [
         {
-            title: 'Wraheouse',
+            title: 'Warehouse',
         },
         {
             title: 'Outbound (Order Fullfillment)', url: routes.eCommerce.outbound,
@@ -248,21 +256,18 @@ const FormOutbound: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 ]}
                             // disabled={mode == 'edit' && isDisabled}
                             />
-                            <Input
+                            <SelectInput
                                 id='warehouse'
                                 label='Warehouse'
-                                type='text'
-                                placeholder='Input Warehouse'
+                                placeholder='Select Warehouse'
                                 onChange={handleChange}
                                 value={formData.warehouse}
-                                disabled={mode == 'edit' && isDisabled}
+                                options={[
+                                    { label: 'Seadan', value: 1 }
+                                ]}
                             />
                         </div>
                         <div className='grid grid-cols-3 gap-3'>
-                            <div className='col-span-full flex flex-col gap-2'>
-                                <h4 className='text-xl font-semibold'>Ship To</h4>
-                                <Divider />
-                            </div>
                             <Input
                                 id='ship_to_name'
                                 label='Name'
@@ -324,13 +329,15 @@ const FormOutbound: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                         </div>
                     </div>
                     <div className='grid md:grid-cols-2 gap-3'>
-                        <Input
+                        <SelectInput
                             id='carrier_service'
                             label='Carrier / Service'
-                            type='text'
-                            placeholder='Input Carrier / Service'
+                            placeholder='Select Carrier / Service'
                             onChange={handleChange}
                             value={formData.carrier_service}
+                            options={[
+                                { label: 'DH Express', value: 1 }
+                            ]}
                         // disabled={mode == 'edit' && isDisabled}
                         />
                         <div className='row-span-2'>
@@ -350,6 +357,105 @@ const FormOutbound: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             onChange={(value: any, dateString: any) => handleDateChange('request_ship_date', value, dateString)}
                         />
 
+                        {
+                            initialValues?.status == 'Allocated'
+                            && <div className='col-span-full grid md:grid-cols-2 gap-3'>
+                                <Input
+                                    id='bin'
+                                    label='Bin'
+                                    type='text'
+                                    placeholder='Input Bin'
+                                    onChange={handleChange}
+                                    value={formData.bin}
+                                // disabled={mode == 'edit' && isDisabled}
+                                />
+
+                                <Input
+                                    id='qty'
+                                    label='Quantity'
+                                    type='text'
+                                    placeholder='Input Quantity'
+                                    onChange={handleChange}
+                                    value={formData.qty}
+                                // disabled={mode == 'edit' && isDisabled}
+                                />
+                            </div>
+                        }
+                        {
+                            initialValues?.status == 'Picking'
+                            && <div className='col-span-full grid md:grid-cols-2 gap-3'>
+                                <SelectInput
+                                    id='reassign_picker'
+                                    label='Reassign Picker'
+                                    placeholder='Select Reassign Picker'
+                                    onChange={handleChange}
+                                    value={formData.reassign_picker}
+                                    options={[
+                                        { label: 'DH Express', value: 1 }
+                                    ]}
+                                // disabled={mode == 'edit' && isDisabled}
+                                />
+
+                                <Input
+                                    id='adjust_pick_task'
+                                    label='Adjust Pick Tasks'
+                                    type='text'
+                                    placeholder='Input Adjust Pick Tasks'
+                                    onChange={handleChange}
+                                    value={formData.adjust_pick_task}
+                                // disabled={mode == 'edit' && isDisabled}
+                                />
+                            </div>
+                        }
+
+                        {
+                            initialValues?.status == 'Packed'
+                            && <div className='col-span-full grid md:grid-cols-2 gap-3'>
+                                <Input
+                                    id='carton'
+                                    label='Carton'
+                                    type='text'
+                                    placeholder='Input Carton'
+                                    onChange={handleChange}
+                                    value={formData.carton}
+                                // disabled={mode == 'edit' && isDisabled}
+                                />
+
+                                <Input
+                                    id='weight_dimension'
+                                    label='Weight / Dimensions'
+                                    type='text'
+                                    placeholder='Input Weight / Dimensions'
+                                    onChange={handleChange}
+                                    value={formData.weight_dimension}
+                                // disabled={mode == 'edit' && isDisabled}
+                                />
+                            </div>
+                        }
+                        {
+                            initialValues?.status == 'Shipped'
+                            && <div className='col-span-full grid md:grid-cols-2 gap-3'>
+                                <Input
+                                    id='tracking_number'
+                                    label='Tracking Number'
+                                    type='text'
+                                    placeholder='Input Tracking Number'
+                                    onChange={handleChange}
+                                    value={formData.tracking_number}
+                                // disabled={mode == 'edit' && isDisabled}
+                                />
+
+                                <Input
+                                    id='delivery_notes'
+                                    label='Delivery Notes'
+                                    type='text'
+                                    placeholder='Input Delivery Notes'
+                                    onChange={handleChange}
+                                    value={formData.delivery_notes}
+                                // disabled={mode == 'edit' && isDisabled}
+                                />
+                            </div>
+                        }
                     </div>
 
                     {/* Submit */}

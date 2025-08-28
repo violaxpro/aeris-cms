@@ -6,7 +6,7 @@ import { Content } from 'antd/es/layout/layout'
 import Products from './product'
 import Services from './service'
 
-const index = ({ products }: { products?: any }) => {
+const index = ({ productDatas }: { productDatas?: any }) => {
     const [activeTab, setActiveTab] = useState<string>('products');
 
     const tabs: Tab[] = [
@@ -43,7 +43,7 @@ const index = ({ products }: { products?: any }) => {
                 setActiveTab={setActiveTab}
                 borderClass='w-full'
             />
-            {activeTab == 'products' && <Products products={products} />}
+            {activeTab == 'products' && <Products products={productDatas} />}
             {activeTab == 'services' && <Services />}
         </>
     )

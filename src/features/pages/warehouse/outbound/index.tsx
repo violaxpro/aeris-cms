@@ -3,12 +3,13 @@ import React, { useState, useEffect } from 'react'
 import Table from "@/components/table"
 import type { TableColumnsType } from 'antd'
 import { Dropdown, Menu } from 'antd'
-import { WarehouseBranchListType } from '@/plugins/types/warehouse-type'
+import { WarehouseBranchListType, dummyOutbound } from '@/plugins/types/warehouse-type'
 import Image from 'next/image'
 import { EditOutlined, PlusCircleOutlined, MoreOutlined } from '@ant-design/icons'
 import DeletePopover from '@/components/popover'
 import { routes } from '@/config/routes'
 import Link from 'next/link'
+import StatusTag from '@/components/tag'
 import Breadcrumb from "@/components/breadcrumb"
 import { Content } from 'antd/es/layout/layout'
 import Button from "@/components/button"
@@ -64,10 +65,10 @@ const index = ({ warehouseBranchList }: { warehouseBranchList?: any }) => {
             title: 'Outbound (Order Fullfilment)',
         },
     ]
-    const columns: TableColumnsType<WarehouseBranchListType> = [
+    const columns: TableColumnsType<any> = [
         {
             title: 'Order Number',
-            dataIndex: 'invoie_number',
+            dataIndex: 'order_number',
         },
         {
             title: 'Customer',
@@ -80,30 +81,37 @@ const index = ({ warehouseBranchList }: { warehouseBranchList?: any }) => {
         {
             title: 'Status',
             dataIndex: 'status',
+            render: (val: any) => {
+                return <StatusTag status={val} />
+            }
         },
         {
             title: 'SKU / QTY',
-            dataIndex: 'status',
+            dataIndex: 'lines',
         },
         {
             title: 'Carrier / Service',
-            dataIndex: 'status',
+            dataIndex: 'carrier',
         },
         {
             title: 'Tracking Number',
-            dataIndex: 'status',
+            dataIndex: 'tracking_number',
         },
         {
-            title: 'Requested Ship / Shipped Date',
-            dataIndex: 'status',
+            title: 'Shipped Date',
+            dataIndex: 'shipped_date',
         },
         {
             title: 'Age (days)',
-            dataIndex: 'status',
+            dataIndex: 'age',
         },
         {
-            title: 'Total Value (Currency)',
-            dataIndex: 'status',
+            title: 'Total',
+            dataIndex: 'total',
+            width: 150,
+            render: (val: any) => {
+                return <span>${val}</span>
+            }
         },
         {
             title: 'Actions',
@@ -118,7 +126,7 @@ const index = ({ warehouseBranchList }: { warehouseBranchList?: any }) => {
                             variant='filled'
                             size="small"
                             icon={PencilIconBlue}
-                            onClick={() => router.push(routes.eCommerce.editPriceLevel(row.id))}
+                            onClick={() => router.push(routes.eCommerce.editOutbound(row.order_number))}
                         />
                         <ButtonIcon
                             color='danger'
@@ -219,14 +227,16 @@ const index = ({ warehouseBranchList }: { warehouseBranchList?: any }) => {
                     </div>
                     <Table
                         columns={columns}
-                        dataSource={data}
+                        dataSource={dummyOutbound}
                         withSelectableRows
                         selectedRowKeys={selectedRowKeys}
                         onSelectChange={setSelectedRowKeys}
+                        detailRoutes={(slug) => routes.eCommerce.detailOutbound(slug)}
+                        getRowValue={(record) => record.order_number}
                     />
                     <Pagination
                         current={currentPage}
-                        total={data?.length}
+                        total={dummyOutbound?.length}
                         pageSize={pageSize}
                         onChange={(page) => setCurrentPage(page)}
                     />

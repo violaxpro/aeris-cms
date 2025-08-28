@@ -164,3 +164,97 @@ export const inventoryListDummyData = [
         ]
     }
 ]
+
+export const dummyOutbound = [
+    {
+        id: 1,
+        order_number: 'B426-M',
+        customer: 'John',
+        warehouse: 'Seaden Paramatta',
+        status: 'Draft',
+        lines: '378-01/100',
+        carrier: 'DHL Express',
+        tracking_number: '3AA1111110A',
+        shipped_date: '25 Aug, 2025',
+        age: 4,
+        total: 400
+    },
+    {
+        id: 2,
+        order_number: 'B427-M',
+        customer: 'Smith',
+        warehouse: 'Seaden Paramatta',
+        status: 'Allocated',
+        lines: '378-01/100',
+        carrier: 'DHL Express',
+        tracking_number: '3AA1111110A',
+        shipped_date: '25 Aug, 2025',
+        age: 4,
+        total: 400
+    },
+    {
+        id: 3,
+        order_number: 'B428-M',
+        customer: 'Ahmad',
+        warehouse: 'Seaden Paramatta',
+        status: 'Picking',
+        lines: '378-01/100',
+        carrier: 'DHL Express',
+        tracking_number: '3AA1111110A',
+        shipped_date: '25 Aug, 2025',
+        age: 4,
+        total: 400
+    },
+    {
+        id: 4,
+        order_number: 'B429-M',
+        customer: 'Alex',
+        warehouse: 'Seaden Paramatta',
+        status: 'Packed',
+        lines: '378-01/100',
+        carrier: 'DHL Express',
+        tracking_number: '3AA1111110A',
+        shipped_date: '25 Aug, 2025',
+        age: 4,
+        total: 400
+    },
+    {
+        id: 5,
+        order_number: 'B430-M',
+        customer: 'Louis',
+        warehouse: 'Seaden Paramatta',
+        status: 'Shipped',
+        lines: '378-01/100',
+        carrier: 'DHL Express',
+        tracking_number: '3AA1111110A',
+        shipped_date: '25 Aug, 2025',
+        age: 4,
+        total: 400
+    },
+    {
+        id: 6,
+        order_number: 'B431-M',
+        customer: 'John',
+        warehouse: 'Seaden Paramatta',
+        status: 'Cancelled',
+        lines: '378-01/100',
+        carrier: 'DHL Express',
+        tracking_number: '3AA1111110A',
+        shipped_date: '25 Aug, 2025',
+        age: 4,
+        total: 400
+    },
+    {
+        id: 7,
+        order_number: 'B432-M',
+        customer: 'John',
+        warehouse: 'Seaden Paramatta',
+        status: 'Returned',
+        lines: '378-01/100',
+        carrier: 'DHL Express',
+        tracking_number: '3AA1111110A',
+        shipped_date: '25 Aug, 2025',
+        age: 4,
+        total: 400
+    },
+]

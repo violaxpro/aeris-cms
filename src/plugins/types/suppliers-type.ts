@@ -286,7 +286,7 @@ export const purchases = [
         "subtotal": 2000,
         "tax": 200,
         "total": 2200,
-        "status": "PendingApproval",
+        "status": "Pending Approval",
         "tags": ["import", "office_supplies"],
         "payment_terms": "60 days",
         "ship_to": {
@@ -397,7 +397,7 @@ export const purchases = [
         "subtotal": 1500000,
         "tax": 165000,
         "total": 1665000,
-        "status": "ParticiallyReceived",
+        "status": "Particially Received",
         "tags": ["maintenance"],
         "payment_terms": "Cash on Delivery",
         "ship_to": {
@@ -887,7 +887,7 @@ export const dummyPayments = [
         currency: "USD",
         amount: 3500,
         fxRate: 1,
-        status: "PendingApproval",
+        status: "Pending Approval",
         remittanceSent: false,
         appliedBills: [
             { billId: 601, billNo: "BILL-2001", originalAmount: 5000, paidAmount: 3500, remaining: 1500 }

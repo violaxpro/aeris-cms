@@ -103,6 +103,7 @@ export const routes = {
     outbound: '/ecommerce/outbound',
     createOutbound: '/ecommerce/outbound/create',
     editOutbound: (slug: string) => `/ecommerce/outbound/${slug}/edit`,
+    detailOutbound: (slug: string) => `/ecommerce/outbound/${slug}/detail`,
 
     inventoryList: '/ecommerce/inventory-management',
     inventoryListHistory: (slug: string) => `/ecommerce/inventory-management/${slug}/history`,
