@@ -112,6 +112,7 @@ export const routes = {
     inbound: '/ecommerce/inbound',
     createInbound: '/ecommerce/inbound/create',
     editInbound: (slug: string) => `/ecommerce/inbound/${slug}/edit`,
+    detailInbound: (slug: string) => `/ecommerce/inbound/${slug}/detail`,
 
     stockTransfer: '/ecommerce/stock-transfer',
     createStockTransfer: '/ecommerce/stock-transfer/create',

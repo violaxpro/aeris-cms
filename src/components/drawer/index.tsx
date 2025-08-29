@@ -44,7 +44,6 @@ const SettingsDrawer: React.FC<SettingsDrawerProps> = ({ open, onClose }) => {
                 <div className="flex gap-4">
                     {['id', 'en'].map((lang) => {
                         const isSelected = language === lang;
-                        console.log(lang, language)
                         return (
                             <div
                                 key={lang}

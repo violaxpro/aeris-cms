@@ -95,8 +95,6 @@ export const getDayShort = (dayName: string) => {
         .format(dayjs(dayName + ' 2023-01-01').toDate());
 };
 
-console.log(getDayShort('Monday')); // Mon
-
 export const formatCurrency = (value: number) =>
     `$${value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 

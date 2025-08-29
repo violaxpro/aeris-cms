@@ -683,7 +683,6 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                             length={formData.items.length}
                                             taxType={formData.tax_type}
                                         />
-
                                     )
                                 })
                             }

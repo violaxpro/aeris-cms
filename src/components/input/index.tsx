@@ -5,7 +5,7 @@ type inputProps = {
     label?: string
     placeholder?: string
     id: string
-    value: string | number | string[]
+    value: any
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
     notes?: any
     type: string

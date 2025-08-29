@@ -28,9 +28,7 @@ export const ThemeProvider = ({ children }: { children: any }) => {
     const [layout, setLayout] = useState<LayoutType>('hydrogen');
     const [direction, setDirection] = useState<Direction>('ltr');
     const [color, setColor] = useState<Color>('');
-    const [language, setLanguage] = useState<Language>('en'); // default: English
-
-    console.log(color)
+    const [language, setLanguage] = useState<Language>('en');
 
     return (
         <ThemeContext.Provider value={{ mode, layout, direction, color, language, setMode, setLayout, setDirection, setColor, setLanguage }}>

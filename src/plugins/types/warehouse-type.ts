@@ -258,3 +258,85 @@ export const dummyOutbound = [
         total: 400
     },
 ]
+
+export const dummyInbound = [
+    {
+        id: 1,
+        po_number: 'B426-M',
+        supplier: 'John',
+        warehouse: 'Seaden Paramatta',
+        status: 'Draft',
+        lines: '378-01/100',
+        carrier: 'DHL Express',
+        tracking_number: '3AA1111110A',
+        received_date: '25 Aug, 2025',
+        age: 4,
+        total: 400
+    },
+    {
+        id: 2,
+        po_number: 'B427-M',
+        supplier: 'Smith',
+        warehouse: 'Seaden Paramatta',
+        status: 'Sent',
+        lines: '378-01/100',
+        carrier: 'DHL Express',
+        tracking_number: '3AA1111110A',
+        received_date: '25 Aug, 2025',
+        age: 4,
+        total: 400
+    },
+    {
+        id: 6,
+        po_number: 'B432-M',
+        supplier: 'Smith',
+        warehouse: 'Seaden Paramatta',
+        status: 'Receiving',
+        lines: '378-01/100',
+        carrier: 'DHL Express',
+        tracking_number: '3AA1111110A',
+        received_date: '25 Aug, 2025',
+        age: 4,
+        total: 400
+    },
+    {
+        id: 3,
+        po_number: 'B428-M',
+        supplier: 'Ahmad',
+        warehouse: 'Seaden Paramatta',
+        status: 'Partially Received',
+        lines: '378-01/100',
+        carrier: 'DHL Express',
+        tracking_number: '3AA1111110A',
+        received_date: '25 Aug, 2025',
+        age: 4,
+        total: 400
+    },
+    {
+        id: 4,
+        po_number: 'B429-M',
+        supplier: 'Alex',
+        warehouse: 'Seaden Paramatta',
+        status: 'Received',
+        lines: '378-01/100',
+        carrier: 'DHL Express',
+        tracking_number: '3AA1111110A',
+        received_date: '25 Aug, 2025',
+        age: 4,
+        total: 400
+    },
+    {
+        id: 5,
+        po_number: 'B430-M',
+        supplier: 'Louis',
+        warehouse: 'Seaden Paramatta',
+        status: 'Cancelled',
+        lines: '378-01/100',
+        carrier: 'DHL Express',
+        tracking_number: '3AA1111110A',
+        received_date: '25 Aug, 2025',
+        age: 4,
+        total: 400
+    },
+
+]

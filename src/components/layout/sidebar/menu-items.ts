@@ -193,7 +193,7 @@ export const menuItems = [
                     {
                         key: 'inbound',
                         label: 'Inbound',
-                        href: '#'
+                        href: routes.eCommerce.inbound
                     },
                     {
                         key: 'stock-transfers',
