@@ -53,7 +53,8 @@ export const statusMap: Record<string, { color: string; text: string, textColor:
     'Received': { color: '#01933B1A', text: 'Received', textColor: '#01933B' },
     'Partially Received': { color: '#FF9E021A', text: 'Partially Received', textColor: '#FF9E02' },
     'Picking Stock Transfer': { color: '#FF9E021A', text: 'Picking', textColor: '#FF9E02' },
-
+    Submitted: { color: '#FF9E021A', text: 'Submitted', textColor: '#FF9E02' },
+    Posted: { color: '#01933B1A', text: 'Posted', textColor: '#01933B' },
 
 };
 

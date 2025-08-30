@@ -429,3 +429,83 @@ export const dummyStockTransfer = [
 
 
 ]
+
+export const dummyStockAdjustment = [
+    {
+        id: 1,
+        adjustment_number: 'ADJ-101',
+        warehouse: {
+            warehouse: 'WH-A',
+            zone: 'Z1',
+            bin: 'B05'
+        },
+        reason_code: 'Damage',
+        status: 'Draft',
+        lines: '3/-45',
+        requested_by: 'Rudi',
+        approved_by: 'Lisa',
+        age: 4,
+    },
+    {
+        id: 2,
+        adjustment_number: 'ADJ-102',
+        warehouse: {
+            warehouse: 'WH-B',
+            zone: 'Z2',
+            bin: 'B05'
+        },
+        reason_code: 'Shrinkage',
+        status: 'Submitted',
+        lines: '30/-145',
+        requested_by: 'Lili',
+        approved_by: '',
+        age: 10,
+    },
+    {
+        id: 3,
+        adjustment_number: 'ADJ-103',
+        warehouse: {
+            warehouse: 'WH-A',
+            zone: 'Z1',
+            bin: 'B06'
+        },
+        reason_code: 'Found',
+        status: 'Approved',
+        lines: '2/+45',
+        requested_by: 'Tuti',
+        approved_by: 'Mona',
+        age: 10,
+    },
+    {
+        id: 4,
+        adjustment_number: 'ADJ-104',
+        warehouse: {
+            warehouse: 'WH-C',
+            zone: 'Z2',
+            bin: 'B05'
+        },
+        reason_code: 'Reclass',
+        status: 'Posted',
+        lines: '2/-125',
+        requested_by: 'Fla',
+        approved_by: '',
+        age: 6,
+    },
+    {
+        id: 5,
+        adjustment_number: 'ADJ-105',
+        warehouse: {
+            warehouse: 'WH-D',
+            zone: 'Z5',
+            bin: 'B05'
+        },
+        reason_code: 'Reopening',
+        status: 'Cancelled',
+        lines: '3/-45',
+        requested_by: 'Lala',
+        approved_by: 'Lisa',
+        age: 10,
+    },
+
+
+]

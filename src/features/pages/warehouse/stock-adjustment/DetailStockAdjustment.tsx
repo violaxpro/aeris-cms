@@ -43,7 +43,7 @@ import exampleImage from '@public/image/Payment Remittance Example.png';
 import StepComponent from '@/components/step'
 import { toCapitalize } from '@/plugins/utils/utils'
 
-const DetailStockTransfer = ({ slug, data }: { slug?: any, data: any }) => {
+const DetailStockAdjustment = ({ slug, data }: { slug?: any, data: any }) => {
     const router = useRouter()
     const { contextHolder, notifySuccess } = useNotificationAntd()
     const [profitHidden, setProfitHidden] = useState(true)
@@ -74,7 +74,7 @@ const DetailStockTransfer = ({ slug, data }: { slug?: any, data: any }) => {
             title: 'Warehouse',
         },
         {
-            title: 'Stock Transfers (Inter Warehouse)', url: routes.eCommerce.stockTransfer,
+            title: 'Stock Adjustment', url: routes.eCommerce.stockAdjustment,
         },
         { title: 'Detail' },
 
@@ -96,43 +96,43 @@ const DetailStockTransfer = ({ slug, data }: { slug?: any, data: any }) => {
             }
         },
         {
-            title: 'QTY Requested',
-            dataIndex: 'qty_requested',
+            title: 'Bin',
+            dataIndex: 'bin',
             sorter: (a: any, b: any) => {
-                return a?.qty_requested - b?.qty_requested
+                return a?.bin.localeCompare(b?.bin)
             },
             render: (_: any, row: any) => {
                 return <div className="flex flex-col w-full">
                     <div className="flex justify-start gap-1">
-                        <span>{row.qty_requested}</span>
+                        <span>{row.bin}</span>
                     </div>
                 </div>
             }
         },
         {
-            title: 'QTY Shipped',
-            dataIndex: 'qty_shipped',
+            title: 'System QTY',
+            dataIndex: 'qty',
             sorter: (a: any, b: any) => {
-                return a?.qty_shipped - b?.qty_shipped
+                return a?.qty - b?.qty
             },
             render: (_: any, row: any) => {
                 return <div className="flex flex-col w-full">
                     <div className="flex justify-start gap-1">
-                        <span>{row.qty_shipped}</span>
+                        <span>{row.qty}</span>
                     </div>
                 </div>
             }
         },
         {
-            title: 'Qty Received',
-            dataIndex: 'qty_received',
+            title: 'Counted / Delta',
+            dataIndex: 'counted',
             sorter: (a: any, b: any) => {
-                return a?.qty_received - b?.qty_received
+                return a?.counted - b?.counted
             },
             render: (_: any, row: any) => {
                 return <div className="flex flex-col w-full">
                     <div className="flex justify-start gap-1">
-                        <span>{row.qty_received}</span>
+                        <span>{row.counted}</span>
                     </div>
                 </div>
             }
@@ -153,89 +153,6 @@ const DetailStockTransfer = ({ slug, data }: { slug?: any, data: any }) => {
             }
         },
 
-    ]
-
-    const columnsReceipts: TableColumnsType<any> = [
-        {
-            title: 'GRN Number',
-            dataIndex: 'grn_number',
-            sorter: (a: any, b: any) => {
-                return a?.grn_number.localeCompare(b?.grn_number)
-            },
-            render: (_: any, row: any) => {
-                return <div className="flex flex-col w-full">
-                    <div className="flex justify-start gap-1">
-                        <span>{row.grn_number}</span>
-                    </div>
-                </div>
-            }
-        },
-        {
-            title: 'Date',
-            dataIndex: 'date',
-            sorter: (a: any, b: any) => {
-                return dayjs(a?.date).valueOf() - dayjs(b?.date).valueOf()
-            },
-            render: (_: any, row: any) => {
-                return <div className="flex flex-col w-full">
-                    <div className="flex justify-start gap-1">
-                        <span>{row.date}</span>
-                    </div>
-                </div>
-            }
-        },
-        {
-            title: 'Receiver',
-            dataIndex: 'receiver',
-            sorter: (a: any, b: any) => {
-                return a?.receiver.localeCompare(b?.receiver)
-            },
-            render: (_: any, row: any) => {
-                return <div className="flex flex-col w-full">
-                    <div className="flex justify-start gap-1">
-                        <span>{row.receiver}</span>
-                    </div>
-                </div>
-            }
-        },
-        {
-            title: 'Discrepancies',
-            dataIndex: 'iscrepancies',
-            sorter: (a: any, b: any) => {
-                return a?.discrepancies.localeCompare(b?.discrepancies)
-            },
-            render: (_: any, row: any) => {
-                return <div className="flex flex-col w-full">
-                    <div className="flex justify-start gap-1">
-                        <span>{row.discrepancies}</span>
-                    </div>
-                </div>
-            }
-        },
-    ]
-
-    const columnsPutawayTask: TableColumnsType<any> = [
-        {
-            title: 'Target Bin',
-            dataIndex: 'bin',
-            sorter: (a: any, b: any) => {
-                return a?.bin.localeCompare(b?.bin)
-            },
-            render: (_: any, row: any) => {
-                return <div className="flex flex-col w-full">
-                    <div className="flex justify-start gap-1">
-                        <span>{row.bin}</span>
-                    </div>
-                </div>
-            }
-        },
-        {
-            title: 'Status',
-            dataIndex: 'status',
-            render: (val: any) => {
-                return <StatusTag status={val} />
-            }
-        },
     ]
 
     const invoiceData = {
@@ -331,7 +248,7 @@ const DetailStockTransfer = ({ slug, data }: { slug?: any, data: any }) => {
                 <div className='flex flex-col justify-start md:flex-row md:justify-between md:items-center'>
                     <div>
                         <h1 className='text-2xl font-bold'>
-                            Stock Transfers (Inter Warehouse) Detail
+                            Stock Adjustment Detail
                         </h1>
                         <Breadcrumb
                             items={breadcrumb}
@@ -395,11 +312,13 @@ const DetailStockTransfer = ({ slug, data }: { slug?: any, data: any }) => {
             <Content className="mb-5">
                 <div className='flex flex-col gap-6 min-h-[360px] p-6'>
                     <div className='grid gap-4'>
-                        <Card title='Stock Transfers Information' gridcols='md:grid-cols-4 grid-cols-1' >
-                            <InfoItem label='Transfer Number' value={data.transfer_number} />
-                            <InfoItem label='From' value={data.from_warehouse} />
-                            <InfoItem label='To' value={data.to_warehouse} />
+                        <Card title='Stock Adjustment Information' gridcols='md:grid-cols-6' >
+                            <InfoItem label='Adjustment Number' value={data.adjustment_number} />
+                            <InfoItem label='Reason' value={data.reason_code} />
                             <InfoItem label='Status' value={toCapitalize(data.status)} textColor={statusMap[toCapitalize(data?.status)]?.textColor} />
+                            <InfoItem label='Created Date' value='20 August, 2025' />
+                            <InfoItem label='Submitted Date' value='21 August, 2025' />
+                            <InfoItem label='Approved Date' value='22 August, 2025' />
                         </Card>
                     </div>
                     <div>
@@ -412,129 +331,71 @@ const DetailStockTransfer = ({ slug, data }: { slug?: any, data: any }) => {
                                 {
                                     id: 1,
                                     sku: '0317-8471',
-                                    description: 'U-Prox Keyfob White',
-                                    qty_requested: 30,
-                                    qty_shipped: 30,
-                                    qty_received: 0,
-                                    price: 1000,
+                                    bin: 'B05',
+                                    qty: 30,
+                                    counted: 30,
                                     serialsLots: ['LOT-KEYW-20250801']
                                 }
                             ]}
                         />
                     </div>
-                    <div className='grid gap-4'>
-                        <Card title='Logistic' gridcols='md:grid-cols-2 grid-cols-1' >
-                            <div className='grid md:grid-cols-2 gap-3'>
-                                <div className='col-span-full' >
-                                    <h4 className='text-lg font-semibold'>Shipment</h4>
-                                </div>
-                                <InfoItem label='Shipment Carrier' value='DHL Express' />
-                                <InfoItem label='Tracking Number' value='DHL987654321AU' />
-                                <InfoItem label='Supporting Docs' value={
-                                    <div className='grid md:grid-cols-2 gap-3'>
-                                        <ButtonAction
-                                            label='PO-2025-00123.pdf'
-                                            icon={<Image
-                                                src={CloudDownloadIcon}
-                                                alt='download-icon'
-                                                width={15}
-                                                height={15}
-                                            />}
-                                            position='end'
-                                            btnClassname='w-full'
-                                            labelClassname='truncate block'
-                                        />
-                                        <ButtonAction
-                                            label='PO-2025-00435.pdf'
-                                            icon={<Image
-                                                src={CloudDownloadIcon}
-                                                alt='download-icon'
-                                                width={15}
-                                                height={15}
-                                            />}
-                                            position='end'
-                                            btnClassname='w-full'
-                                            labelClassname='truncate block'
-                                        />
-                                    </div>
-                                } />
-                            </div>
-
-                            <div className='grid md:grid-cols-2'>
-                                <div className='col-span-full' >
-                                    <h4 className='text-lg font-semibold'>In Transit</h4>
-                                </div>
-                                <div className='col-span-full'>
-                                    <InfoItem label='In Transit Details' value={
-                                        data?.from_warehouse ?
-
-                                            <StepComponent
-                                                current={1}
-                                                items={[
-                                                    {
-                                                        label: "From",
-                                                        date: "26 Aug, 2025, 09:15",
-                                                        title: "Departed Seaden Parramatta",
-                                                        status: "finish",
-                                                    },
-                                                    {
-                                                        label: "Now",
-                                                        date: "26 Aug, 2025, 18:40",
-                                                        title: "Departed Sydney Hub",
-                                                        status: "process",
-                                                    },
-                                                    {
-                                                        label: "Expected Arrival",
-                                                        date: "28 August, 2025",
-                                                        title: "ETA Melbourne Warehouse",
-                                                        status: "wait",
-                                                    },
-                                                ]}
-                                            />
-                                            : 'None'
-                                    } />
-                                </div>
-
-                            </div>
-                        </Card>
-                    </div>
-
-                    {/* <div>
-                        <div className='flex justify-between my-2'>
-                            <h4 className='text-xl font-semibold'>Receipts (GRN)</h4>
-                        </div>
-                        <Table
-                            columns={columnsReceipts}
-                            dataSource={[
-                                {
-                                    id: 1,
-                                    grn_number: 'GRN-21',
-                                    date: 'August 29, 2025',
-                                    receiver: 'Smith',
-                                    discrepancies: 'Shortage SKU 0317-8471(20 pcs not delivered)'
-                                }
-                            ]}
-                        />
-                    </div> */}
-
                     <div className='grid grid-cols-2 gap-4'>
-                        <Card title='Receipt' gridcols='md:grid-cols-3'>
-                            <InfoItem label='Receiver' value={data?.receiver || 'Not yet receiver'} />
-                            <InfoItem label='Date' value={data?.date || 'None'} />
-                            <InfoItem label='Discrepancies' value={data?.discrepancies || 'Pending'} />
+                        <Card title='Approval' gridcols='md:grid-cols-3'>
+                            <InfoItem label='Approver' value='Rudi Santoso' />
+                            <InfoItem label='Timestamp' value='22 August, 2025 08:20' />
+                            <InfoItem label='Comments' value='Adjustment verified, approved for posting.' />
                         </Card>
-                        <Card title='Movements' gridcols='md:grid-cols-2 grid-cols-1'>
-                            <InfoItem label='Out (From)' value='Picking Ref OUT-ST0004-01' />
-                            <InfoItem label='In (To) References' value='Receiving Ref IN-ST0004-01 (Pending)' />
+                        <Card title='Posting Result' gridcols='grid-cols-1'>
+                            <InfoItem label='Stock Movement Refs' value={
+                                <div className='grid md:grid-cols-2 gap-3'>
+                                    <ButtonAction
+                                        label='MOV-2025-08121.pdf'
+                                        icon={<Image
+                                            src={CloudDownloadIcon}
+                                            alt='download-icon'
+                                            width={15}
+                                            height={15}
+                                        />}
+                                        position='end'
+                                        btnClassname='w-full'
+                                        labelClassname='truncate block'
+                                    />
+                                    <ButtonAction
+                                        label='MOV-2025-08122.pdf'
+                                        icon={<Image
+                                            src={CloudDownloadIcon}
+                                            alt='download-icon'
+                                            width={15}
+                                            height={15}
+                                        />}
+                                        position='end'
+                                        btnClassname='w-full'
+                                        labelClassname='truncate block'
+                                    />
+
+                                </div>
+                            } />
                         </Card>
                     </div>
 
                     <div className=''>
                         <Card title='Attachments & Thread' gridcols='md:grid-cols-2 grid-cols-1'>
                             <InfoItem label='Attachments' value={
-                                <div className='flex flex-col gap-2 max-w-sm'>
+                                <div className='flex flex-col gap-2 max-w-lg'>
                                     <ButtonAction
-                                        label='PO-2025-00123.pdf'
+                                        label='photo_damage1.jpg.pdf'
+                                        icon={<Image
+                                            src={CloudDownloadIcon}
+                                            alt='download-icon'
+                                            width={15}
+                                            height={15}
+                                        />}
+                                        position='end'
+                                        btnClassname='w-full'
+                                        labelClassname='truncate block'
+                                    />
+                                    <ButtonAction
+                                        label='photo_damage2.jpg.pdf'
                                         icon={<Image
                                             src={CloudDownloadIcon}
                                             alt='download-icon'
@@ -548,7 +409,7 @@ const DetailStockTransfer = ({ slug, data }: { slug?: any, data: any }) => {
                                 </div>
 
                             } />
-                            <InfoItem label='Thread' value={
+                            <InfoItem label='Thread / Notes' value={
                                 <div>
                                     <ul className='list-disc px-5'>
                                         <li >23 Aug 2025, 10:45</li>
@@ -565,4 +426,4 @@ const DetailStockTransfer = ({ slug, data }: { slug?: any, data: any }) => {
     )
 }
 
-export default DetailStockTransfer
+export default DetailStockAdjustment

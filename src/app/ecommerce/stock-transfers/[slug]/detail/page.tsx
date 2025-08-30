@@ -3,7 +3,7 @@ import DetailStockTransfer from '@/features/pages/warehouse/stock-transfer/Detai
 import { Params } from '@/plugins/types'
 import { dummyStockTransfer } from '@/plugins/types/warehouse-type';
 
-export default async function DetailInboundPage(props: { params: Params }) {
+export default async function DetailStockTransferPage(props: { params: Params }) {
     const params = await props.params;
     const slug = params.slug;
     let data

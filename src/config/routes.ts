@@ -119,10 +119,10 @@ export const routes = {
     editStockTransfer: (slug: string) => `/ecommerce/stock-transfers/${slug}/edit`,
     detailStockTransfer: (slug: string) => `/ecommerce/stock-transfers/${slug}/detail`,
 
-    stockAdjustment: '/ecommerce/stock-adjustment',
-    createStockAdjustment: '/ecommerce/stock-adjustment/create',
-    editStockAdjustment: (slug: string) => `/ecommerce/stock-adjustment/${slug}/edit`,
-    detailStockAdjustment: (slug: string) => `/ecommerce/stock-adjustment/${slug}/detail`,
+    stockAdjustment: '/ecommerce/stock-adjustments',
+    createStockAdjustment: '/ecommerce/stock-adjustments/create',
+    editStockAdjustment: (slug: string) => `/ecommerce/stock-adjustments/${slug}/edit`,
+    detailStockAdjustment: (slug: string) => `/ecommerce/stock-adjustments/${slug}/detail`,
 
     rmaWarehouse: '/ecommerce/rma-warehouse',
     createRmaWarehouse: '/ecommerce/rma-warehouse/create',

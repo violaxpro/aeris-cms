@@ -201,13 +201,13 @@ export const menuItems = [
                         href: routes.eCommerce.stockTransfer
                     },
                     {
-                        key: 'stock-adjusment',
-                        label: 'Stock Adjustment',
+                        key: 'stock-adjusments',
+                        label: 'Stock Adjustments',
                         href: routes.eCommerce.stockAdjustment
                     },
                     {
                         key: 'rma-warehouse',
-                        label: 'Return',
+                        label: 'Return (RMAs)',
                         href: routes.eCommerce.rmaWarehouse
                     },
                     {
