@@ -127,6 +127,7 @@ export const routes = {
     rmaWarehouse: '/ecommerce/rma-warehouse',
     createRmaWarehouse: '/ecommerce/rma-warehouse/create',
     editRmaWarehouse: (slug: string) => `/ecommerce/rma-warehouse/${slug}/edit`,
+    detailRmaWarehouse: (slug: string) => `/ecommerce/rma-warehouse/${slug}/detail`,
 
     warehouseBranchList: '/ecommerce/warehouse-branch-management',
 

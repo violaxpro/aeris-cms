@@ -55,7 +55,10 @@ export const statusMap: Record<string, { color: string; text: string, textColor:
     'Picking Stock Transfer': { color: '#FF9E021A', text: 'Picking', textColor: '#FF9E02' },
     Submitted: { color: '#FF9E021A', text: 'Submitted', textColor: '#FF9E02' },
     Posted: { color: '#01933B1A', text: 'Posted', textColor: '#01933B' },
-
+    'Inspected': { color: '#01933B1A', text: 'Inspected', textColor: '#01933B' },
+    Authorized: { color: '#FF9E021A', text: 'Authorized', textColor: '#FF9E02' },
+    'Received RMA': { color: '#3666AA1A', text: 'Received', textColor: '#3666AA' },
+    'Closed RMA': { color: '#E900001A', text: 'Closed', textColor: '#E90000' },
 };
 
 export const colorMap: Record<string, any> = {

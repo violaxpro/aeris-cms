@@ -509,3 +509,73 @@ export const dummyStockAdjustment = [
 
 
 ]
+
+export const rmaDummyData = [
+    {
+        id: 1,
+        rma_no: "RMA-101",
+        customer: "Wira Pandu",
+        origin_doc: "ORD-321/SHP-889",
+        reason_code: "Damage",
+        qty: 5,
+        status: "Requested",
+        disposition: "Restock",
+        age_days: 5,
+    },
+    {
+        id: 2,
+        rma_no: "RMA-102",
+        customer: "John Smith",
+        origin_doc: "ORD-321/SHP-889",
+        reason_code: "Wrong Item",
+        qty: 15,
+        status: "Authorized",
+        disposition: "Replace",
+        age_days: 14,
+    },
+    {
+        id: 3,
+        rma_no: "RMA-103",
+        customer: "Lauren",
+        origin_doc: "ORD-321/SHP-889",
+        reason_code: "Missing Part",
+        qty: 20,
+        status: "Received",
+        disposition: "Refund",
+        age_days: 7,
+    },
+    {
+        id: 4,
+        rma_no: "RMA-104",
+        customer: "Jason",
+        origin_doc: "ORD-321/SHP-889",
+        reason_code: "Expired",
+        qty: 2,
+        status: "Inspected",
+        disposition: "Scrap",
+        age_days: 2,
+    },
+    {
+        id: 5,
+        rma_no: "RMA-105",
+        customer: "Yuyun",
+        origin_doc: "ORD-321/SHP-889",
+        reason_code: "Defective",
+        qty: 17,
+        status: "Closed",
+        disposition: "Return to Vendor",
+        age_days: 5,
+    },
+    {
+        id: 6,
+        rma_no: "RMA-105",
+        customer: "Louis",
+        origin_doc: "ORD-321/SHP-889",
+        reason_code: "Wrong Size",
+        qty: 25,
+        status: "Closed",
+        disposition: "Restock",
+        age_days: 4,
+    },
+];
+

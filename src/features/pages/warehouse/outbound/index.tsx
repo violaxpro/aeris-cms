@@ -120,7 +120,7 @@ const index = ({ warehouseBranchList }: { warehouseBranchList?: any }) => {
             width: 120,
             render: (_: string, row: any) => {
                 return (
-                    <div className="flex items-center justify-end gap-3 pe-4">
+                    <div className="flex items-center justify-end gap-3 pe-4" onClick={(e) => e.stopPropagation()}>
                         <ButtonIcon
                             color='primary'
                             variant='filled'

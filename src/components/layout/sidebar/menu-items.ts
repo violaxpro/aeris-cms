@@ -207,7 +207,7 @@ export const menuItems = [
                     },
                     {
                         key: 'rma-warehouse',
-                        label: 'Return (RMAs)',
+                        label: 'Return (RMA)',
                         href: routes.eCommerce.rmaWarehouse
                     },
                     {

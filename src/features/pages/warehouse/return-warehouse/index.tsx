@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import Table from "@/components/table"
 import type { TableColumnsType } from 'antd'
 import { Dropdown, Menu } from 'antd'
-import { dummyStockAdjustment } from '@/plugins/types/warehouse-type'
+import { rmaDummyData } from '@/plugins/types/warehouse-type'
 import Image from 'next/image'
 import { EditOutlined, PlusCircleOutlined, MoreOutlined } from '@ant-design/icons'
 import DeletePopover from '@/components/popover'
@@ -62,24 +62,30 @@ const index = ({ inboundDatas }: { inboundDatas?: any }) => {
             title: 'Warehouse',
         },
         {
-            title: 'Stock Adjustments',
+            title: 'Returns (RMA / Reverse Logistics)',
         },
     ]
     const columns: TableColumnsType<any> = [
         {
-            title: 'Adjustment Number',
-            dataIndex: 'adjustment_number',
-            sorter: (a: any, b: any) => a?.adjustment_number.localeCompare(b?.adjustment_number)
+            title: 'Return Number',
+            dataIndex: 'rma_no',
+            sorter: (a: any, b: any) => a?.rma_no.localeCompare(b?.rma_no)
         },
         {
-            title: 'Warehouse/Zone/Bin',
-            dataIndex: 'warehouse',
-            sorter: (a: any, b: any) => a?.warehouse.warehouse.localeCompare(b?.warehouse.warehouse),
+            title: 'Customer',
+            dataIndex: 'customer',
+            sorter: (a: any, b: any) => a?.customer.localeCompare(b?.customer),
             render: (_: any, row: any) => {
-                const warehouse = row.warehouse.warehouse
-                const zone = row.warehouse.zone
-                const bin = row.warehouse.bin
-                return <span>{`${warehouse}/${zone}/${bin}`}</span>
+                return row.customer
+            }
+        },
+        {
+            title: 'Origin Doc (Order/Shipped)',
+            dataIndex: 'origin_doc',
+            width: 200,
+            sorter: (a: any, b: any) => a?.origin_doc.localeCompare(b?.origin_doc),
+            render: (_: any, row: any) => {
+                return row.origin_doc
             }
         },
         {
@@ -91,32 +97,24 @@ const index = ({ inboundDatas }: { inboundDatas?: any }) => {
             }
         },
         {
+            title: 'Qty',
+            sorter: (a: any, b: any) => a?.qty - b?.qty,
+            dataIndex: 'qty',
+        },
+        {
             title: 'Status',
             dataIndex: 'status',
             render: (val: any) => {
-                return <StatusTag status={val} type='stock-transfer' />
+                return <StatusTag status={val} type='rma-warehouse' />
             }
         },
         {
-            title: 'Total Lines / Total QTY Delta',
-            width: 200,
-            dataIndex: 'lines',
-        },
-        {
-            title: 'Requested / Approved By',
-            width: 200,
-            dataIndex: 'requested_by',
-            sorter: (a: any, b: any) => a?.requested_by.localeCompare(b?.requested_by),
-            render: (_: any, row: any) => {
-                const requested_by = row.requested_by || '-'
-                const approved_by = row.approved_by || '-'
-                return <span>{`${requested_by}/${approved_by}`}</span>
-            }
+            title: 'Disposition',
+            dataIndex: 'disposition',
         },
         {
             title: 'Age (days)',
-            width: 50,
-            dataIndex: 'age',
+            dataIndex: 'age_days',
         },
         {
             title: 'Actions',
@@ -131,7 +129,7 @@ const index = ({ inboundDatas }: { inboundDatas?: any }) => {
                             variant='filled'
                             size="small"
                             icon={PencilIconBlue}
-                            onClick={() => router.push(routes.eCommerce.editStockAdjustment(row.adjustment_number))}
+                            onClick={() => router.push(routes.eCommerce.editRmaWarehouse(row.rma_no))}
                         />
                         <ButtonIcon
                             color='danger'
@@ -163,13 +161,13 @@ const index = ({ inboundDatas }: { inboundDatas?: any }) => {
                 onCancel={() => setOpenModalDelete(false)}
                 onSave={handleDelete}
                 action='Delete'
-                text='Are you sure you want to delete this stock adjustment?'
+                text='Are you sure you want to delete this rma warehouse?'
             />
             <div className="mt-6 mx-6 mb-0">
                 <div className='flex justify-between items-center'>
                     <div>
                         <h1 className='text-2xl font-bold'>
-                            Stock Adjustments
+                            Returns (RMA / Reverse Logistics)
                         </h1>
                         <Breadcrumb
                             items={breadcrumb}
@@ -182,8 +180,8 @@ const index = ({ inboundDatas }: { inboundDatas?: any }) => {
                             width={15}
                             height={15}
                         />}
-                        label='Add Stock Adjustment'
-                        link={routes.eCommerce.createStockAdjustment}
+                        label='Add RMA'
+                        link={routes.eCommerce.createRmaWarehouse}
                     />
                 </div>
 
@@ -232,16 +230,16 @@ const index = ({ inboundDatas }: { inboundDatas?: any }) => {
                     </div>
                     <Table
                         columns={columns}
-                        dataSource={dummyStockAdjustment}
+                        dataSource={rmaDummyData}
                         withSelectableRows
                         selectedRowKeys={selectedRowKeys}
                         onSelectChange={setSelectedRowKeys}
-                        detailRoutes={(slug) => routes.eCommerce.detailStockAdjustment(slug)}
-                        getRowValue={(record) => record.adjustment_number}
+                        detailRoutes={(slug) => routes.eCommerce.detailRmaWarehouse(slug)}
+                        getRowValue={(record) => record.rma_no}
                     />
                     <Pagination
                         current={currentPage}
-                        total={dummyStockAdjustment?.length}
+                        total={rmaDummyData?.length}
                         pageSize={pageSize}
                         onChange={(page) => setCurrentPage(page)}
                     />

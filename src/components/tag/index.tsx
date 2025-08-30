@@ -43,6 +43,10 @@ const StatusTag: React.FC<StatusTagProps> = ({ status, type = 'quote', ...props 
         config = statusMap['Approved Permit'];
     } else if (status === 'Picking' && type === 'stock-transfer') {
         config = statusMap['Picking Stock Transfer'];
+    } else if (status === 'Received' && type === 'rma-warehouse') {
+        config = statusMap['Received RMA'];
+    } else if (status === 'Closed' && type === 'rma-warehouse') {
+        config = statusMap['Closed RMA'];
     }
     else {
         config = statusMap[status] || { color: '#D9D9D980', text: status, textColor: '#505050' };
