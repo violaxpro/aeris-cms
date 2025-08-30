@@ -198,17 +198,17 @@ export const menuItems = [
                     {
                         key: 'stock-transfers',
                         label: 'Stock Transfers',
-                        href: '#'
+                        href: routes.eCommerce.stockTransfer
                     },
                     {
                         key: 'stock-adjusment',
                         label: 'Stock Adjustment',
-                        href: '#'
+                        href: routes.eCommerce.stockAdjustment
                     },
                     {
                         key: 'rma-warehouse',
                         label: 'Return',
-                        href: '#'
+                        href: routes.eCommerce.rmaWarehouse
                     },
                     {
                         key: 'branch-management',

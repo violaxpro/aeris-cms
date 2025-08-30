@@ -41,6 +41,8 @@ const StatusTag: React.FC<StatusTagProps> = ({ status, type = 'quote', ...props 
         config = statusMap['Sent Email'];
     } else if (status === 'Approved' && type === 'time') {
         config = statusMap['Approved Permit'];
+    } else if (status === 'Picking' && type === 'stock-transfer') {
+        config = statusMap['Picking Stock Transfer'];
     }
     else {
         config = statusMap[status] || { color: '#D9D9D980', text: status, textColor: '#505050' };

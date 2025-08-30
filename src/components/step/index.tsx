@@ -6,6 +6,8 @@ type StepItem = {
     description?: string;
     subTitle?: string;
     status?: "wait" | "process" | "finish" | "error";
+    label?: string;
+    date?: string;
 };
 
 type StepComponentProps = {
@@ -21,7 +23,22 @@ const StepComponent: React.FC<StepComponentProps> = ({
     return (
         <Steps
             current={current}
-            items={items}
+            items={items.map((item) => ({
+                ...item,
+                title: (
+                    <div className="flex flex-col">
+                        {item.label && (
+                            <span className="text-xs text-gray-500">{item.label}</span>
+                        )}
+                        {item.date && (
+                            <span className="text-xs text-gray-500">{item.date}</span>
+                        )}
+                        <span className="text-base font-semibold">{item.title}</span>
+                    </div>
+                ),
+                description: item.description,
+            }))}
+            labelPlacement="vertical"
             {...props}
         />
     );

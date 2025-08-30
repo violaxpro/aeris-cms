@@ -52,6 +52,9 @@ export const statusMap: Record<string, { color: string; text: string, textColor:
     Receiving: { color: '#3666AA1A', text: 'Receiving', textColor: '#3666AA' },
     'Received': { color: '#01933B1A', text: 'Received', textColor: '#01933B' },
     'Partially Received': { color: '#FF9E021A', text: 'Partially Received', textColor: '#FF9E02' },
+    'Picking Stock Transfer': { color: '#FF9E021A', text: 'Picking', textColor: '#FF9E02' },
+
+
 };
 
 export const colorMap: Record<string, any> = {

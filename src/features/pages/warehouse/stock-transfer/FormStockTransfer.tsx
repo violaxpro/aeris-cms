@@ -22,10 +22,10 @@ import { PlusOutlineIcon } from '@public/icon';
 import Image from 'next/image';
 import { uploadImages } from '@/services/upload-images';
 import { supplierSetAtom } from '@/store/DropdownItemStore';
-import InboundList, { InboundListType } from './InboundList';
-import ReceiptList, { ReceiptListType } from './ReceiptList';
+import ReceiptList, { ReceiptListType } from '../inbound/ReceiptList';
+import StockTransferList, { StockTransferListType } from './StockTransferList';
 
-const FormInbound: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
+const FormStockTransfer: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const router = useRouter()
     const { contextHolder, notifySuccess } = useNotificationAntd();
     const isDisabled = initialValues?.status !== 'Failed'
@@ -44,15 +44,13 @@ const FormInbound: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const [editIndex, setEditIndex] = useState<number | null>(null)
     const [formData, setFormData] = useState({
         supplier: initialValues ? initialValues.supplier : '',
-        warehouse: initialValues ? initialValues.warehouse : '',
+        from_warehouse: initialValues ? initialValues.from_warehouse : '',
+        to_warehouse: initialValues ? initialValues.to_warehouse : '',
         items: [{
             sku: '',
             qty: 0,
-            unit_cost: 0,
-            tax_id: '',
-            tax_value: 0,
-            tax_amount: 0,
-            total_amount: 0
+            from_bin: '',
+            to_bin: ''
         }],
         receipts: [{
             sku: '',
@@ -63,13 +61,11 @@ const FormInbound: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
             qty_receipts: 0,
             qty_remaining: 0,
         }],
+        reason_code: initialValues ? initialValues.reason_code : '',
         notes: initialValues ? initialValues.notes : '',
-        bin: initialValues ? initialValues.bin : '',
-        qty: initialValues ? initialValues.qty : '',
-        terms: initialValues ? initialValues.terms : '',
-        currency: initialValues ? initialValues.currency : '',
-        attach_remittance: initialValues ? initialValues.attach_remittance : [],
-        eta: initialValues ? initialValues.eta : '',
+        carrier: initialValues ? initialValues.carrier : '',
+        tracking_number: initialValues ? initialValues.tracking_number : '',
+        discrepancies: initialValues ? initialValues.discrepancies : '',
     });
 
     const breadcrumb = [
@@ -77,7 +73,7 @@ const FormInbound: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
             title: 'Warehouse',
         },
         {
-            title: 'Inbound', url: routes.eCommerce.inbound,
+            title: 'Stock Transfers (Inter Warehouse)', url: routes.eCommerce.stockTransfer,
         },
         { title: mode == 'create' ? 'Create' : 'Edit' },
 
@@ -85,14 +81,11 @@ const FormInbound: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
 
     const addItem = (list_type: "items" | "receipts") => {
-        const newItem: InboundListType = {
-            sku: "",
+        const newItem: StockTransferListType = {
+            sku: '',
             qty: 0,
-            unit_cost: 0,
-            tax_id: "",
-            tax_value: 0,
-            tax_amount: 0,
-            total_amount: 0,
+            from_bin: '',
+            to_bin: ''
         };
 
         const newReceipt: ReceiptListType = {
@@ -194,9 +187,8 @@ const FormInbound: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
             const submitData = {
 
                 supplier: formData.supplier,
-                warehouse: formData.warehouse,
+                from_warehouse: formData.from_warehouse,
                 notes: formData.notes,
-                currency: formData.currency,
             }
             console.log(submitData)
             localStorage.setItem('products', JSON.stringify(submitData))
@@ -270,7 +262,7 @@ const FormInbound: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
             {contextHolder}
             <div className="mt-6 mx-6 mb-0">
                 <h1 className="text-2xl font-bold mb-4">
-                    {mode == 'create' ? 'Create Inbound' : 'Edit Inbound'}
+                    {mode == 'create' ? 'Create Stock Transfers (Inter Warehouse)' : 'Edit Stock Transfers (Inter Warehouse)'}
                 </h1>
                 <Breadcrumb items={breadcrumb} />
             </div>
@@ -279,22 +271,23 @@ const FormInbound: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                     <div className='flex flex-col gap-5'>
                         <div className='grid grid-cols-2 gap-3'>
                             <SelectInput
-                                id='supplier'
-                                label='Supplier'
-                                placeholder="Select Supplier"
-                                onChange={(val) => handleChangeSelect('supplier', val)}
-                                value={formData.supplier}
-                                options={optionSupplier}
-                            // disabled={mode == 'edit' && isDisabled}
-                            />
-                            <SelectInput
-                                id='warehouse'
-                                label='Warehouse'
+                                id='from_warehouse'
+                                label='From Warehouse'
                                 placeholder='Select Warehouse'
-                                onChange={(val) => handleChangeSelect('warehouse', val)}
-                                value={formData.warehouse}
+                                onChange={(val) => handleChangeSelect('from_warehouse', val)}
+                                value={formData.from_warehouse}
                                 options={[
                                     { label: 'Seadan', value: 1 }
+                                ]}
+                            />
+                            <SelectInput
+                                id='to_warehouse'
+                                label='To Warehouse'
+                                placeholder='Select Warehouse'
+                                onChange={(val) => handleChangeSelect('to_warehouse', val)}
+                                value={formData.to_warehouse}
+                                options={[
+                                    { label: 'Melbourne Central', value: 1 }
                                 ]}
                             />
                         </div>
@@ -305,15 +298,14 @@ const FormInbound: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                         {
                             formData.items.map((item, index) => {
                                 return (
-                                    <InboundList
+                                    <StockTransferList
                                         key={index}
                                         index={index}
                                         productForm={item}
                                         onChange={(updateItem) => handleUpdateRow('items', index, updateItem)}
                                         onRemove={() => handleRemoveRow('items', index)}
                                         length={formData.items.length}
-                                        inboundStatus={initialValues?.status}
-                                        formMode={mode}
+                                        status={initialValues?.status}
                                     />
 
 
@@ -333,51 +325,59 @@ const FormInbound: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             />
                         </div>
                     </div>
-                    {
-                        (initialValues?.status !== 'Draft'
-                            && initialValues?.status !== 'Sent' && mode == 'edit') &&
-                        <div className='flex flex-col gap-3 my-5'>
-                            <h1 className='text-xl font-semibold'>Receipts (GRN)</h1>
-                            <Divider />
+                    <div className={`grid gap-3 ${initialValues == 'Received' ? 'grid-cols-2' : 'grid-cols-1'}`}>
+                        <div className={`col-span-full grid gap-3 ${initialValues?.status == 'Received' ? 'grid-cols-2' : 'grid-cols-1'}`}>
+                            <SelectInput
+                                id='reason_code'
+                                label='Reason Code'
+                                placeholder='Select Reason Code'
+                                onChange={(val) => handleChangeSelect('reason_code', val)}
+                                value={formData.reason_code}
+                                options={[
+                                    { label: 'Rebalance', value: 'Rebalance' },
+                                    { label: 'Allocated', value: 'Allocated' },
+                                    { label: 'Other', value: 'Other' },
+                                ]}
+                            />
                             {
-                                formData.receipts.map((item, index) => {
-                                    return (
-                                        <ReceiptList
-                                            key={index}
-                                            index={index}
-                                            productForm={item}
-                                            onChange={(updateItem) => handleUpdateRow('receipts', index, updateItem)}
-                                            onRemove={() => handleRemoveRow('receipts', index)}
-                                            length={formData.receipts.length}
-                                            inboundStatus={initialValues?.status}
-                                        />
-
-                                    )
-                                })
+                                initialValues?.status == 'Received' &&
+                                <Input
+                                    id='discrepancies'
+                                    label='Discrepancies'
+                                    type='text'
+                                    placeholder='Input Discrepancies'
+                                    onChange={handleChange}
+                                    value={formData.discrepancies}
+                                // disabled={mode == 'edit' && isDisabled}
+                                />
                             }
-                            <div className='flex justify-end'>
-                                <Button
-                                    label='Add Receipt'
-                                    icon={<Image
-                                        src={PlusOutlineIcon}
-                                        alt='plus-icon'
-                                        width={15}
-                                        height={15}
-                                    />}
-                                    onClick={() => addItem('receipts')}
+                        </div>
+                        {
+                            (initialValues?.status == 'In Transit'
+                                || initialValues?.status == 'Received')
+                            &&
+                            <div className='col-span-full grid md:grid-cols-2 gap-3'>
+                                <Input
+                                    id='carrier'
+                                    label='Carrier'
+                                    type='text'
+                                    placeholder='Input Carrier'
+                                    onChange={handleChange}
+                                    value={formData.carrier}
+                                // disabled={mode == 'edit' && isDisabled}
+                                />
+                                <Input
+                                    id='tracking_number'
+                                    label='Tracking Number'
+                                    type='text'
+                                    placeholder='Input Tracking Number'
+                                    onChange={handleChange}
+                                    value={formData.tracking_number}
+                                // disabled={mode == 'edit' && isDisabled}
                                 />
                             </div>
-                        </div>
-                    }
-
-                    <div className='grid md:grid-cols-2 gap-3'>
-                        <DatePickerInput
-                            id='eta'
-                            label='ETA'
-                            value={formData.eta ? dayjs(formData.eta, 'DD-MM-YYYY') : null}
-                            onChange={(value: any, dateString: any) => handleDateChange('eta', value, dateString)}
-                        />
-                        <div className='row-span-2'>
+                        }
+                        <div className='col-span-full'>
                             <Textarea
                                 id='notes'
                                 label='Notes / Instructions'
@@ -387,33 +387,12 @@ const FormInbound: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 textareaClassname='!h-28'
                             />
                         </div>
-                        <div className='grid md:grid-cols-2 gap-3'>
-                            <Input
-                                id='terms'
-                                label='Terms'
-                                type='text'
-                                placeholder='Input Terms'
-                                onChange={handleChange}
-                                value={formData.terms}
-                            // disabled={mode == 'edit' && isDisabled}
-                            />
-                            <Input
-                                id='currency'
-                                label='Currency'
-                                type='text'
-                                placeholder='Input Currency'
-                                onChange={handleChange}
-                                value={formData.currency}
-                            // disabled={mode == 'edit' && isDisabled}
-                            />
-
-                        </div>
                     </div>
 
                     {/* Submit */}
                     <div className="mt-6 flex justify-end">
                         <Button
-                            label={mode == 'create' ? 'Create Inbound' : 'Edit Inbound'}
+                            label={mode == 'create' ? 'Create Stock Transfers (Inter Warehouse)' : 'Edit Stock Transfers (Inter Warehouse)'}
                             onClick={handleSubmit}
                         />
                     </div>
@@ -423,4 +402,4 @@ const FormInbound: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     );
 };
 
-export default FormInbound;
+export default FormStockTransfer;

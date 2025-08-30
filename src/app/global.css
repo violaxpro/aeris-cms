@@ -551,10 +551,13 @@ div {
     background-color: var(--default-color) !important;
 }
 
-.ant-timeline .ant-timeline-item-tail {
-    border-inline-start: 2px dashed #3666AA !important;
-}
-
-.ant-steps-item-title::after {
+/* semua step (finish, process, wait) */
+.ant-steps-item-tail::after {
+    /* background: repeating-linear-gradient(to right,
+            var(--default-color),
+            var(--default-color) 6px,
+            transparent 6px,
+            transparent 12px) !important; */
     background-color: var(--default-color) !important;
+
 }

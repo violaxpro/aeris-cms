@@ -11,7 +11,7 @@ interface CardProps {
     width?: number
 }
 
-export const Card: React.FC<CardProps> = ({ title, children, gridcols = 'grid-cols-2', className, icon, bgIcon = 'bg-[#00809D1A]', width = 15 }) => {
+export const Card: React.FC<CardProps> = ({ title, children, gridcols = 'md:grid-cols-2', className, icon, bgIcon = 'bg-[#00809D1A]', width = 15 }) => {
     return (
         <div className={`border p-4 rounded-xl ${className}`} style={{ borderColor: '#E5E7EB' }}>
             <div className='p-4'>
