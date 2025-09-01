@@ -131,9 +131,10 @@ export const routes = {
 
     warehouseBranchList: '/ecommerce/warehouse-branch-management',
 
-    reportingAnalytics: '/ecommerce/report-analytics',
-    createReportingAnalytics: '/ecommerce/report-analytics/create',
-    editReportingAnalytics: (slug: string) => `/ecommerce/report-analytics/${slug}/edit`,
+    reportingAnalytics: '/ecommerce/reporting-analytics',
+    createReportingAnalytics: '/ecommerce/reporting-analytics/create',
+    editReportingAnalytics: (slug: string) => `/ecommerce/reporting-analytics/${slug}/edit`,
+    detailReportingAnalytics: (slug: string) => `/ecommerce/reporting-analytics/${slug}/detail`,
 
     customers: '/ecommerce/customers',
     createCustomers: '/ecommerce/customers/create',

@@ -59,6 +59,9 @@ export const statusMap: Record<string, { color: string; text: string, textColor:
     Authorized: { color: '#FF9E021A', text: 'Authorized', textColor: '#FF9E02' },
     'Received RMA': { color: '#3666AA1A', text: 'Received', textColor: '#3666AA' },
     'Closed RMA': { color: '#E900001A', text: 'Closed', textColor: '#E90000' },
+    Daily: { color: '#FF9E021A', text: 'Daily', textColor: '#FF9E02' },
+    Weekly: { color: '#3666AA1A', text: 'Weekly', textColor: '#3666AA' },
+    Monthly: { color: '#01933B1A', text: 'Monthly', textColor: '#01933B' },
 };
 
 export const colorMap: Record<string, any> = {

@@ -10,7 +10,11 @@ export async function getTaxes(param?: string | number) {
     try {
         const url = param ? `${api}/${param}` : api
         const res = await baseService.get(url)
-        return res.data
+        if (res.data) {
+            return res.data
+        } else {
+            return []
+        }
     } catch (error) {
         console.error(error)
     }

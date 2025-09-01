@@ -579,3 +579,47 @@ export const rmaDummyData = [
     },
 ];
 
+export const dummyReportingAnalytics = [
+    {
+        "id": 1,
+        "report_name": "Monthly Inventory Summary",
+        "type": "Inventory",
+        "owner": "James Carter",
+        "schedule": "None",
+        "last_run": "23 Aug, 2025 10:00",
+        "next_run": "-",
+        "visibility": "Private"
+    },
+    {
+        "id": 2,
+        "report_name": "Warehouse Stock Valuation",
+        "type": "Valuation",
+        "owner": "Sarah Johnson",
+        "schedule": "Daily",
+        "last_run": "23 Aug, 2025 10:00",
+        "next_run": "24 Aug, 2025 10:00",
+        "visibility": "Team"
+    },
+    {
+        "id": 3,
+        "report_name": "Picking KPI Report",
+        "type": "KPI",
+        "owner": "Emily Brown",
+        "schedule": "Weekly",
+        "last_run": "23 Aug, 2025 10:00",
+        "next_run": "30 Aug, 2025 10:00",
+        "visibility": "Org"
+    },
+    {
+        "id": 4,
+        "report_name": "Discrepancy Audit – Site A",
+        "type": "Discrepancy",
+        "owner": "Olivia White",
+        "schedule": "Monthly",
+        "last_run": "23 Aug, 2025 10:00",
+        "next_run": "23 Sep, 2025 10:00",
+        "visibility": "Team"
+    }
+]
+
+

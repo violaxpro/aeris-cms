@@ -29,7 +29,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         state: initialValues ? initialValues.state : '',
         postcode: initialValues ? initialValues.postcode : '',
         country: initialValues ? initialValues.country : '',
-        phone_number: initialValues ? initialValues.phone_number : '',
+        phone_number: initialValues ? initialValues.phone_number : [{ value: '' }],
         email: initialValues ? initialValues.email : '',
         business_number: initialValues ? initialValues.business_number : '',
         meta_title: initialValues ? initialValues.meta_title : '',
@@ -53,32 +53,31 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const descLength = metaDescription.length;
     const isDescInvalid = descLength > 165;
 
-
-
     const addDynamicItem = (field: string) => {
-        setDynamicFields(prev => ({
+        setFormData((prev: any) => ({
             ...prev,
-            [field]: [{ value: '' }, ...prev[field]],
+            [field]: [...prev[field], { value: '' }],
         }));
     };
 
     const removeDynamicItem = (field: string, index: number) => {
-        setDynamicFields(prev => ({
+        setFormData((prev: any) => ({
             ...prev,
-            [field]: prev[field].filter((_, i) => i !== index),
+            [field]: prev[field].filter((_: any, i: number) => i !== index),
         }));
     };
 
-    const updateDynamicItem = (field: string, index: any, value: string) => {
-        setDynamicFields(prev => {
-            const updated = [...prev[field]];
-            (updated[index] as any) = { value };
+    const updateDynamicItem = (field: string, index: number, value: string) => {
+        setFormData((prev: any) => {
+            const updated = [...prev[field]]; // ambil array dari formData[field]
+            updated[index] = { value };       // update index tertentu
             return {
                 ...prev,
                 [field]: updated,
             };
         });
     };
+
 
 
     const handleChange = (e: any) => {
@@ -294,7 +293,40 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                         value={formData.email}
                                     />
                                     <div className='grid gap-4'>
-                                        <div className='flex gap-2'>
+                                        {
+                                            formData.phone_number.map((item: any, index: any) => (
+                                                <div key={index} className='flex gap-2'>
+                                                    <Input
+                                                        id='phone_number'
+                                                        label='Phone Number'
+                                                        type='text'
+                                                        placeholder='Input Phone Number'
+                                                        onChange={(e) => updateDynamicItem('phone_number', index, e.target.value)}
+                                                        value={item.value}
+                                                        divClassName='w-full'
+                                                    />
+                                                    {
+                                                        index == formData.phone_number.length - 1
+                                                            ? <Button
+                                                                icon={<PlusOutlined />}
+                                                                onClick={() => addDynamicItem('phone_number')}
+                                                                style={{ height: '5vh', marginTop: '1.2rem' }}
+                                                            />
+                                                            :
+                                                            <Button
+                                                                icon={
+                                                                    <DeleteOutlined className='!text-inherit' />
+                                                                }
+                                                                onClick={() => removeDynamicItem('phone_number', index)}
+                                                                style={{ height: '5vh', marginTop: '1.2rem' }}
+
+                                                            />
+                                                    }
+
+                                                </div>
+                                            ))
+                                        }
+                                        {/* <div className='flex gap-2'>
                                             <Input
                                                 id='phone_number'
                                                 label='Phone Number'
@@ -332,7 +364,7 @@ const index: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                                 />
                                             </div>
 
-                                        ))}
+                                        ))} */}
                                     </div>
 
 

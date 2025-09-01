@@ -216,9 +216,9 @@ export const menuItems = [
                         href: routes.eCommerce.warehouseBranchList,
                     },
                     {
-                        key: 'report-analytics',
+                        key: 'reporting-analytics',
                         label: 'Reporting & Analytics',
-                        href: '#'
+                        href: routes.eCommerce.reportingAnalytics
                     }
                 ],
             },
