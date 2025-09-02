@@ -18,7 +18,8 @@ import {
     TrackingIcon,
     SendIcon,
     CloudDownloadIcon,
-    ArrowPreviewIcon
+    ArrowPreviewIcon,
+    EyeWhiteIcon
 } from '@public/icon'
 import Button from '@/components/button'
 import Table from '@/components/table'
@@ -42,6 +43,8 @@ import StatusTag from '@/components/tag'
 import exampleImage from '@public/image/Payment Remittance Example.png';
 import StepComponent from '@/components/step'
 import { toCapitalize } from '@/plugins/utils/utils'
+import ModalEmailPreview from './ModalEmalPreview'
+import ModalActivityHistory from '../../warehouse/inventory-list/ModalActivityHistory'
 
 const DetailEmailCampaigns = ({ slug, data }: { slug?: any, data: any }) => {
     const router = useRouter()
@@ -204,31 +207,10 @@ const DetailEmailCampaigns = ({ slug, data }: { slug?: any, data: any }) => {
     return (
         <>
             {contextHolder}
-            <Modal
-                open={openModalPreview}
+            <ModalEmailPreview
+                isModalOpen={openModalPreview}
                 handleCancel={() => setOpenModalPreview(false)}
-                title='Remittance Advice'
-                rightButton={<Button
-                    icon={<Image
-                        src={ExportIcon}
-                        alt='export-icon'
-                        width={15}
-                        height={15}
-                    />}
-                    label='Download PDF'
-                    onClick={() => console.log('download pdf')}
-                />}
-            >
-                <div className='max-w-700 max-h-100'>
-                    <Image
-                        src={exampleImage}
-                        alt="image"
-                        width={700}
-                        height={100}
-                        className="block rounded-xl border !border-gray-300"
-                    />
-                </div>
-            </Modal>
+            />
             <div className="mt-6 mx-6 mb-0">
                 <div className='flex flex-col justify-start md:flex-row md:justify-between md:items-center'>
                     <div>
@@ -309,6 +291,28 @@ const DetailEmailCampaigns = ({ slug, data }: { slug?: any, data: any }) => {
                             <InfoItem label='From Name' value={data.from_name || 'Alarm Expert Australia'} />
                             <InfoItem label='From Email' value={data.from_email || 'promo@alarmexpert.com.au'} />
                             <InfoItem label='Repply To' value={data.repply_to || 'support@alarmexpert.com.au'} />
+                        </Card>
+                    </div>
+                    <div className='grid gap-4'>
+                        <Card title='Message'>
+                            <InfoItem label='Subject' value={data.subject || 'Protect Your Home – 20% Off Alarm Systems'} />
+                            <InfoItem label='Content Type' value={data.content_type || 'HTML'} />
+                            <InfoItem label='Preheader' value={data.preheader || 'Special limited-time offer for our valued customers.'} />
+                            <InfoItem label='HTML Body' value={
+                                <Button
+                                    label='Preview Content'
+                                    icon={<Image
+                                        src={EyeWhiteIcon}
+                                        alt='preview-icon'
+                                        width={15}
+                                        height={15}
+                                    />}
+                                    shape='round'
+                                    hasHeight={false}
+                                    onClick={() => setOpenModalPreview(true)}
+                                />
+                            }
+                            />
                         </Card>
                     </div>
                     <div className='grid md:grid-cols-[1fr_3fr] gap-4'>
