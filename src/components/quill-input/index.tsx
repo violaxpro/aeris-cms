@@ -48,7 +48,7 @@ export default function QuillEditor({
     }), [toolbarId]);
 
     const toolbarContent = useMemo(() => (
-        <div id={toolbarId}>
+        <div id={toolbarId} className='w-full'>
             <span className="ql-formats">
                 <button className="ql-bold" />
                 <button className="ql-italic" />

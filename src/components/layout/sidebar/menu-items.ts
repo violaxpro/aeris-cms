@@ -433,12 +433,17 @@ export const menuItems = [
                     {
                         key: 'email-campaigns,',
                         label: ' Email Campaigns',
-                        href: '#'
+                        href: routes.eCommerce.emailCampaigns
                     },
                     {
-                        key: 'sms-wa-campaigns',
-                        label: 'SMS / WhatsApp Campaigns',
-                        href: '#'
+                        key: 'sms-campaigns',
+                        label: 'SMS Campaigns',
+                        href: routes.eCommerce.smsCampaigns
+                    },
+                    {
+                        key: 'wa-campaigns',
+                        label: 'WhatsApp Campaigns',
+                        href: routes.eCommerce.whatsappCampaigns
                     },
                     {
                         key: 'push-notifications',

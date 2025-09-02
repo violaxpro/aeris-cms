@@ -188,7 +188,7 @@ const index = ({ inboundDatas }: { inboundDatas?: any }) => {
 
             </div>
             <Content className="mb-0">
-                <div className='p-6 min-h-[360px'>
+                <div className='p-6 min-h-[360px]'>
                     <div className='flex justify-between mb-4'>
                         <div className='flex items-center gap-2'>
                             <ShowPageSize

@@ -192,13 +192,20 @@ export const routes = {
     createFlashSale: '/ecommerce/flash-sale/create',
     editFlashSale: (slug: string) => `/ecommerce/flash-sale/${slug}/edit`,
 
-    emailMarketing: '/ecommerce/email-marketing',
-    createemailMarketing: '/ecommerce/email-marketing/create',
-    editemailMarketing: (slug: string) => `/ecommerce/email-marketing/${slug}/edit`,
+    emailCampaigns: '/ecommerce/email-campaigns',
+    createEmailCampaigns: '/ecommerce/email-campaigns/create',
+    editEmailCampaigns: (slug: string) => `/ecommerce/email-campaigns/${slug}/edit`,
+    detailEmailCampaigns: (slug: string) => `/ecommerce/email-campaigns/${slug}/detail`,
 
-    smsMarketing: '/ecommerce/sms-marketing',
-    createSmsMarketing: '/ecommerce/sms-marketing/create',
-    editSmsMarketing: (slug: string) => `/ecommerce/sms-marketing/${slug}/edit`,
+    smsCampaigns: '/ecommerce/sms-campaigns',
+    createSmsCampaigns: '/ecommerce/sms-campaigns/create',
+    editSmsCampaigns: (slug: string) => `/ecommerce/sms-campaigns/${slug}/edit`,
+    detailSmsCampaigns: (slug: string) => `/ecommerce/sms-campaigns/${slug}/detail`,
+
+    whatsappCampaigns: '/ecommerce/whatsapp-campaigns',
+    createWhatsappCampaigns: '/ecommerce/whatsapp-campaigns/create',
+    editWhatsappCampaigns: (slug: string) => `/ecommerce/whatsapp-campaigns/${slug}/edit`,
+    detailWhatsappCampaigns: (slug: string) => `/ecommerce/whatsapp-campaigns/${slug}/detail`,
 
     coupon: '/ecommerce/coupon',
     createCoupon: '/ecommerce/coupon/create',

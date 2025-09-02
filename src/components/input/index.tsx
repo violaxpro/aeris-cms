@@ -73,7 +73,7 @@ const index = ({ label,
                     type={type}
                     style={{
                         ...style,
-                        borderColor: error ? '#f5222d' : '#E5E7EB',
+                        // borderColor: error ? '#f5222d' : '#E5E7EB',
                     }}
                     readOnly={readOnly}
                     suffix={suffix}

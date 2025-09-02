@@ -164,3 +164,67 @@ export const dummyCoupon: couponType[] = [
         status: 0
     }
 ]
+
+export const dummyEmailCampaigns = [
+    {
+        "id": 1,
+        "name": "Winter Safety Promo",
+        "audience": "NSW Homeowners",
+        "schedule": "30 Aug, 2025 10:00",
+        "status": "Scheduled",
+        "sent_delivered": "-",
+        "open_click": "-",
+        "conversions": "-",
+        "revenue": "-",
+        "updated": "30 Aug, 2025 by User"
+    },
+    {
+        "id": 2,
+        "name": "Fire Alarm Reminder",
+        "audience": "VIC Subscribers",
+        "schedule": "30 Aug, 2025 10:00",
+        "status": "Completed",
+        "sent_delivered": "5,000/4,850",
+        "open_click": "42% / 18%",
+        "conversions": 310,
+        "revenue": "$12,500",
+        "updated": "30 Aug, 2025 by User"
+    },
+    {
+        "id": 3,
+        "name": "Fire Alarm Reminder",
+        "audience": "VIC Subscribers",
+        "schedule": "30 Aug, 2025 10:00",
+        "status": "Completed",
+        "sent_delivered": "5,000/4,850",
+        "open_click": "42% / 18%",
+        "conversions": 310,
+        "revenue": "$12,500",
+        "updated": "30 Aug, 2025 by User"
+    },
+    {
+        "id": 4,
+        "name": "Fire Alarm Reminder",
+        "audience": "VIC Subscribers",
+        "schedule": "30 Aug, 2025 10:00",
+        "status": "Completed",
+        "sent_delivered": "5,000/4,850",
+        "open_click": "42% / 18%",
+        "conversions": 310,
+        "revenue": "$12,500",
+        "updated": "30 Aug, 2025 by User"
+    },
+    {
+        "id": 5,
+        "name": "Fire Alarm Reminder",
+        "audience": "VIC Subscribers",
+        "schedule": "30 Aug, 2025 10:00",
+        "status": "Completed",
+        "sent_delivered": "5,000/4,850",
+        "open_click": "42% / 18%",
+        "conversions": 310,
+        "revenue": "$12,500",
+        "updated": "30 Aug, 2025 by User"
+    }
+]
+

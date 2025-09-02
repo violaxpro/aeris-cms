@@ -149,6 +149,9 @@ export { default as GmailIcon } from './GmailIcon.svg'
 export { default as SentEmailWhiteIcon } from './SentEmailWhiteIcon.svg'
 export { default as ArrowPreviewIcon } from './ArrowPreviewIcon.svg'
 export { default as CloudDownloadIcon } from './CloudDownloadIcon.svg'
+export { default as AlertIcon } from './AlertIcon.svg'
+export { default as WarningIcon } from './WarningIcon.svg'
+export { default as SuccessIcon } from './SuccessIcon.svg'
 
 
 

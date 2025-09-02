@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import Table from "@/components/table"
 import type { TableColumnsType } from 'antd'
 import { Dropdown, Menu } from 'antd'
-import { WarehouseBranchListType, dummyInbound } from '@/plugins/types/warehouse-type'
+import { dummyEmailCampaigns } from '@/plugins/types/marketing-type'
 import Image from 'next/image'
 import { EditOutlined, PlusCircleOutlined, MoreOutlined } from '@ant-design/icons'
 import DeletePopover from '@/components/popover'
@@ -26,6 +26,7 @@ import Pagination from '@/components/pagination'
 import SearchTable from '@/components/search/SearchTable'
 import ShowPageSize from '@/components/pagination/ShowPageSize'
 import { AddIcon, FilterIcon, TrashIconRed, PencilIconBlue } from '@public/icon'
+import dayjs from 'dayjs'
 
 const index = ({ inboundDatas }: { inboundDatas?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
@@ -59,45 +60,71 @@ const index = ({ inboundDatas }: { inboundDatas?: any }) => {
 
     const breadcrumb = [
         {
-            title: 'Warehouse',
+            title: 'Marketing',
         },
         {
-            title: 'Inbound',
+            title: 'Email Campaigns',
         },
     ]
     const columns: TableColumnsType<any> = [
         {
-            title: 'PO Number',
-            dataIndex: 'po_number',
+            title: 'Name',
+            dataIndex: 'name',
+            sorter: (a: any, b: any) => a?.name.localeCompare(b?.name)
         },
         {
-            title: 'Supplier',
-            dataIndex: 'supplier',
+            title: 'Audience',
+            dataIndex: 'audience',
+            sorter: (a: any, b: any) => a?.audience.localeCompare(b?.audience)
+
         },
         {
-            title: 'Warehouse',
-            dataIndex: 'warehouse',
+            title: 'Schedule',
+            dataIndex: 'schedule',
+            sorter: (a: any, b: any) => dayjs(a?.audience).valueOf() - dayjs(b?.audience).valueOf()
         },
         {
             title: 'Status',
             dataIndex: 'status',
+            sorter: (a: any, b: any) => a?.status.localeCompare(b?.status),
             render: (val: any) => {
                 return <StatusTag status={val} />
             }
         },
         {
-            title: 'Lines (SKUs / Qty Ordered vs Received)',
+            title: 'Sent / Delivered',
             width: 200,
-            dataIndex: 'lines',
+            dataIndex: 'sent_delivered',
+            sorter: (a: any, b: any) => a?.sent - b?.sent
         },
         {
-            title: 'ETA / Received Date',
+            title: 'Open / Click',
             width: 200,
-            dataIndex: 'received_date',
+            dataIndex: 'open_click',
+            sorter: (a: any, b: any) => a?.open - b?.open
         },
         {
-            title: 'Age (days)',
-            dataIndex: 'age',
+            title: 'Conversions',
+            dataIndex: 'conversions',
+            sorter: (a: any, b: any) => a?.conversions - b?.conversions
+        },
+        {
+            title: 'Revenue',
+            dataIndex: 'revenue',
+            sorter: (a: any, b: any) => a?.revenue - b?.revenue
+        },
+        {
+            title: 'Updated',
+            dataIndex: 'updated_at',
+            sorter: (a: any, b: any) => dayjs(a?.updated_at).valueOf() - dayjs(b?.updated_at).valueOf(),
+            render: (_: any, row: any) => {
+                const date = dayjs(row.updated_at).format('DD/MM/YYYY')
+                const user = row.user
+                return <div className='flex flex-col'>
+                    <span>{date}</span>
+                    <span>by {user || 'User'}</span>
+                </div>
+            }
         },
         {
             title: 'Actions',
@@ -112,7 +139,7 @@ const index = ({ inboundDatas }: { inboundDatas?: any }) => {
                             variant='filled'
                             size="small"
                             icon={PencilIconBlue}
-                            onClick={() => router.push(routes.eCommerce.editInbound(row.po_number))}
+                            onClick={() => router.push(routes.eCommerce.editEmailCampaigns(row.id))}
                         />
                         <ButtonIcon
                             color='danger'
@@ -150,7 +177,7 @@ const index = ({ inboundDatas }: { inboundDatas?: any }) => {
                 <div className='flex justify-between items-center'>
                     <div>
                         <h1 className='text-2xl font-bold'>
-                            Inbound
+                            Email Campaigns
                         </h1>
                         <Breadcrumb
                             items={breadcrumb}
@@ -163,14 +190,14 @@ const index = ({ inboundDatas }: { inboundDatas?: any }) => {
                             width={15}
                             height={15}
                         />}
-                        label='Add Inbound'
-                        link={routes.eCommerce.createInbound}
+                        label='Add Email Campaign'
+                        link={routes.eCommerce.createEmailCampaigns}
                     />
                 </div>
 
             </div>
             <Content className="mb-0">
-                <div className='p-6 min-h-[360px]'>
+                <div className='p-6 min-h-[360px'>
                     <div className='flex justify-between mb-4'>
                         <div className='flex items-center gap-2'>
                             <ShowPageSize
@@ -213,16 +240,16 @@ const index = ({ inboundDatas }: { inboundDatas?: any }) => {
                     </div>
                     <Table
                         columns={columns}
-                        dataSource={dummyInbound}
+                        dataSource={dummyEmailCampaigns}
                         withSelectableRows
                         selectedRowKeys={selectedRowKeys}
                         onSelectChange={setSelectedRowKeys}
-                        detailRoutes={(slug) => routes.eCommerce.detailInbound(slug)}
-                        getRowValue={(record) => record.po_number}
+                        detailRoutes={(slug) => routes.eCommerce.detailEmailCampaigns(slug)}
+                        getRowValue={(record) => record.id}
                     />
                     <Pagination
                         current={currentPage}
-                        total={dummyInbound?.length}
+                        total={dummyEmailCampaigns?.length}
                         pageSize={pageSize}
                         onChange={(page) => setCurrentPage(page)}
                     />

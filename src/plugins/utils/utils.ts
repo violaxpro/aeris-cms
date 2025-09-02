@@ -108,6 +108,33 @@ export const toCapitalize = (str: string) => {
         .join(" ");
 };
 
+const spamWords = ["free", "100%", "winner", "click here", "guarantee", "$$$"];
+
+export const validateSubject = (subject: string) => {
+    if (!subject || subject.trim() === "") {
+        return { status: "", message: "" };
+    }
+
+    if (spamWords.some(word => subject.toLowerCase().includes(word))) {
+        return { status: "error", message: "Subject may trigger spam filters." };
+    }
+
+    if (subject.length < 5 || subject.length > 60) {
+        return { status: "warning", message: "Subject length is not optimal." };
+    }
+
+    return { status: "success", message: "No spam issues in subject." };
+};
+
+export const borderColors: Record<string, string> = {
+    "": "#E5E7EB",       // default abu
+    warning: "orange",
+    success: "green",
+    error: "red",
+};
+
+
+
 // Format waktu
 export const dateFormats = [
     { label: 'YYYY-MM-DD', value: 'YYYY-MM-DD' },
