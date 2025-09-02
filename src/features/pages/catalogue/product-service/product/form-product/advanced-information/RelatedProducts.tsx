@@ -15,6 +15,7 @@ import { productAtom } from '@/store/ProductAtom'
 import ButtonIcon from '@/components/button/ButtonIcon'
 import { PencilIconBlue, TrashIconRed } from '@public/icon'
 import { getProduct } from '@/services/products-service'
+import Modal from '@/components/modal'
 
 const RelatedProductInformation = ({ className }: { className?: string }) => {
     const [formData, setFormData] = useState({
@@ -24,6 +25,7 @@ const RelatedProductInformation = ({ className }: { className?: string }) => {
     const [data, setData] = useAtom(productAtom)
     const [filteredData, setFilteredData] = useState<ProductDataType[]>([]);
     const [search, setSearch] = useState('')
+    const [openModalProduct, setIsOpenModalProduct] = useState(false)
 
     const columnProducts: TableColumnsType<ProductDataType> = [
         {
@@ -76,6 +78,9 @@ const RelatedProductInformation = ({ className }: { className?: string }) => {
             width: 120,
             render: (_: string, row: any) => (
                 <div className="flex items-center justify-end gap-3 pe-4">
+                    <Button
+                        label='Choose'
+                    />
                     <ButtonIcon
                         color='primary'
                         variant='filled'
@@ -135,12 +140,27 @@ const RelatedProductInformation = ({ className }: { className?: string }) => {
     }, [data, search]);
     return (
         <div>
+            <Modal
+                open={openModalProduct}
+                handleCancel={() => setIsOpenModalProduct(false)}
+                title='List Products'
+            >
+                <TableProduct
+                    columns={columnProducts}
+                    dataSource={filteredData}
+                    withSelectableRows
+                />
+            </Modal>
             <FormGroup
                 title="Related Product"
                 description="Related Product information about the product"
             >
                 <div className="overflow-x-auto col-span-full">
-                    <div className='flex justify-end mb-2'>
+                    <div className='flex justify-end mb-2 gap-3'>
+                        <Button
+                            label='View Products'
+                            onClick={() => setIsOpenModalProduct(true)}
+                        />
                         <SearchTable
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}

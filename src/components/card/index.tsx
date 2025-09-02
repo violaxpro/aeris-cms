@@ -7,25 +7,26 @@ interface CardProps {
     className?: string
     gridcols?: string
     icon?: string
+    button?: any
     bgIcon?: string
     width?: number
 }
 
-export const Card: React.FC<CardProps> = ({ title, children, gridcols = 'md:grid-cols-2', className, icon, bgIcon = 'bg-[#00809D1A]', width = 15 }) => {
+export const Card: React.FC<CardProps> = ({ title, children, gridcols = 'md:grid-cols-2', className, button, icon, bgIcon = 'bg-[#00809D1A]', width = 15 }) => {
     return (
         <div className={`border p-4 rounded-xl ${className}`} style={{ borderColor: '#E5E7EB' }}>
             <div className='p-4'>
                 <div className='flex items-center justify-between'>
                     <h4 className='text-lg font-semibold'>{title}</h4>
                     {
-                        icon && <div className={`${bgIcon} p-2 rounded-md`}>
+                        icon ? <div className={`${bgIcon} p-2 rounded-md`}>
                             <Image
                                 src={icon}
                                 alt='icon'
                                 width={width}
                                 height={15}
                             />
-                        </div>
+                        </div> : button
 
                     }
                 </div>

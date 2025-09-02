@@ -114,11 +114,11 @@ const BasicInformationProduct = ({ dataById, onChange, formDataCreate }: ChildFo
 
     const metaTitle = formDataCreate.tab_basic_information.metaTitle;
     const titleLength = metaTitle.length;
-    const isTitleInvalid = titleLength < 55 || titleLength > 65;
+    const isTitleInvalid = titleLength !== 0 && (titleLength < 55 || titleLength > 65)
 
     const metaDescription = formDataCreate.tab_basic_information.metaDescription;
     const descLength = metaDescription.length;
-    const isDescInvalid = descLength < 155 || descLength > 165;
+    const isDescInvalid = descLength !== 0 && (descLength < 155 || descLength > 165)
     return (
         <div className='flex flex-col'>
             <FormGroup

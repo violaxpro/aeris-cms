@@ -99,12 +99,14 @@ const OptionsInformation = ({ className }: { className?: string }) => {
                         <div key={index} className="flex flex-col gap-3 mb-6 w-full pb-4">
                             {/* Baris 1: Name dan Option Type */}
                             <div className="grid grid-cols-[1fr_1fr_120px_50px] gap-4">
-                                <Input
+                                <SelectInput
                                     id='name'
-                                    label='Name'
-                                    type='text'
+                                    label='Option Name'
+                                    placeholder="Select Option Name"
                                     value={item.name}
-                                    onChange={(e) => updateItem(index, 'name', e.target.value)}
+                                    onChange={(selectedOptions) =>
+                                        updateItem(index, 'name', selectedOptions)
+                                    }
                                 />
                                 <SelectInput
                                     id={`optionType-${index}`}
