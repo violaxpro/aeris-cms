@@ -228,3 +228,89 @@ export const dummyEmailCampaigns = [
     }
 ]
 
+export const dummySmsCampaigns = [
+    {
+        "id": 1,
+        "name": "Service Renewal Reminder",
+        "audience": "Active Customers",
+        "schedule": "30 Aug, 2025 10:00",
+        "status": "Draft",
+        "sent_delivered": "-",
+        "open_click": "-",
+        "conversions": "-",
+        "revenue": "-",
+        "updated": "30 Aug, 2025 by User"
+    },
+    {
+        "id": 2,
+        "name": "Flash Sale Alert",
+        "audience": "All Subscribers",
+        "schedule": "30 Aug, 2025 10:00",
+        "status": "Scheduled",
+        "sent_delivered": "5,000/4,850",
+        "open_click": "42% / 18%",
+        "conversions": 310,
+        "revenue": "$12,500",
+        "updated": "30 Aug, 2025 by User"
+    },
+    {
+        "id": 3,
+        "name": "Security Check Follow-up",
+        "audience": "Leads NSW",
+        "schedule": "30 Aug, 2025 10:00",
+        "status": "Running",
+        "sent_delivered": "5,000/4,850",
+        "open_click": "42% / 18%",
+        "conversions": 310,
+        "revenue": "$12,500",
+        "updated": "30 Aug, 2025 by User"
+    },
+    {
+        "id": 4,
+        "name": "Fire Alarm Reminder",
+        "audience": "VIC Subscribers",
+        "schedule": "30 Aug, 2025 10:00",
+        "status": "Paused",
+        "sent_delivered": "5,000/4,850",
+        "open_click": "42% / 18%",
+        "conversions": 310,
+        "revenue": "$12,500",
+        "updated": "30 Aug, 2025 by User"
+    },
+    {
+        "id": 5,
+        "name": "Fire Alarm Reminder",
+        "audience": "VIC Subscribers",
+        "schedule": "30 Aug, 2025 10:00",
+        "status": "Completed",
+        "sent_delivered": "5,000/4,850",
+        "open_click": "42% / 18%",
+        "conversions": 310,
+        "revenue": "$12,500",
+        "updated": "30 Aug, 2025 by User"
+    },
+    {
+        "id": 6,
+        "name": "Fire Alarm Reminder",
+        "audience": "VIC Subscribers",
+        "schedule": "30 Aug, 2025 10:00",
+        "status": "Failed",
+        "sent_delivered": "5,000/4,850",
+        "open_click": "42% / 18%",
+        "conversions": 310,
+        "revenue": "$12,500",
+        "updated": "30 Aug, 2025 by User"
+    },
+    {
+        "id": 7,
+        "name": "Fire Alarm Reminder",
+        "audience": "VIC Subscribers",
+        "schedule": "30 Aug, 2025 10:00",
+        "status": "Archived",
+        "sent_delivered": "5,000/4,850",
+        "open_click": "42% / 18%",
+        "conversions": 310,
+        "revenue": "$12,500",
+        "updated": "30 Aug, 2025 by User"
+    },
+]

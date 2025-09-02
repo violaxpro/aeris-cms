@@ -1,7 +1,7 @@
 'use client'
 import React, { useState } from 'react'
 import Breadcrumb from '@/components/breadcrumb'
-import { Divider } from 'antd'
+import Divider from '@/components/divider'
 import { routes } from '@/config/routes'
 import { Content } from 'antd/es/layout/layout'
 import ButtonAction from '@/components/button/ButtonAction'
@@ -19,7 +19,10 @@ import {
     SendIcon,
     CloudDownloadIcon,
     ArrowPreviewIcon,
-    EyeWhiteIcon
+    EyeWhiteIcon,
+    AlertIcon,
+    WarningIcon,
+    SuccessIcon
 } from '@public/icon'
 import Button from '@/components/button'
 import Table from '@/components/table'
@@ -43,41 +46,19 @@ import StatusTag from '@/components/tag'
 import exampleImage from '@public/image/Payment Remittance Example.png';
 import StepComponent from '@/components/step'
 import { toCapitalize } from '@/plugins/utils/utils'
-import ModalEmailPreview from './ModalEmalPreview'
-import ModalActivityHistory from '../../warehouse/inventory-list/ModalActivityHistory'
+import ModalSmsPreview from './ModalSmsPreview'
 
-const DetailEmailCampaigns = ({ slug, data }: { slug?: any, data: any }) => {
+const DetailSmsCampaign = ({ slug, data }: { slug?: any, data: any }) => {
     const router = useRouter()
     const { contextHolder, notifySuccess } = useNotificationAntd()
-    const [profitHidden, setProfitHidden] = useState(true)
-    const [buyPriceHidden, setBuyPriceHidden] = useState(true)
     const [openModalPreview, setOpenModalPreview] = useState(false)
-    const [isOpenModalTracking, setIsOpenModalTracking] = useState(false)
-    const [serialNumberData, setSerialNumberData] = useState<any>({
-        pickId: [],
-        packId: [],
-        serialNumber: {},
-        productFrom: ''
-    })
-    const [trackingNumberData, setTrackingNumberData] = useState<any>({
-        courier: '',
-        tracking_number: [{ value: '' }],
-    })
-    const [isSendTrackingNumber, setIsSendTrackingNumber] = useState(false)
-    const [modalSerialNumber, setModalSerialNumber] = useState<{ open: boolean; row: any }>({ open: false, row: null })
-    const [currentOrder, setCurrentOrder] = useState<any>(null)
-    const [currentPageWarehouse, setCurrentPageWarehouse] = useState(1);
-    const [pageSizeWarehouse, setPageSizeWarehouse] = useState(10);
-    const [search, setSearch] = useState('')
-    const [revealedRows, setRevealedRows] = useState<number[]>([]);
-
 
     const breadcrumb = [
         {
             title: 'Campaigns Management',
         },
         {
-            title: 'Email Campaigns', url: routes.eCommerce.emailCampaigns,
+            title: 'SMS Campaigns', url: routes.eCommerce.smsCampaigns,
         },
         { title: 'Detail' },
 
@@ -159,38 +140,6 @@ const DetailEmailCampaigns = ({ slug, data }: { slug?: any, data: any }) => {
         quantity: 10
     };
 
-    // Saat user pilih serial number di modal:
-    const handleSelectSerialNumber = (rowId: string, serial: string, warehouseName: string, poNumber: string) => {
-        setSerialNumberData((prev: any) => ({
-            ...prev,
-            serialNumber: {
-                ...prev.serialNumber,
-                [rowId]: serial
-            },
-            productFrom: {
-                ...prev.productFrom,
-                [rowId]: `${warehouseName} - ${poNumber}`
-            }
-        }));
-
-        // Tutup modal
-        setModalSerialNumber({ open: false, row: null });
-    };
-
-    const handleTrackingChange = (field: string, value: any) => {
-        setTrackingNumberData((prev: any) => ({
-            ...prev,
-            [field]: value,
-        }));
-    };
-
-    const handleSubmitTracking = () => {
-        console.log("Tracking data dikirim:", trackingNumberData);
-        setIsSendTrackingNumber(true)
-        setIsOpenModalTracking(false)
-        // TODO: kirim ke API di sini
-    };
-
     const handlePrint = async (data: any) => {
         await downloadInvoicePDF(data, 'order');
     }
@@ -199,15 +148,11 @@ const DetailEmailCampaigns = ({ slug, data }: { slug?: any, data: any }) => {
         await previewAndPrintPDF(data, 'order');
     }
 
-    const handleSendTrackingNumber = () => {
-        notifySuccess('Tracking Number has succesfully send!')
-    }
-
     // console.log(modalSerialNumber, serialNumberData)
     return (
         <>
             {contextHolder}
-            <ModalEmailPreview
+            <ModalSmsPreview
                 isModalOpen={openModalPreview}
                 handleCancel={() => setOpenModalPreview(false)}
             />
@@ -215,7 +160,7 @@ const DetailEmailCampaigns = ({ slug, data }: { slug?: any, data: any }) => {
                 <div className='flex flex-col justify-start md:flex-row md:justify-between md:items-center'>
                     <div>
                         <h1 className='text-2xl font-bold'>
-                            Email Campaigns Detail
+                            SMS Campaigns Detail
                         </h1>
                         <Breadcrumb
                             items={breadcrumb}
@@ -281,24 +226,19 @@ const DetailEmailCampaigns = ({ slug, data }: { slug?: any, data: any }) => {
                     <div className='grid gap-4'>
                         <Card title='Campaign Information' gridcols='md:grid-cols-4' >
                             <InfoItem label='Campaign Name' value={data.name || '-'} />
-                            <InfoItem label='Channel' value={data.channel || 'Email'} />
+                            <InfoItem label='Channel' value={data.channel || 'SMS'} />
+                            <InfoItem label='Audience Segment' value={data.audience || 'All Subscribers'} />
                             <InfoItem label='Status' value={toCapitalize(data.status)} textColor={statusMap[toCapitalize(data?.status)]?.textColor} />
-                            <InfoItem label='Last Updated' value={data.last_updated || '01 Sep 2025, 10:00'} />
+                            <InfoItem label='Schedule Type' value={data.schedule_type || 'Send Now'} />
+                            <InfoItem label='Schedule At' value={data.schedule_at || '01 Sep 2025, 10:00'} />
+                            <InfoItem label='UTM Parameters' value={data.utm_parameters || 'utm_source=sms&utm_campaign=flashsale_alt'} />
                         </Card>
                     </div>
                     <div className='grid gap-4'>
-                        <Card title='Sender Information' gridcols='md:grid-cols-3' >
-                            <InfoItem label='From Name' value={data.from_name || 'Alarm Expert Australia'} />
-                            <InfoItem label='From Email' value={data.from_email || 'promo@alarmexpert.com.au'} />
-                            <InfoItem label='Repply To' value={data.repply_to || 'support@alarmexpert.com.au'} />
-                        </Card>
-                    </div>
-                    <div className='grid gap-4'>
-                        <Card title='Message'>
-                            <InfoItem label='Subject' value={data.subject || 'Protect Your Home – 20% Off Alarm Systems'} />
-                            <InfoItem label='Content Type' value={data.content_type || 'HTML'} />
-                            <InfoItem label='Preheader' value={data.preheader || 'Special limited-time offer for our valued customers.'} />
-                            <InfoItem label='HTML Body' value={
+                        <Card title='Message Details' gridcols='md:grid-cols-3' >
+                            <InfoItem label='Provider' value={data.provider || 'Twilio'} />
+                            <InfoItem label='Sender ID / Number' value={data.sender_id || 'ALRMEXP'} />
+                            <InfoItem label='Message Body' value={
                                 <Button
                                     label='Preview Content'
                                     icon={<Image
@@ -313,44 +253,83 @@ const DetailEmailCampaigns = ({ slug, data }: { slug?: any, data: any }) => {
                                 />
                             }
                             />
+                            <InfoItem label='Template Selector' value={data.template_selector || 'Not Used (Manual Message)'} />
+                            <InfoItem label='Max Length Strategy' value={data.max_length_strategy || 'Split'} />
+                            <InfoItem label='Link Shortener & Tracking' value={data.max_length_strategy || 'Enable'} />
+                            <div className='col-span-full py-2'>
+                                <Divider />
+                            </div>
+                            <div className='col-span-full'>
+                                <h4 className='text-lg font-semibold'>Live Counters</h4>
+                            </div>
+                            <InfoItem label='Characters' value={data.characters || '160'} />
+                            <InfoItem label='Segments' value={data.segments || '1'} />
+                            <InfoItem label='Estimate Costs' value={data.estimate_cost || '$0.045 per recipient'} />
                         </Card>
                     </div>
                     <div className='grid md:grid-cols-[1fr_3fr] gap-4'>
-                        <Card title='Audience' gridcols='grid-cols-1'>
-                            <InfoItem label='Segment' value={data.segment || 'INV-AX-2025-0897'} />
-                            <InfoItem label='Exclusions' value={data.exclusions || 'RCPT-AX-2025-0366'} />
+                        <Card title='Controls' gridcols='grid-cols-1'>
+                            <InfoItem label='Skip if No Opt-in' value={data.skip_if_no_option || 'Enable (locked)'} />
+                            <InfoItem label='Country Routing' value={data.country_routing || 'Australia, Indonesia'} />
+                            <InfoItem label='Rate Limit per Minute' value={data.rate_limit_per_minute || '1,000 messages'} />
                         </Card>
-                        <Card title='A/B Testing' gridcols='md:grid-cols-[3fr_1fr]'>
-                            <InfoItem label='Variants' value={
+                        <Card title='Validation & Testing' gridcols='md:grid-cols-2'>
+                            <InfoItem label='Validation Panel' value={
                                 <div>
-                                    <ul className='list-disc px-5'>
-                                        <li>A (50%) - Subject : “Secure Your Home – 20% Off Today”</li>
-                                        <li>B (50%) - Subject : “Protect Your Family with 20% Discount”</li>
-                                    </ul>
-
+                                    <div className='flex gap-2 items-center'>
+                                        <Image src={SuccessIcon} alt='icon' />
+                                        <span>All contacts are opted-in</span>
+                                    </div>
+                                    <div className='flex gap-2 items-center'>
+                                        <Image src={WarningIcon} alt='icon' />
+                                        <span>Sending restricted in Indonesia after 9 PM local time</span>
+                                    </div>
+                                    <div className='flex gap-2 items-center'>
+                                        <Image src={SuccessIcon} alt='icon' />
+                                        <span>No blacklisted numbers detected</span>
+                                    </div>
                                 </div>
                             } />
-                            <InfoItem label='Weights Total' value={data.weights_total || '100%'} />
-                        </Card>
-                    </div>
-                    <div className='grid md:grid-cols-[1fr_3fr] gap-4'>
-                        <Card title='Schedule' gridcols='grid-cols-1'>
-                            <InfoItem label='Send Date / Time' value={data.send_date_time || '5 Sep 2025, 08:45'} />
-                            <InfoItem label='Throttling' value={data.throttling || '5,000 emails per hour'} />
-                        </Card>
-                        <Card title='Tracking & Compliance' gridcols='md:grid-cols-[3fr_1fr]'>
-                            <InfoItem label='Open Tracking' value={data.open_tracking || 'Enable'} />
-                            <InfoItem label='Click Tracking' value={data.click_tracking || 'Enable'} />
-                            <InfoItem label='UTM Parameters' value={data.utm_parameters || 'utm_campaign=winter_safety, utm_source=email'} />
+                            <InfoItem label='Test Number' value={data.test_numbers || '+6281234567890, +6281234567890'} />
                         </Card>
                     </div>
                     <div className='grid gap-4'>
-                        <Card title='Performance Metrics' gridcols='md:grid-cols-5' >
-                            <InfoItem label='Sent/Delivered' value={data.send_delivered || '2,000/1,900'} />
-                            <InfoItem label='Open Rate' value={data.open_rate || '45%'} />
-                            <InfoItem label='Click Rate' value={data.click_rate || '27%'} />
-                            <InfoItem label='Conversions' value={data.conversions || '450'} />
-                            <InfoItem label='Revenue Attributed' value={data.revenue || '$7,500'} />
+                        <Card title='Performance & Report'>
+                            <div className='col-span-full grid md:grid-cols-2'>
+                                <div>
+                                    <h4 className='text-lg font-semibold'>KPIs (01 Sep 2025, 11:00)</h4>
+                                    <div className='grid md:grid-cols-5'>
+                                        <InfoItem label='Sent/Delivered' value={data.send_delivered || '10.000/9,850'} />
+                                        <InfoItem label='Failed' value={data.failed || '150'} />
+                                        <InfoItem label='Clicks Rate' value={data.click_rate || '18.5%'} />
+                                        <InfoItem label='Conversions' value={data.conversions || '310'} />
+                                        <InfoItem label='Revenue' value={data.revenue || '$12.000'} />
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 className='text-lg font-semibold'>Opt-out Events (STOP)</h4>
+                                    <InfoItem label='Contacts Unsubscribed' value={data.contacts_unsubscribes || '34 Contacts'} />
+                                </div>
+                            </div>
+                            <div className='col-span-full py-2'>
+                                <Divider />
+                            </div>
+                            <div className='col-span-full grid md:grid-cols-2'>
+                                <div>
+                                    <h4 className='text-lg font-semibold'>Delivery Errors Sample</h4>
+                                    <div className='grid md:grid-cols-2'>
+                                        <InfoItem label='Error 1' value={data.error || '+61 411 222 333 → Invalid Number'} />
+                                        <InfoItem label='Error 2' value={data.error || '+62 812 7777 8888 → DND (Do Not Disturb)'} />
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 className='text-lg font-semibold'>Heat Map by Country/Hour</h4>
+                                    <div className='grid md:grid-cols-2'>
+                                        <InfoItem label='Australia' value={data.error || 'Peak Engagement at 12:00'} />
+                                        <InfoItem label='Indonesia' value={data.error || 'Peak Engagement at 20:00'} />
+                                    </div>
+                                </div>
+                            </div>
                         </Card>
                     </div>
 
@@ -360,4 +339,4 @@ const DetailEmailCampaigns = ({ slug, data }: { slug?: any, data: any }) => {
     )
 }
 
-export default DetailEmailCampaigns
+export default DetailSmsCampaign

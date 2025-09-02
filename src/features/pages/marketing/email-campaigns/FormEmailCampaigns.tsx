@@ -100,7 +100,7 @@ const FormEmailCampaigns: React.FC<FormProps> = ({ mode, initialValues, slug }) 
     console.log(dynamicFields)
 
     const breadcrumb = [
-        { title: 'Marketing' },
+        { title: 'Campaigns Management' },
         { title: 'Email Campaigns', url: routes.eCommerce.emailCampaigns },
         { title: mode === 'create' ? 'Create' : 'Edit' },
     ];

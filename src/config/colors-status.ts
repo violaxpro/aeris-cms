@@ -62,6 +62,9 @@ export const statusMap: Record<string, { color: string; text: string, textColor:
     Daily: { color: '#FF9E021A', text: 'Daily', textColor: '#FF9E02' },
     Weekly: { color: '#3666AA1A', text: 'Weekly', textColor: '#3666AA' },
     Monthly: { color: '#01933B1A', text: 'Monthly', textColor: '#01933B' },
+    Running: { color: '#3666AA1A', text: 'Running', textColor: '#3666AA' },
+    Paused: { color: '#9747FF1A', text: 'Paused', textColor: '#9747FF' },
+    Archived: { color: '#A329041A', text: 'Archived', textColor: '#A32904' },
 };
 
 export const colorMap: Record<string, any> = {

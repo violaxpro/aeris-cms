@@ -17,7 +17,7 @@ interface QuillEditorProps {
     labelClassName?: string;
     errorClassName?: string;
     toolbarPosition?: 'top' | 'bottom';
-    notes?: string;
+    notes?: any;
     style?: any
 }
 
@@ -111,7 +111,7 @@ export default function QuillEditor({
 
             {toolbarPosition === 'bottom' && toolbarContent}
 
-            {notes && <span>{notes}</span>}
+            {notes && <div className='text-xs mt-1'>{notes}</div>}
             {/* {error && <FieldError size="md" error={error} className={errorClassName} />} */}
         </div>
     );

@@ -80,32 +80,20 @@ const ModalSendTrackingNumber = ({
                 iconLeftTitle={GmailIcon}
             >
                 <div className='flex flex-col gap-3'>
-                    <Input
-                        id='from'
-                        label='From:'
-                        type='text'
-                        value={formEmail.from}
-                        onChange={handleChange}
-                        prefix={
+                    <div className='flex gap-4 items-center'>
+                        <span className='w-10'>From:</span>
+                        <div className='border border-gray-300 p-2 rounded-lg w-full flex gap-2 items-center '>
                             <Avatar style={{ backgroundColor: '#87d068' }} url={AvatarImage} size='default' />
-                        }
-                        divClassName='flex gap-4'
-                        labelClassName='w-10'
-                        inputClassname='md:w-full'
-                    />
-                    <Input
-                        id='to'
-                        label='To:'
-                        type='text'
-                        value={formEmail.to}
-                        onChange={handleChange}
-                        prefix={
+                            <span>{formEmail.from}</span>
+                        </div>
+                    </div>
+                    <div className='flex gap-4 items-center'>
+                        <span className='w-10'>To:</span>
+                        <div className='border border-gray-300 p-2 rounded-lg w-full flex gap-2 items-center '>
                             <Avatar style={{ backgroundColor: '#87d068' }} url={AvatarImage} size='default' />
-                        }
-                        divClassName='flex gap-4'
-                        labelClassName='w-10'
-                        inputClassname='md:w-full'
-                    />
+                            <span>{formEmail.to}</span>
+                        </div>
+                    </div>
                     <Divider />
                     <div>
                         <span>Order #12345 Shipped – Alarm Expert</span>

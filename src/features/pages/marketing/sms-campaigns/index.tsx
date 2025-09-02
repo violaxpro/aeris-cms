@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import Table from "@/components/table"
 import type { TableColumnsType } from 'antd'
 import { Dropdown, Menu } from 'antd'
-import { dummyEmailCampaigns } from '@/plugins/types/marketing-type'
+import { dummySmsCampaigns } from '@/plugins/types/marketing-type'
 import Image from 'next/image'
 import { EditOutlined, PlusCircleOutlined, MoreOutlined } from '@ant-design/icons'
 import DeletePopover from '@/components/popover'
@@ -63,7 +63,7 @@ const index = ({ inboundDatas }: { inboundDatas?: any }) => {
             title: 'Campaigns Management',
         },
         {
-            title: 'Email Campaigns',
+            title: 'SMS Campaigns',
         },
     ]
     const columns: TableColumnsType<any> = [
@@ -139,7 +139,7 @@ const index = ({ inboundDatas }: { inboundDatas?: any }) => {
                             variant='filled'
                             size="small"
                             icon={PencilIconBlue}
-                            onClick={() => router.push(routes.eCommerce.editEmailCampaigns(row.id))}
+                            onClick={() => router.push(routes.eCommerce.editSmsCampaigns(row.id))}
                         />
                         <ButtonIcon
                             color='danger'
@@ -171,13 +171,13 @@ const index = ({ inboundDatas }: { inboundDatas?: any }) => {
                 onCancel={() => setOpenModalDelete(false)}
                 onSave={handleDelete}
                 action='Delete'
-                text='Are you sure you want to delete this email campaign?'
+                text='Are you sure you want to delete this sms campaign?'
             />
             <div className="mt-6 mx-6 mb-0">
                 <div className='flex justify-between items-center'>
                     <div>
                         <h1 className='text-2xl font-bold'>
-                            Email Campaigns
+                            SMS Campaigns
                         </h1>
                         <Breadcrumb
                             items={breadcrumb}
@@ -190,8 +190,8 @@ const index = ({ inboundDatas }: { inboundDatas?: any }) => {
                             width={15}
                             height={15}
                         />}
-                        label='Add Email Campaign'
-                        link={routes.eCommerce.createEmailCampaigns}
+                        label='Add SMS Campaign'
+                        link={routes.eCommerce.createSmsCampaigns}
                     />
                 </div>
 
@@ -240,16 +240,16 @@ const index = ({ inboundDatas }: { inboundDatas?: any }) => {
                     </div>
                     <Table
                         columns={columns}
-                        dataSource={dummyEmailCampaigns}
+                        dataSource={dummySmsCampaigns}
                         withSelectableRows
                         selectedRowKeys={selectedRowKeys}
                         onSelectChange={setSelectedRowKeys}
-                        detailRoutes={(slug) => routes.eCommerce.detailEmailCampaigns(slug)}
+                        detailRoutes={(slug) => routes.eCommerce.detailSmsCampaigns(slug)}
                         getRowValue={(record) => record.id}
                     />
                     <Pagination
                         current={currentPage}
-                        total={dummyEmailCampaigns?.length}
+                        total={dummySmsCampaigns?.length}
                         pageSize={pageSize}
                         onChange={(page) => setCurrentPage(page)}
                     />
