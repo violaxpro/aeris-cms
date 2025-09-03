@@ -12,10 +12,15 @@ export type InventoryListType = {
 
 export type WarehouseBranchListType = {
     id?: number | string | undefined
-    name: string
+    warehouse_code: string
+    warehouse_name: string
     address: string
-    phone_number: string
-    email: string
+    contact: string
+    status: string
+    default_fulfilment: boolean
+    zones_count: number
+    bins_count: number
+    cutoff_profiles: any[]
 };
 
 export const inventoryListDummyData = [
@@ -164,6 +169,165 @@ export const inventoryListDummyData = [
         ]
     }
 ]
+
+export const dummyBranchManagement = [
+    {
+        "id": 1,
+        "warehouse_code": "WH001",
+        "warehouse_name": "Jakarta Main Warehouse",
+        "address": "Jl. Sudirman No. 123, Jakarta",
+        "contact": "+62 812-3456-7890",
+        "status": "Active",
+        "default_fulfilment": true,
+        "zones_count": 5,
+        "bins_count": 120,
+        "cutoff_profiles": [
+            {
+                "id": 101,
+                "carrier": "JNE",
+                "service": "Reguler",
+                "cutoff_time": "16:00"
+            },
+            {
+                "id": 102,
+                "carrier": "SiCepat",
+                "service": "Best",
+                "cutoff_time": "15:30"
+            }
+        ],
+        "zones": [
+            {
+                "code": "Z001",
+                "name": "Storage Zone A",
+                "type": "Storage",
+                "bins": [
+                    {
+                        "code": "BIN-001",
+                        "zone": "Z001",
+                        "pick_sequence": 1,
+                        "pickable": true,
+                        "putawayable": true,
+                        "capacity": {
+                            "units": 100,
+                            "volume": 500,
+                            "weight": 2000
+                        }
+                    },
+                    {
+                        "code": "BIN-002",
+                        "zone": "Z001",
+                        "pick_sequence": 2,
+                        "pickable": true,
+                        "putawayable": false,
+                        "capacity": {
+                            "units": 50,
+                            "volume": 200,
+                            "weight": 800
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "warehouse_code": "WH002",
+        "warehouse_name": "Bandung Fulfilment Center",
+        "address": "Jl. Asia Afrika No. 45, Bandung",
+        "contact": "+62 812-9876-5432",
+        "status": "Active",
+        "default_fulfilment": false,
+        "zones_count": 3,
+        "bins_count": 75,
+        "cutoff_profiles": [
+            {
+                "id": 103,
+                "carrier": "J&T",
+                "service": "EZ",
+                "cutoff_time": "17:00"
+            }
+        ],
+        "zones": [
+            {
+                "code": "Z001",
+                "name": "Storage Zone A",
+                "type": "Storage",
+                "bins": [
+                    {
+                        "code": "BIN-001",
+                        "zone": "Z001",
+                        "pick_sequence": 1,
+                        "pickable": true,
+                        "putawayable": true,
+                        "capacity": {
+                            "units": 100,
+                            "volume": 500,
+                            "weight": 2000
+                        }
+                    },
+                    {
+                        "code": "BIN-002",
+                        "zone": "Z001",
+                        "pick_sequence": 2,
+                        "pickable": true,
+                        "putawayable": false,
+                        "capacity": {
+                            "units": 50,
+                            "volume": 200,
+                            "weight": 800
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "warehouse_code": "WH003",
+        "warehouse_name": "Surabaya Secondary Warehouse",
+        "address": "Jl. Pemuda No. 88, Surabaya",
+        "contact": "+62 813-5555-7777",
+        "status": "Disabled",
+        "default_fulfilment": false,
+        "zones_count": 2,
+        "bins_count": 30,
+        "cutoff_profiles": [],
+        "zones": [
+            {
+                "code": "Z001",
+                "name": "Storage Zone A",
+                "type": "Storage",
+                "bins": [
+                    {
+                        "code": "BIN-001",
+                        "zone": "Z001",
+                        "pick_sequence": 1,
+                        "pickable": true,
+                        "putawayable": true,
+                        "capacity": {
+                            "units": 100,
+                            "volume": 500,
+                            "weight": 2000
+                        }
+                    },
+                    {
+                        "code": "BIN-002",
+                        "zone": "Z001",
+                        "pick_sequence": 2,
+                        "pickable": true,
+                        "putawayable": false,
+                        "capacity": {
+                            "units": 50,
+                            "volume": 200,
+                            "weight": 800
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+]
+
 
 export const dummyOutbound = [
     {

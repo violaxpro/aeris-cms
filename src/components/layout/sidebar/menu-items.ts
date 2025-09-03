@@ -186,8 +186,8 @@ export const menuItems = [
                         href: routes.eCommerce.outbound
                     },
                     {
-                        key: 'inventory-management',
-                        label: 'Inventory Management',
+                        key: 'inventory-managements',
+                        label: 'Inventory Managements',
                         href: routes.eCommerce.inventoryList,
                     },
                     {
@@ -211,8 +211,8 @@ export const menuItems = [
                         href: routes.eCommerce.rmaWarehouse
                     },
                     {
-                        key: 'branch-management',
-                        label: 'Branch Management',
+                        key: 'branch-managements',
+                        label: 'Branch Managements',
                         href: routes.eCommerce.warehouseBranchList,
                     },
                     {

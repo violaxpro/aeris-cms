@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from 'react'
 import Table from "@/components/table"
 import type { TableColumnsType } from 'antd'
-import { Dropdown, Menu } from 'antd'
-import { WarehouseBranchListType } from '@/plugins/types/warehouse-type'
+import { Dropdown, Menu, Tooltip } from 'antd'
+import { WarehouseBranchListType, dummyBranchManagement } from '@/plugins/types/warehouse-type'
 import Image from 'next/image'
 import { EditOutlined, PlusCircleOutlined, MoreOutlined } from '@ant-design/icons'
 import DeletePopover from '@/components/popover'
@@ -25,6 +25,7 @@ import Pagination from '@/components/pagination'
 import SearchTable from '@/components/search/SearchTable'
 import ShowPageSize from '@/components/pagination/ShowPageSize'
 import { AddIcon, FilterIcon, TrashIconRed, PencilIconBlue } from '@public/icon'
+import StatusTag from '@/components/tag'
 
 const index = ({ warehouseBranchList }: { warehouseBranchList?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
@@ -61,25 +62,80 @@ const index = ({ warehouseBranchList }: { warehouseBranchList?: any }) => {
             title: 'Warehouse',
         },
         {
-            title: 'Branch Management',
+            title: 'Branch Managements',
         },
     ]
     const columns: TableColumnsType<WarehouseBranchListType> = [
         {
             title: 'Warehouse Name',
-            dataIndex: 'name',
+            dataIndex: 'warehouse_name',
+            sorter: (a: any, b: any) => a.warehouse_name.localeCompare(b?.warehouse_name),
         },
         {
             title: 'Address',
             dataIndex: 'address',
+            sorter: (a: any, b: any) => a.address.localeCompare(b?.address),
         },
         {
-            title: 'Phone Number',
-            dataIndex: 'phone_number',
+            title: 'Contact',
+            dataIndex: 'contact',
+            sorter: (a: any, b: any) => a.phone_number.localeCompare(b?.phone_number),
         },
         {
-            title: 'Email',
-            dataIndex: 'email',
+            title: 'Status',
+            dataIndex: 'status',
+            sorter: (a: any, b: any) => a.status.localeCompare(b?.status),
+            render: (val: any) => {
+                return <StatusTag status={val} />
+            }
+        },
+        {
+            title: 'Default Fulfillment',
+            dataIndex: 'default_fulfilment',
+            sorter: (a: any, b: any) => a.default_fulfilment.localeCompare(b?.default_fulfilment),
+            render: (val: any) => {
+                return val == true ? 'Y' : 'N'
+            }
+        },
+        {
+            title: 'Zones / Bins Count',
+            width: 100,
+            dataIndex: 'zone_counts',
+            sorter: (a: any, b: any) => a.zone_counts - b?.zone_counts,
+            render: (_: any, row: any) => {
+                const zones_count = row.zones_count
+                const bins_count = row.bins_count
+                return <span>{`${zones_count} / ${bins_count}`}</span>
+            }
+        },
+        {
+            title: 'Cut-off Profiles',
+            dataIndex: 'cutoff_profiles',
+            sorter: (a: any, b: any) => a.cutoff_profiles.localeCompare(b?.cutoff_profiles),
+            render: (data: any[]) => {
+                if (!data || data.length === 0) return '-'
+
+                const first = data[0]
+                const moreCount = data.length - 1
+
+                return (
+                    <span>
+                        Carrier : {first.carrier}, Service : {first.service}
+                        {moreCount > 0 && (
+                            <Tooltip
+                                title={data.slice(1).map((item, i) => (
+                                    <div key={i}>
+                                        Carrier : {item.carrier} <br />
+                                        Service : {item.service}
+                                    </div>
+                                ))}
+                            >
+                                <Link href='#' className='ml-2'>+{moreCount} more</Link>
+                            </Tooltip>
+                        )}
+                    </span>
+                )
+            }
         },
         {
             title: 'Actions',
@@ -88,13 +144,13 @@ const index = ({ warehouseBranchList }: { warehouseBranchList?: any }) => {
             width: 120,
             render: (_: string, row: any) => {
                 return (
-                    <div className="flex items-center justify-end gap-3 pe-4">
+                    <div className="flex items-center justify-end gap-3 pe-4" onClick={(e) => e.stopPropagation()}>
                         <ButtonIcon
                             color='primary'
                             variant='filled'
                             size="small"
                             icon={PencilIconBlue}
-                            onClick={() => router.push(routes.eCommerce.editPriceLevel(row.id))}
+                            onClick={() => router.push(routes.eCommerce.editWarehouseBranchList(row.warehouse_code))}
                         />
                         <ButtonIcon
                             color='danger'
@@ -126,15 +182,29 @@ const index = ({ warehouseBranchList }: { warehouseBranchList?: any }) => {
                 onCancel={() => setOpenModalDelete(false)}
                 onSave={handleDelete}
                 action='Delete'
-                text='Are you sure you want to delete this warehouse branch list?'
+                text='Are you sure you want to delete this branch management?'
             />
             <div className="mt-6 mx-6 mb-0">
-                <h1 className='text-2xl font-bold'>
-                    Branch Management
-                </h1>
-                <Breadcrumb
-                    items={breadcrumb}
-                />
+                <div className='flex justify-between items-center'>
+                    <div>
+                        <h1 className='text-2xl font-bold'>
+                            Branch Managements
+                        </h1>
+                        <Breadcrumb
+                            items={breadcrumb}
+                        />
+                    </div>
+                    <Button
+                        icon={<Image
+                            src={AddIcon}
+                            alt='add-icon'
+                            width={15}
+                            height={15}
+                        />}
+                        label='Add Branch Management'
+                        link={routes.eCommerce.createWarehouseBranchList}
+                    />
+                </div>
             </div>
             <Content className="mb-0">
                 <div className='p-6 min-h-[360px]'>
@@ -175,19 +245,19 @@ const index = ({ warehouseBranchList }: { warehouseBranchList?: any }) => {
                                 btnClassname='btn-delete-all'
                             />
                         }
-
-
                     </div>
                     <Table
                         columns={columns}
-                        dataSource={data}
+                        dataSource={dummyBranchManagement}
                         withSelectableRows
                         selectedRowKeys={selectedRowKeys}
                         onSelectChange={setSelectedRowKeys}
+                        detailRoutes={(slug) => routes.eCommerce.detailWarehouseBranchList(slug)}
+                        getRowValue={(record) => record.warehouse_code}
                     />
                     <Pagination
                         current={currentPage}
-                        total={data?.length}
+                        total={dummyBranchManagement?.length}
                         pageSize={pageSize}
                         onChange={(page) => setCurrentPage(page)}
                     />

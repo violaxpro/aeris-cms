@@ -130,6 +130,10 @@ export const routes = {
     detailRmaWarehouse: (slug: string) => `/ecommerce/rma-warehouse/${slug}/detail`,
 
     warehouseBranchList: '/ecommerce/warehouse-branch-management',
+    createWarehouseBranchList: '/ecommerce/warehouse-branch-management/create',
+    editWarehouseBranchList: (slug: string) => `/ecommerce/warehouse-branch-management/${slug}/edit`,
+    detailWarehouseBranchList: (slug: string) => `/ecommerce/warehouse-branch-management/${slug}/detail`,
+
 
     reportingAnalytics: '/ecommerce/reporting-analytics',
     createReportingAnalytics: '/ecommerce/reporting-analytics/create',
