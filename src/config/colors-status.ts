@@ -65,6 +65,8 @@ export const statusMap: Record<string, { color: string; text: string, textColor:
     Running: { color: '#3666AA1A', text: 'Running', textColor: '#3666AA' },
     Paused: { color: '#9747FF1A', text: 'Paused', textColor: '#9747FF' },
     Archived: { color: '#A329041A', text: 'Archived', textColor: '#A32904' },
+    Quarantine: { color: '#EA00001A', text: 'Quarantine', textColor: '#EA0000' },
+
 };
 
 export const colorMap: Record<string, any> = {

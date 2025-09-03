@@ -106,6 +106,9 @@ export const routes = {
     detailOutbound: (slug: string) => `/ecommerce/outbound/${slug}/detail`,
 
     inventoryList: '/ecommerce/inventory-management',
+    createInventoryList: '/ecommerce/inventory-management/create',
+    editInventoryList: (slug: string) => `/ecommerce/inventory-management/${slug}/edit`,
+    detailInventoryList: (slug: string) => `/ecommerce/inventory-management/${slug}/detail`,
     inventoryListHistory: (slug: string) => `/ecommerce/inventory-management/${slug}/history`,
     warehouses: (slug: string) => `/ecommerce/warehouse/${slug}/edit`,
 

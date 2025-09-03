@@ -412,7 +412,7 @@ const FormBranchManagement: React.FC<FormProps> = ({ mode, initialValues, slug }
                                                     onChange={(selected) => handleUpdateRow(index, 'type', selected)}
                                                     options={[
                                                         { label: 'Fast', value: 'Fast' },
-                                                        { label: 'Bulk', value: 'Picking' },
+                                                        { label: 'Bulk', value: 'Bulk' },
                                                         { label: 'Cold', value: 'Cold' },
                                                         { label: 'Returns', value: 'Returns' },
                                                         { label: 'Quarantine', value: 'Quarantine' },

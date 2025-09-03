@@ -59,7 +59,7 @@ const index = ({ inventoryLists }: { inventoryLists?: any }) => {
             title: 'Warehouse',
         },
         {
-            title: 'Inventory Management',
+            title: 'Inventory Managements',
         },
     ]
     const columns: TableColumnsType<BrandType> = [
@@ -69,26 +69,38 @@ const index = ({ inventoryLists }: { inventoryLists?: any }) => {
             sorter: (a: any, b: any) => a?.sku.localeCompare(b?.sku)
         },
         {
-            title: 'Image',
-            dataIndex: 'image',
-            render: (url: string) => {
-                if (!url) return null;
-                return (
-                    <Image
-                        src={url}
-                        alt="product-img"
-                        width={50}
-                        height={50}
-                        className='object-cover rounded-xl'
-                    />
-                )
-            },
-        },
-        {
-            title: 'Name',
+            title: 'Product Name',
             dataIndex: 'name',
             sorter: (a: any, b: any) => a?.name.localeCompare(b?.name)
         },
+        {
+            title: 'Warehouse / Zone / Bin',
+            dataIndex: 'warehouses',
+            width: 200,
+            sorter: (a: any, b: any) => a?.warehouses.localeCompare(b?.warehouses),
+            render: (_: any, row: any) => {
+                const warehouse = row.warehouses.warehouse || '-'
+                const zone = row.warehouses.zone || '-'
+                const bin = row.warehouses.bin || '-'
+                return <span>{warehouse} / {zone} / {bin}</span>
+            }
+        },
+        // {
+        //     title: 'Image',
+        //     dataIndex: 'image',
+        //     render: (url: string) => {
+        //         if (!url) return null;
+        //         return (
+        //             <Image
+        //                 src={url}
+        //                 alt="product-img"
+        //                 width={50}
+        //                 height={50}
+        //                 className='object-cover rounded-xl'
+        //             />
+        //         )
+        //     },
+        // },
         {
             title: 'In Stock',
             dataIndex: 'in_stock',
@@ -132,7 +144,7 @@ const index = ({ inventoryLists }: { inventoryLists?: any }) => {
                             size="small"
                             icon={PencilYellowIcon}
                             width={15}
-                            onClick={() => router.push(routes.eCommerce.editPriceLevel(row.id))}
+                            onClick={() => router.push(routes.eCommerce.editInventoryList(row.id))}
                         />
                         <ButtonIcon
                             color='danger'
@@ -163,15 +175,31 @@ const index = ({ inventoryLists }: { inventoryLists?: any }) => {
                 onCancel={() => setOpenModalDelete(false)}
                 onSave={handleDelete}
                 action='Delete'
-                text='Are you sure you want to delete this inventory list?'
+                text='Are you sure you want to delete this inventory management?'
             />
             <div className="mt-6 mx-6 mb-0">
-                <h1 className='text-2xl font-bold'>
-                    Inventory Management
-                </h1>
-                <Breadcrumb
-                    items={breadcrumb}
-                />
+                <div className='flex justify-between items-center'>
+                    <div>
+                        <h1 className='text-2xl font-bold'>
+                            Inventory Managements
+                        </h1>
+                        <Breadcrumb
+                            items={breadcrumb}
+                        />
+                    </div>
+
+                    <Button
+                        icon={<Image
+                            src={AddIcon}
+                            alt='add-icon'
+                            width={15}
+                            height={15}
+                        />}
+                        label='Add Inventory Management'
+                        link={routes.eCommerce.createInventoryList}
+                    />
+                </div>
+
             </div>
             <Content className="mb-0">
                 <div className=' bg-[#fff] p-6 min-h-[360px]'>
@@ -221,8 +249,8 @@ const index = ({ inventoryLists }: { inventoryLists?: any }) => {
                         withSelectableRows
                         selectedRowKeys={selectedRowKeys}
                         onSelectChange={setSelectedRowKeys}
-                        detailRoutes={(slug: string) => routes.eCommerce.inventoryListHistory(slug)}
-                        getRowValue={(record: any) => record.sku}
+                        detailRoutes={(slug: string) => routes.eCommerce.detailInventoryList(slug)}
+                        getRowValue={(record: any) => record.id}
                     />
                     <Pagination
                         current={currentPage}

@@ -70,7 +70,7 @@ const InventoryListsHistory = ({ historyData, slug }: { historyData?: any, slug:
             title: 'Warehouse',
         },
         {
-            title: 'Inventory Management', url: routes.eCommerce.inventoryList
+            title: 'Inventory Managements', url: routes.eCommerce.inventoryList
         },
         {
             title: slug
@@ -189,7 +189,7 @@ const InventoryListsHistory = ({ historyData, slug }: { historyData?: any, slug:
             />
             <div className="mt-6 mx-6 mb-0">
                 <h1 className='text-2xl font-bold'>
-                    Inventory Management
+                    Inventory Managements
                 </h1>
                 <Breadcrumb
                     items={breadcrumb}

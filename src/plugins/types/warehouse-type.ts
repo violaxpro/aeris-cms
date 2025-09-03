@@ -117,7 +117,12 @@ export const inventoryListDummyData = [
                     },
                 ]
             }
-        ]
+        ],
+        warehouses: {
+            warehouse: 'Seadan Pranatta',
+            zone: 'Z001',
+            bin: 'B01'
+        }
     },
     {
         id: 2,
@@ -166,7 +171,12 @@ export const inventoryListDummyData = [
                     }
                 ]
             }
-        ]
+        ],
+        warehouses: {
+            warehouse: 'Seadan Pranatta',
+            zone: 'Z002',
+            bin: 'B02'
+        }
     }
 ]
 
