@@ -219,7 +219,7 @@ export const menuItems = [
                         key: 'reporting-analytics',
                         label: 'Reporting & Analytics',
                         href: routes.eCommerce.reportingAnalytics
-                    }
+                    },
                 ],
             },
             // {
@@ -530,6 +530,12 @@ export const menuItems = [
                         href: '#'
                     },
                 ]
+            },
+            {
+                key: 'marketing-settings',
+                label: 'Marketing Settings',
+                href: '#',
+                icon: SettingOutlined,
             }
         ]
     },

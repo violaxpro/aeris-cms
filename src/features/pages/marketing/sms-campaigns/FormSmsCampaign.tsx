@@ -36,6 +36,7 @@ const FormSmsCampaign: React.FC<FormProps> = ({ mode, initialValues, slug }) => 
     const [formData, setFormData] = useState({
         campaign_name: initialValues ? initialValues.campaign_name : '',
         audience_segment: initialValues ? initialValues.audience_segment : '',
+        custom_audience: initialValues ? initialValues.custom_audience : '',
         utm_parameters: initialValues ? initialValues.utm_parameters : '',
         provider: initialValues ? initialValues.provider : '',
         sender_id: initialValues ? initialValues.sender_id : '',
@@ -142,17 +143,31 @@ const FormSmsCampaign: React.FC<FormProps> = ({ mode, initialValues, slug }) => 
                             onChange={handleChange('campaign_name')}
                             value={formData.campaign_name}
                         />
-                        <SelectInput
-                            id='audience_segment'
-                            label='Audience Segment'
-                            placeholder='Input Audience Segment'
-                            onChange={handleChange('audience_segment')}
-                            value={formData.audience_segment}
-                            options={[
-                                { label: 'All Subscribers', value: 'All Subscribers' },
-                                { label: 'Active Subscribers', value: 'Active Subscribers' },
-                            ]}
-                        />
+                        <div className={`grid ${formData.audience_segment == 'Custom' ? 'md:grid-cols-2' : 'grid-cols-1'} gap-3`}>
+                            <SelectInput
+                                id='audience_segment'
+                                label='Audience Segment'
+                                placeholder='Input Audience Segment'
+                                onChange={handleChange('audience_segment')}
+                                value={formData.audience_segment}
+                                options={[
+                                    { label: 'All Subscribers', value: 'All Subscribers' },
+                                    { label: 'Active Subscribers', value: 'Active Subscribers' },
+                                    { label: 'Custom', value: 'Custom' },
+                                ]}
+                            />
+                            {
+                                formData.audience_segment == 'Custom' &&
+                                <Input
+                                    id='custom_audience'
+                                    label='Custom Audience'
+                                    type='text'
+                                    placeholder='Input Custom Audience'
+                                    onChange={handleChange('custom_audience')}
+                                    value={formData.custom_audience}
+                                />
+                            }
+                        </div>
                         <Input
                             id='utm_parameters'
                             label='UTM Parameters'
@@ -170,9 +185,6 @@ const FormSmsCampaign: React.FC<FormProps> = ({ mode, initialValues, slug }) => 
                                 value={formData.provider}
                                 options={[
                                     { label: 'Twillio', value: 'Twillio' },
-                                    { label: 'Tidio', value: 'Tidio' },
-                                    { label: 'Vonage', value: 'Vonage' },
-                                    { label: 'Other', value: 'Other' },
                                 ]}
                             />
                             <Input

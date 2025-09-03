@@ -43,7 +43,7 @@ import exampleImage from '@public/image/Payment Remittance Example.png';
 import StepComponent from '@/components/step'
 import { toCapitalize } from '@/plugins/utils/utils'
 
-const DetailInventoryManagement = ({ slug, data }: { slug?: any, data: any }) => {
+const DetailBranchManagement = ({ slug, data }: { slug?: any, data: any }) => {
     const router = useRouter()
     const { contextHolder, notifySuccess } = useNotificationAntd()
     const [profitHidden, setProfitHidden] = useState(true)
@@ -74,253 +74,186 @@ const DetailInventoryManagement = ({ slug, data }: { slug?: any, data: any }) =>
             title: 'Warehouse',
         },
         {
-            title: 'Inventory Managements', url: routes.eCommerce.inventoryList,
+            title: 'Branch Managements', url: routes.eCommerce.warehouseBranchList,
         },
         { title: 'Detail' },
 
     ]
 
-    const columnsWarehouseLocation: TableColumnsType<any> = [
+
+    const columnsZone: TableColumnsType<any> = [
         {
-            title: 'Location',
-            dataIndex: 'location',
+            title: 'Zone Code',
+            dataIndex: 'zone_code',
             sorter: (a: any, b: any) => {
-                return a?.location.localeCompare(b?.location)
+                return a?.zone_code.localeCompare(b?.zone_code)
+            },
+            render: (_: any, row: any) => {
+                return row.zone_code
+            }
+        },
+        {
+            title: 'Zone Name',
+            dataIndex: 'zone_name',
+            sorter: (a: any, b: any) => {
+                return a?.zone_name.localeCompare(b?.zone_name)
+            },
+            render: (_: any, row: any) => {
+                return row.zone_name
+            }
+        },
+        {
+            title: 'Type',
+            dataIndex: 'type',
+            sorter: (a: any, b: any) => {
+                return a?.type.localeCompare(b?.type)
+            },
+            render: (_: any, row: any) => {
+                return row.type
+            }
+        },
+
+    ]
+    const columnsBin: TableColumnsType<any> = [
+        {
+            title: 'Bin Code',
+            dataIndex: 'bin_code',
+            sorter: (a: any, b: any) => {
+                return a?.bin_code.localeCompare(b?.bin_code)
             },
             render: (_: any, row: any) => {
                 return <div className="flex flex-col w-full">
                     <div className="flex justify-start gap-1">
-                        <span>{row.location}</span>
+                        <span>{row.bin_code}</span>
                     </div>
                 </div>
             }
         },
         {
-            title: 'Zone',
-            dataIndex: 'zone',
+            title: 'Zone Code',
+            dataIndex: 'zone_code',
             sorter: (a: any, b: any) => {
-                return a?.zone.localeCompare(b?.zone)
+                return a?.zone_code.localeCompare(b?.zone_code)
             },
             render: (_: any, row: any) => {
-                return <div className="flex flex-col w-full">
-                    <div className="flex justify-start gap-1">
-                        <span>{row.zone}</span>
-                    </div>
-                </div>
+                return row.zone_code
             }
         },
         {
-            title: 'Bin',
-            dataIndex: 'bin',
+            title: 'Pick Sequence',
+            dataIndex: 'pick_sequence',
             sorter: (a: any, b: any) => {
-                return a?.bin.localeCompare(b?.bin)
+                return a?.pick_sequence - b?.pick_sequence
             },
             render: (_: any, row: any) => {
-                return <div className="flex flex-col w-full">
-                    <div className="flex justify-start gap-1">
-                        <span>{row.bin}</span>
-                    </div>
-                </div>
+                return row.pick_sequence
             }
         },
         {
-            title: 'On Hand',
-            dataIndex: 'on_hand',
+            title: 'Pickable',
+            dataIndex: 'pickable',
             sorter: (a: any, b: any) => {
-                return a?.on_hand - b?.on_hand
+                return a?.pickable.localeCompare(b?.pickable)
             },
             render: (_: any, row: any) => {
-                return <div className="flex flex-col w-full">
-                    <div className="flex justify-start gap-1">
-                        <span>{row.on_hand}</span>
-                    </div>
-                </div>
+                const pickable = row.pickable == true ? 'Yes' : 'No'
+                return pickable
             }
         },
         {
-            title: 'Allocated',
-            dataIndex: 'allocated',
+            title: 'Putawayable',
+            dataIndex: 'putawayable',
             sorter: (a: any, b: any) => {
-                return a?.allocated - b?.allocated
+                return a?.putawayable.localeCompare(b?.putawayable)
             },
             render: (_: any, row: any) => {
-                return <div className="flex flex-col w-full">
-                    <div className="flex justify-start gap-1">
-                        <span>{row.allocated}</span>
-                    </div>
-                </div>
+                const putawayable = row.putawayable == true ? 'Yes' : 'No'
+                return putawayable
             }
         },
         {
-            title: 'Available',
-            dataIndex: 'available',
+            title: 'Capacity',
+            dataIndex: 'capacity',
             sorter: (a: any, b: any) => {
-                return a?.available - b?.available
+                return a?.capacity.localeCompare(b?.capacity)
             },
             render: (_: any, row: any) => {
-                return <div className="flex flex-col w-full">
-                    <div className="flex justify-start gap-1">
-                        <span>{row.available}</span>
-                    </div>
-                </div>
+                return row.capacity
             }
         },
 
     ]
 
-    const columnsSerial: TableColumnsType<any> = [
+    const columnsCutOffs: TableColumnsType<any> = [
         {
-            title: 'Lots / Serials',
-            dataIndex: 'serial',
+            title: 'Carrier',
+            dataIndex: 'carrier',
             sorter: (a: any, b: any) => {
-                return a?.serial.localeCompare(b?.serial)
+                return a?.carrier.localeCompare(b?.carrier)
             },
             render: (_: any, row: any) => {
-                return <div className="flex flex-col w-full">
-                    <div className="flex justify-start gap-1">
-                        <span>{row.serial}</span>
-                    </div>
-                </div>
+                return row.carrier
             }
         },
         {
-            title: 'Status',
-            dataIndex: 'status',
+            title: 'Service',
+            dataIndex: 'service',
             sorter: (a: any, b: any) => {
-                return a?.status.localeCompare(b?.status)
+                return a?.service.localeCompare(b?.service)
             },
             render: (_: any, row: any) => {
-                return <StatusTag status={row?.status || '-'} />
+                return row.service
             }
         },
         {
-            title: 'Expiry Date',
-            dataIndex: 'expiry_date',
+            title: 'Cut Off',
+            dataIndex: 'cut_off_time',
             sorter: (a: any, b: any) => {
-                return a?.expiry_date.localeCompare(b?.expiry_date)
+                return a?.cut_off_time - b?.cut_off_time
             },
             render: (_: any, row: any) => {
-                return row.expiry_date
+                return row.cut_off_time
             }
         },
 
     ]
 
-    const columnsMovementLog: TableColumnsType<any> = [
+    const columnsCourierAccount: TableColumnsType<any> = [
         {
-            title: 'Date',
-            dataIndex: 'date',
+            title: 'Carrier',
+            dataIndex: 'carrier',
             sorter: (a: any, b: any) => {
-                return a?.date.localeCompare(b?.date)
+                return a?.carrier.localeCompare(b?.carrier)
             },
             render: (_: any, row: any) => {
-                return <div className="flex flex-col w-full">
-                    <div className="flex justify-start gap-1">
-                        <span>{row.date}</span>
-                    </div>
-                </div>
+                return row.carrier
             }
         },
         {
-            title: 'QTY (+/-)',
-            dataIndex: 'qty',
+            title: 'Account Number',
+            dataIndex: 'account_number',
             sorter: (a: any, b: any) => {
-                return a?.qty - b?.qty
+                return a?.account_number.localeCompare(b?.account_number)
             },
             render: (_: any, row: any) => {
-                return row.qty
+                return row.account_number
             }
         },
         {
-            title: 'Reason Code',
-            dataIndex: 'reason',
+            title: 'Service',
+            dataIndex: 'service',
             sorter: (a: any, b: any) => {
-                return a?.reason.localeCompare(b?.reason)
+                return a?.service.localeCompare(b?.service)
             },
             render: (_: any, row: any) => {
-                return row.reason
+                return row.service
             }
         },
-        {
-            title: 'Reference',
-            dataIndex: 'reference',
-            sorter: (a: any, b: any) => {
-                return a?.reference.localeCompare(b?.reference)
-            },
-            render: (_: any, row: any) => {
-                return row.reference
-            }
-        },
+
 
     ]
 
-    const columnsHoldQuarantine: TableColumnsType<any> = [
-        {
-            title: 'Reason Code',
-            dataIndex: 'reason',
-            sorter: (a: any, b: any) => {
-                return a?.reason.localeCompare(b?.reason)
-            },
-            render: (_: any, row: any) => {
-                return row.reason
-            }
-        },
-        {
-            title: 'QTY',
-            dataIndex: 'qty',
-            sorter: (a: any, b: any) => {
-                return a?.qty - b?.qty
-            },
-            render: (_: any, row: any) => {
-                return row.qty
-            }
-        },
-        {
-            title: 'Expiry Date',
-            dataIndex: 'expiry_date',
-            sorter: (a: any, b: any) => {
-                return a?.expiry_date.localeCompare(b?.expiry_date)
-            },
-            render: (_: any, row: any) => {
-                return row.expiry_date
-            }
-        },
 
-    ]
-
-    const columnsReorderSettings: TableColumnsType<any> = [
-        {
-            title: 'Reorder Point',
-            dataIndex: 'reorder_point',
-            sorter: (a: any, b: any) => {
-                return a?.reorder_point.localeCompare(b?.reorder_point)
-            },
-            render: (_: any, row: any) => {
-                return row.reorder_point
-            }
-        },
-        {
-            title: 'Reorder QTY',
-            dataIndex: 'reorder_qty',
-            sorter: (a: any, b: any) => {
-                return a?.reorder_qty - b?.reorder_qty
-            },
-            render: (_: any, row: any) => {
-                return row.reorder_qty
-            }
-        },
-        {
-            title: 'Preferred Supplier',
-            dataIndex: 'preferred_supplier',
-            sorter: (a: any, b: any) => {
-                return a?.preferred_supplier.localeCompare(b?.preferred_supplier)
-            },
-            render: (_: any, row: any) => {
-                return row.preferred_supplier
-            }
-        },
-
-    ]
 
     const invoiceData = {
         invoiceNumber: 'INV-2025-001',
@@ -415,7 +348,7 @@ const DetailInventoryManagement = ({ slug, data }: { slug?: any, data: any }) =>
                 <div className='flex flex-col justify-start md:flex-row md:justify-between md:items-center'>
                     <div>
                         <h1 className='text-2xl font-bold'>
-                            Inventory Management Detail
+                            Branch Management Detail
                         </h1>
                         <Breadcrumb
                             items={breadcrumb}
@@ -479,129 +412,138 @@ const DetailInventoryManagement = ({ slug, data }: { slug?: any, data: any }) =>
             <Content className="mb-5">
                 <div className='flex flex-col gap-6 min-h-[360px] p-6'>
                     <div className='grid gap-4'>
-                        <Card title='Inventory Management Information' gridcols='md:grid-cols-4' >
-                            <InfoItem label='SKU' value={data.sku || 'ALM-123'} />
-                            <InfoItem label='Product Name' value={data.name || 'IP Module for Bosch 3000'} />
-                            {/* <InfoItem label='Status' value={toCapitalize(data.status)} textColor={statusMap[toCapitalize(data?.status)]?.textColor} /> */}
-                            <InfoItem label='UoM' value={data.uom || 'pcs'} />
-                            <InfoItem label='Barcodes' value={data.barcodes || 'BARCODE-165365'} />
+                        <Card title='Branch Management Information' gridcols='md:grid-cols-4' >
+                            <InfoItem label='Warehouse Code' value={data.warehouse_code || 'WRH-388785'} />
+                            <InfoItem label='Warehouse Name' value={data.warehouse_name || 'Seadan Pranatta'} />
+                            <InfoItem label='Status' value={toCapitalize(data.status)} textColor={statusMap[toCapitalize(data?.status)]?.textColor} />
+                            <InfoItem label='Default Fullfillment' value={data.default_fullfillment || 'Yes'} />
                         </Card>
                     </div>
                     <div>
                         <div className='flex justify-between my-2'>
-                            <h4 className='text-xl font-semibold'>Location Tabs</h4>
+                            <h4 className='text-xl font-semibold'>Zones</h4>
                         </div>
                         <Table
-                            columns={columnsWarehouseLocation}
+                            columns={columnsZone}
                             dataSource={[
                                 {
                                     id: 1,
-                                    location: 'Seaden Paramatta',
-                                    zone: 'ZO23',
-                                    bin: 'B05',
-                                    on_hand: 300,
-                                    allocated: 100,
-                                    available: 50
+                                    zone_code: 'ZO23',
+                                    zone_name: 'Zone Fast Pick Zone',
+                                    type: 'Fast',
                                 },
                                 {
                                     id: 2,
-                                    location: 'Seaden Paramatta',
-                                    zone: 'ZO22',
-                                    bin: 'B01',
-                                    on_hand: 200,
-                                    allocated: 100,
-                                    available: 50
-                                },
-                            ]}
-                        />
-                    </div>
-                    <div>
-                        <div className='flex justify-between my-2'>
-                            <h4 className='text-xl font-semibold'>Lots / Serials</h4>
-                        </div>
-                        <Table
-                            columns={columnsSerial}
-                            dataSource={[
-                                {
-                                    id: 1,
-                                    serial: 'SERIAL-0193',
-                                    status: 'Active',
-                                    expiry_date: '02 September, 2025'
-                                },
-                                {
-                                    id: 2,
-                                    serial: 'SERIAL-0191',
-                                    status: 'Quarantine',
-                                    expiry_date: '02 September, 2025'
-                                },
-                            ]}
-                        />
-                    </div>
-                    <div>
-                        <div className='flex justify-between my-2'>
-                            <h4 className='text-xl font-semibold'>Movement Log</h4>
-                        </div>
-                        <Table
-                            columns={columnsMovementLog}
-                            dataSource={[
-                                {
-                                    id: 1,
-                                    date: '01 September, 2025',
-                                    qty: '+50',
-                                    reason: 'Adjustment Opening',
-                                    reference: 'Initial Stock',
-                                },
-                                {
-                                    id: 2,
-                                    date: '01 September, 2025',
-                                    qty: '-20',
-                                    reason: 'Order',
-                                    reference: 'SO-20250905-01',
-                                },
-                                {
-                                    id: 3,
-                                    date: '01 September, 2025',
-                                    qty: '+50',
-                                    reason: 'GRN',
-                                    reference: 'PO-20250907-01',
+                                    zone_code: 'ZO24',
+                                    zone_name: 'Zone Bulk Pick Zone',
+                                    type: 'Bulk',
                                 },
 
+                            ]}
+                        />
+                    </div>
+                    <div>
+                        <div className='flex justify-between my-2'>
+                            <h4 className='text-xl font-semibold'>Bins</h4>
+                        </div>
+                        <Table
+                            columns={columnsBin}
+                            dataSource={[
+                                {
+                                    id: 1,
+                                    bin_code: 'BIN-0193',
+                                    zone_code: 'ZONE-934',
+                                    pick_sequence: '1',
+                                    pickable: false,
+                                    putawayable: true,
+                                    capacity: 100
+                                },
+                                {
+                                    id: 2,
+                                    bin_code: 'BIN-0194',
+                                    zone_code: 'ZONE-902',
+                                    pick_sequence: '1',
+                                    pickable: true,
+                                    putawayable: false,
+                                    capacity: 100
+                                },
                             ]}
                         />
                     </div>
                     <div className='grid md:grid-cols-2 gap-3'>
                         <div>
                             <div className='flex justify-between my-2'>
-                                <h4 className='text-xl font-semibold'>Holds/Quarantine</h4>
+                                <h4 className='text-xl font-semibold'>Cut-offs</h4>
                             </div>
                             <Table
-                                columns={columnsHoldQuarantine}
+                                columns={columnsCutOffs}
                                 dataSource={[
                                     {
                                         id: 1,
-                                        reason: 'Quality Check',
-                                        qty: '50',
-                                        expiry_date: '01 September, 2025',
+                                        carrier: 'Aust Post',
+                                        service: 'Ecom',
+                                        cut_off_time: '17:00',
                                     },
                                 ]}
                             />
                         </div>
                         <div>
                             <div className='flex justify-between my-2'>
-                                <h4 className='text-xl font-semibold'>Reorder Settings</h4>
+                                <h4 className='text-xl font-semibold'>Courier Accounts</h4>
                             </div>
                             <Table
-                                columns={columnsReorderSettings}
+                                columns={columnsCourierAccount}
                                 dataSource={[
                                     {
                                         id: 1,
-                                        reorder_point: 'Quality Check',
-                                        reorder_qty: '50',
-                                        preferred_supplier: 'SafeAlarm Pty Ltd',
+                                        carrier: 'Aust Post',
+                                        service: 'Ecom',
+                                        account_number: '1238387',
                                     },
                                 ]}
                             />
                         </div>
+                    </div>
+                    <div>
+                        <Card title='Attachments & Thread' gridcols='md:grid-cols-2 grid-cols-1'>
+                            <InfoItem label='Attachments' value={
+                                <div className='flex flex-col gap-2 max-w-sm'>
+                                    <ButtonAction
+                                        label='Floor Map – Parramatta.pdf'
+                                        icon={<Image
+                                            src={CloudDownloadIcon}
+                                            alt='download-icon'
+                                            width={15}
+                                            height={15}
+                                        />}
+                                        position='end'
+                                        btnClassname='w-full'
+                                        labelClassname='truncate block'
+                                    />
+                                    <ButtonAction
+                                        label='SOP Receiving – v2.docx'
+                                        icon={<Image
+                                            src={CloudDownloadIcon}
+                                            alt='download-icon'
+                                            width={15}
+                                            height={15}
+                                        />}
+                                        position='end'
+                                        btnClassname='w-full'
+                                        labelClassname='truncate block'
+                                    />
+                                </div>
+
+                            } />
+                            <InfoItem label='Thread' value={
+                                <div>
+                                    <ul className='list-disc px-5'>
+                                        <li >23 Aug 2025, 10:45</li>
+                                        <p>Customer requested express shipping via DHL.</p>
+                                    </ul>
+                                </div>
+                            } />
+                        </Card>
                     </div>
                 </div>
             </Content>
@@ -609,4 +551,4 @@ const DetailInventoryManagement = ({ slug, data }: { slug?: any, data: any }) =>
     )
 }
 
-export default DetailInventoryManagement
+export default DetailBranchManagement

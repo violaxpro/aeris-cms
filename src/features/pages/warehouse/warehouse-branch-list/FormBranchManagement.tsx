@@ -58,10 +58,19 @@ const FormBranchManagement: React.FC<FormProps> = ({ mode, initialValues, slug }
             type: '',
             bins: []
         }],
+        carrier_services: [
+            {
+                carrier: '',
+                account_number: '',
+                service: '',
+                cut_off_time: '',
+            }
+        ],
         carrier: initialValues ? initialValues.carrier : '',
         account_number: initialValues ? initialValues.account_number : '',
         service: initialValues ? initialValues.service : '',
         cut_off_time: initialValues ? initialValues.cut_off_time : '',
+        notes: initialValues ? initialValues.notes : '',
     });
 
     const breadcrumb = [
@@ -76,17 +85,24 @@ const FormBranchManagement: React.FC<FormProps> = ({ mode, initialValues, slug }
     ]
 
 
-    const addItem = () => {
+    const addItem = (list_type: string) => {
         const newZone = {
             code: '',
             name: '',
             type: '',
-            bins: [] // kosong dulu
+            bins: []
         };
+
+        const newCarrier = {
+            carrier: '',
+            account_number: '',
+            service: '',
+            cut_off_time: '',
+        }
 
         setFormData((prev: any) => ({
             ...prev,
-            zones: [...prev.zones, newZone],
+            [list_type]: [...prev[list_type], list_type == 'zones' ? newZone : newCarrier],
         }));
     };
 
@@ -134,27 +150,27 @@ const FormBranchManagement: React.FC<FormProps> = ({ mode, initialValues, slug }
     };
 
 
-    const handleRemoveRow = (index: number) => {
+    const handleRemoveRow = (list_type: string, index: number) => {
         setFormData((prev: any) => {
-            const updatedItems = [...prev.zones];
+            const updatedItems = [...prev[list_type]];
             updatedItems.splice(index, 1);
             return {
                 ...prev,
-                zones: updatedItems,
+                [list_type]: updatedItems,
             };
         });
     };
 
-    const handleUpdateRow = (index: number, fieldName: any, value: any) => {
-        setFormData((prev) => {
-            const updatedItems = [...prev.zones];
+    const handleUpdateRow = (list_type: string, index: number, fieldName: any, value: any) => {
+        setFormData((prev: any) => {
+            const updatedItems = [...prev[list_type]];
             updatedItems[index] = {
                 ...updatedItems[index],
                 [fieldName]: value
             }
             return {
                 ...prev,
-                zones: updatedItems,
+                [list_type]: updatedItems,
             };
         });
     };
@@ -376,7 +392,7 @@ const FormBranchManagement: React.FC<FormProps> = ({ mode, initialValues, slug }
                             {
                                 formData.zones.map((item: any, index: number) => {
                                     return (
-                                        <div className='grid gap-3 rounded-xl border border-[#E5E7EB] p-4'>
+                                        <div key={index} className='grid gap-3 rounded-xl border border-[#E5E7EB] p-4'>
                                             <div className='flex justify-between items-center'>
                                                 <span className='text-xl font-semibold'>Zone & Bin {index + 1}</span>
                                                 <ButtonIcon
@@ -384,32 +400,32 @@ const FormBranchManagement: React.FC<FormProps> = ({ mode, initialValues, slug }
                                                     shape='circle'
                                                     variant='filled'
                                                     color='default'
-                                                    onClick={() => handleRemoveRow(index)}
+                                                    onClick={() => handleRemoveRow('zones', index)}
                                                 />
                                             </div>
                                             <div
                                                 key={index}
-                                                className='grid md:grid-cols-[repeat(3,1fr)_150px] gap-2 items-center'
+                                                className='grid md:grid-cols-3 gap-2 items-center'
                                             >
                                                 <Input
                                                     id='code'
                                                     label='Zone Code'
                                                     type='text'
                                                     value={item.code}
-                                                    onChange={(e) => handleUpdateRow(index, 'code', e.target.value)}
+                                                    onChange={(e) => handleUpdateRow('zones', index, 'code', e.target.value)}
                                                 />
                                                 <Input
                                                     id='name'
                                                     label='Zone Name'
                                                     type='text'
                                                     value={item.name}
-                                                    onChange={(e) => handleUpdateRow(index, 'name', e.target.value)}
+                                                    onChange={(e) => handleUpdateRow('zones', index, 'name', e.target.value)}
                                                 />
                                                 <SelectInput
                                                     id='type'
                                                     label='Type'
                                                     value={item.type}
-                                                    onChange={(selected) => handleUpdateRow(index, 'type', selected)}
+                                                    onChange={(selected) => handleUpdateRow('zones', index, 'type', selected)}
                                                     options={[
                                                         { label: 'Fast', value: 'Fast' },
                                                         { label: 'Bulk', value: 'Bulk' },
@@ -418,7 +434,7 @@ const FormBranchManagement: React.FC<FormProps> = ({ mode, initialValues, slug }
                                                         { label: 'Quarantine', value: 'Quarantine' },
                                                     ]}
                                                 />
-                                                <div className='flex gap-2 pt-5'>
+                                                <div className='col-span-full flex justify-end'>
                                                     <Button
                                                         label='Add Bin'
                                                         icon={<Image
@@ -428,18 +444,7 @@ const FormBranchManagement: React.FC<FormProps> = ({ mode, initialValues, slug }
                                                             height={15}
                                                         />}
                                                         onClick={() => addBin(index)}
-                                                        hasWidth='w-full'
                                                     />
-                                                    {/* <ButtonIcon
-                                                        color='danger'
-                                                        variant='filled'
-                                                        size="small"
-                                                        icon={TrashIconRed}
-                                                        width={15}
-                                                        height={15}
-                                                        className='!h-10 !w-15'
-                                                        onClick={() => handleRemoveRow(index)}
-                                                    /> */}
                                                 </div>
                                                 {
                                                     item?.bins?.map((bin: any, binIndex: number) => (
@@ -468,18 +473,6 @@ const FormBranchManagement: React.FC<FormProps> = ({ mode, initialValues, slug }
                                                                 value={bin.pick_sequence}
                                                                 onChange={(e) => updateBin(index, binIndex, 'pick_sequence', e.target.value)}
                                                             />
-                                                            <CheckboxInput
-                                                                label='Pickable'
-                                                                checked={bin.pickable}
-                                                                onChange={(checked) => updateBin(index, binIndex, 'pickable', checked)}
-                                                                text='Enable'
-                                                            />
-                                                            <CheckboxInput
-                                                                label='Putawayable'
-                                                                checked={bin.putawayable}
-                                                                onChange={(checked) => updateBin(index, binIndex, 'putawayable', checked)}
-                                                                text='Enable'
-                                                            />
                                                             <Input
                                                                 id='units'
                                                                 label='Units'
@@ -500,6 +493,18 @@ const FormBranchManagement: React.FC<FormProps> = ({ mode, initialValues, slug }
                                                                 type='text'
                                                                 value={bin.weight}
                                                                 onChange={(e) => updateBin(index, binIndex, 'weight', e.target.value)}
+                                                            />
+                                                            <CheckboxInput
+                                                                label='Pickable'
+                                                                checked={bin.pickable}
+                                                                onChange={(checked) => updateBin(index, binIndex, 'pickable', checked)}
+                                                                text='Enable'
+                                                            />
+                                                            <CheckboxInput
+                                                                label='Putawayable'
+                                                                checked={bin.putawayable}
+                                                                onChange={(checked) => updateBin(index, binIndex, 'putawayable', checked)}
+                                                                text='Enable'
                                                             />
                                                             <div className='flex gap-2 pt-5'>
                                                                 <ButtonIcon
@@ -522,7 +527,6 @@ const FormBranchManagement: React.FC<FormProps> = ({ mode, initialValues, slug }
                                 })
                             }
                         </div>
-                        <Divider />
                         <div className='flex justify-end'>
                             <Button
                                 label='Add Zone'
@@ -532,11 +536,97 @@ const FormBranchManagement: React.FC<FormProps> = ({ mode, initialValues, slug }
                                     width={15}
                                     height={15}
                                 />}
-                                onClick={addItem}
+                                onClick={() => addItem('zones')}
                             />
                         </div>
                     </div>
-                    <div className='grid md:grid-cols-4 gap-3 my-5'>
+                    <div className='flex flex-col gap-3 my-5'>
+                        <h1 className='text-xl font-semibold'>Zones & Bins</h1>
+                        <Divider />
+                        <div className='flex flex-col gap-3'>
+                            {
+                                formData.carrier_services.map((item: any, index: number) => (
+                                    <div key={index} className='grid md:grid-cols-[repeat(4,1fr)_50px] gap-3'>
+                                        <SelectInput
+                                            id='carrier'
+                                            label='Carrier'
+                                            placeholder='Select Carrier'
+                                            onChange={(selected) => handleUpdateRow('carrier_services', index, 'carrier', selected)}
+                                            value={item.carrier}
+                                            options={[
+                                                { label: 'Australian Express', value: '1' },
+                                            ]}
+                                        />
+                                        <Input
+                                            id='account_number'
+                                            label='Account Number'
+                                            type='text'
+                                            value={item.account_number}
+                                            onChange={(e) => handleUpdateRow('carrier_services', index, 'account_number', e.target.value)}
+                                            placeholder='Input Account Number'
+                                        />
+                                        <SelectInput
+                                            id='service'
+                                            label='Service'
+                                            value={item.service}
+                                            placeholder='Input Service'
+                                            onChange={(selected) => handleUpdateRow('carrier_services', index, 'service', selected)}
+                                            options={[
+                                                { label: 'Reguler', value: 'Reguler' },
+                                            ]}
+                                        />
+                                        <Input
+                                            id='cut_off_time'
+                                            label='Cut Off Time'
+                                            type='text'
+                                            value={item.cut_off_time}
+                                            onChange={(e) => handleUpdateRow('carrier_services', index, 'cut_off_time', e.target.value)}
+                                            placeholder='Input Cut Off Time'
+                                        />
+                                        <div className='flex gap-2 pt-5'>
+                                            <ButtonIcon
+                                                color='danger'
+                                                variant='filled'
+                                                size="small"
+                                                icon={TrashIconRed}
+                                                width={15}
+                                                height={15}
+                                                className='!h-10 !w-15'
+                                                onClick={() => handleRemoveRow('carrier_services', index)}
+                                            />
+                                        </div>
+                                    </div>
+                                ))
+                            }
+                            <div className='col-span-full flex justify-end'>
+                                <Button
+                                    label='Add Carrier'
+                                    icon={<Image
+                                        src={PlusOutlineIcon}
+                                        alt='plus-icon'
+                                        width={15}
+                                        height={15}
+                                    />}
+                                    onClick={() => addItem('carrier_services')}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    {
+                        initialValues.status == 'Disabled' &&
+                        <div>
+                            <Textarea
+                                id='notes'
+                                label='Notes'
+                                value={formData.notes}
+                                onChange={handleChange('notes')}
+                                placeholder='Input Notes'
+                                textareaClassname='!h-30'
+                            />
+                        </div>
+                    }
+
+                    {/* <div className='grid md:grid-cols-[repeat(4,1fr)_50px] gap-3 my-5'>
                         <SelectInput
                             id='carrier'
                             label='Carrier'
@@ -573,11 +663,35 @@ const FormBranchManagement: React.FC<FormProps> = ({ mode, initialValues, slug }
                             onChange={handleChange('cut_off_time')}
                             placeholder='Input Cut Off Time'
                         />
+                        <div className='flex gap-2 pt-5'>
+                            <ButtonIcon
+                                color='danger'
+                                variant='filled'
+                                size="small"
+                                icon={TrashIconRed}
+                                width={15}
+                                height={15}
+                                className='!h-10 !w-15'
+                            // onClick={() => removeBin(index, binIndex)}
+                            />
+                        </div>
+                        <div className='col-span-full flex justify-end'>
+                            <Button
+                                label='Add Carrier'
+                                icon={<Image
+                                    src={PlusOutlineIcon}
+                                    alt='plus-icon'
+                                    width={15}
+                                    height={15}
+                                />}
+                                onClick={() => addItem('carriers')}
+                            />
 
-                    </div>
+                        </div>
+                    </div> */}
 
                     {/* Submit */}
-                    <div className="mt-6 flex justify-end">
+                    <div className="pt-8 flex justify-end">
                         <Button
                             label={mode == 'create' ? 'Create Branch Management' : 'Edit Branch Management'}
                             onClick={handleSubmit}
