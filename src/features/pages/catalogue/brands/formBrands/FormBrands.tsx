@@ -1,8 +1,6 @@
 'use client'
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation';
-import GeneralForm from "./GeneralForm";
-import SEOForm from "./SEOForm";
 import Breadcrumb from "@/components/breadcrumb";
 import { FormProps } from '@/plugins/types/form-type';
 import { Content } from 'antd/es/layout/layout';
@@ -12,15 +10,12 @@ import Input from "@/components/input"
 import Checkbox from "@/components/checkbox"
 import FormGroup from '@/components/form-group'
 import Textarea from '@/components/textarea'
-import FileUploader from '@/components/input-file'
 import { addBrand, updateBrand } from '@/services/brands-service';
-import { useNotificationAntd } from '@/components/toast';
 import { useSetAtom } from 'jotai';
 import { notificationAtom } from '@/store/NotificationAtom';
 
 const FormBrands: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const setNotification = useSetAtom(notificationAtom);
-    const { contextHolder, notifySuccess } = useNotificationAntd()
     const router = useRouter()
 
     const breadcrumb = [
@@ -59,20 +54,6 @@ const FormBrands: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         }));
     };
 
-    const handleSuccess = (id: string) => (file: any) => {
-        console.log('Uploaded:', file);
-        const fileUrl = file?.response?.url || file?.name || '';
-
-        setFormData((prev) => ({
-            ...prev,
-            [id]: fileUrl,
-        }));
-    };
-
-    const handleError = (file: any) => {
-        console.error('Failed to upload:', file);
-    };
-
     const handleSubmit = async () => {
         try {
             let errors: any = {}
@@ -87,7 +68,6 @@ const FormBrands: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                 return;
             }
 
-            // Meta Description wajib min 145, max 165
             if (descLength < 145 || descLength > 165) {
                 return;
             }
@@ -95,7 +75,6 @@ const FormBrands: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
             setFormErrors(errors)
 
             if (Object.keys(errors).length > 0) {
-                console.log('Form has errors, stop submit');
                 return;
             }
 
@@ -116,7 +95,6 @@ const FormBrands: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                 response = await addBrand(data)
             }
 
-            console.log(response)
             if (response.success == true) {
                 setNotification(response.message);
                 router.push(routes.eCommerce.brands)
@@ -127,11 +105,8 @@ const FormBrands: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
     }
 
-
-    console.log(formData)
     return (
         <div>
-            {contextHolder}
             <div className="mt-6 mx-6 mb-0">
                 <h1 className="text-2xl font-bold mb-4">{mode === 'create' ? 'Create Brand' : 'Edit Brand'}</h1>
                 <Breadcrumb items={breadcrumb} />
@@ -217,27 +192,11 @@ const FormBrands: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     value={formData.urlBanner}
                                     onChange={handleChange}
                                 />
-                                {/* <div className='flex col-span-full gap-4'>
-                                    <FileUploader
-                                        label='Url Logo'
-                                        // action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
-                                        onSuccess={handleSuccess('urlLogo')}
-                                        onError={handleError}
-                                        errorMessage={formErrors.urlLogo}
-                                    />
-                                    <FileUploader
-                                        label='Url Banner'
-                                        // action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
-                                        onSuccess={handleSuccess('urlBanner')}
-                                        onError={handleError}
-                                    />
-                                </div> */}
                             </FormGroup>
 
                         </div>
                     </div>
 
-                    {/* Submit */}
                     <div className="mt-6 flex justify-end">
                         <Button
                             label={mode === 'create' ? 'Create Brand' : 'Edit Brand'}

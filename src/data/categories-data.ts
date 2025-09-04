@@ -9,7 +9,6 @@ export type CategoryType = {
   url_banner: string
   show_in_search: boolean
   show_in_page: boolean
-  enabled: boolean
   status?: boolean
 }
 

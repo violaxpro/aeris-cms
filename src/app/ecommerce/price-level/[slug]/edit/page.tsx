@@ -4,14 +4,14 @@ import FormPriceLevel from '@/features/pages/catalogue/price-level/FormPriceLeve
 import { Params } from '@/plugins/types'
 
 export default async function EditPriceLevelPage(props: { params: Params }) {
-    let dataForm = []
+    let dataForm: any = []
     const params = await props.params;
     const slug = params.slug;
     try {
-        const res = await getPriceLevel(slug)
-        if (res?.data) {
-            dataForm = res.data
-        }
+        // const res = await getPriceLevel(slug)
+        // if (res?.data) {
+        //     dataForm = res.data
+        // }
 
     } catch (error) {
         console.log(error)

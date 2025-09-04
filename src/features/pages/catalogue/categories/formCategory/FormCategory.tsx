@@ -7,45 +7,48 @@ import { formCategoryProps } from '@/plugins/types/treeTypes';
 import { addCategory, updateCategory } from '@/services/category-service';
 import { useNotificationAntd } from '@/components/toast';
 
-const FormCategory = ({ parentId, data }: formCategoryProps) => {
+const FormCategory = ({ parentId, data, mode }: formCategoryProps) => {
     const [activeTab, setActiveTab] = useState<'General' | 'SEO'>('General');
     const { contextHolder, notifyError, notifySuccess } = useNotificationAntd()
     const idEdit = data && data.categoriesData ? data.categoriesData.id : ''
     const [formData, setFormData] = useState({
         general: {
-            name: data && data?.categoriesData ? data.categoriesData.name : '',
-            slug: data && data?.categoriesData ? data.categoriesData.slug : '',
-            isSearch: data && data.categoriesData ? data.categoriesData.show_in_search : false,
-            isShow: data && data.categoriesData ? data.categoriesData.show_in_page : false,
-            isStatus: data && data.categoriesData ? data.categoriesData.enabled : false
+            // name: data && data?.categoriesData ? data.categoriesData.name : '',
+            // slug: data && data?.categoriesData ? data.categoriesData.url_slug : '',
+            // isSearch: data && data.categoriesData ? data.categoriesData.show_in_search : false,
+            // isShow: data && data.categoriesData ? data.categoriesData.show_in_page : false,
+            // isStatus: data && data.categoriesData ? data.categoriesData.status : false
+            name: data ? data.name : '',
+            slug: data ? data.url_slug : '',
+            isSearch: data ? data.show_in_search : false,
+            isShow: data ? data.show_in_page : false,
+            isStatus: data ? data.status : false
         },
         seo: {
-            url_logo: '',
-            url_banner: '',
-            metaTitle: '',
-            metaDescription: '',
-            pageDesc: '',
+            // url_logo: data && data?.categoriesData ? data.categoriesData.url_logo : '',
+            // url_banner: data && data?.categoriesData ? data.categoriesData.url_banner : '',
+            // metaTitle: data && data?.categoriesData ? data.categoriesData.meta_title : '',
+            // metaDescription: data && data?.categoriesData ? data.categoriesData.meta_description : '',
+            // pageDesc: data && data?.categoriesData ? data.categoriesData.page_description : '',
+            url_logo: data ? data.url_logo : '',
+            url_banner: data ? data.url_banner : '',
+            metaTitle: data ? data.meta_title : '',
+            metaDescription: data ? data.meta_description : '',
+            pageDesc: data ? data.page_description : '',
         }
     })
 
-    console.log(data)
+    console.log(parentId, data)
 
-    const handleGeneralChange = (updatedGeneral: any) => {
-        setFormData(prev => ({
+    const handleChange = (section: string, updatedData: any) => {
+        setFormData((prev: any) => ({
             ...prev,
-            general: {
-                ...prev.general,
-                ...updatedGeneral
+            [section]: {
+                ...prev[section],
+                ...updatedData
             }
-        }))
-    }
-
-    const handleSeoChange = (updatedSeo: any) => {
-        setFormData(prev => ({
-            ...prev,
-            seo: updatedSeo
-        }))
-    }
+        }));
+    };
 
     const handleSubmit = async () => {
         try {
@@ -61,17 +64,17 @@ const FormCategory = ({ parentId, data }: formCategoryProps) => {
 
             const data = {
                 name: formData.general.name,
-                slug: formData.general.slug,
+                url_slug: formData.general.slug,
                 show_in_search: formData.general.isSearch,
                 show_in_page: formData.general.isShow,
-                enabled: formData.general.isStatus,
+                status: formData.general.isStatus,
                 url_logo: formData.seo.url_logo,
                 url_banner: formData.seo.url_banner,
                 meta_title: formData.seo.metaTitle,
                 meta_description: formData.seo.metaDescription,
-                page_description: formData.seo.pageDesc
+                page_description: formData.seo.pageDesc,
+                parent_id: parentId ?? null
             }
-
 
             let response;
             if (idEdit) {
@@ -92,7 +95,6 @@ const FormCategory = ({ parentId, data }: formCategoryProps) => {
             console.error(error)
         }
     }
-
 
     return (
         <>
@@ -125,7 +127,8 @@ const FormCategory = ({ parentId, data }: formCategoryProps) => {
                                     <GeneralForm
                                         data={data}
                                         parentId={parentId}
-                                        onChange={handleGeneralChange}
+                                        onChange={(data) => handleChange('general', data)}
+                                        formDataCreate={formData}
                                     />
                                 </div>
                             )}
@@ -136,7 +139,8 @@ const FormCategory = ({ parentId, data }: formCategoryProps) => {
                                     <SEOForm
                                         data={data}
                                         parentId={parentId}
-                                        onChange={handleSeoChange}
+                                        onChange={(data) => handleChange('seo', data)}
+                                        formDataCreate={formData}
                                     />
                                 </div>
                             )}

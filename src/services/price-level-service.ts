@@ -1,13 +1,23 @@
 import baseService from "./base-service";
 import { PriceLevelType } from "@/data/price-level-data";
 
-const apiPriceLevel = '/admin/product/price-level'
+const apiPriceLevel = '/admin/catalogue/price-level'
 
-export async function getPriceLevel(param?: string | number) {
+export async function getPriceLevel(
+    { page = 1, perPage = 10 }: { page?: number; perPage?: number } = {},
+    param?: string | number
+) {
     try {
-        const url = param ? `${apiPriceLevel}/${param}` : apiPriceLevel
-        const res = await baseService.get(url)
-        return res.data
+        let url = apiPriceLevel;
+
+        if (param) {
+            url = `${apiPriceLevel}/${param}`;
+        }
+        const res = await baseService(url, {
+            params: { page, perPage }
+        });
+
+        return res.data; //
     } catch (error) {
         console.error(error)
     }

@@ -107,7 +107,7 @@ const CategoriesPage = ({ categories }: { categories?: any }) => {
     const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([])
     const [autoExpandParent, setAutoExpandParent] = useState(true);
     const [addForm, setAddForm] = useState(false)
-    const [selectedParent, setSelectedParent] = useState<TreeNode | null>(null);
+    const [selectedParent, setSelectedParent] = useState<any>(null);
     const [parentId, setParentId] = useState<string | number | null>()
     const [categoryData, setCategoryData] = useAtom(categoryDataFetch)
     // const [categoryData, setCategoryData] = useState<any[]>(categories);
@@ -115,17 +115,22 @@ const CategoriesPage = ({ categories }: { categories?: any }) => {
     const [checkedKeys, setCheckedKeys] = useState<React.Key[]>([]);
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
     const [hoveredKey, setHoveredKey] = useState<string | null>(null);
+    const [formMode, setFormMode] = useState('')
 
     // const treeData = buildTree(dummyTreeData)
     const handleCreateSubcategory = (node: TreeNode) => {
         console.log('Create subcategory for:', node);
+        setSelectedParent(null)
         setParentId(node.key);
+        setFormMode("add");
         setAddForm(true);
     };
 
     const handleEditCategory = (node: TreeNode) => {
         console.log('Edit category:', node);
-        setSelectedParent(node);
+        setParentId(null);
+        // setSelectedParent(node);
+        setFormMode("edit");
         setAddForm(true);
     };
 
@@ -144,41 +149,35 @@ const CategoriesPage = ({ categories }: { categories?: any }) => {
     const mapTreeData = (data: any[]): TreeNode[] => {
         return data.map((item) => {
             const key = item.key || item.id;
-            // Ambil children mentahnya
-            // const childrenData = item?.children ? mapTreeData(item.children) : []
+            const childrenData = item?.categoriesData?.children ? mapTreeData(item?.categoriesData?.children) : []
             // Recursive dummy map children
-            const childrenData: TreeNode[] = [];
-            childrenData.push({
-                key: `dummy-child-${item.id || item.key}`,
-                title: <span>Anak Kategory</span>,
-                isLeaf: false,
-                selectable: true,
-                children: [
-                    {
-                        key: `subchild-${item.id || item.key}`,
-                        title: 'Sub Anak',
-                        isLeaf: true,
-                        selectable: true,
-                    },
-                    {
-                        key: `add-subchild-${item.id || item.key}`,
-                        title: (
-                            <span
-                                className="text-blue-500 hover:underline"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleCreateSubcategory(item);
-                                }}
-                            >
-                                + Add Subcategory
-                            </span>
-                        ),
-                        isLeaf: true,
-                        selectable: false,
-                    },
-                ],
+            // const childrenData: TreeNode[] = [];
+            // childrenData.push({
+            //     key: `dummy-child-${item.id || item.key}`,
+            //     title: <span>Anak Kategory</span>,
+            //     isLeaf: false,
+            //     selectable: true,
+            //     children: [
+            //         {
+            //             key: `add-subchild-${item.id || item.key}`,
+            //             title: (
+            //                 <span
+            //                     className="text-blue-500 hover:underline"
+            //                     onClick={(e) => {
+            //                         e.stopPropagation();
+            //                         handleCreateSubcategory(item);
+            //                     }}
+            //                 >
+            //                     + Add Subcategory
+            //                 </span>
+            //             ),
+            //             isLeaf: true,
+            //             selectable: false,
+            //         },
+            //     ],
 
-            })
+            // })
+            console.log(childrenData)
 
             if (!searchValue) {
                 childrenData.push({
@@ -300,25 +299,33 @@ const CategoriesPage = ({ categories }: { categories?: any }) => {
         () => searchValue ? filter(treeData, searchValue) : treeData, [searchValue, treeData]
     )
 
-    const onSelect: TreeProps['onSelect'] = (selectedKeysValue, info) => {
+    const onSelect: TreeProps['onSelect'] = (selectedKeysValue, info: any) => {
+        console.log('masuk', info)
         // console.log('onSelect', info);
         // setSelectedKeys(selectedKeysValue);
 
         const selectedNode = info.node as TreeNode;
+        const dataCategory = info.node.categoriesData
         const isValidNode =
             selectedNode.selectable !== false &&
             !selectedNode.key.toString().startsWith('add') &&
             !selectedNode.key.toString().startsWith('subchild') &&
             !selectedNode.key.toString().startsWith('dummy-child');
 
+        console.log(isValidNode)
         if (isValidNode) {
             setSelectedKeys([selectedNode.key]); // Hanya satu key aktif
-            handleEditCategory(selectedNode);
+            handleEditCategory(dataCategory);
+            setSelectedParent(dataCategory);
         } else {
             // Clear selection kalau yang diklik bukan node yang valid
             setSelectedKeys([]);
+            setSelectedParent(null);
+            setAddForm(false);
         }
     };
+
+    console.log(selectedKeys, selectedParent)
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchValue(e.target.value)
@@ -420,8 +427,10 @@ const CategoriesPage = ({ categories }: { categories?: any }) => {
                         <div>
                             {
                                 addForm == true && <FormCategory
+                                    key={formMode + "-" + (selectedParent?.id ?? parentId ?? "new")}
                                     parentId={parentId ?? null}
-                                    data={selectedParent ?? null}
+                                    data={formMode === "edit" ? selectedParent : undefined}
+                                    mode={formMode}
                                 />
                             }
                         </div>

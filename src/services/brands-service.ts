@@ -4,20 +4,14 @@ import { BrandType } from "@/data/brands-data";
 const apiBrand = '/admin/catalogue/brand'
 
 export async function getBrands(
-    { page = 1, perPage = 10 }: { page?: number; perPage?: number } = {},
-    param?: string | number
+    { page = 1, perPage = 10 }: { page?: number; perPage?: number } = {}
 ) {
     try {
-        let url = apiBrand;
-
-        if (param) {
-            url = `${apiBrand}/${param}`;
-        }
-        const res = await baseService(url, {
+        const res = await baseService(apiBrand, {
             params: { page, perPage }
         });
 
-        return res.data; //
+        return res.data;
     } catch (error: any) {
         if (error.response?.status === 404) {
             return null
@@ -25,6 +19,20 @@ export async function getBrands(
         throw error
     }
 }
+
+export async function getBrandById(slug: string) {
+    const url = `${apiBrand}/${slug}`;
+    try {
+        const res = await baseService(url);
+        return res.data;
+    } catch (error: any) {
+        if (error.response?.status === 404) {
+            return null;
+        }
+        throw error;
+    }
+}
+
 
 export async function addBrand(params: BrandType) {
     try {

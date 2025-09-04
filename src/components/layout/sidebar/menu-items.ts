@@ -243,13 +243,12 @@ export const menuItems = [
             {
                 key: 'customer-parents',
                 label: 'Customers',
-                href: routes.eCommerce.customers,
                 icon: TeamOutlined,
                 children: [
                     {
                         key: 'customer-list',
                         label: 'Customer Lists',
-                        href: '#',
+                        href: routes.eCommerce.customers,
                     },
                     {
                         key: 'customer-group',

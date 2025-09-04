@@ -14,7 +14,6 @@ import dayjs from 'dayjs'
 import { deleteBrand, getBrands } from '@/services/brands-service'
 import { useNotificationAntd } from '@/components/toast'
 import { useAtom } from 'jotai'
-import { brandAtom } from '@/store/BrandAtomStore'
 import StatusBadge from '@/components/badge/badge-status'
 import { AddIcon, TrashIconRed, MoreIcon } from '@public/icon'
 import ButtonDelete from '@/components/button/ButtonAction'
@@ -23,18 +22,15 @@ import ButtonIcon from '@/components/button/ButtonIcon'
 import SearchTable from '@/components/search/SearchTable'
 import ShowPageSize from '@/components/pagination/ShowPageSize'
 import ConfirmModal from '@/components/modal/ConfirmModal'
-import { useRouter } from 'next/navigation'
 import { notificationAtom } from '@/store/NotificationAtom'
 
 const index = ({ brandsData }: { brandsData?: any }) => {
-    const router = useRouter()
     const { contextHolder, notifySuccess } = useNotificationAntd()
     const [data, setData] = useState(brandsData?.data || [])
     const [currentPage, setCurrentPage] = useState(brandsData?.page || 1)
     const [pageSize, setPageSize] = useState(brandsData?.perPage || 10)
     const [total, setTotal] = useState(brandsData?.count || 0)
     const [notification, setNotification] = useAtom(notificationAtom);
-    // const [filteredData, setFilteredData] = useState<BrandType[]>([]);
     const [search, setSearch] = useState('')
     const [isOpenModalFilter, setisOpenModalFilter] = useState(false)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);

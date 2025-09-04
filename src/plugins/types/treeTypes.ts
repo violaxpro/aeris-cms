@@ -77,4 +77,5 @@ export type DirectoryTreeProps = GetProps<typeof Tree.DirectoryTree>;
 export type formCategoryProps = {
     parentId: string | number | null
     data?: any
+    mode: string
 }

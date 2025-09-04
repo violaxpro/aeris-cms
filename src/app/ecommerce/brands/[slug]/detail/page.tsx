@@ -1,5 +1,5 @@
 import DetailBrand from "@/features/pages/catalogue/brands/formBrands/DetailBrands";
-import { getBrands } from "@/services/brands-service";
+import { getBrandById } from "@/services/brands-service";
 import { Params } from "@/plugins/types";
 
 export default async function DetailPriceLevelPage(props: { params: Params }) {
@@ -7,7 +7,7 @@ export default async function DetailPriceLevelPage(props: { params: Params }) {
     const params = await props.params;
     const slug = params.slug;
     try {
-        const res = await getBrands(slug)
+        const res = await getBrandById(slug)
         dataForm = res.data
 
 
@@ -18,5 +18,4 @@ export default async function DetailPriceLevelPage(props: { params: Params }) {
     return (
         <DetailBrand data={dataForm} />
     )
-
 }

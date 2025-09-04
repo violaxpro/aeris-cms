@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Breadcrumb from "@/components/breadcrumb";
 import { Content } from 'antd/es/layout/layout';
@@ -9,31 +9,28 @@ import FormGroup from '@/components/form-group';
 import Input from "@/components/input"
 import SelectInput from '@/components/select';
 import { routes } from '@/config/routes';
-import { useParams } from 'next/navigation'
-import { getPriceLevel, addPriceLevel, updatePriceLevel } from '@/services/price-level-service';
+import { addPriceLevel, updatePriceLevel } from '@/services/price-level-service';
 import { useAtom } from 'jotai';
 import { brandsAtom, categoriesAtom } from '@/store/DropdownItemStore';
-import { useNotificationAntd } from '@/components/toast';
+import { useSetAtom } from 'jotai';
+import { notificationAtom } from '@/store/NotificationAtom';
 
 const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
-    const [optionBrands] = useAtom(brandsAtom)
     const router = useRouter()
-    const { contextHolder, notifySuccess } = useNotificationAntd();
+    const setNotification = useSetAtom(notificationAtom);
     const [optionsCategories] = useAtom(categoriesAtom)
+    const [optionBrands] = useAtom(brandsAtom)
     const [formData, setFormData] = useState({
         name: initialValues ? initialValues.name : '',
-        brands: initialValues ? initialValues.brandId : '',
-        categories: initialValues ? initialValues.categoryId : '',
-        subcategories: initialValues ? initialValues.subCategoryId : '',
-        buyingPrice: '',
-        rrp: initialValues ? initialValues.rrp_price : '',
-        trade: initialValues ? initialValues.trade_price : '',
-        silver: initialValues ? initialValues.silver_price : '',
-        gold: initialValues ? initialValues.gold_price : '',
-        platinum: initialValues ? initialValues.platinum_price : '',
-        diamond: initialValues ? initialValues.diamond_price : '',
-        kitPrice: '',
-        priceNotes: ''
+        brand_id: initialValues ? initialValues.brand_id : '',
+        category_id: initialValues ? initialValues.category_id : '',
+        sub_category_id: initialValues ? initialValues.sub_category_id : '',
+        rrp: initialValues ? initialValues.recommended_retail_price_percentage : '',
+        trade: initialValues ? initialValues.trade_percentage : '',
+        silver: initialValues ? initialValues.silver_percentage : '',
+        gold: initialValues ? initialValues.gold_percentage : '',
+        platinum: initialValues ? initialValues.platinum_percentage : '',
+        diamond: initialValues ? initialValues.diamond_percentage : '',
     });
 
     const breadcrumb = [
@@ -61,14 +58,15 @@ const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         try {
             const submitData = {
                 name: formData.name,
-                brandId: formData.brands,
-                categoryId: formData.categories,
-                rrp_price: Number(formData.rrp),
-                trade_price: Number(formData.trade),
-                silver_price: Number(formData.silver),
-                gold_price: Number(formData.gold),
-                platinum_price: Number(formData.platinum),
-                diamond_price: Number(formData.diamond)
+                brand_id: formData.brand_id,
+                category_id: formData.category_id,
+                sub_category_id: formData.sub_category_id,
+                recommended_retail_price_percentage: Number(formData.rrp),
+                trade_percentage: Number(formData.trade),
+                silver_percentage: Number(formData.silver),
+                gold_percentage: Number(formData.gold),
+                platinum_percentage: Number(formData.platinum),
+                diamond_percentage: Number(formData.diamond)
             }
 
             let response;
@@ -79,10 +77,8 @@ const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
             }
 
             if (response.success == true) {
-                notifySuccess(response.message)
-                setTimeout(() => {
-                    router.push(routes.eCommerce.priceLevel)
-                }, 2000);
+                setNotification(response.message);
+                router.push(routes.eCommerce.priceLevel)
             }
         } catch (error) {
             console.error(error)
@@ -94,7 +90,6 @@ const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
     return (
         <>
-            {contextHolder}
             <div className="mt-6 mx-6 mb-0">
                 <h1 className="text-2xl font-bold mb-4">{mode === 'create' ? 'Create Price Level' : 'Edit Price Level'}</h1>
                 <Breadcrumb items={breadcrumb} />
@@ -102,8 +97,6 @@ const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
             <Content className="mb-0">
                 <div className='bg-[#fff] min-h-[360px] p-6'>
-
-                    {/* Tab Content */}
                     <div>
                         <FormGroup
                             title="Price"
@@ -119,27 +112,27 @@ const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 value={formData.name}
                             />
                             <SelectInput
-                                id='brands'
+                                id='brand_id'
                                 label="Brands"
                                 placeholder="Select Brands"
-                                value={formData.brands}
-                                onChange={(e) => handleChangeSelect('brands', e)}
+                                value={formData.brand_id}
+                                onChange={(e) => handleChangeSelect('brand_id', e)}
                                 options={optionBrands}
                             />
                             <SelectInput
-                                id="categories"
+                                id="category_id"
                                 label="Categories"
                                 placeholder="Select Categories"
-                                value={formData.categories}
-                                onChange={(val) => handleChangeSelect("categories", val)}
+                                value={formData.category_id}
+                                onChange={(val) => handleChangeSelect("category_id", val)}
                                 options={optionsCategories}
                             />
                             <SelectInput
-                                id="subcategories"
+                                id="sub_category_id"
                                 label="Sub Categories"
                                 placeholder="Select Sub Categories"
-                                value={formData.subcategories}
-                                onChange={(val) => handleChangeSelect("subcategories", val)}
+                                value={formData.sub_category_id}
+                                onChange={(val) => handleChangeSelect("sub_category_id", val)}
                                 options={optionsCategories}
                             />
 
@@ -194,29 +187,11 @@ const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 onChange={handleChange}
                                 value={formData.diamond}
                             />
-                            {/* <Input
-                                id='kitPrice'
-                                label='Kit Price'
-                                type='text'
-                                placeholder='Input Kit Price'
-                                onChange={handleChange}
-                                value={formData.kitPrice}
-                            />
-                            <Input
-                                id='priceNotes'
-                                label='Price Notes'
-                                type='text'
-                                placeholder='Input Price Notes'
-                                onChange={handleChange}
-                                value={formData.priceNotes}
-                            /> */}
                         </FormGroup>
                     </div>
 
-                    {/* Submit */}
                     <div className="mt-6 flex justify-end">
                         <Button
-
                             label={mode === 'create' ? 'Create Price Level' : 'Edit Price Level'}
                             onClick={handleSubmit}
                         />

@@ -50,7 +50,7 @@ export default async function PriceLevelUrl() {
 
   return (
     <div>
-      <PriceLevelPage priceLevels={priceLevels} />
+      <PriceLevelPage priceData={priceLevels} />
     </div>
   )
 

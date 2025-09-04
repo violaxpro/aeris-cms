@@ -1,6 +1,6 @@
 import React from 'react'
 import FormBrands from '@/features/pages/catalogue/brands/formBrands/FormBrands'
-import { getBrands } from '@/services/brands-service'
+import { getBrandById } from '@/services/brands-service'
 import { Params } from '@/plugins/types'
 
 export default async function EditBrandsPage(props: { params: Params }) {
@@ -8,7 +8,7 @@ export default async function EditBrandsPage(props: { params: Params }) {
     const params = await props.params;
     const slug = params.slug;
     try {
-        const res = await getBrands(slug)
+        const res = await getBrandById(slug)
         if (res?.data) {
             dataForm = res.data
         }

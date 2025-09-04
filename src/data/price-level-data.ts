@@ -1,17 +1,15 @@
 export type PriceLevelType = {
   id?: number | string | undefined
   name?: string
-  brandId: string;
-  categoryId: string;
-  subcategoryId?: string;
-  rrp_price: number | string;
-  trade_price: number | string;
-  silver_price: number | string;
-  gold_price: number | string;
-  platinum_price: number | string;
-  diamond_price: number | string;
-  kitPrice?: string;
-  priceNotes?: string;
+  brand_id: string;
+  category_id: string;
+  sub_category_id?: string;
+  recommended_retail_price_percentage: number | string;
+  trade_percentage: number | string;
+  silver_percentage: number | string;
+  gold_percentage: number | string;
+  platinum_percentage: number | string;
+  diamond_percentage: number | string;
 };
 
 export type PriceLevelProps = {

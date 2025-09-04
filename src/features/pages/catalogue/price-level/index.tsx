@@ -2,39 +2,35 @@
 import React, { useState, useEffect } from 'react'
 import Table from "@/components/table"
 import type { TableColumnsType } from 'antd'
-import { PriceLevelType } from '@/data/price-level-data'
 import { Dropdown, Menu } from 'antd'
-import { EditOutlined, PlusCircleOutlined, InfoCircleOutlined, MoreOutlined } from '@ant-design/icons'
-import Popover from '@/components/popover'
+import { PriceLevelType } from '@/data/price-level-data'
 import { routes } from '@/config/routes'
-import Link from 'next/link'
 import Breadcrumb from "@/components/breadcrumb"
 import { Content } from 'antd/es/layout/layout'
 import Button from "@/components/button"
-import SearchInput from '@/components/search';
+import Link from 'next/link'
 import { useNotificationAntd } from '@/components/toast'
-import { deletePriceLevel } from '@/services/price-level-service'
-import { priceLevelsAtom } from '@/store/PriceLevelAtomStore'
+import { deletePriceLevel, getPriceLevel } from '@/services/price-level-service'
 import { useAtom } from 'jotai'
 import Image from 'next/image'
-import { AddIcon, FilterIcon, TrashIconRed, PencilIconBlue } from '@public/icon'
-import ButtonFilter from '@/components/button/ButtonAction'
+import { AddIcon, TrashIconRed, MoreIcon } from '@public/icon'
 import ButtonDelete from '@/components/button/ButtonAction'
 import Pagination from '@/components/pagination'
 import ButtonIcon from '@/components/button/ButtonIcon'
 import SearchTable from '@/components/search/SearchTable'
 import ShowPageSize from '@/components/pagination/ShowPageSize'
 import ConfirmModal from '@/components/modal/ConfirmModal'
-import { useRouter } from 'next/navigation'
+import { notificationAtom } from '@/store/NotificationAtom'
+import dayjs from 'dayjs'
 
-const index = ({ priceLevels }: { priceLevels?: any }) => {
-    const router = useRouter()
+const index = ({ priceData }: { priceData?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
-    const [data, setData] = useAtom(priceLevelsAtom)
-    const [filteredData, setFilteredData] = useState<PriceLevelType[]>([]);
+    const [data, setData] = useState(priceData?.data || [])
+    const [currentPage, setCurrentPage] = useState(priceData?.page || 1)
+    const [pageSize, setPageSize] = useState(priceData?.perPage || 10)
+    const [total, setTotal] = useState(priceData?.count || 0)
+    const [notification, setNotification] = useAtom(notificationAtom);
     const [search, setSearch] = useState('')
-    const [currentPage, setCurrentPage] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
     const [isOpenModalFilter, setisOpenModalFilter] = useState(false)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
     const [openModalDelete, setOpenModalDelete] = useState(false)
@@ -46,7 +42,7 @@ const index = ({ priceLevels }: { priceLevels?: any }) => {
             const res = await deletePriceLevel(deletedData);
             if (res.success) {
                 notifySuccess(res.message);
-                setData(prev => prev.filter(item => item.id !== deletedData));
+                fetchPage(currentPage, pageSize)
             }
         } catch (error) {
             console.error(error);
@@ -103,22 +99,29 @@ const index = ({ priceLevels }: { priceLevels?: any }) => {
             key: 'action',
             width: 120,
             render: (_: string, row: any) => {
+                const menu = (
+                    <Menu>
+                        <Menu.Item key="edit">
+                            <Link href={routes.eCommerce.editPriceLevel(row.id)}>
+                                Edit
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item key="delete" onClick={() => handleOpenModalDelete(row.id)}>
+                            Delete
+                        </Menu.Item>
+                    </Menu>
+                );
+
                 return (
-                    <div className="flex items-center justify-end gap-3 pe-4">
-                        <ButtonIcon
-                            color='primary'
-                            variant='filled'
-                            size="small"
-                            icon={PencilIconBlue}
-                            onClick={() => router.push(routes.eCommerce.editPriceLevel(row.id))}
-                        />
-                        <ButtonIcon
-                            color='danger'
-                            variant='filled'
-                            size="small"
-                            icon={TrashIconRed}
-                            onClick={() => handleOpenModalDelete(row.id)}
-                        />
+                    <div className="flex  gap-3 pe-4" onClick={(e) => e.stopPropagation()}>
+                        <Dropdown overlay={menu} trigger={['click']} >
+                            <ButtonIcon
+                                color='primary'
+                                variant='filled'
+                                size="small"
+                                icon={MoreIcon}
+                            />
+                        </Dropdown >
                     </div >
                 );
             }
@@ -126,23 +129,37 @@ const index = ({ priceLevels }: { priceLevels?: any }) => {
 
     ]
 
-    const handleSearch = (value: string) => {
-        const search = value.toLowerCase();
-        setSearch(search)
-        const result = data.filter((item: any) => {
-            return item?.name?.toLowerCase().includes(search) ||
-                item?.brand?.name?.toLowerCase().includes(search) ||
-                item?.category?.name?.toLowerCase().includes(search)
+    const filteredData = React.useMemo(() => {
+        if (!search) return data;
+        const keyword = search.toLowerCase();
+        return data.filter((item: any) => {
+            const formattedDate = dayjs(item?.created_at)
+                .format('DD/MM/YYYY')
+                .toLowerCase();
+            return (
+                item?.name.toLowerCase().includes(keyword) ||
+                formattedDate.includes(keyword)
+            );
         });
-        setFilteredData(result);
-    };
+    }, [search, data]);
 
-    useEffect(() => {
-        setData(priceLevels)
-        if (!search) {
-            setFilteredData(priceLevels)
+    const fetchPage = async (page: number, perPage: number) => {
+        try {
+            const res = await getPriceLevel({ page, perPage })
+            setData(res.data)
+            setTotal(res.count)
+            setCurrentPage(res.page)
+            setPageSize(res.perPage)
+        } catch (error) {
+            console.error(error)
         }
-    }, [priceLevels, search])
+    }
+    useEffect(() => {
+        if (notification) {
+            notifySuccess(notification);
+            setNotification(null);
+        }
+    }, [notification]);
 
     return (
         <>
@@ -184,24 +201,15 @@ const index = ({ priceLevels }: { priceLevels?: any }) => {
                         <div className='flex items-center gap-2'>
                             <ShowPageSize
                                 pageSize={pageSize}
-                                onChange={setPageSize}
-                            />
-                            <ButtonFilter
-                                label='Filter by'
-                                icon={<Image
-                                    src={FilterIcon}
-                                    alt='filter-icon'
-                                    width={15}
-                                    height={15}
-                                />}
-                                onClick={() => setisOpenModalFilter(true)}
-                                position='end'
-                                style={{ padding: '1.2rem 1.7rem' }}
+                                onChange={(newPageSize) => {
+                                    setPageSize(newPageSize);
+                                    setCurrentPage(1);
+                                    fetchPage(1, newPageSize);
+                                }}
                             />
                             <SearchTable
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
-                                onSearch={() => console.log('Searching for:', search)}
                             />
                         </div>
                         {
@@ -215,7 +223,6 @@ const index = ({ priceLevels }: { priceLevels?: any }) => {
                                 />}
                                 onClick={() => setisOpenModalFilter(true)}
                                 position='start'
-                                style={{ padding: '1.2rem 1.7rem' }}
                                 btnClassname='btn-delete-all'
                             />
                         }
@@ -231,10 +238,14 @@ const index = ({ priceLevels }: { priceLevels?: any }) => {
                     />
                     <Pagination
                         current={currentPage}
-                        total={filteredData.length}
+                        total={total}
                         pageSize={pageSize}
-                        onChange={(page) => setCurrentPage(page)}
+                        onChange={(page) => {
+                            setCurrentPage(page);
+                            fetchPage(page, pageSize);
+                        }}
                     />
+
                 </div>
             </Content>
         </>

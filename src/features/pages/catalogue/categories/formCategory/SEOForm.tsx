@@ -13,6 +13,10 @@ const SEOForm = ({ data, parentId, onChange }: generalCategoriesForm) => {
         metaDescription: '',
         pageDesc: '',
     })
+    const titleLength = formData?.metaTitle?.length || 0;
+    const isTitleInvalid = titleLength !== 0 && (titleLength < 55 || titleLength > 65);
+    const descLength = formData?.metaDescription?.length || 0;
+    const isDescInvalid = descLength !== 0 && (descLength < 145 || descLength > 165);
 
     useEffect(() => {
         setFormData({
@@ -42,14 +46,6 @@ const SEOForm = ({ data, parentId, onChange }: generalCategoriesForm) => {
             return updated;
         });
     };
-
-    const metaTitle = formData.metaTitle;
-    const titleLength = metaTitle?.length || 0;
-    const isTitleInvalid = titleLength > 65;
-
-    const metaDescription = formData.metaDescription;
-    const descLength = metaDescription?.length || 0;
-    const isDescInvalid = descLength > 165;
 
     return (
         <div className='flex flex-col gap-4'>
