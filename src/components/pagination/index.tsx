@@ -1,4 +1,4 @@
-import { DoubleRightOutlined } from '@ant-design/icons';
+import { DoubleRightOutlined, DoubleLeftOutlined } from '@ant-design/icons';
 import React from 'react';
 
 type Props = {
@@ -24,26 +24,35 @@ const Pagination: React.FC<Props> = ({ current, total, pageSize, onChange }) => 
 
     return (
         <div className="flex justify-center items-center gap-2 mt-4">
+            {totalPages > 1 && (
+                <button
+                    onClick={() => onChange(current - 1)}
+                    disabled={current <= 1}
+                    className="w-9 h-9 rounded-md border bg-white text-gray-800 disabled:opacity-40"
+                >
+                    <DoubleLeftOutlined />
+                </button>
+            )}
             {generatePageNumbers().map((page) => (
                 <button
                     key={page}
                     onClick={() => onChange(page)}
                     className={`w-9 h-9 rounded-md border text-sm ${page === current
                         ? 'bg-[#0B2C4D] text-white'
-                        : 'bg-white text-gray-800 hover:border-blue-300'
+                        : 'bg-white text-gray-800 hover:border-[#0B2C4D]'
                         }`}
                 >
                     {page}
                 </button>
             ))}
 
-            {totalPages > 3 && (
+            {totalPages > 1 && (
                 <>
-                    <span className="text-gray-500 px-1">...</span>
+                    {/* <span className="text-gray-500 px-1">...</span> */}
                     <button
                         onClick={() => onChange(current + 1)}
                         disabled={current >= totalPages}
-                        className="w-9 h-9 rounded-md border bg-white text-gray-800 hover:border-blue-300 disabled:opacity-40"
+                        className="w-9 h-9 rounded-md border bg-white text-gray-800 disabled:opacity-40"
                     >
                         <DoubleRightOutlined />
                     </button>

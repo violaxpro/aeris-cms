@@ -69,9 +69,12 @@ const PriceInformation = ({
                         <p className="mt-2">Price information</p>
                     </div>
                     <div className='flex gap-4'>
-                        <Button
-                            label='View Price History'
-                        />
+                        {
+                            dataById &&
+                            <Button
+                                label='View Price History'
+                            />
+                        }
                         <Button
                             label='Calculate'
                             icon={<CalculatorOutlined />}
@@ -80,7 +83,15 @@ const PriceInformation = ({
                     </div>
                 </div>
                 <Divider />
-                <div className='grid md:grid-cols-3 gap-4'>
+                <div className='grid md:grid-cols-4 gap-4'>
+                    <Input
+                        id='last_price'
+                        label='Last Price'
+                        type='text'
+                        placeholder='Input Last Price'
+                        onChange={handleChange}
+                        value={formDataCreate?.tab_price?.last_price}
+                    />
                     <Input
                         id='buying_price'
                         label='Buying Price'
@@ -105,40 +116,39 @@ const PriceInformation = ({
                         onChange={handleChange}
                         value={formDataCreate?.tab_price?.trade}
                     />
-                    <div className='col-span-full grid grid-cols-4 gap-4'>
-                        <Input
-                            id='silver'
-                            label='Silver'
-                            type='text'
-                            placeholder='Input Silver'
-                            onChange={handleChange}
-                            value={formDataCreate?.tab_price?.silver}
-                        />
-                        <Input
-                            id='gold'
-                            label='Gold'
-                            type='text'
-                            placeholder='Input Gold'
-                            onChange={handleChange}
-                            value={formDataCreate?.tab_price?.gold}
-                        />
-                        <Input
-                            id='platinum'
-                            label='Platinum'
-                            type='text'
-                            placeholder='Input Platinum'
-                            onChange={handleChange}
-                            value={formDataCreate?.tab_price?.platinum}
-                        />
-                        <Input
-                            id='diamond'
-                            label='Diamond'
-                            type='text'
-                            placeholder='Input Diamond'
-                            onChange={handleChange}
-                            value={formDataCreate?.tab_price?.diamond}
-                        />
-                        {/* <Input
+                    <Input
+                        id='silver'
+                        label='Silver'
+                        type='text'
+                        placeholder='Input Silver'
+                        onChange={handleChange}
+                        value={formDataCreate?.tab_price?.silver}
+                    />
+                    <Input
+                        id='gold'
+                        label='Gold'
+                        type='text'
+                        placeholder='Input Gold'
+                        onChange={handleChange}
+                        value={formDataCreate?.tab_price?.gold}
+                    />
+                    <Input
+                        id='platinum'
+                        label='Platinum'
+                        type='text'
+                        placeholder='Input Platinum'
+                        onChange={handleChange}
+                        value={formDataCreate?.tab_price?.platinum}
+                    />
+                    <Input
+                        id='diamond'
+                        label='Diamond'
+                        type='text'
+                        placeholder='Input Diamond'
+                        onChange={handleChange}
+                        value={formDataCreate?.tab_price?.diamond}
+                    />
+                    {/* <Input
                     id='kitPrice'
                     label='Kit Price'
                     type='text'
@@ -154,7 +164,6 @@ const PriceInformation = ({
                     onChange={handleChange}
                     value={formDataCreate?.tab_price?.price_notes}
                 /> */}
-                    </div>
                 </div>
 
                 <div className='flex justify-end gap-3 md:mt-3'>

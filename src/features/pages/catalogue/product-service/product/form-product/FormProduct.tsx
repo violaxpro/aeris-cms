@@ -54,9 +54,17 @@ const ProductForm: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
             platinum: initialValues ? initialValues.platinum_price : '',
             diamond: initialValues ? initialValues.diamond_price : '',
             kit_price: initialValues ? initialValues.kit_price : '',
-            price_notes: initialValues ? initialValues.price_notes : ''
+            price_notes: initialValues ? initialValues.price_notes : '',
+            additional_shipping_cost: initialValues ? initialValues.additional_shipping_cost : '',
+            last_price: initialValues ? initialValues.last_price : '',
+            suppliers: initialValues ? initialValues.suppliers : '',
+            kits: initialValues ? initialValues.kits : '',
         },
-        tab_advanced: {}
+        tab_advanced: {
+            attributes: initialValues ? initialValues.attributes : '',
+            options: initialValues ? initialValues.options : '',
+            relateds: initialValues ? initialValues.relateds : '',
+        }
     })
     const tabs: Tab[] = [
         { key: 'basic', label: 'Basic Information' },
@@ -64,7 +72,7 @@ const ProductForm: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         { key: 'advanced', label: 'Advanced Information' },
     ];
 
-    console.log(formData)
+    console.log('ini data form yaa', formData)
 
     const breadcrumb = [
         { title: 'Catalogue' },
@@ -84,36 +92,44 @@ const ProductForm: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
     const handleSubmit = async () => {
         try {
-            if(formData.tab_basic_information.metaTitle) {
-                
+            if (formData.tab_basic_information.metaTitle) {
+
             }
             const submitData = {
+                brand_id: Number(formData.tab_basic_information.brand),
+                category_id: Number(formData.tab_basic_information.categories),
+                // subCategoriesId: Number(formData.tab_basic_information.subCategoriesId) || 1,
                 name: formData.tab_basic_information.productName,
-                short_description: formData.tab_basic_information.shortDesc || 'short-desc',
-                description: formData.tab_basic_information.description,
+                // short_description: formData.tab_basic_information.shortDesc || 'short-desc',
                 slug: formData.tab_basic_information.slug,
+                description: formData.tab_basic_information.description,
+                meta_title: formData.tab_basic_information.metaTitle,
+                meta_description: formData.tab_basic_information.metaDescription,
+                tax_class_id: formData.tab_basic_information.taxClass,
+                manual_url: formData.tab_basic_information.manualUrl,
+                warranty_month: formData.tab_basic_information.warranty,
+                status: formData.tab_basic_information.status,
                 sku: formData.tab_basic_information.sku,
                 sku2: formData.tab_basic_information.sku2,
                 mpn: formData.tab_basic_information.mpn,
-                brandId: Number(formData.tab_basic_information.brand),
-                categoriesId: Number(formData.tab_basic_information.categories),
-                subCategoriesId: Number(formData.tab_basic_information.subCategoriesId) || 1,
-                // tax: formData.tab_basic_information.taxClass,
-                // qty: Number(formData.tab_basic_information.qty),
-                // stock: Number(formData.tab_basic_information.stock),
-                stock: formData.tab_basic_information.stock,
-                tags: formData.tab_basic_information.tags,
-                status: formData.tab_basic_information.status == true ? 1 : 0,
-                price_buy: Number(formData.tab_price.buying_price),
-                rrp_price: Number(formData.tab_price.rrp),
+                best_seller: formData.tab_basic_information.isBestSeller,
+                back_order: formData.tab_basic_information.isBackOrder,
+                buy_price: Number(formData.tab_price.buying_price),
+                recommended_retail_price: Number(formData.tab_price.rrp),
                 trade_price: Number(formData.tab_price.trade),
                 silver_price: Number(formData.tab_price.silver),
                 gold_price: Number(formData.tab_price.gold),
                 platinum_price: Number(formData.tab_price.platinum),
                 diamond_price: Number(formData.tab_price.diamond),
-                meta_title: formData.tab_basic_information.metaTitle,
-                meta_description: formData.tab_basic_information.metaDescription,
-                images: formData.tab_basic_information.images
+                last_price: Number(formData.tab_price.last_price),
+                additional_shipping_cost: Number(formData.tab_price.additional_shipping_cost),
+                tags: formData.tab_basic_information.tags,
+                images: formData.tab_basic_information.images,
+                suppliers: formData.tab_price.suppliers,
+                kits: formData.tab_price.kits,
+                attributes: formData.tab_advanced.attributes,
+                options: formData.tab_advanced.options,
+                relateds: formData.tab_advanced.relateds,
                 // images: [
                 //     {
                 //         "name": "image a",

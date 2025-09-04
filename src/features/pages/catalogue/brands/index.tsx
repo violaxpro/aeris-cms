@@ -5,21 +5,18 @@ import type { TableColumnsType } from 'antd'
 import { Dropdown, Menu } from 'antd'
 import { BrandType } from '@/data/brands-data'
 import Image from 'next/image'
-import { EditOutlined, PlusCircleOutlined, InfoCircleOutlined, MoreOutlined } from '@ant-design/icons'
-import Popover from '@/components/popover'
 import { routes } from '@/config/routes'
 import Link from 'next/link'
 import Breadcrumb from "@/components/breadcrumb"
 import { Content } from 'antd/es/layout/layout'
 import Button from "@/components/button"
-import SearchInput from '@/components/search';
 import dayjs from 'dayjs'
-import { deleteBrand } from '@/services/brands-service'
+import { deleteBrand, getBrands } from '@/services/brands-service'
 import { useNotificationAntd } from '@/components/toast'
 import { useAtom } from 'jotai'
 import { brandAtom } from '@/store/BrandAtomStore'
 import StatusBadge from '@/components/badge/badge-status'
-import { AddIcon, TrashIconRed, PencilIconBlue } from '@public/icon'
+import { AddIcon, TrashIconRed, MoreIcon } from '@public/icon'
 import ButtonDelete from '@/components/button/ButtonAction'
 import Pagination from '@/components/pagination'
 import ButtonIcon from '@/components/button/ButtonIcon'
@@ -27,41 +24,39 @@ import SearchTable from '@/components/search/SearchTable'
 import ShowPageSize from '@/components/pagination/ShowPageSize'
 import ConfirmModal from '@/components/modal/ConfirmModal'
 import { useRouter } from 'next/navigation'
+import { notificationAtom } from '@/store/NotificationAtom'
 
 const index = ({ brandsData }: { brandsData?: any }) => {
     const router = useRouter()
     const { contextHolder, notifySuccess } = useNotificationAntd()
-    const [data, setData] = useAtom(brandAtom)
-    const [filteredData, setFilteredData] = useState<BrandType[]>([]);
+    const [data, setData] = useState(brandsData?.data || [])
+    const [currentPage, setCurrentPage] = useState(brandsData?.page || 1)
+    const [pageSize, setPageSize] = useState(brandsData?.perPage || 10)
+    const [total, setTotal] = useState(brandsData?.count || 0)
+    const [notification, setNotification] = useAtom(notificationAtom);
+    // const [filteredData, setFilteredData] = useState<BrandType[]>([]);
     const [search, setSearch] = useState('')
-    const [currentPage, setCurrentPage] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
     const [isOpenModalFilter, setisOpenModalFilter] = useState(false)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
     const [openModalDelete, setOpenModalDelete] = useState(false)
     const [deletedData, setDeletedData] = useState<any>(null)
 
-    const handleDelete = async (id?: any) => {
-        if (!deletedData) return;
+    const handleDelete = async () => {
+        if (!deletedData) return
         try {
-            const res = await deleteBrand(deletedData);
+            const res = await deleteBrand(deletedData)
             if (res.success) {
-                notifySuccess(res.message);
-                const updatedData = data.filter(item => item.id !== deletedData);
-                setData(updatedData);
-
-                setFilteredData(updatedData.filter(item =>
-                    item.name.toLowerCase().includes(search.toLowerCase())
-                ));
-                // setData(prev => prev.filter(item => item.id !== deletedData));
+                notifySuccess(res.message)
+                fetchPage(currentPage, pageSize)
             }
         } catch (error) {
-            console.error(error);
+            console.error(error)
         } finally {
-            setOpenModalDelete(false);
-            setDeletedData(null);
+            setOpenModalDelete(false)
+            setDeletedData(null)
         }
-    };
+    }
+
 
     const breadcrumb = [
         {
@@ -72,11 +67,6 @@ const index = ({ brandsData }: { brandsData?: any }) => {
         },
     ]
     const columns: TableColumnsType<BrandType> = [
-        {
-            title: 'ID',
-            dataIndex: 'id',
-            sorter: (a: any, b: any) => a.id - b.id,
-        },
         {
             title: 'Logo',
             dataIndex: 'url_logo',
@@ -105,7 +95,8 @@ const index = ({ brandsData }: { brandsData?: any }) => {
                 return a?.status - b?.status
             },
             render: (value: any) => {
-                return <StatusBadge status={value} />;
+                const status = value == true ? 'Enabled' : 'Disabled'
+                return <StatusBadge status={status} />;
             }
         },
         {
@@ -123,40 +114,29 @@ const index = ({ brandsData }: { brandsData?: any }) => {
             key: 'action',
             width: 120,
             render: (_: string, row: any) => {
-                // const menu = (
-                //     <Menu>
-                //         <Menu.Item key="edit">
-                //             <Link href={routes.eCommerce.editBrands(row.id)}>
-                //                 Edit
-                //             </Link>
-                //         </Menu.Item>
-                //         <Menu.Item key="delete">
-                //             <Popover
-                //                 title='Delete Brands'
-                //                 description='Are you sure to delete this data?'
-                //                 onDelete={() => handleDelete(row.id)}
-                //                 label='Delete'
-                //             />
-                //         </Menu.Item>
-                //     </Menu>
-                // );
+                const menu = (
+                    <Menu>
+                        <Menu.Item key="edit">
+                            <Link href={routes.eCommerce.editBrands(row.id)}>
+                                Edit
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item key="delete" onClick={() => handleOpenModalDelete(row.id)}>
+                            Delete
+                        </Menu.Item>
+                    </Menu>
+                );
 
                 return (
-                    <div className="flex items-center justify-end gap-3 pe-4">
-                        <ButtonIcon
-                            color='primary'
-                            variant='filled'
-                            size="small"
-                            icon={PencilIconBlue}
-                            onClick={() => router.push(routes.eCommerce.editBrands(row.id))}
-                        />
-                        <ButtonIcon
-                            color='danger'
-                            variant='filled'
-                            size="small"
-                            icon={TrashIconRed}
-                            onClick={() => handleOpenModalDelete(row.id)}
-                        />
+                    <div className="flex  gap-3 pe-4" onClick={(e) => e.stopPropagation()}>
+                        <Dropdown overlay={menu} trigger={['click']} >
+                            <ButtonIcon
+                                color='primary'
+                                variant='filled'
+                                size="small"
+                                icon={MoreIcon}
+                            />
+                        </Dropdown >
                     </div >
                 );
             }
@@ -169,23 +149,38 @@ const index = ({ brandsData }: { brandsData?: any }) => {
         setDeletedData(data)
     }
 
-    const handleSearch = (value: string) => {
-        const search = value.toLowerCase();
-        setSearch(search)
-        const result = data.filter((item: any) => {
-            const formattedDate = dayjs(item?.createdAt).format('DD MMMM, YYYY').toLowerCase();
-            return item?.name.toLowerCase().includes(search) ||
-                formattedDate.includes(search);
+    const filteredData = React.useMemo(() => {
+        if (!search) return data;
+        const keyword = search.toLowerCase();
+        return data.filter((item: any) => {
+            const formattedDate = dayjs(item?.created_at)
+                .format('DD/MM/YYYY')
+                .toLowerCase();
+            return (
+                item?.name.toLowerCase().includes(keyword) ||
+                formattedDate.includes(keyword)
+            );
         });
-        setFilteredData(result);
-    };
+    }, [search, data]);
+
+    const fetchPage = async (page: number, perPage: number) => {
+        try {
+            const res = await getBrands({ page, perPage })
+            setData(res.data)
+            setTotal(res.count)
+            setCurrentPage(res.page)
+            setPageSize(res.perPage)
+        } catch (error) {
+            console.error(error)
+        }
+    }
 
     useEffect(() => {
-        setData(brandsData)
-        if (!search) {
-            setFilteredData(brandsData)
+        if (notification) {
+            notifySuccess(notification);
+            setNotification(null);
         }
-    }, [brandsData, search])
+    }, [notification]);
 
     return (
         <>
@@ -228,12 +223,15 @@ const index = ({ brandsData }: { brandsData?: any }) => {
                         <div className='flex items-center gap-2'>
                             <ShowPageSize
                                 pageSize={pageSize}
-                                onChange={setPageSize}
+                                onChange={(newPageSize) => {
+                                    setPageSize(newPageSize);
+                                    setCurrentPage(1);
+                                    fetchPage(1, newPageSize);
+                                }}
                             />
                             <SearchTable
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
-                                onSearch={() => console.log('Searching for:', search)}
                             />
                         </div>
                         {
@@ -247,7 +245,6 @@ const index = ({ brandsData }: { brandsData?: any }) => {
                                 />}
                                 onClick={() => setisOpenModalFilter(true)}
                                 position='start'
-                                style={{ padding: '1.2rem 1.7rem' }}
                                 btnClassname='btn-delete-all'
                             />
                         }
@@ -263,9 +260,12 @@ const index = ({ brandsData }: { brandsData?: any }) => {
                     />
                     <Pagination
                         current={currentPage}
-                        total={filteredData.length}
+                        total={total}
                         pageSize={pageSize}
-                        onChange={(page) => setCurrentPage(page)}
+                        onChange={(page) => {
+                            setCurrentPage(page);
+                            fetchPage(page, pageSize);
+                        }}
                     />
 
                 </div>

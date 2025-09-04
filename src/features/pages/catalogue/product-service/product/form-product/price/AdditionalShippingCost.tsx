@@ -30,7 +30,7 @@ const AdditionalShippingCost = ({ dataById, onChange }: ChildFormProps) => {
                 description="Additional Shipping Cost"
             >
                 <Input
-                    id='buyingPrice'
+                    id='additional_shipping_cost'
                     label='Additional Shipping Cost'
                     type='text'
                     placeholder='Input Additional Shipping Cost'

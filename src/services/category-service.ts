@@ -1,7 +1,7 @@
 import baseService from "./base-service";
 import { CategoryType } from "@/data/categories-data";
 
-const apiCategories = '/admin/product/categories'
+const apiCategories = '/admin/catalogue/categories'
 
 export async function getCategories(param?: string | number[]) {
     const url = param ? `${apiCategories}/${param}` : apiCategories

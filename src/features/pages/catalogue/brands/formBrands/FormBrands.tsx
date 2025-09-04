@@ -15,8 +15,11 @@ import Textarea from '@/components/textarea'
 import FileUploader from '@/components/input-file'
 import { addBrand, updateBrand } from '@/services/brands-service';
 import { useNotificationAntd } from '@/components/toast';
+import { useSetAtom } from 'jotai';
+import { notificationAtom } from '@/store/NotificationAtom';
 
 const FormBrands: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
+    const setNotification = useSetAtom(notificationAtom);
     const { contextHolder, notifySuccess } = useNotificationAntd()
     const router = useRouter()
 
@@ -32,13 +35,20 @@ const FormBrands: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         status: initialValues ? initialValues.status : false,
         metaTitle: initialValues ? initialValues.meta_title : '',
         metaDescription: initialValues ? initialValues.meta_description : '',
-        urlBanner: initialValues ? initialValues.url_banner : '',
-        urlLogo: initialValues ? initialValues.url_banner : ''
+        urlLogo: initialValues ? initialValues.url_logo : '',
+        urlBanner: initialValues ? initialValues.url_banner : ''
     })
+
+    const titleLength = formData?.metaTitle?.length || 0;
+    const isTitleInvalid = titleLength !== 0 && (titleLength < 55 || titleLength > 65);
+    const descLength = formData?.metaDescription?.length || 0;
+    const isDescInvalid = descLength !== 0 && (descLength < 145 || descLength > 165);
     const [formErrors, setFormErrors] = useState({
         name: '',
         status: '',
-        urlLogo: ''
+        urlLogo: '',
+        metaTitle: '',
+        metaDescription: ''
     })
 
     const handleChange = (e: any) => {
@@ -73,6 +83,15 @@ const FormBrands: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                 errors.urlLogo = 'Url Logo is required'
             }
 
+            if (titleLength < 55 || titleLength > 65) {
+                return;
+            }
+
+            // Meta Description wajib min 145, max 165
+            if (descLength < 145 || descLength > 165) {
+                return;
+            }
+
             setFormErrors(errors)
 
             if (Object.keys(errors).length > 0) {
@@ -83,7 +102,7 @@ const FormBrands: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
             const data = {
                 name: formData.name,
                 discount_percent: Number(formData.discountPercent) ?? 0,
-                status: formData.status == true ? 1 : 0,
+                status: formData.status,
                 meta_title: formData.metaTitle,
                 meta_description: formData.metaDescription,
                 url_banner: formData.urlBanner,
@@ -99,10 +118,8 @@ const FormBrands: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
             console.log(response)
             if (response.success == true) {
-                notifySuccess(response.message)
-                setTimeout(() => {
-                    router.push(routes.eCommerce.brands)
-                }, 2000);
+                setNotification(response.message);
+                router.push(routes.eCommerce.brands)
             }
         } catch (error) {
             console.error(error)
@@ -110,13 +127,8 @@ const FormBrands: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
     }
 
-    const metaTitle = formData?.metaTitle;
-    const titleLength = metaTitle?.length || 0;
-    const isTitleInvalid = titleLength > 65;
 
-    const metaDescription = formData?.metaDescription;
-    const descLength = metaDescription?.length || 0;
-    const isDescInvalid = descLength > 165;
+    console.log(formData)
     return (
         <div>
             {contextHolder}

@@ -29,7 +29,15 @@ const nextConfig = {
       },
       {
         protocol: 'http',
+        hostname: 'url.logo',
+      },
+      {
+        protocol: 'http',
         hostname: 'url.bnanner2'
+      },
+      {
+        protocol: 'http',
+        hostname: 'url.banner'
       },
       {
         protocol: 'https',
@@ -62,7 +70,7 @@ const nextConfig = {
       },
     ],
   },
-  reactStrictMode: true,
+  reactStrictMode: false,
   transpilePackages: ['core'],
 };
 

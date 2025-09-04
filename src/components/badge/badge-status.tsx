@@ -20,10 +20,14 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
         'Waiting for Payment': { color: '#FF6A00', text: 'Waiting for Payment' },
         'Verification': { color: '#FF7601', text: 'Verification' },
         'Refunded': { color: '#A32904', text: 'Refunded' },
-        'Not Yet Issued': { color: '#4E4E4ECC', text: 'Not Yet Issued' }
+        'Not Yet Issued': { color: '#4E4E4ECC', text: 'Not Yet Issued' },
+        Enabled: { color: '#01933B', text: 'Enabled' },
+
     };
 
+
     const config = statusMap[status] || { color: '#4E4E4ECC', text: status };
+
     return (
         <span className="inline-flex items-center gap-1">
             <Badge color={config.color as any} />
