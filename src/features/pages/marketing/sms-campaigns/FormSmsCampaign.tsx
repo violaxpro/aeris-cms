@@ -27,6 +27,9 @@ import dynamic from 'next/dynamic';
 import Divider from '@/components/divider'
 import ButtonAction from '@/components/button/ButtonAction';
 import ModalPreviewTest from './ModalPreviewTest';
+import Modal from '@/components/modal'
+import Table from '@/components/table'
+import type { TableColumnsType } from 'antd';
 
 const QuillInput = dynamic(() => import('@/components/quill-input'), { ssr: false, loading: () => <p>Loading editor...</p>, });
 
@@ -45,7 +48,7 @@ const FormSmsCampaign: React.FC<FormProps> = ({ mode, initialValues, slug }) => 
         content: initialValues ? initialValues.content : '',
         max_length_strategy: initialValues ? initialValues.max_length_strategy : 'Split',
         link_shortener: initialValues ? initialValues.link_shortener : false,
-        click_tracking: initialValues ? initialValues.click_tracking : false,
+        click_tracking: initialValues ? initialValues.click_tracking : true,
         skip_if_no_option: initialValues ? initialValues.skip_if_no_option : true,
         country_routing: initialValues ? initialValues.country_routing : '',
         rate_limit_per_minute: initialValues ? initialValues.rate_limit_per_minute : '',
@@ -54,12 +57,37 @@ const FormSmsCampaign: React.FC<FormProps> = ({ mode, initialValues, slug }) => 
         test_numbers: initialValues ? initialValues.test_numbers : '',
     });
     const [openModalPreviewTest, setOpenModalPreviewTest] = useState(false)
+    const [openModalCustomer, setOpenModalCustomer] = useState(false)
+    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
     const breadcrumb = [
         { title: 'Campaigns Management' },
         { title: 'SMS Campaigns', url: routes.eCommerce.smsCampaigns },
         { title: mode === 'create' ? 'Create' : 'Edit' },
     ];
+
+    const columnCustomer: TableColumnsType<any> = [
+        {
+            title: 'Customer Name',
+            dataIndex: 'customer_name',
+            sorter: (a: any, b: any) => {
+                return a?.customer_name.localeCompare(b?.customer_name)
+            },
+            render: (_: any, row: any) => {
+                return row.customer_name
+            }
+        },
+        {
+            title: 'Phone Number',
+            dataIndex: 'phone_number',
+            sorter: (a: any, b: any) => {
+                return a?.phone_number.localeCompare(b?.phone_number)
+            },
+            render: (_: any, row: any) => {
+                return row.phone_number
+            }
+        }
+    ]
 
     const handleChange = (field: string) => (
         e: any
@@ -76,6 +104,9 @@ const FormSmsCampaign: React.FC<FormProps> = ({ mode, initialValues, slug }) => 
         }
         // Kalau string atau array langsung pakai
         else if (typeof e === 'string' || Array.isArray(e)) {
+            if (e == 'Custom') {
+                setOpenModalCustomer(true)
+            }
             value = e;
         }
         // Input biasa (text/number)
@@ -127,6 +158,34 @@ const FormSmsCampaign: React.FC<FormProps> = ({ mode, initialValues, slug }) => 
                 isModalOpen={openModalPreviewTest}
                 handleCancel={() => setOpenModalPreviewTest(false)}
             />
+            {
+                formData.audience_segment == 'Custom' &&
+                <Modal
+                    open={openModalCustomer}
+                    handleCancel={() => setOpenModalCustomer(false)}
+                    title='List Customer Groups'
+                >
+                    <Table
+                        columns={columnCustomer}
+                        withSelectableRows
+                        selectedRowKeys={selectedRowKeys}
+                        onSelectChange={setSelectedRowKeys}
+                        dataSource={[
+                            {
+                                id: 1,
+                                customer_name: 'John Smith',
+                                phone_number: '+6283176374875',
+                            },
+                            {
+                                id: 2,
+                                customer_name: 'Linda',
+                                phone_number: '+6281277361589',
+                            },
+                        ]}
+
+                    />
+                </Modal>
+            }
             <div className="mt-6 mx-6 mb-0">
                 <h1 className="text-2xl font-bold mb-4">{mode === 'create' ? 'Create SMS Campaign' : 'Edit SMS Campaign'}</h1>
                 <Breadcrumb items={breadcrumb} />
@@ -134,76 +193,89 @@ const FormSmsCampaign: React.FC<FormProps> = ({ mode, initialValues, slug }) => 
 
             <Content className="mb-0">
                 <div className='p-6 min-h-[360px] flex flex-col gap-8'>
-                    <div className='grid md:grid-cols-3 gap-3'>
+                    <div className='grid md:grid-cols-5 gap-3'>
                         <Input
                             id='campaign_name'
                             label='Campaign Name'
                             type='text'
-                            placeholder='Input Campaign Name'
+                            placeholder='Summer Promo 2025'
                             onChange={handleChange('campaign_name')}
                             value={formData.campaign_name}
                         />
-                        <div className={`grid ${formData.audience_segment == 'Custom' ? 'md:grid-cols-2' : 'grid-cols-1'} gap-3`}>
-                            <SelectInput
-                                id='audience_segment'
-                                label='Audience Segment'
-                                placeholder='Input Audience Segment'
-                                onChange={handleChange('audience_segment')}
-                                value={formData.audience_segment}
-                                options={[
-                                    { label: 'All Subscribers', value: 'All Subscribers' },
-                                    { label: 'Active Subscribers', value: 'Active Subscribers' },
-                                    { label: 'Custom', value: 'Custom' },
-                                ]}
-                            />
-                            {
-                                formData.audience_segment == 'Custom' &&
-                                <Input
-                                    id='custom_audience'
-                                    label='Custom Audience'
-                                    type='text'
-                                    placeholder='Input Custom Audience'
-                                    onChange={handleChange('custom_audience')}
-                                    value={formData.custom_audience}
-                                />
-                            }
-                        </div>
-                        <Input
+                        <SelectInput
+                            id='audience_segment'
+                            label='Audience Segment'
+                            placeholder='Loyal Customers - Last 90 Days'
+                            onChange={handleChange('audience_segment')}
+                            value={formData.audience_segment || undefined}
+                            options={[
+                                { label: 'All Subscribers', value: 'All Subscribers' },
+                                { label: 'Active Subscribers', value: 'Active Subscribers' },
+                                { label: 'Custom', value: 'Custom' },
+                            ]}
+                        />
+                        {/* <Input
                             id='utm_parameters'
                             label='UTM Parameters'
                             type='text'
                             placeholder='Input UTM Parameters'
                             onChange={handleChange('utm_parameters')}
                             value={formData.utm_parameters}
+                        /> */}
+                        <SelectInput
+                            id='country_routing'
+                            label='Country Routing (Optional)'
+                            placeholder='Australia'
+                            onChange={handleChange('country_routing')}
+                            value={formData.country_routing || undefined}
+                            options={[
+                                { label: 'Australia', value: 'Australia' },
+                                { label: 'Indonesia', value: 'Indonesia' },
+                            ]}
+                            modeType='multiple'
                         />
-                        <div className='col-span-full grid md:grid-cols-2 gap-3'>
+                        <SelectInput
+                            id='provider'
+                            label='Provider'
+                            placeholder='Twillio'
+                            onChange={handleChange('provider')}
+                            value={formData.provider || undefined}
+                            options={[
+                                { label: 'Twillio', value: 'Twillio' },
+                            ]}
+                        />
+                        <SelectInput
+                            id='sender_id'
+                            label='Sender ID / Number'
+                            placeholder='+12025550123'
+                            onChange={handleChange('sender_id')}
+                            value={formData.sender_id || undefined}
+                            options={[
+                                { label: '+61025550123', value: '+61025550123' },
+                            ]}
+                        />
+                        <div className='col-span-full flex flex-col gap-3'>
                             <SelectInput
-                                id='provider'
-                                label='Provider'
-                                placeholder='Input Provider'
-                                onChange={handleChange('provider')}
-                                value={formData.provider}
+                                id='template_selector'
+                                label='Template Selector (Optional)'
+                                placeholder='Flash Sale Reminder Template'
+                                onChange={handleChange('template_selector')}
+                                value={formData.template_selector || undefined}
                                 options={[
-                                    { label: 'Twillio', value: 'Twillio' },
+                                    { label: 'SMS Campaigns Template', value: '1' }
                                 ]}
                             />
-                            <Input
-                                id='sender_id'
-                                label='Sender ID / Number'
-                                type='text'
-                                placeholder='Input Sender ID / Number'
-                                onChange={handleChange('sender_id')}
-                                value={formData.sender_id}
-                            />
-                        </div>
-                        <div className='col-span-full flex flex-col gap-3'>
-                            <Textarea
-                                id='message_body'
-                                label='Message Body'
-                                placeholder='Input Message Body'
-                                onChange={handleChange('message_body')}
-                                value={formData.message_body}
-                                textareaClassname='!h-30'
+                            <QuillInput
+                                value={formData.content}
+                                onChange={handleChange('content')}
+                                label="Content Editor"
+                                className="col-span-full [&_.ql-editor]:min-h-[100px]"
+                                labelClassName="font-medium text-gray-700 dark:text-gray-600 mb-1.5"
+                                placeholder='Hi {{first_name}}, 
+                                Don’t miss our Summer Sale! Get 20% off all items. 
+                                Shop now: https://brand.ly/sale
+                                Reply STOP to opt out.
+                                '
                                 notes={
                                     <div className='flex gap-3'>
                                         <span>Characters: 120 </span>
@@ -213,118 +285,54 @@ const FormSmsCampaign: React.FC<FormProps> = ({ mode, initialValues, slug }) => 
                                     </div>
                                 }
                             />
+                        </div>
+                        <div className={`col-span-full grid ${formData.schedule_type !== 'Send Now' ? 'md:grid-cols-4' : 'md:grid-cols-3'} gap-3`}>
                             <SelectInput
-                                id='template_selector'
-                                label='Template Selector (Optional)'
-                                placeholder='Template Selector'
-                                onChange={handleChange('template_selector')}
-                                value={formData.template_selector}
+                                id='max_length_strategy'
+                                label='Max Length Strategy'
+                                placeholder='Split'
+                                onChange={handleChange('max_length_strategy')}
+                                value={formData.max_length_strategy || undefined}
                                 options={[
-                                    { label: 'SMS Campaigns Template', value: '1' }
+                                    { label: 'Truncate', value: 'Truncate' },
+                                    { label: 'Split', value: 'Split' },
+                                    { label: 'Reject', value: 'Reject' },
+                                ]}
+                            />
+                            <Input
+                                id='rate_limit_per_minute'
+                                label='Rate Limit Per Minute (Optional)'
+                                type='text'
+                                placeholder='500'
+                                onChange={handleChange('rate_limit_per_minute')}
+                                value={formData.rate_limit_per_minute}
+                            />
+                            <SelectInput
+                                id='schedule_type'
+                                label='Schedule Type'
+                                placeholder='Send Now'
+                                onChange={handleChange('schedule_type')}
+                                value={formData.schedule_type || undefined}
+                                options={[
+                                    { label: 'Send Now', value: 'Send Now' },
+                                    { label: 'Scheduled', value: 'Scheduled' },
+                                    { label: 'RRULE', value: 'RRULE' },
                                 ]}
                             />
                             {
-                                formData.template_selector && <QuillInput
-                                    value={formData.content}
-                                    onChange={handleChange('content')}
-                                    label="Content Editor"
-                                    className="col-span-full [&_.ql-editor]:min-h-[100px]"
-                                    labelClassName="font-medium text-gray-700 dark:text-gray-600 mb-1.5"
-                                    notes={
-                                        <div className='flex gap-3'>
-                                            <span>Characters: 120 </span>
-                                            <span> Segments: 1 </span>
-                                            <span> Est. cost: $0.02</span>
-                                            {/* Est. cost = (Jumlah penerima) × (Jumlah segmen) × (Tarif per SMS segmen) */}
-                                        </div>
-                                    }
+                                formData.schedule_type !== 'Send Now' &&
+                                <DatePickerInput
+                                    id='schedule_at'
+                                    label='Set Schedule'
+                                    placeholder='09/10/2025 10:00 AM'
+                                    value={formData.schedule_at ? dayjs(formData.schedule_at, 'DD-MM-YYYY HH:mm') : null}
+                                    onChange={(value: any, dateString: any) => handleDateChange('schedule_at', value, dateString)}
+                                    showTime
+                                    format='DD-MM-YYYY HH:mm'
                                 />
                             }
+
                         </div>
-                        <SelectInput
-                            id='max_length_strategy'
-                            label='Max Length Strategy'
-                            placeholder='Input Max Length Strategy'
-                            onChange={handleChange('max_length_strategy')}
-                            value={formData.max_length_strategy}
-                            options={[
-                                { label: 'Truncate', value: 'Truncate' },
-                                { label: 'Split', value: 'Split' },
-                                { label: 'Reject', value: 'Reject' },
-                            ]}
-                        />
-                        <CheckboxInput
-                            label='Link Shortener (Optional)'
-                            checked={formData.link_shortener}
-                            onChange={handleChange('link_shortener')}
-                            text='Link Shortener'
-                        />
-                        <CheckboxInput
-                            label='Click Tracking (Optional)'
-                            checked={formData.click_tracking}
-                            onChange={handleChange('click_tracking')}
-                            text='Click Tracking'
-                        />
-                        <CheckboxInput
-                            label='Skip If No Option'
-                            checked={formData.skip_if_no_option}
-                            onChange={handleChange('skip_if_no_option')}
-                            text='Skip if no option'
-                        />
-                        <SelectInput
-                            id='country_routing'
-                            label='Country Routing (Optional)'
-                            placeholder='Select Country Routing'
-                            onChange={handleChange('country_routing')}
-                            value={formData.country_routing || undefined}
-                            options={[
-                                { label: 'Australia', value: 'Australia' },
-                                { label: 'Indonesia', value: 'Indonesia' },
-                            ]}
-                            modeType='multiple'
-                        />
-                        <Input
-                            id='rate_limit_per_minute'
-                            label='Rate Limit Per Minute (Optional)'
-                            type='text'
-                            placeholder='Input Rate Limit Per Minute '
-                            onChange={handleChange('rate_limit_per_minute')}
-                            value={formData.rate_limit_per_minute}
-                        />
-
-                        <SelectInput
-                            id='schedule_type'
-                            label='Schedule Type'
-                            placeholder='Select Schedule Type'
-                            onChange={handleChange('schedule_type')}
-                            value={formData.schedule_type}
-                            options={[
-                                { label: 'Send Now', value: 'Send Now' },
-                                { label: 'Scheduled', value: 'Scheduled' },
-                                { label: 'RRULE', value: 'RRULE' },
-                            ]}
-                        />
-                        <DatePickerInput
-                            id='schedule_at'
-                            label='Schedule At / RRULE'
-                            value={formData.schedule_at ? dayjs(formData.schedule_at, 'DD-MM-YYYY HH:mm') : null}
-                            onChange={(value: any, dateString: any) => handleDateChange('schedule_at', value, dateString)}
-                            showTime
-                            format='DD-MM-YYYY HH:mm'
-                        />
-                        <SelectInput
-                            id='test_numbers'
-                            label='Test Numbers'
-                            placeholder='Select Test Numbers'
-                            onChange={handleChange('test_numbers')}
-                            value={formData.test_numbers || undefined}
-                            options={[
-                                { label: 'Australia', value: 'Australia' },
-                                { label: 'Indonesia', value: 'Indonesia' },
-                            ]}
-                            modeType='multiple'
-                        />
-
                     </div>
 
                     {/* Submit */}

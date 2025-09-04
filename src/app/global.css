@@ -339,7 +339,7 @@ label,
 span,
 p,
 div {
-    font-family: 'Inter', sans-serif !important;
+    font-family: 'Inter', 'inter Fallback', system-ui !important;
 }
 
 .ant-layout-content {

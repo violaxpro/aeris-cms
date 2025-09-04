@@ -153,6 +153,7 @@ export { default as AlertIcon } from './AlertIcon.svg'
 export { default as WarningIcon } from './WarningIcon.svg'
 export { default as SuccessIcon } from './SuccessIcon.svg'
 export { default as EyeWhiteIcon } from './EyeWhiteIcon.svg'
+export { default as InfoIcon } from './InfoIcon.svg'
 
 
 

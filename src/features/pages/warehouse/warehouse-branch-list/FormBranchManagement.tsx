@@ -613,7 +613,7 @@ const FormBranchManagement: React.FC<FormProps> = ({ mode, initialValues, slug }
                         </div>
                     </div>
                     {
-                        initialValues.status == 'Disabled' &&
+                        initialValues?.status == 'Disabled' &&
                         <div>
                             <Textarea
                                 id='notes'

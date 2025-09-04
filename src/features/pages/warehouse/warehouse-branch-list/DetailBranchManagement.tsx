@@ -415,7 +415,7 @@ const DetailBranchManagement = ({ slug, data }: { slug?: any, data: any }) => {
                         <Card title='Branch Management Information' gridcols='md:grid-cols-4' >
                             <InfoItem label='Warehouse Code' value={data.warehouse_code || 'WRH-388785'} />
                             <InfoItem label='Warehouse Name' value={data.warehouse_name || 'Seadan Pranatta'} />
-                            <InfoItem label='Status' value={toCapitalize(data.status)} textColor={statusMap[toCapitalize(data?.status)]?.textColor} />
+                            <InfoItem label='Status' value={toCapitalize(data?.status)} textColor={statusMap[toCapitalize(data?.status)]?.textColor} />
                             <InfoItem label='Default Fullfillment' value={data.default_fullfillment || 'Yes'} />
                         </Card>
                     </div>

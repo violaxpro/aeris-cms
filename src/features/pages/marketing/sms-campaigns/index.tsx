@@ -25,8 +25,9 @@ import ConfirmModal from '@/components/modal/ConfirmModal'
 import Pagination from '@/components/pagination'
 import SearchTable from '@/components/search/SearchTable'
 import ShowPageSize from '@/components/pagination/ShowPageSize'
-import { AddIcon, FilterIcon, TrashIconRed, PencilIconBlue } from '@public/icon'
+import { AddIcon, FilterIcon, TrashIconRed, PencilIconBlue, MoreIcon } from '@public/icon'
 import dayjs from 'dayjs'
+import { MenuItem } from '@chakra-ui/react'
 
 const index = ({ inboundDatas }: { inboundDatas?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
@@ -128,26 +129,44 @@ const index = ({ inboundDatas }: { inboundDatas?: any }) => {
         },
         {
             title: 'Actions',
-            dataIndex: 'action',
-            key: 'action',
+            dataIndex: 'actions',
+            key: 'actions',
             width: 120,
             render: (_: string, row: any) => {
+                const menu = (
+                    <Menu>
+                        <Menu.Item key="edit">
+                            <Link href={routes.eCommerce.editSmsCampaigns(row.id)}>
+                                Edit
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item key="detail">
+                            <Link href={routes.eCommerce.detailSmsCampaigns(row.id)}>
+                                Detail
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item key="show">
+                            <Link href='#'>
+                                Show
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item key="delete" onClick={() => handleOpenModalDelete(row.id)}>
+                            Delete
+                        </Menu.Item>
+                    </Menu>
+                );
+
                 return (
-                    <div className="flex items-center justify-end gap-3 pe-4" onClick={(e) => e.stopPropagation()}>
-                        <ButtonIcon
-                            color='primary'
-                            variant='filled'
-                            size="small"
-                            icon={PencilIconBlue}
-                            onClick={() => router.push(routes.eCommerce.editSmsCampaigns(row.id))}
-                        />
-                        <ButtonIcon
-                            color='danger'
-                            variant='filled'
-                            size="small"
-                            icon={TrashIconRed}
-                            onClick={() => handleOpenModalDelete(row.id)}
-                        />
+                    <div className="flex gap-3 pe-4" onClick={(e) => e.stopPropagation()}>
+                        <Dropdown overlay={menu} trigger={['click']}>
+                            <ButtonIcon
+                                color='primary'
+                                variant='filled'
+                                size="small"
+                                icon={MoreIcon}
+                            />
+                        </Dropdown>
+
                     </div >
                 );
 
@@ -222,18 +241,32 @@ const index = ({ inboundDatas }: { inboundDatas?: any }) => {
                             />
                         </div>
                         {
-                            selectedRowKeys.length > 0 && <ButtonAction
-                                label='Delete All'
-                                icon={<Image
-                                    src={TrashIconRed}
-                                    alt='trash-icon'
-                                    width={10}
-                                    height={10}
-                                />}
-                                onClick={() => setisOpenModalFilter(true)}
-                                position='start'
-                                btnClassname='btn-delete-all'
-                            />
+                            selectedRowKeys.length > 0 &&
+                            <div className='flex gap-3'>
+                                <ButtonAction
+                                    label='Click Tracking'
+                                    // icon={<Image
+                                    //     src={FilterIcon}
+                                    //     alt='filter-icon'
+                                    //     width={15}
+                                    //     height={15}
+                                    // />}
+                                    onClick={() => setisOpenModalFilter(true)}
+                                // position='end'
+                                />
+                                <ButtonAction
+                                    label='Delete All'
+                                    icon={<Image
+                                        src={TrashIconRed}
+                                        alt='trash-icon'
+                                        width={10}
+                                        height={10}
+                                    />}
+                                    onClick={() => setisOpenModalFilter(true)}
+                                    position='start'
+                                    btnClassname='btn-delete-all'
+                                />
+                            </div>
                         }
 
 

@@ -51,16 +51,17 @@ const index = ({ label,
     return (
         <div className={divClassName}>
             {
-                label && (<label htmlFor={id} className={`flex justify-between items-center text-sm font-medium text-gray-700 ${labelClassName}`}>
-                    <div>
-                        {label}
-                        {required && <span className="text-red-500 ml-1">*</span>}
-                    </div>
-                    {
-                        segmented && segmented
-                    }
+                label && (
+                    <label htmlFor={id} className={`flex justify-between items-center text-sm font-medium text-gray-700 ${labelClassName}`}>
+                        <div>
+                            {label}
+                            {required && <span className="text-red-500 ml-1">*</span>}
+                        </div>
+                        {
+                            segmented && segmented
+                        }
 
-                </label>)
+                    </label>)
             }
             <div className={inputClassname}>
                 <Input

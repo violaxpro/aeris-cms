@@ -241,10 +241,22 @@ export const menuItems = [
             //     ]
             // },
             {
-                key: 'customer',
+                key: 'customer-parents',
                 label: 'Customers',
                 href: routes.eCommerce.customers,
                 icon: TeamOutlined,
+                children: [
+                    {
+                        key: 'customer-list',
+                        label: 'Customer Lists',
+                        href: '#',
+                    },
+                    {
+                        key: 'customer-group',
+                        label: 'Customer Groups',
+                        href: '#',
+                    },
+                ]
             },
             {
                 key: 'website-content',

@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 import Modal from '@/components/modal'
+import SelectInput from '@/components/select'
+import Image from 'next/image'
 import Input from "@/components/input"
 import Avatar from '@/components/avatar'
 import AvatarImage from "public/social-avatar.webp"
 import Divider from '@/components/divider'
 import Link from 'next/link'
-import Image from 'next/image';
-import { GmailIcon, SentEmailWhiteIcon, CancelIcon } from '@public/icon';
+import { GmailIcon, SentEmailWhiteIcon, InfoIcon } from '@public/icon';
 import ButtonAction from '@/components/button/ButtonAction';
 import Button from '@/components/button'
 
@@ -22,7 +23,7 @@ const ModalPreviewTest = ({
     handleSubmit
 }: ModalPreviewTestProps) => {
     const [formEmail, setFormEmail] = useState({
-        from: 'Alarm Expert Australia admin@alarmexpert.com.au',
+        from: '+61 400 123 419',
         to: ['+61 400 123 456', '+61 400 123 459']
     })
     const [openModalEdit, setOpenModalEdit] = useState(false)
@@ -51,14 +52,39 @@ const ModalPreviewTest = ({
                 handleCancel={handleCancel}
                 iconLeftTitle={GmailIcon}
             >
-                <div className='flex flex-col gap-3'>
+                <div className='flex flex-col gap-5'>
                     <div className='flex gap-4 items-center'>
                         <span className='w-10'>From:</span>
-                        <div className='border border-gray-300 p-3 rounded-lg w-full '>
-                            <span>{formEmail.from}</span>
+                        <div className='p-3 w-full '>
+                            <span>Australia | Twillio | {formEmail.from}</span>
                         </div>
                     </div>
                     <div className='flex gap-4 items-center'>
+                        <span className='w-13'>To:</span>
+                        <div className='flex gap-3 w-full'>
+                            <SelectInput
+                                id='to'
+                                onChange={handleChange}
+                                value={formEmail.to}
+                                options={[
+                                    { label: '+62813874124', value: '+62813874124' }
+                                ]}
+                                selectClassName='w-full'
+                                className='w-full'
+                            />
+                        </div>
+                    </div>
+                    {/* <Input
+                        id='to'
+                        label='To:'
+                        onChange={handleChange}
+                        value={formEmail.to}
+                        type='text'
+                        divClassName='flex'
+                        inputClassname='w-full'
+                        labelClassName='w-15'
+                    /> */}
+                    {/* <div className='flex gap-4 items-center'>
                         <span className='w-10'>To:</span>
                         <div className='border border-gray-300 p-3 rounded-lg w-full'>
                             <div className='flex gap-3'>
@@ -75,57 +101,47 @@ const ModalPreviewTest = ({
                                     ))
                                 }
                             </div>
+                        </div>
+                    </div> */}
+                    <div className="flex justify-end space-y-4 text-sm ">
+                        <div className='max-w-xs bg-[#0A3353] text-white p-4 rounded-tr-4xl rounded-tl-4xl rounded-bl-4xl'>
+                            <p>
+                                FLASH SALE! Get 30% OFF home alarms today only.
+                            </p>
 
+                            <ul className="space-y-1">
+                                <li>
+                                    🛒 Shop now: alarmexpert.com/sale
+                                </li>
+                                <li>
+                                    ⏰ End at 11:59 PM.
+                                </li>
+                            </ul>
                         </div>
                     </div>
-                    <Divider />
-                    <div>
-                        <span className='font-bold'>Message Body</span>
-                    </div>
-                    <Divider />
-                    <div className="space-y-4 text-sm">
-                        <p>
-                            🔥 Flash Sale Alert! 🔥
-                        </p>
-
-                        <ul className="space-y-1">
-                            <p>Today Only – Get 30% OFF all home alarm products.</p>
-                            <li>
-                                🛒 Shop now: www.alarmexpert.com/sale
-                            </li>
-                            <li>
-                                ⏰ Hurry! Offer ends tonight at 11:59 PM.
-                            </li>
-
-                        </ul>
-                        <p>
-                            Best regards,<br />
-                            <span className='font-bold'>Alarm Expert Australia Team</span>
-                        </p>
-                    </div>
-                    <Divider />
-                    <div className='flex flex-col gap-3'>
-                        <p className='font-bold'>Message Details</p>
-                        <Divider />
-                        <div className="space-y-1 space-x-3">
-                            <div className='flex gap-2 w-fdivl'>
+                    <div className='flex flex-col gap-3 p-4 bg-gray-100 rounded-xl'>
+                        <div className='flex justify-between items-center'>
+                            <p className='font-bold text-gray-600 text-lg'>Message Details</p>
+                            <Image src={InfoIcon} alt='info-icon' />
+                        </div>
+                        <div className="flex gap-3 justify-between">
+                            <div className='flex gap-2'>
                                 <span className='w-20'>Characters</span>
                                 <span>:</span>
                                 <span>120</span>
                             </div>
-                            <div className='flex gap-2 w-full'>
+                            <div className='flex gap-2'>
                                 <span className='w-20'> Segments </span>
                                 <span>:</span>
                                 <span>1</span>
                             </div>
-                            <div className='flex gap-2 w-full'>
+                            <div className='flex gap-2'>
                                 <span className='w-20'> Est. Cost </span>
                                 <span>:</span>
                                 <span> $0.045 per recipient</span>
                             </div>
                         </div>
                     </div>
-
                     <div className='flex justify-end gap-3 items-center'>
                         <ButtonAction
                             label='Cancel'

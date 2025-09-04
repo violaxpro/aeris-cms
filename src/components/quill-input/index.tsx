@@ -19,6 +19,7 @@ interface QuillEditorProps {
     toolbarPosition?: 'top' | 'bottom';
     notes?: any;
     style?: any
+    placeholder?: any
 }
 
 export default function QuillEditor({
@@ -31,7 +32,8 @@ export default function QuillEditor({
     errorClassName,
     toolbarPosition = 'top',
     notes,
-    style
+    style,
+    placeholder
 }: QuillEditorProps) {
     const [mounted, setMounted] = useState(false);
     const editorId = useId();
@@ -106,7 +108,7 @@ export default function QuillEditor({
                     error && 'rounded-lg border-2 border-red-400'
                 )}
                 style={style}
-
+                placeholder={placeholder}
             />
 
             {toolbarPosition === 'bottom' && toolbarContent}
