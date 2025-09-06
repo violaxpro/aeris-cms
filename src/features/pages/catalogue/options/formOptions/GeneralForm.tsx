@@ -86,14 +86,15 @@ const GeneralForm = ({ data }: formProps) => {
                     id='name'
                     label='Name'
                     type='text'
-                    value={data ? data.text : formData.name}
+                    value={formData.name || undefined}
                     onChange={handleChange}
+                    placeholder='Color'
                 />
 
                 <SelectInput
                     id="type"
                     label="Type"
-                    placeholder="Select Type"
+                    placeholder="Field"
                     value={formData.type || undefined}
                     onChange={(val) => handleChangeSelect("type", val)}
                     options={optionsType}

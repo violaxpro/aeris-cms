@@ -83,7 +83,7 @@ const GeneralForm = ({ dataById, onChange, formDataCreate }: ChildFormProps) => 
                     type='text'
                     value={formDataCreate.general.name}
                     onChange={handleChange}
-                    placeholder='Color'
+                    placeholder='Lens Size'
                 />
                 <SelectInput
                     id='attributeSet'
@@ -109,7 +109,7 @@ const GeneralForm = ({ dataById, onChange, formDataCreate }: ChildFormProps) => 
                     id="categories"
                     modeType='multiple'
                     label="Categories"
-                    placeholder="Select Categories (e.g. Alarm, CCTV)"
+                    placeholder="CCTV"
                     value={formDataCreate.general.categories || undefined}
                     onChange={(val) => handleChangeSelect("categories", val)}
                     options={optionCategories}
@@ -122,13 +122,6 @@ const GeneralForm = ({ dataById, onChange, formDataCreate }: ChildFormProps) => 
                 />
 
             </FormGroup>
-            {/* <hr style={{ borderColor: '#E5E7EB', marginTop: '1rem', marginBottom: '1rem' }} />
-            <FormGroup
-                title="Attribute Set"
-            >
-                <AttributeSetSection />
-            </FormGroup> */}
-
             <Modal
                 title='Add Attribute Sets'
                 open={isModalOpen}

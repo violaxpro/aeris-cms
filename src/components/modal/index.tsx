@@ -86,6 +86,7 @@ const index = ({
                     xxl: '40%',
                 }}
 
+
             >
                 <div className='my-5 mx-5'>
                     {children}

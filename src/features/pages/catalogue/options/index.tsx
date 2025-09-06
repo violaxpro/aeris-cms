@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useAtom } from 'jotai'
 import Table from "@/components/table"
 import type { TableColumnsType } from 'antd'
@@ -23,21 +23,37 @@ import ConfirmModal from '@/components/modal/ConfirmModal'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { useNotificationAntd } from '@/components/toast'
+import { getOptions, deleteOptions } from '@/services/options-service'
+import { notificationAtom } from '@/store/NotificationAtom'
 
 const index = ({ optionsData }: { optionsData?: any }) => {
     const router = useRouter()
     const { contextHolder, notifySuccess } = useNotificationAntd()
-    const [filteredData, setFilteredData] = useState<OptionsType[]>([])
+    const [data, setData] = useState(optionsData?.data || [])
+    const [currentPage, setCurrentPage] = useState(optionsData?.page || 1)
+    const [pageSize, setPageSize] = useState(optionsData?.perPage || 10)
+    const [total, setTotal] = useState(optionsData?.count || 0)
+    const [notification, setNotification] = useAtom(notificationAtom);
     const [search, setSearch] = useState('')
-    const [currentPage, setCurrentPage] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
     const [isOpenModalFilter, setisOpenModalFilter] = useState(false)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
     const [openModalDelete, setOpenModalDelete] = useState(false)
     const [deletedData, setDeletedData] = useState<any>(null)
 
-    const handleDelete = (id: any) => {
-        console.log('delete', id)
+    const handleDelete = async (id: any) => {
+        if (!deletedData) return;
+        try {
+            const res = await deleteOptions(deletedData)
+            if (res.success) {
+                notifySuccess(res.message);
+                fetchPage(currentPage, pageSize)
+            }
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setOpenModalDelete(false)
+            setDeletedData(null)
+        }
     }
 
     const handleOpenModalDelete = (data: any) => {
@@ -54,11 +70,6 @@ const index = ({ optionsData }: { optionsData?: any }) => {
         },
     ]
     const columns: TableColumnsType<OptionsType> = [
-        {
-            title: 'ID',
-            dataIndex: 'id',
-            sorter: (a: any, b: any) => a.id - b.id,
-        },
         {
             title: 'Name',
             dataIndex: 'optionName',
@@ -109,9 +120,38 @@ const index = ({ optionsData }: { optionsData?: any }) => {
 
     ]
 
-    const handleSearch = (query: string) => {
-        console.log('User mencari:', query);
-    };
+    const filteredData = React.useMemo(() => {
+        if (!search) return data;
+        const keyword = search.toLowerCase();
+        return data.filter((item: any) => {
+            const formattedDate = dayjs(item?.created_at)
+                .format('DD/MM/YYYY')
+                .toLowerCase();
+            return (
+                item?.name.toLowerCase().includes(keyword) ||
+                formattedDate.includes(keyword)
+            );
+        });
+    }, [search, data]);
+
+    const fetchPage = async (page: number, perPage: number) => {
+        try {
+            const res = await getOptions({ page, perPage })
+            setData(res.data)
+            setTotal(res.count)
+            setCurrentPage(res.page)
+            setPageSize(res.perPage)
+        } catch (error) {
+            console.error(error)
+        }
+    }
+    useEffect(() => {
+        if (notification) {
+            notifySuccess(notification);
+            setNotification(null);
+        }
+    }, [notification]);
+
     return (
         <>
             <ConfirmModal
@@ -152,12 +192,15 @@ const index = ({ optionsData }: { optionsData?: any }) => {
                         <div className='flex items-center gap-2'>
                             <ShowPageSize
                                 pageSize={pageSize}
-                                onChange={setPageSize}
+                                onChange={(newPageSize) => {
+                                    setPageSize(newPageSize)
+                                    setCurrentPage(1)
+                                    fetchPage(1, newPageSize)
+                                }}
                             />
                             <SearchTable
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
-                                onSearch={() => console.log('Searching for:', search)}
                             />
                         </div>
                         {
@@ -171,7 +214,6 @@ const index = ({ optionsData }: { optionsData?: any }) => {
                                 />}
                                 onClick={() => setisOpenModalFilter(true)}
                                 position='start'
-                                style={{ padding: '1.2rem 1.7rem' }}
                                 btnClassname='btn-delete-all'
                             />
                         }
@@ -179,16 +221,19 @@ const index = ({ optionsData }: { optionsData?: any }) => {
 
                     <Table
                         columns={columns}
-                        dataSource={optionsData}
+                        dataSource={filteredData}
                         withSelectableRows
                         selectedRowKeys={selectedRowKeys}
                         onSelectChange={setSelectedRowKeys}
                     />
                     <Pagination
                         current={currentPage}
-                        total={optionsData?.length}
+                        total={total}
                         pageSize={pageSize}
-                        onChange={(page) => setCurrentPage(page)}
+                        onChange={(page) => {
+                            setCurrentPage(page);
+                            fetchPage(page, pageSize);
+                        }}
                     />
                 </div>
             </Content>

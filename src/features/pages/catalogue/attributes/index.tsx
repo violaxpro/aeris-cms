@@ -168,7 +168,6 @@ const index = ({ attributesData }: { attributesData?: any }) => {
         }
     }, [notification]);
 
-    console.log(data)
     return (
         <>
             <ConfirmModal

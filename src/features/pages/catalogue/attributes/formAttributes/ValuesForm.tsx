@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import Input from "@/components/input"
 import FormGroup from '@/components/form-group'
-import { PlusOutlined, MinusCircleOutlined } from '@ant-design/icons'
+import { PlusOutlined } from '@ant-design/icons'
 import { Button, Divider } from 'antd'
 import { ChildFormProps } from '@/plugins/types/form-type'
 import ButtonIcon from '@/components/button/ButtonIcon';
-import { TrashIcon, TrashIconRed, PlusOutlineIcon } from '@public/icon';
-
-type formProps = {
-    data?: any
-}
+import Image from 'next/image'
+import { TrashIcon, TrashIconRed } from '@public/icon';
 
 type itemInputType = {
     value: string[]
@@ -47,7 +44,6 @@ const ValuesForm = ({ dataById, onChange, formDataCreate }: ChildFormProps) => {
         }
     }, [dataById]);
 
-    console.log(formDataCreate.values)
 
     return (
         <div className='flex flex-col gap-2'>
@@ -65,7 +61,7 @@ const ValuesForm = ({ dataById, onChange, formDataCreate }: ChildFormProps) => {
                                         label='Value'
                                         type='text'
                                         value={item.value || undefined}
-                                        placeholder='Red'
+                                        placeholder='6MP'
                                         onChange={(e) => handleChangeItem(index, 'value', e.target.value)}
                                     />
                                 </div>
@@ -97,7 +93,7 @@ const ValuesForm = ({ dataById, onChange, formDataCreate }: ChildFormProps) => {
                             type="dashed"
                             onClick={addItem}
                             icon={<PlusOutlined />}
-                            style={{ marginTop: 12 }}
+                            className='mt-12'
                         >
                             Add Values
                         </Button>

@@ -74,7 +74,6 @@ const FormAttributes: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                 notifyError('Values form is empty, please filled the form')
                 return
             }
-            console.log(formData.values)
 
             const data = {
                 name: formData.general.name,

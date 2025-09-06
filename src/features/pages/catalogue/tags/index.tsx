@@ -2,16 +2,15 @@
 import React, { useState, useEffect } from 'react'
 import Table from "@/components/table"
 import type { TableColumnsType } from 'antd'
+import { Dropdown, Menu } from 'antd'
 import Image from 'next/image'
 import { tagsType } from '@/plugins/types/tags-type'
-import DeletePopover from '@/components/popover'
-import { routes } from '@/config/routes'
 import Link from 'next/link'
 import Breadcrumb from "@/components/breadcrumb"
 import { Content } from 'antd/es/layout/layout'
 import Button from "@/components/button"
-import { getTags } from '@/services/tags-service'
-import { AddIcon, TrashIconRed, PencilIconBlue } from '@public/icon'
+import { getTags, deleteTags, getTagsById } from '@/services/tags-service'
+import { AddIcon, TrashIconRed, MoreIcon } from '@public/icon'
 import ButtonDelete from '@/components/button/ButtonAction'
 import Pagination from '@/components/pagination'
 import ButtonIcon from '@/components/button/ButtonIcon'
@@ -22,37 +21,40 @@ import { useRouter } from 'next/navigation'
 import { useNotificationAntd } from '@/components/toast'
 import dayjs from 'dayjs'
 import ModalTags from './ModalTags'
+import { useAtom } from 'jotai'
+import { notificationAtom } from '@/store/NotificationAtom'
 
-const index = () => {
-    const [tagsData, setTagsData] = useState([])
+const index = ({ tagDatas }: { tagDatas: any }) => {
     const router = useRouter()
     const { contextHolder, notifySuccess } = useNotificationAntd()
-    const [filteredData, setFilteredData] = useState<tagsType[]>([])
+    const [data, setData] = useState(tagDatas?.data || [])
+    const [currentPage, setCurrentPage] = useState(tagDatas?.page || 1)
+    const [pageSize, setPageSize] = useState(tagDatas?.perPage || 10)
+    const [total, setTotal] = useState(tagDatas?.count || 0)
+    const [notification, setNotification] = useAtom(notificationAtom);
     const [search, setSearch] = useState('')
-    const [currentPage, setCurrentPage] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
     const [isOpenModalFilter, setisOpenModalFilter] = useState(false)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
     const [openModalDelete, setOpenModalDelete] = useState(false)
     const [deletedData, setDeletedData] = useState<any>(null)
     const [openModalTag, setOpenModalTag] = useState(false)
-    const [actionType, setActionType] = useState('create')
-    const [detailData, setDetailData] = useState<any>(null)
+    const [actionType, setActionType] = useState('')
+    const [detailData, setDetailData] = useState(null)
 
-    console.log(tagsData)
-
-    useEffect(() => {
-        getTags()
-            .then((res) => {
-                setTagsData(res.data)
-            }).catch((error) => {
-                console.error(error)
-            })
-
-    }, [])
-
-    const handleDelete = (id: any) => {
-        console.log('delete', id)
+    const handleDelete = async (id: any) => {
+        if (!deletedData) return;
+        try {
+            const res = await deleteTags(deletedData)
+            if (res.success) {
+                notifySuccess(res.message);
+                fetchPage(currentPage, pageSize)
+            }
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setOpenModalDelete(false)
+            setDeletedData(null)
+        }
     }
 
     const handleOpenModalDelete = (data: any) => {
@@ -77,7 +79,7 @@ const index = () => {
             title: 'Created At',
             dataIndex: 'created_at',
             render: (created_at: string) => {
-                const date = dayjs(created_at).format('DD MMMM, YYYY')
+                const date = dayjs(created_at).format('DD/MM/YYYY')
                 return date
             }
         },
@@ -86,37 +88,72 @@ const index = () => {
             dataIndex: 'action',
             key: 'action',
             width: 120,
-            render: (_: string, row: tagsType) => (
-                <div className="flex items-center justify-end gap-3 pe-4">
-                    <ButtonIcon
-                        color='primary'
-                        variant='filled'
-                        size="small"
-                        icon={PencilIconBlue}
-                        onClick={() => handleOpenModal('edit', row)}
-                    />
-                    <ButtonIcon
-                        color='danger'
-                        variant='filled'
-                        size="small"
-                        icon={TrashIconRed}
-                        onClick={() => handleOpenModalDelete(row.id)}
-                    />
-                </div >
-            ),
+            render: (_: string, row: tagsType) => {
+                const menu = (
+                    <Menu>
+                        <Menu.Item key="edit" onClick={() => handleOpenModal('edit', row)}>
+                            Edit
+                        </Menu.Item>
+                        <Menu.Item key="delete" onClick={() => handleOpenModalDelete(row.id)}>
+                            Delete
+                        </Menu.Item>
+                    </Menu>
+                );
+                return (
+                    <div className="flex items-center justify-end gap-3 pe-4" onClick={(e) => e.stopPropagation()}>
+                        <Dropdown overlay={menu} trigger={['click']} >
+                            <ButtonIcon
+                                color='primary'
+                                variant='filled'
+                                size="small"
+                                icon={MoreIcon}
+                            />
+                        </Dropdown >
+                    </div >
+                )
+            },
         },
 
     ]
 
-    const handleOpenModal = (action: string, data?: any) => {
+    const handleOpenModal = async (action: string, data?: any) => {
+        setDetailData(data)
         setOpenModalTag(true)
         setActionType(action)
-        setDetailData(data)
     }
 
-    const handleSearch = (query: string) => {
-        console.log('User mencari:', query);
-    };
+    const filteredData = React.useMemo(() => {
+        if (!search) return data;
+        const keyword = search.toLowerCase();
+        return data.filter((item: any) => {
+            const formattedDate = dayjs(item?.created_at)
+                .format('DD/MM/YYYY')
+                .toLowerCase();
+            return (
+                item?.name.toLowerCase().includes(keyword) ||
+                formattedDate.includes(keyword)
+            );
+        });
+    }, [search, data]);
+
+    const fetchPage = async (page: number, perPage: number) => {
+        try {
+            const res = await getTags({ page, perPage })
+            setData(res.data)
+            setTotal(res.count)
+            setCurrentPage(res.page)
+            setPageSize(res.perPage)
+        } catch (error) {
+            console.error(error)
+        }
+    }
+    useEffect(() => {
+        if (notification) {
+            notifySuccess(notification);
+            setNotification(null);
+        }
+    }, [notification]);
+
     return (
         <>
             <ConfirmModal
@@ -128,7 +165,11 @@ const index = () => {
             />
             <ModalTags
                 isModalOpen={openModalTag}
+                setOpenModalOpen={setOpenModalTag}
                 handleCancel={() => setOpenModalTag(false)}
+                actionType={actionType}
+                onSuccess={() => fetchPage(currentPage, pageSize)}
+                databyId={detailData}
             />
             {contextHolder}
             <div className="mt-6 mx-6 mb-0">
@@ -179,7 +220,6 @@ const index = () => {
                                 />}
                                 onClick={() => setisOpenModalFilter(true)}
                                 position='start'
-                                style={{ padding: '1.2rem 1.7rem' }}
                                 btnClassname='btn-delete-all'
                             />
                         }
@@ -187,16 +227,19 @@ const index = () => {
 
                     <Table
                         columns={columns}
-                        dataSource={tagsData}
+                        dataSource={filteredData}
                         withSelectableRows
                         selectedRowKeys={selectedRowKeys}
                         onSelectChange={setSelectedRowKeys}
                     />
                     <Pagination
                         current={currentPage}
-                        total={tagsData?.length}
+                        total={total}
                         pageSize={pageSize}
-                        onChange={(page) => setCurrentPage(page)}
+                        onChange={(page) => {
+                            setCurrentPage(page);
+                            fetchPage(page, pageSize);
+                        }}
                     />
                 </div>
             </Content>
