@@ -2,7 +2,6 @@ import React from 'react'
 import FormAttributes from '@/features/pages/catalogue/attributes/formAttributes/FormAttributes'
 import { Params } from '@/plugins/types'
 import { getAttributebyId } from '@/services/attributes-service';
-import { getCategories } from '@/services/category-service';
 
 export default async function EditAttributePage(props: { params: Params }) {
     const params = await props.params;

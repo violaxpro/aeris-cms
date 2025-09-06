@@ -10,9 +10,8 @@ import Input from "@/components/input"
 import SelectInput from '@/components/select';
 import { routes } from '@/config/routes';
 import { addPriceLevel, updatePriceLevel } from '@/services/price-level-service';
-import { useAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import { brandsAtom, categoriesAtom } from '@/store/DropdownItemStore';
-import { useSetAtom } from 'jotai';
 import { notificationAtom } from '@/store/NotificationAtom';
 
 const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues, slug }) => {

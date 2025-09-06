@@ -14,10 +14,10 @@ import Button from "@/components/button"
 import SearchInput from '@/components/search';
 import dayjs from 'dayjs'
 import { useAtom } from 'jotai'
-import { deleteAttribute } from '@/services/attributes-service'
+import { getAttributes, deleteAttribute } from '@/services/attributes-service'
 import { useNotificationAntd } from '@/components/toast'
 import { attributeAtom } from '@/store/AttributeAtom'
-import { AddIcon, TrashIconRed, PencilIconBlue } from '@public/icon'
+import { AddIcon, TrashIconRed, MoreIcon } from '@public/icon'
 import ButtonDelete from '@/components/button/ButtonAction'
 import Pagination from '@/components/pagination'
 import ButtonIcon from '@/components/button/ButtonIcon'
@@ -26,16 +26,17 @@ import ShowPageSize from '@/components/pagination/ShowPageSize'
 import ConfirmModal from '@/components/modal/ConfirmModal'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
+import { notificationAtom } from '@/store/NotificationAtom'
 
 const index = ({ attributesData }: { attributesData?: any }) => {
     const router = useRouter()
-
     const { contextHolder, notifySuccess } = useNotificationAntd()
-    const [data, setData] = useAtom(attributeAtom)
-    const [filteredData, setFilteredData] = useState<AttributesType[]>([])
+    const [data, setData] = useState(attributesData?.data || [])
+    const [currentPage, setCurrentPage] = useState(attributesData?.page || 1)
+    const [pageSize, setPageSize] = useState(attributesData?.perPage || 10)
+    const [total, setTotal] = useState(attributesData?.count || 0)
+    const [notification, setNotification] = useAtom(notificationAtom);
     const [search, setSearch] = useState('')
-    const [currentPage, setCurrentPage] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
     const [isOpenModalFilter, setisOpenModalFilter] = useState(false)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
     const [openModalDelete, setOpenModalDelete] = useState(false)
@@ -44,18 +45,16 @@ const index = ({ attributesData }: { attributesData?: any }) => {
     const handleDelete = async (id: any) => {
         if (!deletedData) return;
         try {
-            const res = await deleteAttribute(id)
-            if (res.success == true) {
-                notifySuccess(res.message)
-                const updatedData = data.filter(item => item.id !== deletedData);
-                setData(updatedData);
-
-                setFilteredData(updatedData.filter(item =>
-                    item.name.toLowerCase().includes(search.toLowerCase())
-                ));
+            const res = await deleteAttribute(deletedData)
+            if (res.success) {
+                notifySuccess(res.message);
+                fetchPage(currentPage, pageSize)
             }
         } catch (error) {
             console.error(error)
+        } finally {
+            setOpenModalDelete(false)
+            setDeletedData(null)
         }
     }
 
@@ -69,11 +68,6 @@ const index = ({ attributesData }: { attributesData?: any }) => {
     ]
     const columns: TableColumnsType<AttributesType> = [
         {
-            title: 'ID',
-            dataIndex: 'id',
-            sorter: (a: any, b: any) => a.id - b.id,
-        },
-        {
             title: 'Attribute Name',
             dataIndex: 'name',
             sorter: (a, b) => a.name.localeCompare(b.name)
@@ -81,7 +75,8 @@ const index = ({ attributesData }: { attributesData?: any }) => {
         {
             title: 'Attribute Set',
             dataIndex: 'attribute_set',
-            sorter: (a: any, b: any) => a.attribute_set.localeCompare(b.attribute_set)
+            sorter: (a: any, b: any) => a?.attribute_set?.name.localeCompare(b?.attribute_set?.name),
+            render: (val: any) => val?.attribute_set?.name
         },
         {
             title: 'Filterable',
@@ -89,6 +84,7 @@ const index = ({ attributesData }: { attributesData?: any }) => {
             sorter: (a: any, b: any) => {
                 return a?.filterable - b?.filterable
             },
+            render: (val) => val == true ? 'Yes' : 'No'
         },
         {
             title: 'Created At',
@@ -105,22 +101,29 @@ const index = ({ attributesData }: { attributesData?: any }) => {
             key: 'action',
             width: 120,
             render: (_: string, row: any) => {
+                const menu = (
+                    <Menu>
+                        <Menu.Item key="edit">
+                            <Link href={routes.eCommerce.editAttributes(row.id)}>
+                                Edit
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item key="delete" onClick={() => handleOpenModalDelete(row.id)}>
+                            Delete
+                        </Menu.Item>
+                    </Menu>
+                );
+
                 return (
-                    <div className="flex items-center justify-end gap-3 pe-4">
-                        <ButtonIcon
-                            color='primary'
-                            variant='filled'
-                            size="small"
-                            icon={PencilIconBlue}
-                            onClick={() => router.push(routes.eCommerce.editAttributes(row.id))}
-                        />
-                        <ButtonIcon
-                            color='danger'
-                            variant='filled'
-                            size="small"
-                            icon={TrashIconRed}
-                            onClick={() => handleOpenModalDelete(row.id)}
-                        />
+                    <div className="flex  gap-3 pe-4" onClick={(e) => e.stopPropagation()}>
+                        <Dropdown overlay={menu} trigger={['click']} >
+                            <ButtonIcon
+                                color='primary'
+                                variant='filled'
+                                size="small"
+                                icon={MoreIcon}
+                            />
+                        </Dropdown >
                     </div >
                 );
             }
@@ -133,24 +136,39 @@ const index = ({ attributesData }: { attributesData?: any }) => {
         setDeletedData(data)
     }
 
-    const handleSearch = (value: string) => {
-        const search = value.toLowerCase()
-        setSearch(search)
-        const result = data.filter((item: any) => {
-            const formattedDate = dayjs(item?.createdAt).format('DD MMMM, YYYY').toLowerCase();
-            return item?.name.toLowerCase().includes(search) ||
-                item?.attribute_set.toLowerCase().includes(search) ||
-                formattedDate.includes(search);
+    const filteredData = React.useMemo(() => {
+        if (!search) return data;
+        const keyword = search.toLowerCase();
+        return data.filter((item: any) => {
+            const formattedDate = dayjs(item?.created_at)
+                .format('DD/MM/YYYY')
+                .toLowerCase();
+            return (
+                item?.name.toLowerCase().includes(keyword) ||
+                formattedDate.includes(keyword)
+            );
         });
-        setFilteredData(result);
-    };
+    }, [search, data]);
 
-    useEffect(() => {
-        setData(attributesData)
-        if (!search) {
-            setFilteredData(attributesData)
+    const fetchPage = async (page: number, perPage: number) => {
+        try {
+            const res = await getAttributes({ page, perPage })
+            setData(res.data)
+            setTotal(res.count)
+            setCurrentPage(res.page)
+            setPageSize(res.perPage)
+        } catch (error) {
+            console.error(error)
         }
-    }, [attributesData, search])
+    }
+    useEffect(() => {
+        if (notification) {
+            notifySuccess(notification);
+            setNotification(null);
+        }
+    }, [notification]);
+
+    console.log(data)
     return (
         <>
             <ConfirmModal
@@ -181,7 +199,6 @@ const index = ({ attributesData }: { attributesData?: any }) => {
 
                         label='Add Attribute'
                         link={routes.eCommerce.createAttributes}
-
                     />
                 </div>
             </div>
@@ -191,12 +208,15 @@ const index = ({ attributesData }: { attributesData?: any }) => {
                         <div className='flex items-center gap-2'>
                             <ShowPageSize
                                 pageSize={pageSize}
-                                onChange={setPageSize}
+                                onChange={(newPageSize) => {
+                                    setPageSize(newPageSize)
+                                    setCurrentPage(1)
+                                    fetchPage(1, newPageSize)
+                                }}
                             />
                             <SearchTable
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
-                                onSearch={() => console.log('Searching for:', search)}
                             />
                         </div>
                         {
@@ -210,7 +230,6 @@ const index = ({ attributesData }: { attributesData?: any }) => {
                                 />}
                                 onClick={() => setisOpenModalFilter(true)}
                                 position='start'
-                                style={{ padding: '1.2rem 1.7rem' }}
                                 btnClassname='btn-delete-all'
                             />
                         }
@@ -225,11 +244,13 @@ const index = ({ attributesData }: { attributesData?: any }) => {
                     />
                     <Pagination
                         current={currentPage}
-                        total={filteredData.length}
+                        total={total}
                         pageSize={pageSize}
-                        onChange={(page) => setCurrentPage(page)}
+                        onChange={(page) => {
+                            setCurrentPage(page);
+                            fetchPage(page, pageSize);
+                        }}
                     />
-
                 </div>
             </Content>
         </>

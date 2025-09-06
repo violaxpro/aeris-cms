@@ -3,10 +3,9 @@ import AttributesList from "@/features/pages/catalogue/attributes"
 import { getAttributes } from '@/services/attributes-service'
 
 export default async function AttributesPage() {
-    let attributes = []
+    let attributes = { data: [], page: 1, perPage: 10, count: 0 }
     try {
-        const res = await getAttributes()
-        attributes = res.data
+        attributes = await getAttributes({ page: 1, perPage: 10 })
     } catch (error) {
         console.error('Fetch error:', error);
     }

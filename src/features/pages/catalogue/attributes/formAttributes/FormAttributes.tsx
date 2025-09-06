@@ -11,20 +11,25 @@ import ValuesForm from './ValuesForm';
 import { routes } from '@/config/routes';
 import { useNotificationAntd } from '@/components/toast';
 import { addAttribute, updateAttribute } from '@/services/attributes-service';
+import { useSetAtom } from 'jotai';
+import { notificationAtom } from '@/store/NotificationAtom';
 
 const FormAttributes: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     console.log(initialValues)
     const [activeTab, setActiveTab] = useState<string>('general');
+    const setNotification = useSetAtom(notificationAtom);
     const router = useRouter()
     const { contextHolder, notifySuccess, notifyError } = useNotificationAntd()
     const [formData, setFormData] = useState({
         general: {
             name: initialValues ? initialValues.name : '',
-            attributeSet: initialValues ? initialValues.attribute_set : '',
-            categories: initialValues ? initialValues.categories : [],
+            attributeSet: initialValues ? initialValues.attribute_set_id : '',
+            categories: initialValues ? initialValues?.categories?.map((cat: any) => cat.id) : [],
             filterable: initialValues ? initialValues.filterable : false
         },
-        values: initialValues ? initialValues.values : []
+        values: initialValues ? initialValues?.values?.map((val: any) => {
+            return { value: val }
+        }) : [{ value: '' }]
     })
     const tabs: Tab[] = [
         { key: 'general', label: 'General Information' },
@@ -37,22 +42,29 @@ const FormAttributes: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         { title: mode === 'create' ? 'Create' : 'Edit' },
     ];
 
-    const handleGeneralChange = (updatedGeneral: any) => {
-        setFormData(prev => ({
-            ...prev,
-            general: updatedGeneral
-        }))
-    }
+    const handleChange = (section: string, updatedData: any) => {
+        setFormData((prev: any) => {
+            // kalau values (array) simpan langsung
+            if (section === 'values') {
+                return {
+                    ...prev,
+                    values: updatedData
+                };
+            }
 
-    const handleValuesChange = (valuesUpdated: any) => {
-        setFormData(prev => ({
-            ...prev,
-            values: valuesUpdated
-        }))
-    }
+            // kalau general (object) merge
+            return {
+                ...prev,
+                [section]: {
+                    ...prev[section],
+                    ...updatedData
+                }
+            };
+        });
+    };
+
 
     const handleSubmit = async () => {
-        console.log('ini data form', formData.values)
         try {
             if (Object.keys(formData.general).length == 0) {
                 notifyError('General form is empty, please filled the form')
@@ -66,8 +78,8 @@ const FormAttributes: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
             const data = {
                 name: formData.general.name,
-                // attribute_set : formData.general.attributeSet,
-                categories: formData.general.categories,
+                attribute_set_id: formData.general.attributeSet,
+                attribute_categories: formData.general.categories,
                 values: mode == 'edit' && typeof formData.values == 'string'
                     ? JSON.parse(formData.values).map((v: any) => v)
                     : formData.values.map((item: any) => {
@@ -80,8 +92,6 @@ const FormAttributes: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                     }),
                 filterable: formData.general.filterable
             }
-            console.log(data.values)
-
 
             let response;
             if (mode == 'edit' && slug) {
@@ -90,18 +100,17 @@ const FormAttributes: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                 response = await addAttribute(data)
             }
 
-            console.log(response)
             if (response.success == true) {
-                notifySuccess(response.message)
-                setTimeout(() => {
-                    router.push(routes.eCommerce.attributes)
-                }, 2000);
+                setNotification(response.message)
+                router.push(routes.eCommerce.attributes)
             }
 
         } catch (error) {
             console.error(error)
         }
     }
+
+    console.log(formData)
     return (
         <>
             {contextHolder}
@@ -124,7 +133,8 @@ const FormAttributes: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             <div className="space-y-8">
                                 <GeneralForm
                                     dataById={formData.general}
-                                    onChange={handleGeneralChange}
+                                    onChange={(data) => handleChange('general', data)}
+                                    formDataCreate={formData}
                                 />
                             </div>
                         )}
@@ -134,7 +144,8 @@ const FormAttributes: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             <div>
                                 <ValuesForm
                                     dataById={formData.values}
-                                    onChange={handleValuesChange}
+                                    onChange={(data) => handleChange('values', data)}
+                                    formDataCreate={formData}
                                 />
                             </div>
                         )}

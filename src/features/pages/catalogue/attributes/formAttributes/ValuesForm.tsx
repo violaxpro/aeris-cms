@@ -5,7 +5,7 @@ import { PlusOutlined, MinusCircleOutlined } from '@ant-design/icons'
 import { Button, Divider } from 'antd'
 import { ChildFormProps } from '@/plugins/types/form-type'
 import ButtonIcon from '@/components/button/ButtonIcon';
-import { TrashIcon, TrashIconRed } from '@public/icon';
+import { TrashIcon, TrashIconRed, PlusOutlineIcon } from '@public/icon';
 
 type formProps = {
     data?: any
@@ -14,7 +14,7 @@ type formProps = {
 type itemInputType = {
     value: string[]
 };
-const ValuesForm = ({ dataById, onChange }: ChildFormProps) => {
+const ValuesForm = ({ dataById, onChange, formDataCreate }: ChildFormProps) => {
     const [items, setItems] = useState<itemInputType[]>([
         { value: [] }
     ])
@@ -25,27 +25,18 @@ const ValuesForm = ({ dataById, onChange }: ChildFormProps) => {
     };
 
     const addItem = () => {
-        const updated = [{ value: [] }, ...items]
+        const updated = [...formDataCreate.values, { value: "" }];
         handleChange(updated)
     }
 
-    const updateItem = (index: number, key: keyof itemInputType, value: any) => {
-        // const updated = [...items];
-        // (updated[index] as any)[key] = value;
-        setItems(prev => {
-            const updated = [...prev];
-            if (typeof updated[index] === 'string') {
-                (updated[index] as any) = value; // untuk string langsung ganti
-            } else {
-                (updated[index] as any)[key] = value;
-            }
-            handleChange(updated);
-            return updated;
-        });
+    const handleChangeItem = (index: number, key: keyof itemInputType, value: any) => {
+        const updated = [...formDataCreate.values];
+        updated[index][key] = value;
+        onChange(updated);
     };
 
     const removeItem = (index: number) => {
-        const updated = items.filter((_, i) => i !== index);
+        const updated = formDataCreate.values.filter((_: any, i: number) => i !== index);
         handleChange(updated);
     };
 
@@ -56,6 +47,8 @@ const ValuesForm = ({ dataById, onChange }: ChildFormProps) => {
         }
     }, [dataById]);
 
+    console.log(formDataCreate.values)
+
     return (
         <div className='flex flex-col gap-2'>
             <FormGroup
@@ -64,20 +57,21 @@ const ValuesForm = ({ dataById, onChange }: ChildFormProps) => {
             >
                 <div className="space-y-4 col-span-full">
                     {
-                        items.map((item, index) => {
+                        formDataCreate?.values?.map((item: any, index: any) => {
                             return <div key={index} className="flex  items-center gap-2 mb-3 w-full">
                                 <div className="w-full">
                                     <Input
                                         id='name'
                                         label='Value'
                                         type='text'
-                                        value={item.value || item}
-                                        onChange={(e) => updateItem(index, 'value', e.target.value)}
+                                        value={item.value || undefined}
+                                        placeholder='Red'
+                                        onChange={(e) => handleChangeItem(index, 'value', e.target.value)}
                                     />
                                 </div>
                                 <div className="pt-5">
                                     {
-                                        items.length <= 1 ? <ButtonIcon
+                                        formDataCreate?.values?.length <= 1 ? <ButtonIcon
                                             icon={TrashIcon}
                                             width={20}
                                             height={20}

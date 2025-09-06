@@ -47,8 +47,8 @@ const index = ({ priceData }: { priceData?: any }) => {
         } catch (error) {
             console.error(error);
         } finally {
-            setOpenModalDelete(false);
-            setDeletedData(null);
+            setOpenModalDelete(false)
+            setDeletedData(null)
         }
     };
 
@@ -228,8 +228,6 @@ const index = ({ priceData }: { priceData?: any }) => {
                                 btnClassname='btn-delete-all'
                             />
                         }
-
-
                     </div>
                     <Table
                         columns={columns}

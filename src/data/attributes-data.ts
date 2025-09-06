@@ -1,8 +1,8 @@
 export type AttributesType = {
   id?: number | string | undefined
   name: string;
-  categories: string[]
-  attribute_set?: string;
+  attribute_categories: string[]
+  attribute_set_id?: string;
   filterable: boolean;
   values: string[]
 };

@@ -11,25 +11,10 @@ import { categoriesAtom, attributeSetAtom } from '@/store/DropdownItemStore'
 import { addAttributeSet, getAttributeSet } from '@/services/attribute-set-service'
 import { ChildFormProps } from '@/plugins/types/form-type'
 
-type formProps = {
-    data?: any
-}
-const GeneralForm = ({ dataById, onChange }: ChildFormProps) => {
+const GeneralForm = ({ dataById, onChange, formDataCreate }: ChildFormProps) => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [optionAttributeSet, setOptionAttributeSet] = useAtom(attributeSetAtom)
     const [optionCategories] = useAtom(categoriesAtom)
-    const [formData, setFormData] = useState({
-        name: dataById ? dataById.name : '',
-        attributeSet: dataById ? dataById.attribute_set : '',
-        categories: dataById && dataById.categories
-            ? typeof dataById.categories === 'string'
-                ? JSON.parse(dataById.categories)
-                : dataById.categories
-            : [],
-
-        filterable: dataById ? dataById.filterable : false
-    })
-
     const [attributeSet, setAttributeSet] = useState({
         name: ''
     })
@@ -44,11 +29,8 @@ const GeneralForm = ({ dataById, onChange }: ChildFormProps) => {
 
     const handleChange = (e: any) => {
         const { id, value } = e.target;
-        setFormData((prev) => ({
-            ...prev,
-            [id]: value,
-        }));
-        onChange({ [id]: value })
+        let updated: any = { [id]: value };
+        onChange(updated)
     };
 
     const handleChangeAttributeSet = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,20 +41,15 @@ const GeneralForm = ({ dataById, onChange }: ChildFormProps) => {
         }));
     };
 
-
     const handleChangeSelect = (id: string, value: string | string[]) => {
-        setFormData((prev) => ({
-            ...prev,
-            [id]: value,
-        }));
-        onChange({ [id]: value })
+        const updated = { [id]: value };
+        onChange(updated)
     };
 
-    const handleCheckbox = (val: boolean) => {
-        const updated = { ...formData, filterable: val }
-        setFormData(updated)
-        onChange(updated)
-    }
+    const handleChangeCheckbox = (field: any) => (val: boolean) => {
+        const updated = { [field]: val };
+        onChange(updated);
+    };
 
     const handleSubmitAttributeSet = async () => {
         try {
@@ -104,14 +81,15 @@ const GeneralForm = ({ dataById, onChange }: ChildFormProps) => {
                     id='name'
                     label='Name'
                     type='text'
-                    value={formData.name}
+                    value={formDataCreate.general.name}
                     onChange={handleChange}
+                    placeholder='Color'
                 />
                 <SelectInput
                     id='attributeSet'
                     label="Attribute Set"
-                    placeholder="Attribute Set"
-                    value={formData.attributeSet}
+                    placeholder="Electronics Specs"
+                    value={formDataCreate.general.attributeSet || undefined}
                     onChange={(e) => handleChangeSelect('attributeSet', e)}
                     options={optionAttributeSet}
                     popupRender={(options: any) => (
@@ -131,16 +109,16 @@ const GeneralForm = ({ dataById, onChange }: ChildFormProps) => {
                     id="categories"
                     modeType='multiple'
                     label="Categories"
-                    placeholder="Select Categories"
-                    value={formData.categories || undefined}
+                    placeholder="Select Categories (e.g. Alarm, CCTV)"
+                    value={formDataCreate.general.categories || undefined}
                     onChange={(val) => handleChangeSelect("categories", val)}
                     options={optionCategories}
                 />
                 <Checkbox
                     label='Filterable'
                     text='Check this to enable this attribute'
-                    onChange={handleCheckbox}
-                    checked={formData.filterable}
+                    onChange={handleChangeCheckbox('filterable')}
+                    checked={formDataCreate.general.filterable}
                 />
 
             </FormGroup>
