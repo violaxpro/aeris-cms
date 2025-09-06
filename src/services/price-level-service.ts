@@ -17,9 +17,26 @@ export async function getPriceLevel(
             params: { page, perPage }
         });
 
-        return res.data; //
-    } catch (error) {
-        console.error(error)
+        return res.data;
+    } catch (error: any) {
+        if (error.response?.status === 404) {
+            return null;
+        }
+        throw error;
+    }
+
+}
+
+export async function getPriceLevelById(slug: string) {
+    const url = `${apiPriceLevel}/${slug}`;
+    try {
+        const res = await baseService(url);
+        return res.data;
+    } catch (error: any) {
+        if (error.response?.status === 404) {
+            return null;
+        }
+        throw error;
     }
 
 }
@@ -28,8 +45,11 @@ export async function addPriceLevel(params: PriceLevelType) {
     try {
         const res = await baseService.post(apiPriceLevel, params)
         return res.data
-    } catch (error) {
-        console.error(error)
+    } catch (error: any) {
+        if (error.response?.status === 404) {
+            return null;
+        }
+        throw error;
     }
 }
 
@@ -37,8 +57,11 @@ export async function updatePriceLevel(id: string | number, params: PriceLevelTy
     try {
         const res = await baseService.put(`${apiPriceLevel}/${id}`, params)
         return res.data
-    } catch (error) {
-        console.error(error)
+    } catch (error: any) {
+        if (error.response?.status === 404) {
+            return null;
+        }
+        throw error;
     }
 }
 
@@ -46,8 +69,11 @@ export async function deletePriceLevel(id: string | number) {
     try {
         const res = await baseService.delete(`${apiPriceLevel}/${id}`)
         return res.data
-    } catch (error) {
-        console.error(error)
+    } catch (error: any) {
+        if (error.response?.status === 404) {
+            return null;
+        }
+        throw error;
     }
 }
 

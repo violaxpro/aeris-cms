@@ -12,6 +12,7 @@ import { getProduct } from '@/services/products-service';
 import { getTaxes } from '@/services/settings-service';
 import { useAtom } from 'jotai'
 import { brandsAtom, categoriesAtom, attributeSetAtom, productSetAtom, taxSetAtom } from '@/store/DropdownItemStore'
+import Item from 'antd/es/list/Item';
 
 const { useBreakpoint } = Grid;
 
@@ -40,7 +41,8 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
             const categoryOptions = categories.data.map((category: any) => ({
                 label: category.name,
-                value: category.id
+                value: category.id,
+                children: category.children
             }))
 
             const attributeSetOption = attributeSet.data.map((attr: any) => ({

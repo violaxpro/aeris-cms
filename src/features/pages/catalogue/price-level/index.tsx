@@ -161,6 +161,8 @@ const index = ({ priceData }: { priceData?: any }) => {
         }
     }, [notification]);
 
+    console.log(priceData)
+
     return (
         <>
             {contextHolder}

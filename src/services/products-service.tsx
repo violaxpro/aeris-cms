@@ -1,7 +1,7 @@
 import baseService from "./base-service";
 import { ProductDataType } from "@/data/products-data";
 
-const apiProduct = '/admin/product/catalog'
+const apiProduct = '/admin/catalogue/product'
 
 export async function getProduct(param?: string | number) {
     const url = param ? `${apiProduct}/${param}` : apiProduct

@@ -20,6 +20,7 @@ const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const setNotification = useSetAtom(notificationAtom);
     const [optionsCategories] = useAtom(categoriesAtom)
     const [optionBrands] = useAtom(brandsAtom)
+    const [optionSubCategories, setOptionSubCategories] = useState([])
     const [formData, setFormData] = useState({
         name: initialValues ? initialValues.name : '',
         brand_id: initialValues ? initialValues.brand_id : '',
@@ -86,8 +87,6 @@ const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
     }
 
-    console.log(formData)
-
     return (
         <>
             <div className="mt-6 mx-6 mb-0">
@@ -124,7 +123,17 @@ const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 label="Categories"
                                 placeholder="Select Categories"
                                 value={formData.category_id}
-                                onChange={(val) => handleChangeSelect("category_id", val)}
+                                onChange={(val) => {
+                                    handleChangeSelect("category_id", val);
+                                    const selectedCategory: any = optionsCategories.find((cat: any) => cat.value === val);
+                                    const optionsSubCategory = selectedCategory?.children.map((item: any) => {
+                                        return {
+                                            label: item.name,
+                                            value: item.id
+                                        }
+                                    })
+                                    setOptionSubCategories(optionsSubCategory || []);
+                                }}
                                 options={optionsCategories}
                             />
                             <SelectInput
@@ -133,7 +142,7 @@ const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 placeholder="Select Sub Categories"
                                 value={formData.sub_category_id}
                                 onChange={(val) => handleChangeSelect("sub_category_id", val)}
-                                options={optionsCategories}
+                                options={optionSubCategories}
                             />
 
                             <div className='col-span-full grid grid-cols-2 gap-4'>

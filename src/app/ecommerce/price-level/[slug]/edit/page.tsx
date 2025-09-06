@@ -1,5 +1,5 @@
 import React from 'react'
-import { getPriceLevel } from '@/services/price-level-service'
+import { getPriceLevelById } from '@/services/price-level-service'
 import FormPriceLevel from '@/features/pages/catalogue/price-level/FormPriceLevel'
 import { Params } from '@/plugins/types'
 
@@ -8,10 +8,10 @@ export default async function EditPriceLevelPage(props: { params: Params }) {
     const params = await props.params;
     const slug = params.slug;
     try {
-        // const res = await getPriceLevel(slug)
-        // if (res?.data) {
-        //     dataForm = res.data
-        // }
+        const res = await getPriceLevelById(slug)
+        if (res?.data) {
+            dataForm = res.data
+        }
 
     } catch (error) {
         console.log(error)
