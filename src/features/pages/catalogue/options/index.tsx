@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { useAtom } from 'jotai'
 import Table from "@/components/table"
 import type { TableColumnsType } from 'antd'
+import { Dropdown, Menu } from 'antd'
 import { optionsData, OptionsType } from '@/data/options-data'
 import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons'
 import DeletePopover from '@/components/popover'
@@ -13,7 +14,7 @@ import { Content } from 'antd/es/layout/layout'
 import Button from "@/components/button"
 import SearchInput from '@/components/search';
 import dayjs from 'dayjs'
-import { AddIcon, TrashIconRed, PencilIconBlue } from '@public/icon'
+import { AddIcon, TrashIconRed, MoreIcon } from '@public/icon'
 import ButtonDelete from '@/components/button/ButtonAction'
 import Pagination from '@/components/pagination'
 import ButtonIcon from '@/components/button/ButtonIcon'
@@ -72,16 +73,16 @@ const index = ({ optionsData }: { optionsData?: any }) => {
     const columns: TableColumnsType<OptionsType> = [
         {
             title: 'Name',
-            dataIndex: 'optionName',
+            dataIndex: 'name',
             sorter: (a: any, b: any) => {
                 return a?.option_name?.localeCompare(b?.option_name)
             }
         },
         {
             title: 'Type',
-            dataIndex: 'optionType',
+            dataIndex: 'type',
             sorter: (a: any, b: any) => {
-                return a?.type - b?.type
+                return a?.type.localeCompare(b?.type)
             },
         },
         {
@@ -97,25 +98,33 @@ const index = ({ optionsData }: { optionsData?: any }) => {
             dataIndex: 'action',
             key: 'action',
             width: 120,
-            render: (_: string, row: OptionsType) => (
-                <div className="flex items-center justify-end gap-3 pe-4">
-                    <ButtonIcon
-                        color='primary'
-                        variant='filled'
-                        size="small"
-                        icon={PencilIconBlue}
-                        onClick={() => router.push(routes.eCommerce.editOptions(row.id))}
-                    />
-                    <ButtonIcon
-                        color='danger'
-                        variant='filled'
-                        size="small"
-                        icon={TrashIconRed}
-                        onClick={() => handleOpenModalDelete(row.id)}
-                    />
-                </div >
+            render: (_: string, row: OptionsType) => {
+                const menu = (
+                    <Menu>
+                        <Menu.Item key="edit">
+                            <Link href={routes.eCommerce.editOptions(row.id)}>
+                                Edit
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item key="delete" onClick={() => handleOpenModalDelete(row.id)}>
+                            Delete
+                        </Menu.Item>
+                    </Menu>
+                );
+                return (
+                    <div className="flex  gap-3 pe-4" onClick={(e) => e.stopPropagation()}>
+                        <Dropdown overlay={menu} trigger={['click']} >
+                            <ButtonIcon
+                                color='primary'
+                                variant='filled'
+                                size="small"
+                                icon={MoreIcon}
+                            />
+                        </Dropdown >
+                    </div >
 
-            ),
+                )
+            },
         },
 
     ]

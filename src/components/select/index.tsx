@@ -44,7 +44,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
     return (
         <div className={className}>
             {
-                label && (<label htmlFor={id} className="block text-sm font-medium text-gray-700">
+                label && (<label htmlFor={id} className="block text-sm font-medium text-gray-700 mb-1">
                     {label}
                     {required && <span className="text-red-500 ml-1">*</span>}
                 </label>)

@@ -1,7 +1,7 @@
 import React from 'react'
-import FormOptions from '@/features/pages/catalogue/options/formOptions/FormOptions'
+import FormOptions from '@/features/pages/catalogue/options/FormOptions'
 
-const CrateOptionsPage = () => {
+export default async function CrateOptionsPage() {
     return (
         <div>
             <FormOptions mode='create' />
@@ -9,4 +9,4 @@ const CrateOptionsPage = () => {
     )
 }
 
-export default CrateOptionsPage
+

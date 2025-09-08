@@ -52,7 +52,7 @@ const index = ({ label,
         <div className={divClassName}>
             {
                 label && (
-                    <label htmlFor={id} className={`flex justify-between items-center text-sm font-medium text-gray-700 ${labelClassName}`}>
+                    <label htmlFor={id} className={`mb-1 flex justify-between items-center text-sm font-medium text-gray-700 ${labelClassName}`}>
                         <div>
                             {label}
                             {required && <span className="text-red-500 ml-1">*</span>}

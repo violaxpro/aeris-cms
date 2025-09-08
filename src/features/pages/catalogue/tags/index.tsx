@@ -5,7 +5,6 @@ import type { TableColumnsType } from 'antd'
 import { Dropdown, Menu } from 'antd'
 import Image from 'next/image'
 import { tagsType } from '@/plugins/types/tags-type'
-import Link from 'next/link'
 import Breadcrumb from "@/components/breadcrumb"
 import { Content } from 'antd/es/layout/layout'
 import Button from "@/components/button"
@@ -100,7 +99,7 @@ const index = ({ tagDatas }: { tagDatas: any }) => {
                     </Menu>
                 );
                 return (
-                    <div className="flex items-center justify-end gap-3 pe-4" onClick={(e) => e.stopPropagation()}>
+                    <div className="flex gap-3 pe-4" onClick={(e) => e.stopPropagation()}>
                         <Dropdown overlay={menu} trigger={['click']} >
                             <ButtonIcon
                                 color='primary'
@@ -147,6 +146,7 @@ const index = ({ tagDatas }: { tagDatas: any }) => {
             console.error(error)
         }
     }
+
     useEffect(() => {
         if (notification) {
             notifySuccess(notification);
