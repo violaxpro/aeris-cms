@@ -8,7 +8,12 @@ import Button from "@/components/button"
 import FileUploader from '@/components/input-file'
 import dynamic from 'next/dynamic';
 import { useAtom } from 'jotai'
-import { brandsAtom, categoriesAtom } from '@/store/DropdownItemStore'
+import {
+    brandsAtom,
+    categoriesAtom,
+    taxSetAtom,
+    tagSetAtom,
+} from '@/store/DropdownItemStore'
 import { ChildFormProps } from '@/plugins/types/form-type'
 import { uploadImages } from '@/services/upload-images'
 import { slugify } from '@/plugins/validators/common-rules'
@@ -18,10 +23,12 @@ const QuillInput = dynamic(() => import('@/components/quill-input'), { ssr: fals
 const BasicInformationProduct = ({ dataById, onChange, formDataCreate }: ChildFormProps) => {
     const [optionBrands] = useAtom(brandsAtom)
     const [optionCategories] = useAtom(categoriesAtom)
+    const [optionTaxs] = useAtom(taxSetAtom)
+    const [optionTags] = useAtom(tagSetAtom)
     const [isLoading, setIsLoading] = useState(false)
     const handleChange = (e: any) => {
         const { id, value } = e.target;
-        const updated = { ...formDataCreate, [id]: value };
+        const updated = { ...formDataCreate.tab_basic_information, [id]: value };
         if (id === 'productName') {
             formDataCreate.tab_basic_information.slug = slugify(value)
         }
@@ -34,7 +41,7 @@ const BasicInformationProduct = ({ dataById, onChange, formDataCreate }: ChildFo
     };
 
     const handleChangeSelect = (id: string, value: string | string[]) => {
-        const updated = { ...formDataCreate, [id]: value }
+        const updated = { ...formDataCreate.tab_basic_information, [id]: value }
         onChange(updated);
         // setFormData(prev => {
         //     const updated = { ...prev, [id]: value }
@@ -44,13 +51,13 @@ const BasicInformationProduct = ({ dataById, onChange, formDataCreate }: ChildFo
     };
 
     const handleCheckbox = (key: string, val: boolean) => {
-        const updated = { ...formDataCreate, [key]: val };
+        const updated = { ...formDataCreate.tab_basic_information, [key]: val };
         onChange(updated);
     };
 
 
     const handleQuillChange = (value: string) => {
-        const updated = { ...formDataCreate, description: value };
+        const updated = { ...formDataCreate.tab_basic_information, description: value };
         onChange(updated);
         // setFormData({ ...formData, description: value });
     };
@@ -64,9 +71,9 @@ const BasicInformationProduct = ({ dataById, onChange, formDataCreate }: ChildFo
             const res = await uploadImages(formData)
             if (res.success == true) {
                 const images = [{
-                    name: file.name,
+                    // name: file.name,
                     url: res?.data?.public_url,
-                    default: true,
+                    // default: true,
                     alt_image: file.name
                 }]
 
@@ -131,9 +138,7 @@ const BasicInformationProduct = ({ dataById, onChange, formDataCreate }: ChildFo
                         id='productName'
                         label='Name'
                         type='text'
-                        placeholder='Product Name'
-                        // onChange={handleChange}
-                        // value={formData.productName}
+                        placeholder='Enter product name (e.g. Battery 12V X 7.0 AMP)'
                         onChange={handleChange}
                         value={formDataCreate.tab_basic_information.productName}
 
@@ -142,27 +147,25 @@ const BasicInformationProduct = ({ dataById, onChange, formDataCreate }: ChildFo
                         id='slug'
                         label='Slug'
                         type='text'
-                        placeholder='Slug'
-                        // onChange={handleChange}
-                        // value={formData.slug}
+                        placeholder='auto-generated-slug'
                         onChange={handleChange}
                         value={formDataCreate.tab_basic_information.slug}
                     />
                     <Select
                         id="brand"
                         label="Brand"
-                        placeholder="Select Brand"
+                        placeholder="Select brand (e.g. Panasonic)"
                         // value={formData.brand}
-                        value={formDataCreate.tab_basic_information.brand}
+                        value={formDataCreate.tab_basic_information.brand || undefined}
                         onChange={(val) => handleChangeSelect("brand", val)}
                         options={optionBrands}
                     />
                     <Select
                         id="categories"
                         label="Categories"
-                        placeholder="Select Categories"
+                        placeholder="Select category (e.g. Electronics)"
                         // value={formData.categories}
-                        value={formDataCreate.tab_basic_information.categories}
+                        value={formDataCreate.tab_basic_information.categories || undefined}
                         onChange={(val) => handleChangeSelect("categories", val)}
                         options={optionCategories}
                     />
@@ -170,7 +173,7 @@ const BasicInformationProduct = ({ dataById, onChange, formDataCreate }: ChildFo
 
                 <div className='col-span-full w-full'>
                     <QuillInput
-                        // value={formData.description}
+                        placeholder='Write detailed product description'
                         value={formDataCreate.tab_basic_information.description}
                         onChange={handleQuillChange}
                         label="Description"
@@ -182,7 +185,6 @@ const BasicInformationProduct = ({ dataById, onChange, formDataCreate }: ChildFo
                     <TextArea
                         id='metaTitle'
                         label='Meta Title'
-                        placeholder='Input Meta Title'
                         // onChange={handleChange}
                         // value={formData.metaTitle}
                         onChange={handleChange}
@@ -193,13 +195,12 @@ const BasicInformationProduct = ({ dataById, onChange, formDataCreate }: ChildFo
                             </span>
                         }
                         textareaClassname='!h-20'
+                        placeholder='Enter SEO-friendly title'
                     />
                     <TextArea
                         id='metaDescription'
                         label='Meta Description'
-                        placeholder='Input Meta Description'
-                        // onChange={handleChange}
-                        // value={formData.metaDescription}
+                        placeholder='Enter SEO-friendly description'
                         onChange={handleChange}
                         value={formDataCreate.tab_basic_information.metaDescription}
                         notes={
@@ -214,21 +215,19 @@ const BasicInformationProduct = ({ dataById, onChange, formDataCreate }: ChildFo
                     <Select
                         id="taxClass"
                         label="Tax Class"
-                        placeholder="Select Tax Class"
-                        value={formDataCreate.tab_basic_information.taxClass}
-                        // value={formData.taxClass}
+                        placeholder="Select applicable tax class"
+                        value={formDataCreate.tab_basic_information.taxClass || undefined}
                         onChange={(val) => handleChangeSelect("taxClass", val)}
-                        options={optionsTaxClass}
+                        options={optionTaxs}
                     />
                     <Select
                         id="tags"
                         modeType='tags'
                         label="Tags"
-                        placeholder="Select Tags"
+                        placeholder="Add tags (e.g. power, battery, electronics)"
                         onChange={(val) => handleChangeSelect("tags", val)}
-                        // value={formData.tags}
                         value={formDataCreate.tab_basic_information.tags}
-                        options={optionsTagClass}
+                        options={optionTags}
                     />
                 </div>
                 <div className='grid md:grid-cols-3 gap-4'>
@@ -236,9 +235,7 @@ const BasicInformationProduct = ({ dataById, onChange, formDataCreate }: ChildFo
                         id='manualUrl'
                         label='Manual URL'
                         type='text'
-                        placeholder='Input Manual URL'
-                        // onChange={handleChange}
-                        // value={formData.manualUrl}
+                        placeholder='https://example.com/manualurl'
                         onChange={handleChange}
                         value={formDataCreate.tab_basic_information.manualUrl}
                     />
@@ -246,9 +243,7 @@ const BasicInformationProduct = ({ dataById, onChange, formDataCreate }: ChildFo
                         id='warranty'
                         label='Warranty (month)'
                         type='number'
-                        placeholder='Warranty (month)'
-                        // onChange={handleChange}
-                        // value={formData.warranty}
+                        placeholder='Enter warranty period (e.g. 12)'
                         onChange={handleChange}
                         value={formDataCreate.tab_basic_information.warranty}
                     />
@@ -256,7 +251,6 @@ const BasicInformationProduct = ({ dataById, onChange, formDataCreate }: ChildFo
                         <CheckboxInput
                             label='Status'
                             text="Check this to enable this product"
-                            // checked={formData.status}
                             checked={formDataCreate.tab_basic_information.status}
                             onChange={(val) => handleCheckbox('status', val)}
                         />
@@ -278,9 +272,7 @@ const BasicInformationProduct = ({ dataById, onChange, formDataCreate }: ChildFo
                     id='sku'
                     label='SKU'
                     type='text'
-                    placeholder='Input SKU'
-                    // onChange={handleChange}
-                    // value={formData.sku}
+                    placeholder='Enter unique SKU (e.g. BAT-12V-7000)'
                     onChange={handleChange}
                     value={formDataCreate.tab_basic_information.sku}
                 />
@@ -288,9 +280,7 @@ const BasicInformationProduct = ({ dataById, onChange, formDataCreate }: ChildFo
                     id='sku2'
                     label='SKU2'
                     type='text'
-                    placeholder='Input SKU2'
-                    // onChange={handleChange}
-                    // value={formData.sku2}
+                    placeholder='Enter secondary SKU (optional)'
                     onChange={handleChange}
                     value={formDataCreate.tab_basic_information.sku2}
                 />
@@ -298,9 +288,7 @@ const BasicInformationProduct = ({ dataById, onChange, formDataCreate }: ChildFo
                     id='mpn'
                     label='MPN'
                     type='text'
-                    placeholder='Input MPN'
-                    // onChange={handleChange}
-                    // value={formData.mpn}
+                    placeholder='Enter manufacturer part number (e.g. MPN-12345)'
                     onChange={handleChange}
                     value={formDataCreate.tab_basic_information.mpn}
                 />

@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import Table from "@/components/table"
-import type { TableColumnsType } from 'antd'
+import type { TableColumnsType, MenuProps } from 'antd'
 import { Dropdown, Menu } from 'antd'
 import { ProductDataType } from '@/data/products-data'
 import { EditOutlined, PlusCircleOutlined, InfoCircleOutlined, MoreOutlined } from '@ant-design/icons'
@@ -13,7 +13,7 @@ import Button from "@/components/button"
 import SearchInput from '@/components/search';
 import StatusBadge from '@/components/badge/badge-status'
 import Popover from '@/components/popover'
-import { deleteProduct } from '@/services/products-service'
+import { getProduct, deleteProduct } from '@/services/products-service'
 import { useNotificationAntd } from '@/components/toast'
 import { useAtom } from 'jotai'
 import { productAtom } from '@/store/ProductAtom'
@@ -28,15 +28,17 @@ import ButtonAction from '@/components/button/ButtonIcon'
 import SearchTable from '@/components/search/SearchTable'
 import ShowPageSize from '@/components/pagination/ShowPageSize'
 import ConfirmModal from '@/components/modal/ConfirmModal'
+import { notificationAtom } from '@/store/NotificationAtom'
 
 const index = ({ products }: { products?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
-    const [data, setData] = useAtom(productAtom)
-    const [filteredData, setFilteredData] = useState<ProductDataType[]>([]);
+    const [data, setData] = useState(products?.data || [])
+    const [currentPage, setCurrentPage] = useState(products?.page || 1)
+    const [pageSize, setPageSize] = useState(products?.perPage || 10)
+    const [total, setTotal] = useState(products?.count || 0)
+    const [notification, setNotification] = useAtom(notificationAtom);
     const [search, setSearch] = useState('')
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
     const [isOpenModalFilter, setisOpenModalFilter] = useState(false)
     const [openModalDelete, setOpenModalDelete] = useState(false)
     const [deletedData, setDeletedData] = useState<any>(null)
@@ -47,7 +49,7 @@ const index = ({ products }: { products?: any }) => {
             const res = await deleteProduct(deletedData);
             if (res.success) {
                 notifySuccess(res.message);
-                setData(prev => prev.filter(item => item.id !== deletedData));
+                fetchPage(currentPage, pageSize)
             }
         } catch (error) {
             console.error(error);
@@ -57,25 +59,11 @@ const index = ({ products }: { products?: any }) => {
         }
     };
 
-    const breadcrumb = [
-        {
-            title: 'Catalogue',
-        },
-        {
-            title: 'Products',
-        },
-    ]
-
     const handleOpenModalDelete = (data: any) => {
         setOpenModalDelete(true)
         setDeletedData(data)
     }
     const columnProducts: TableColumnsType<ProductDataType> = [
-        {
-            title: 'ID',
-            dataIndex: 'id',
-            sorter: (a: any, b: any) => a.id - b.id,
-        },
         {
             title: 'SKU',
             dataIndex: 'sku',
@@ -167,27 +155,24 @@ const index = ({ products }: { products?: any }) => {
             key: 'action',
             width: 120,
             render: (_: string, row: any) => {
-                const menu = (
-                    <Menu>
-                        <Menu.Item key="edit">
-                            <Link href={routes.eCommerce.editProduct(row.id)}>
-                                Edit
-                            </Link>
-                        </Menu.Item>
-                        <Menu.Item key="delete">
-                            <Popover
-                                title='Delete Product'
-                                description='Are you sure to delete this data?'
-                                onDelete={() => handleDelete(row.id)}
-                                label='Delete'
-                            />
-                        </Menu.Item>
-                    </Menu>
-                );
+                const items: MenuProps['items'] = [
+                    {
+                        key: 'edit',
+                        label: <Link href={routes.eCommerce.editProduct(row.id)}>
+                            Edit
+                        </Link>
+                    },
+                    {
+                        key: 'delete',
+                        label: <div className='cursor-pointer' onClick={() => handleOpenModalDelete(row.id)}>
+                            Delete
+                        </div>
+                    }
+                ]
 
                 return (
                     <div className='flex items-center gap-2'>
-                        <Dropdown overlay={menu} trigger={['click']} >
+                        <Dropdown menu={{ items }} trigger={['click']} >
                             <ButtonAction
                                 color='primary'
                                 variant='filled'
@@ -195,13 +180,6 @@ const index = ({ products }: { products?: any }) => {
                                 icon={MoreIcon}
                             />
                         </Dropdown >
-                        <ButtonAction
-                            color='danger'
-                            variant='filled'
-                            size="small"
-                            icon={TrashIconRed}
-                            onClick={() => handleOpenModalDelete(row.id)}
-                        />
                     </div>
                 );
             }
@@ -210,36 +188,38 @@ const index = ({ products }: { products?: any }) => {
 
     ]
 
-    const handleSearch = (value: string) => {
-        const search = value.toLowerCase();
-        setSearch(search)
-        const result = data.filter((item: any) => {
-            return item?.name?.toLowerCase().includes(search) ||
-                item?.sku?.toLowerCase().includes(search) ||
-                item?.price.toLowerCase().includes(search)
-        });
-        setFilteredData(result);
-    };
-    // Ambil data dari props saat pertama render
-    useEffect(() => {
-        setData(products || []);
-    }, [products]);
-
-    // Filter data setiap kali data atau search berubah
-    useEffect(() => {
-        if (!search) {
-            setFilteredData(data);
-        } else {
-            const searchLower = search.toLowerCase();
-            const result = data.filter((item: any) =>
-                item?.name?.toLowerCase().includes(searchLower) ||
-                item?.sku?.toLowerCase().includes(searchLower) ||
-                item?.price?.toString().toLowerCase().includes(searchLower)
+    const filteredData = React.useMemo(() => {
+        if (!search) return data;
+        const keyword = search.toLowerCase();
+        return data.filter((item: any) => {
+            const formattedDate = dayjs(item?.created_at)
+                .format('DD/MM/YYYY')
+                .toLowerCase();
+            return (
+                item?.name.toLowerCase().includes(keyword) ||
+                item?.sku?.toLowerCase().includes(keyword) ||
+                formattedDate.includes(keyword)
             );
-            setFilteredData(result);
-        }
-    }, [data, search]);
+        });
+    }, [search, data]);
 
+    const fetchPage = async (page: number, perPage: number) => {
+        try {
+            const res = await getProduct({ page, perPage })
+            setData(res.data)
+            setTotal(res.count)
+            setCurrentPage(res.page)
+            setPageSize(res.perPage)
+        } catch (error) {
+            console.error(error)
+        }
+    }
+    useEffect(() => {
+        if (notification) {
+            notifySuccess(notification);
+            setNotification(null);
+        }
+    }, [notification]);
 
     console.log('ini data products', products, data, filteredData)
 
@@ -259,9 +239,6 @@ const index = ({ products }: { products?: any }) => {
                         <h1 className='text-2xl font-bold'>
                             Products
                         </h1>
-                        {/* <Breadcrumb
-                            items={breadcrumb}
-                        /> */}
                     </div>
                     <Button
                         icon={<Image
@@ -276,34 +253,20 @@ const index = ({ products }: { products?: any }) => {
                 </div>
             </div>
             <Content className="mb-0 ">
-                <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
+                <div className='min-h-[360px] p-6'>
                     <div className='flex justify-between mb-4 gap-2'>
-                        {/* <Button
-                                       label='Add Payment'
-                                       onClick={handleClickModalPaid}
-                                   /> */}
-
                         <div className='flex items-center gap-2'>
                             <ShowPageSize
                                 pageSize={pageSize}
-                                onChange={setPageSize}
-                            />
-                            <ButtonFilter
-                                label='Filter by'
-                                icon={<Image
-                                    src={FilterIcon}
-                                    alt='filter-icon'
-                                    width={15}
-                                    height={15}
-                                />}
-                                onClick={() => setisOpenModalFilter(true)}
-                                position='end'
-                                style={{ padding: '1.2rem 1.7rem' }}
+                                onChange={(newPageSize) => {
+                                    setPageSize(newPageSize);
+                                    setCurrentPage(1);
+                                    fetchPage(1, newPageSize);
+                                }}
                             />
                             <SearchTable
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
-                                onSearch={() => console.log('Searching for:', search)}
                             />
                         </div>
                         {
@@ -317,7 +280,6 @@ const index = ({ products }: { products?: any }) => {
                                 />}
                                 onClick={() => setisOpenModalFilter(true)}
                                 position='start'
-                                style={{ padding: '1.2rem 1.7rem' }}
                                 btnClassname='btn-delete-all'
                             />
                         }
@@ -333,7 +295,10 @@ const index = ({ products }: { products?: any }) => {
                         current={currentPage}
                         total={filteredData.length}
                         pageSize={pageSize}
-                        onChange={(page) => setCurrentPage(page)}
+                        onChange={(page) => {
+                            setCurrentPage(page);
+                            fetchPage(page, pageSize);
+                        }}
                     />
                 </div>
             </Content>

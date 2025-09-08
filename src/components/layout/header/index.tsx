@@ -3,7 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { Header } from 'antd/es/layout/layout';
 import Avatar from '@/components/avatar'
-import { Badge, Dropdown, Menu, Grid, Drawer } from 'antd';
+import type { MenuProps } from 'antd';
+import { Badge, Dropdown, Menu, Grid } from 'antd';
 import AvatarImage from "public/social-avatar.webp"
 import Image from 'next/image';
 // import logoImg from '@public/logo/Alarm Expert Logo.webp';
@@ -170,32 +171,28 @@ export default function HeaderLayout({ onOpenDrawer }: { onOpenDrawer?: () => vo
         setAttendanceType('');
     };
 
-    const mobileMenu = (
-        <Menu
-            items={[
-                {
-                    key: 'support',
-                    label: <Button type="text" icon={<Image src={HeadphoneIcon} alt="support-icon" width={15} />}>Support</Button>
-                },
-                {
-                    key: 'notification',
-                    label: <Button type="text" icon={<Image src={BellOutlinedIcon} alt="bell-icon" width={15} />}>Notifications</Button>
-                },
-                {
-                    key: 'settings',
-                    label: <Button type="text" icon={<Image src={GearOutlinedIcon} alt="gear-icon" width={15} />} onClick={showDrawer}>Settings</Button>
-                },
-                {
-                    key: 'profile',
-                    label: <Button type="text" icon={<Image src={UserIcon} alt="gear-icon" width={15} />}>Profile</Button>
-                },
-                {
-                    key: 'logout',
-                    label: <Button type="text" icon={<Image src={LogoutIcon} alt="gear-icon" width={15} />}>Logout</Button>
-                },
-            ]}
-        />
-    );
+    const items: MenuProps['items'] = [
+        {
+            key: 'support',
+            label: <Button type="text" icon={<Image src={HeadphoneIcon} alt="support-icon" width={15} />}>Support</Button>
+        },
+        {
+            key: 'notification',
+            label: <Button type="text" icon={<Image src={BellOutlinedIcon} alt="bell-icon" width={15} />}>Notifications</Button>
+        },
+        {
+            key: 'settings',
+            label: <Button type="text" icon={<Image src={GearOutlinedIcon} alt="gear-icon" width={15} />} onClick={showDrawer}>Settings</Button>
+        },
+        {
+            key: 'profile',
+            label: <Button type="text" icon={<Image src={UserIcon} alt="gear-icon" width={15} />}>Profile</Button>
+        },
+        {
+            key: 'logout',
+            label: <Button type="text" icon={<Image src={LogoutIcon} alt="gear-icon" width={15} />}>Logout</Button>
+        },
+    ];
 
     useEffect(() => {
         const handleScroll = () => {
@@ -360,7 +357,7 @@ export default function HeaderLayout({ onOpenDrawer }: { onOpenDrawer?: () => vo
                 </div>
 
                 <div className="md:hidden pr-4">
-                    <Dropdown overlay={mobileMenu} placement="bottomRight" trigger={['click']}>
+                    <Dropdown menu={{ items }} placement="bottomRight" trigger={['click']}>
                         <Button icon={<MoreOutlined />} />
                     </Dropdown>
                 </div>

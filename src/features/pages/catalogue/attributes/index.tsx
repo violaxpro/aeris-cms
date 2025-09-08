@@ -1,22 +1,18 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import Table from "@/components/table"
-import type { TableColumnsType } from 'antd'
-import { Dropdown, Menu } from 'antd'
+import type { TableColumnsType, MenuProps } from 'antd'
+import { Dropdown } from 'antd'
 import { AttributesType } from '@/data/attributes-data'
-import { EditOutlined, PlusCircleOutlined, MoreOutlined } from '@ant-design/icons'
-import Popover from '@/components/popover'
 import { routes } from '@/config/routes'
 import Link from 'next/link'
 import Breadcrumb from "@/components/breadcrumb"
 import { Content } from 'antd/es/layout/layout'
 import Button from "@/components/button"
-import SearchInput from '@/components/search';
 import dayjs from 'dayjs'
 import { useAtom } from 'jotai'
 import { getAttributes, deleteAttribute } from '@/services/attributes-service'
 import { useNotificationAntd } from '@/components/toast'
-import { attributeAtom } from '@/store/AttributeAtom'
 import { AddIcon, TrashIconRed, MoreIcon } from '@public/icon'
 import ButtonDelete from '@/components/button/ButtonAction'
 import Pagination from '@/components/pagination'
@@ -101,22 +97,23 @@ const index = ({ attributesData }: { attributesData?: any }) => {
             key: 'action',
             width: 120,
             render: (_: string, row: any) => {
-                const menu = (
-                    <Menu>
-                        <Menu.Item key="edit">
-                            <Link href={routes.eCommerce.editAttributes(row.id)}>
-                                Edit
-                            </Link>
-                        </Menu.Item>
-                        <Menu.Item key="delete" onClick={() => handleOpenModalDelete(row.id)}>
+                const items: MenuProps['items'] = [
+                    {
+                        key: 'edit',
+                        label: <Link href={routes.eCommerce.editAttributes(row.id)}>
+                            Edit
+                        </Link>
+                    },
+                    {
+                        key: 'delete',
+                        label: <div className='cursor-pointer' onClick={() => handleOpenModalDelete(row.id)}>
                             Delete
-                        </Menu.Item>
-                    </Menu>
-                );
-
+                        </div>
+                    }
+                ]
                 return (
                     <div className="flex  gap-3 pe-4" onClick={(e) => e.stopPropagation()}>
-                        <Dropdown overlay={menu} trigger={['click']} >
+                        <Dropdown menu={{ items }} trigger={['click']} >
                             <ButtonIcon
                                 color='primary'
                                 variant='filled'

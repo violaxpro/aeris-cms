@@ -12,9 +12,12 @@ import { addProduct, updateProduct } from '@/services/products-service';
 import { useNotificationAntd } from '@/components/toast';
 import { useRouter } from 'next/navigation';
 import { FormProps } from '@/plugins/types/form-type';
+import { useSetAtom } from 'jotai';
+import { notificationAtom } from '@/store/NotificationAtom';
 
 const ProductForm: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const [activeTab, setActiveTab] = useState<string>('basic');
+    const setNotification = useSetAtom(notificationAtom);
     const router = useRouter()
     const { contextHolder, notifySuccess } = useNotificationAntd()
     const [formData, setFormData] = useState({
@@ -53,17 +56,16 @@ const ProductForm: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
             gold: initialValues ? initialValues.gold_price : '',
             platinum: initialValues ? initialValues.platinum_price : '',
             diamond: initialValues ? initialValues.diamond_price : '',
-            kit_price: initialValues ? initialValues.kit_price : '',
             price_notes: initialValues ? initialValues.price_notes : '',
             additional_shipping_cost: initialValues ? initialValues.additional_shipping_cost : '',
             last_price: initialValues ? initialValues.last_price : '',
-            suppliers: initialValues ? initialValues.suppliers : '',
-            kits: initialValues ? initialValues.kits : '',
+            suppliers: initialValues ? initialValues.suppliers : [{ supplierName: '', buyPrice: 0 }],
+            kits: initialValues ? initialValues.kits : [{ productName: '' }],
         },
         tab_advanced: {
-            attributes: initialValues ? initialValues.attributes : '',
-            options: initialValues ? initialValues.options : '',
-            relateds: initialValues ? initialValues.relateds : '',
+            attributes: initialValues ? initialValues.attributes : [{ name: '', price: 0, categories: [] }],
+            options: initialValues ? initialValues.options : [{ name: '', type: '', required: false, values: [] }],
+            relateds: initialValues ? initialValues.relateds : [],
         }
     })
     const tabs: Tab[] = [
@@ -125,19 +127,17 @@ const ProductForm: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                 additional_shipping_cost: Number(formData.tab_price.additional_shipping_cost),
                 tags: formData.tab_basic_information.tags,
                 images: formData.tab_basic_information.images,
-                suppliers: formData.tab_price.suppliers,
-                kits: formData.tab_price.kits,
-                attributes: formData.tab_advanced.attributes,
-                options: formData.tab_advanced.options,
-                relateds: formData.tab_advanced.relateds,
-                // images: [
-                //     {
-                //         "name": "image a",
-                //         "url": "https://cdn.alarmexpert.com.au/local/images/undefined/1738868084095.png",
-                //         "default": true,
-                //         "alt_image": "image a"
-                //     }
-                // ]
+                suppliers: formData.tab_price.suppliers.map((supp: any) => ({
+                    supplier_id: supp.supplierName,
+                    price: supp.price
+                })) || [],
+                kits: formData.tab_price.kits.map((kit: any) => kit.productName) || [],
+                attributes: formData.tab_advanced.attributes.map((attr: any) => ({
+                    attribute_id: attr.name,
+                    price: attr.price
+                })) || [],
+                options: formData.tab_advanced.options.map((opt: any) => opt.name) || [],
+                relateds: formData.tab_advanced.relateds.map((rel: any) => rel.id) || [],
             }
             console.log(submitData)
 
@@ -150,10 +150,8 @@ const ProductForm: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
 
             if (response.success == true) {
-                notifySuccess(response.message)
-                setTimeout(() => {
-                    router.push(routes.eCommerce.products)
-                }, 2000);
+                setNotification(response.message);
+                router.push(routes.eCommerce.products)
             }
 
         } catch (error) {
@@ -180,9 +178,7 @@ const ProductForm: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
             />
 
             <Content className="mb-0">
-                <div style={{ padding: 24, minHeight: 360, background: '#fff' }}>
-
-                    {/* Tab Content */}
+                <div className='min-h-[360px] p-6'>
                     <div className='bg-background'>
                         {activeTab === 'basic' && (
                             <div className="space-y-8">
@@ -193,7 +189,6 @@ const ProductForm: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 />
                             </div>
                         )}
-
 
                         {activeTab === 'price' && (
                             <div>
@@ -207,7 +202,11 @@ const ProductForm: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
                         {activeTab === 'advanced' && (
                             <div>
-                                <AdvancedInformation />
+                                <AdvancedInformation
+                                    onChange={(data) => handleChange('tab_advanced', data)}
+                                    dataById={initialValues}
+                                    formDataCreate={formData}
+                                />
                             </div>
                         )}
                     </div>

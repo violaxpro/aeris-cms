@@ -128,6 +128,7 @@ const FormBrands: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     onChange={handleChange}
                                     error={!!formErrors.name}
                                     errorMessage={formErrors.name}
+                                    placeholder='e.g. Sony'
                                 />
                                 <Input
                                     id='discountPercent'
@@ -135,6 +136,7 @@ const FormBrands: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     type='number'
                                     value={formData.discountPercent}
                                     onChange={handleChange}
+                                    placeholder='Enter Number'
                                 />
                                 <Checkbox
                                     label='Status'
@@ -159,6 +161,7 @@ const FormBrands: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                             min.55 / max.65, Character {titleLength}
                                         </span>
                                     }
+                                    placeholder='Enter SEO-friendly title'
                                 />
                                 <Textarea
                                     id='metaDescription'
@@ -170,6 +173,7 @@ const FormBrands: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                             min.145 / max.165, Character {descLength}
                                         </span>
                                     }
+                                    placeholder='Enter SEO-friendly description'
                                 />
                             </FormGroup>
                             <FormGroup
@@ -184,6 +188,7 @@ const FormBrands: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     value={formData.urlLogo}
                                     onChange={handleChange}
                                     errorMessage={formErrors.urlLogo}
+                                    placeholder='https://example.com/logo.png'
                                 />
                                 <Input
                                     id='urlBanner'
@@ -191,6 +196,7 @@ const FormBrands: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     type='text'
                                     value={formData.urlBanner}
                                     onChange={handleChange}
+                                    placeholder='https://example.com/banner.png'
                                 />
                             </FormGroup>
 

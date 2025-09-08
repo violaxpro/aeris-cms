@@ -10,6 +10,7 @@ export type FlatNode = categoriesType & {
 };
 
 export type TreeNode = {
+    id?: number | string | undefined
     key: number | string;
     title: ReactNode;
     text?: string;
@@ -78,4 +79,5 @@ export type formCategoryProps = {
     parentId: string | number | null
     data?: any
     mode: string
+    onSaved?: any
 }

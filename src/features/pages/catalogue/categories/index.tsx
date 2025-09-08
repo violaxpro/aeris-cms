@@ -121,7 +121,7 @@ const CategoriesPage = ({ categories }: { categories?: any }) => {
     const handleCreateSubcategory = (node: TreeNode) => {
         console.log('Create subcategory for:', node);
         setSelectedParent(null)
-        setParentId(node.key);
+        setParentId(node.key || node.id);
         setFormMode("add");
         setAddForm(true);
     };
@@ -149,34 +149,12 @@ const CategoriesPage = ({ categories }: { categories?: any }) => {
     const mapTreeData = (data: any[]): TreeNode[] => {
         return data.map((item) => {
             const key = item.key || item.id;
-            const childrenData = item?.categoriesData?.children ? mapTreeData(item?.categoriesData?.children) : []
-            // Recursive dummy map children
-            // const childrenData: TreeNode[] = [];
-            // childrenData.push({
-            //     key: `dummy-child-${item.id || item.key}`,
-            //     title: <span>Anak Kategory</span>,
-            //     isLeaf: false,
-            //     selectable: true,
-            //     children: [
-            //         {
-            //             key: `add-subchild-${item.id || item.key}`,
-            //             title: (
-            //                 <span
-            //                     className="text-blue-500 hover:underline"
-            //                     onClick={(e) => {
-            //                         e.stopPropagation();
-            //                         handleCreateSubcategory(item);
-            //                     }}
-            //                 >
-            //                     + Add Subcategory
-            //                 </span>
-            //             ),
-            //             isLeaf: true,
-            //             selectable: false,
-            //         },
-            //     ],
+            const childrenData = item?.categoriesData?.children
+                ? mapTreeData(item?.categoriesData?.children)
+                : item?.children
+                    ? mapTreeData(item?.children)
+                    : []
 
-            // })
             console.log(childrenData)
 
             if (!searchValue) {
@@ -188,6 +166,7 @@ const CategoriesPage = ({ categories }: { categories?: any }) => {
                                 className="text-blue-500 hover:underline"
                                 onClick={(e) => {
                                     e.stopPropagation();
+                                    console.log(item)
                                     handleCreateSubcategory(item);
                                 }}
                             >
@@ -258,7 +237,7 @@ const CategoriesPage = ({ categories }: { categories?: any }) => {
         return mapTreeData(built);
     }, [categoryData, hoveredKey]);
 
-    console.log(treeData)
+    console.log(treeData, categoryData)
 
     const searchCategory = (
         categories: TreeNode[],
@@ -300,7 +279,6 @@ const CategoriesPage = ({ categories }: { categories?: any }) => {
     )
 
     const onSelect: TreeProps['onSelect'] = (selectedKeysValue, info: any) => {
-        console.log('masuk', info)
         // console.log('onSelect', info);
         // setSelectedKeys(selectedKeysValue);
 
@@ -314,6 +292,8 @@ const CategoriesPage = ({ categories }: { categories?: any }) => {
 
         console.log(isValidNode)
         if (isValidNode) {
+            console.log('masuk', isValidNode)
+
             setSelectedKeys([selectedNode.key]); // Hanya satu key aktif
             handleEditCategory(dataCategory);
             setSelectedParent(dataCategory);
@@ -343,7 +323,10 @@ const CategoriesPage = ({ categories }: { categories?: any }) => {
     };
 
     const handleAdd = () => {
-        setAddForm(!addForm)
+        setFormMode("add");
+        setSelectedParent(null);
+        setParentId(null);
+        setAddForm(true);
     }
 
     useEffect(() => {
@@ -431,6 +414,13 @@ const CategoriesPage = ({ categories }: { categories?: any }) => {
                                     parentId={parentId ?? null}
                                     data={formMode === "edit" ? selectedParent : undefined}
                                     mode={formMode}
+                                    onSaved={async () => {
+                                        const refreshed = await getCategories()
+                                        if (refreshed.data) {
+                                            setCategoryData(refreshed.data)
+                                        }
+                                        setAddForm(false)
+                                    }}
                                 />
                             }
                         </div>

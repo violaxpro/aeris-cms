@@ -7,10 +7,10 @@ import { formCategoryProps } from '@/plugins/types/treeTypes';
 import { addCategory, updateCategory } from '@/services/category-service';
 import { useNotificationAntd } from '@/components/toast';
 
-const FormCategory = ({ parentId, data, mode }: formCategoryProps) => {
+const FormCategory = ({ parentId, data, mode, onSaved }: formCategoryProps) => {
     const [activeTab, setActiveTab] = useState<'General' | 'SEO'>('General');
     const { contextHolder, notifyError, notifySuccess } = useNotificationAntd()
-    const idEdit = data && data.categoriesData ? data.categoriesData.id : ''
+    const idEdit = data ? data?.id : ''
     const [formData, setFormData] = useState({
         general: {
             // name: data && data?.categoriesData ? data.categoriesData.name : '',
@@ -38,7 +38,7 @@ const FormCategory = ({ parentId, data, mode }: formCategoryProps) => {
         }
     })
 
-    console.log(parentId, data)
+    console.log(parentId, data, idEdit)
 
     const handleChange = (section: string, updatedData: any) => {
         setFormData((prev: any) => ({
@@ -86,15 +86,57 @@ const FormCategory = ({ parentId, data, mode }: formCategoryProps) => {
             console.log(response)
             if (response.success == true) {
                 notifySuccess(response.message)
-                setTimeout(() => {
-                    window.location.reload()
-                }, 2000);
+                if (onSaved) {
+                    setTimeout(() => {
+                        onSaved()
+                    }, 2000);
+                }
             }
 
         } catch (error) {
             console.error(error)
         }
     }
+
+    useEffect(() => {
+        if (data) {
+            setFormData({
+                general: {
+                    name: data.name,
+                    slug: data.url_slug,
+                    isSearch: data.show_in_search,
+                    isShow: data.show_in_page,
+                    isStatus: data.status
+                },
+                seo: {
+                    url_logo: data.url_logo,
+                    url_banner: data.url_banner,
+                    metaTitle: data.meta_title,
+                    metaDescription: data.meta_description,
+                    pageDesc: data.page_description,
+                }
+            })
+
+        } else {
+            setFormData({
+                general: {
+                    name: '',
+                    slug: '',
+                    isSearch: '',
+                    isShow: '',
+                    isStatus: ''
+                },
+                seo: {
+                    url_logo: '',
+                    url_banner: '',
+                    metaTitle: '',
+                    metaDescription: '',
+                    pageDesc: '',
+                }
+            })
+        }
+
+    }, [data, mode])
 
     return (
         <>
@@ -118,7 +160,7 @@ const FormCategory = ({ parentId, data, mode }: formCategoryProps) => {
                     ))}
                 </div>
                 <Content className="mt-4 mx-4 mb-0">
-                    <div style={{ minHeight: 360, background: '#fff' }}>
+                    <div className='min-h-[360px] p-6'>
 
                         {/* Tab Content */}
                         <div>

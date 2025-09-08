@@ -105,23 +105,23 @@ const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 id='name'
                                 label='Name'
                                 type='text'
-                                placeholder='Input Name'
+                                placeholder='Distributor Price'
                                 onChange={handleChange}
                                 value={formData.name}
                             />
                             <SelectInput
                                 id='brand_id'
                                 label="Brands"
-                                placeholder="Select Brands"
-                                value={formData.brand_id}
+                                placeholder="DIGIFORT"
+                                value={formData.brand_id || undefined}
                                 onChange={(e) => handleChangeSelect('brand_id', e)}
                                 options={optionBrands}
                             />
                             <SelectInput
                                 id="category_id"
                                 label="Categories"
-                                placeholder="Select Categories"
-                                value={formData.category_id}
+                                placeholder="CCTV"
+                                value={formData.category_id || undefined}
                                 onChange={(val) => {
                                     handleChangeSelect("category_id", val);
                                     const selectedCategory: any = optionsCategories.find((cat: any) => cat.value === val);
@@ -138,18 +138,18 @@ const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             <SelectInput
                                 id="sub_category_id"
                                 label="Sub Categories"
-                                placeholder="Select Sub Categories"
-                                value={formData.sub_category_id}
+                                placeholder="Accessories"
+                                value={formData.sub_category_id || undefined}
                                 onChange={(val) => handleChangeSelect("sub_category_id", val)}
                                 options={optionSubCategories}
                             />
 
-                            <div className='col-span-full grid grid-cols-2 gap-4'>
+                            <div className='col-span-full grid md:grid-cols-6 gap-4'>
                                 <Input
                                     id='rrp'
                                     label='RRP(%)'
                                     type='text'
-                                    placeholder='Input RRP'
+                                    placeholder='Enter Percentage Number'
                                     onChange={handleChange}
                                     value={formData.rrp}
                                 />
@@ -157,44 +157,43 @@ const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     id='trade'
                                     label='Trade(%)'
                                     type='text'
-                                    placeholder='Input Trade'
+                                    placeholder='Enter Percentage Number'
                                     onChange={handleChange}
                                     value={formData.trade}
                                 />
+                                <Input
+                                    id='silver'
+                                    label='Silver(%)'
+                                    type='text'
+                                    placeholder='Enter Percentage Number'
+                                    onChange={handleChange}
+                                    value={formData.silver}
+                                />
+                                <Input
+                                    id='gold'
+                                    label='Gold(%)'
+                                    type='text'
+                                    placeholder='Enter Percentage Number'
+                                    onChange={handleChange}
+                                    value={formData.gold}
+                                />
+                                <Input
+                                    id='platinum'
+                                    label='Platinum(%)'
+                                    type='text'
+                                    placeholder='Enter Percentage Number'
+                                    onChange={handleChange}
+                                    value={formData.platinum}
+                                />
+                                <Input
+                                    id='diamond'
+                                    label='Diamond(%)'
+                                    type='text'
+                                    placeholder='Enter Percentage Number'
+                                    onChange={handleChange}
+                                    value={formData.diamond}
+                                />
                             </div>
-
-                            <Input
-                                id='silver'
-                                label='Silver(%)'
-                                type='text'
-                                placeholder='Input Silver'
-                                onChange={handleChange}
-                                value={formData.silver}
-                            />
-                            <Input
-                                id='gold'
-                                label='Gold(%)'
-                                type='text'
-                                placeholder='Input Gold'
-                                onChange={handleChange}
-                                value={formData.gold}
-                            />
-                            <Input
-                                id='platinum'
-                                label='Platinum(%)'
-                                type='text'
-                                placeholder='Input Platinum'
-                                onChange={handleChange}
-                                value={formData.platinum}
-                            />
-                            <Input
-                                id='diamond'
-                                label='Diamond(%)'
-                                type='text'
-                                placeholder='Input Diamond'
-                                onChange={handleChange}
-                                value={formData.diamond}
-                            />
                         </FormGroup>
                     </div>
 

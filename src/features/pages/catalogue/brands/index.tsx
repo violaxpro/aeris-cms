@@ -1,8 +1,8 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import Table from "@/components/table"
-import type { TableColumnsType } from 'antd'
-import { Dropdown, Menu } from 'antd'
+import type { TableColumnsType, MenuProps } from 'antd'
+import { Dropdown } from 'antd'
 import { BrandType } from '@/data/brands-data'
 import Image from 'next/image'
 import { routes } from '@/config/routes'
@@ -110,22 +110,23 @@ const index = ({ brandsData }: { brandsData?: any }) => {
             key: 'action',
             width: 120,
             render: (_: string, row: any) => {
-                const menu = (
-                    <Menu>
-                        <Menu.Item key="edit">
-                            <Link href={routes.eCommerce.editBrands(row.id)}>
-                                Edit
-                            </Link>
-                        </Menu.Item>
-                        <Menu.Item key="delete" onClick={() => handleOpenModalDelete(row.id)}>
+                const items: MenuProps['items'] = [
+                    {
+                        key: 'edit',
+                        label: <Link href={routes.eCommerce.editBrands(row.id)}>
+                            Edit
+                        </Link>
+                    },
+                    {
+                        key: 'delete',
+                        label: <div className='cursor-pointer' onClick={() => handleOpenModalDelete(row.id)}>
                             Delete
-                        </Menu.Item>
-                    </Menu>
-                );
-
+                        </div>
+                    }
+                ]
                 return (
                     <div className="flex  gap-3 pe-4" onClick={(e) => e.stopPropagation()}>
-                        <Dropdown overlay={menu} trigger={['click']} >
+                        <Dropdown menu={{ items }} trigger={['click']} >
                             <ButtonIcon
                                 color='primary'
                                 variant='filled'

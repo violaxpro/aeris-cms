@@ -18,6 +18,7 @@ import { addOptions, updateOptions } from '@/services/options-service'
 import { useAtom, useSetAtom } from 'jotai';
 import { notificationAtom } from '@/store/NotificationAtom';
 import { productSetAtom } from '@/store/DropdownItemStore'
+import { optionsType, optionsPriceType } from '@/plugins/utils/options'
 
 type ItemInputType = {
     price: number
@@ -119,40 +120,6 @@ const FormOptions = ({ mode = 'create', initialValues, slug }: FormProps) => {
         handleValuesChange(updated)
     }
 
-    const optionsType = [
-        {
-            label: 'Text',
-            options: [
-                { label: 'Field', value: 'FIELD' },
-                { label: 'Textarea', value: 'TEXTAREA' },
-            ],
-        },
-        {
-            label: 'Select',
-            options: [
-                { label: 'Dropdown', value: 'DROPDOWN' },
-                { label: 'Checkbox', value: 'CHECKBOX' },
-                { label: 'Custom Checkbox', value: 'CUSTOM-CHECKBOX' },
-                { label: 'Radio Button', value: 'RADIO-BUTTON' },
-                { label: 'Custom Radio Button', value: 'CUSTOM-RADIO-BUTTON' },
-                { label: 'Multiple Select', value: 'MULTIPLE-SELECT' },
-            ],
-        },
-        {
-            label: 'Date',
-            options: [
-                { label: 'Date', value: 'DATE' },
-                { label: 'Date & Time', value: 'DATE-TIME' },
-                { label: 'Time', value: 'TIME' },
-            ],
-        },
-    ]
-
-    const optionsPriceType = [
-        { value: 'fixed', label: 'Fixed' },
-        { value: 'percent', label: 'Percent' },
-    ]
-
     // submit
     const handleSubmit = async () => {
         try {
@@ -239,8 +206,8 @@ const FormOptions = ({ mode = 'create', initialValues, slug }: FormProps) => {
                             <SelectInput
                                 id="type"
                                 label="Type"
-                                placeholder="Field"
-                                value={formData.type}
+                                placeholder="Choose a type (Field, Textarea, Dropdown)"
+                                value={formData.type || undefined}
                                 onChange={(val) => handleChangeSelect("type", val)}
                                 options={optionsType}
                                 error={formErrors.type}

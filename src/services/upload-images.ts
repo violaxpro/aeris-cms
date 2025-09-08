@@ -1,6 +1,6 @@
 import baseService from "./base-service";
 
-const url = '/admin/product/cdn/upload'
+const url = '/admin/catalogue/cdn/upload'
 
 export async function uploadImages(params: any) {
     try {

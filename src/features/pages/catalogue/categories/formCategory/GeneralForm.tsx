@@ -5,14 +5,13 @@ import { ChildFormProps } from '@/plugins/types/form-type'
 import { formCategoryProps } from '@/plugins/types/treeTypes'
 import { slugify } from '@/plugins/validators/common-rules'
 
-export type generalCategoriesForm = {
+export type CategoriesForm = {
     data?: any
     parentId?: string | number | null
     onChange: (params: any) => void
     formDataCreate?: any
 }
-const GeneralForm = ({ data, parentId, onChange, formDataCreate }: generalCategoriesForm) => {
-    console.log(data)
+const GeneralForm = ({ data, parentId, onChange, formDataCreate }: CategoriesForm) => {
     // const [formData, setFormData] = useState({
     //     name: '',
     //     slug: '',
@@ -63,6 +62,7 @@ const GeneralForm = ({ data, parentId, onChange, formDataCreate }: generalCatego
                 type='text'
                 value={formDataCreate.general.name}
                 onChange={handleChange}
+                placeholder='Access Control'
             />
             <Input
                 id='slug'
@@ -70,6 +70,7 @@ const GeneralForm = ({ data, parentId, onChange, formDataCreate }: generalCatego
                 type='text'
                 value={formDataCreate.general.slug}
                 onChange={handleChange}
+                placeholder='access-control'
             />
             <Checkbox
                 label='Searchable'
@@ -81,7 +82,6 @@ const GeneralForm = ({ data, parentId, onChange, formDataCreate }: generalCatego
                 label='Show on Category Page'
                 text='Show on Category Page'
                 onChange={handleChangeCheckbox('isShow')}
-
                 checked={formDataCreate.general.isShow}
             />
             <Checkbox

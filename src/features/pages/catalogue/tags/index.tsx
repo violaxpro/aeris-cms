@@ -1,14 +1,14 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import Table from "@/components/table"
-import type { TableColumnsType } from 'antd'
-import { Dropdown, Menu } from 'antd'
+import type { TableColumnsType, MenuProps } from 'antd'
+import { Dropdown } from 'antd'
 import Image from 'next/image'
 import { tagsType } from '@/plugins/types/tags-type'
 import Breadcrumb from "@/components/breadcrumb"
 import { Content } from 'antd/es/layout/layout'
 import Button from "@/components/button"
-import { getTags, deleteTags, getTagsById } from '@/services/tags-service'
+import { getTags, deleteTags } from '@/services/tags-service'
 import { AddIcon, TrashIconRed, MoreIcon } from '@public/icon'
 import ButtonDelete from '@/components/button/ButtonAction'
 import Pagination from '@/components/pagination'
@@ -88,19 +88,23 @@ const index = ({ tagDatas }: { tagDatas: any }) => {
             key: 'action',
             width: 120,
             render: (_: string, row: tagsType) => {
-                const menu = (
-                    <Menu>
-                        <Menu.Item key="edit" onClick={() => handleOpenModal('edit', row)}>
+                const items: MenuProps['items'] = [
+                    {
+                        key: 'edit',
+                        label: <div className='cursor-pointer' onClick={() => handleOpenModal('edit', row)}>
                             Edit
-                        </Menu.Item>
-                        <Menu.Item key="delete" onClick={() => handleOpenModalDelete(row.id)}>
+                        </div>
+                    },
+                    {
+                        key: 'delete',
+                        label: <div className='cursor-pointer' onClick={() => handleOpenModalDelete(row.id)}>
                             Delete
-                        </Menu.Item>
-                    </Menu>
-                );
+                        </div>
+                    }
+                ]
                 return (
                     <div className="flex gap-3 pe-4" onClick={(e) => e.stopPropagation()}>
-                        <Dropdown overlay={menu} trigger={['click']} >
+                        <Dropdown menu={{ items }} trigger={['click']} >
                             <ButtonIcon
                                 color='primary'
                                 variant='filled'
