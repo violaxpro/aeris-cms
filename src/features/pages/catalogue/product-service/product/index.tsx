@@ -109,7 +109,8 @@ const index = ({ products }: { products?: any }) => {
                 return a?.status - b?.status
             },
             render: (value: any) => {
-                return <StatusBadge status={value} />;
+                const status = value == true ? 'Enabled' : 'Disabled'
+                return <StatusBadge status={status} />;
             }
         },
         {

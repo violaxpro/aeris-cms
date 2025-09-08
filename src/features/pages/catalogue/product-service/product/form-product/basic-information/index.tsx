@@ -28,16 +28,18 @@ const BasicInformationProduct = ({ dataById, onChange, formDataCreate }: ChildFo
     const [isLoading, setIsLoading] = useState(false)
     const handleChange = (e: any) => {
         const { id, value } = e.target;
-        const updated = { ...formDataCreate.tab_basic_information, [id]: value };
+        let updated = {
+            ...formDataCreate.tab_basic_information,
+            [id]: value,
+        };
+
         if (id === 'productName') {
-            formDataCreate.tab_basic_information.slug = slugify(value)
+            console.log('masuk', slugify(value))
+            updated = { ...updated, slug: slugify(value) };
+
+            // formDataCreate.tab_basic_information.slug = slugify(value)
         }
         onChange(updated);
-        // setFormData(prev => {
-        //     const updated = { ...prev, [id]: value }
-        //     onChange(updated)
-        //     return updated
-        // });
     };
 
     const handleChangeSelect = (id: string, value: string | string[]) => {
@@ -127,7 +129,7 @@ const BasicInformationProduct = ({ dataById, onChange, formDataCreate }: ChildFo
     const descLength = metaDescription.length;
     const isDescInvalid = descLength !== 0 && (descLength < 155 || descLength > 165)
     return (
-        <div className='flex flex-col'>
+        <div className='flex flex-col gap-10'>
             <FormGroup
                 title="General"
                 description="General information about the product."
@@ -255,11 +257,11 @@ const BasicInformationProduct = ({ dataById, onChange, formDataCreate }: ChildFo
                             onChange={(val) => handleCheckbox('status', val)}
                         />
                     </div>
-                    <div className='col-span-full flex justify-end'>
+                    {/* <div className='col-span-full flex justify-end'>
                         <Button
                             label='Save'
                         />
-                    </div>
+                    </div> */}
                 </div>
             </FormGroup>
 
@@ -298,7 +300,6 @@ const BasicInformationProduct = ({ dataById, onChange, formDataCreate }: ChildFo
                 title="Product Status"
                 description="Product status info here"
                 childClassName='grid md:grid-cols-12 gap-4'
-                className='md:my-12'
             >
                 <div className='flex col-span-4 w-full gap-2 items-center justify-start'>
                     <CheckboxInput

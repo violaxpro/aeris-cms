@@ -8,7 +8,7 @@ import Button from "@/components/button"
 import { getPriceLevel } from '@/services/price-level-service'
 import { mathFloor } from '@/plugins/validators/common-rules'
 import { useNotificationAntd } from '@/components/toast'
-import { Divider } from 'antd'
+import Divider from '@/components/divider'
 import Image from 'next/image'
 import { PlusOutlineIcon, TrashIcon, TrashIconRed } from '@public/icon'
 import ButtonIcon from '@/components/button/ButtonIcon'
@@ -111,13 +111,13 @@ const ProductPrice = ({
     };
 
     return (
-        <div>
+        <div className='flex flex-col'>
             {contextHolder}
-            <div>
+            <div className='flex flex-col gap-4'>
                 <div className='flex justify-between items-center'>
                     <div>
                         <h4 className="text-2xl font-semibold">Price</h4>
-                        <p className="mt-2">Price information</p>
+                        <p>Price information</p>
                     </div>
                     <div className='flex gap-4'>
                         {
@@ -153,7 +153,7 @@ const ProductPrice = ({
                     />
                     <Input
                         id='rrp'
-                        label='RRP'
+                        label='RRP Price'
                         type='text'
                         placeholder='Enter Number'
                         onChange={handleChange}
@@ -161,7 +161,7 @@ const ProductPrice = ({
                     />
                     <Input
                         id='trade'
-                        label='Trade'
+                        label='Trade Price'
                         type='text'
                         placeholder='Enter Number'
                         onChange={handleChange}
@@ -169,7 +169,7 @@ const ProductPrice = ({
                     />
                     <Input
                         id='silver'
-                        label='Silver'
+                        label='Silver Price'
                         type='text'
                         placeholder='Enter Number'
                         onChange={handleChange}
@@ -177,7 +177,7 @@ const ProductPrice = ({
                     />
                     <Input
                         id='gold'
-                        label='Gold'
+                        label='Gold Price'
                         type='text'
                         placeholder='Enter Number'
                         onChange={handleChange}
@@ -185,7 +185,7 @@ const ProductPrice = ({
                     />
                     <Input
                         id='platinum'
-                        label='Platinum'
+                        label='Platinum Price'
                         type='text'
                         placeholder='Enter Number'
                         onChange={handleChange}
@@ -193,7 +193,7 @@ const ProductPrice = ({
                     />
                     <Input
                         id='diamond'
-                        label='Diamond'
+                        label='Diamond Price'
                         type='text'
                         placeholder='Enter Number'
                         onChange={handleChange}
@@ -201,15 +201,15 @@ const ProductPrice = ({
                     />
                 </div>
 
-                <div className='flex justify-end gap-3 md:mt-3'>
+                {/* <div className='flex justify-end gap-3 md:mt-3'>
                     <Button
                         label='Save'
                     />
-                </div>
+                </div> */}
             </div>
 
-            <FormGroup title="Supplier" description="Supplier information">
-                <div className="space-y-4 col-span-full">
+            <FormGroup title="Supplier" description="Supplier information" className='mt-10'>
+                <div className="col-span-full">
                     {formDataCreate.tab_price.suppliers.map((item: any, index: number) => (
                         <div key={index} className="flex items-center gap-2 mb-3 w-full">
                             <div className="w-full">
@@ -269,7 +269,7 @@ const ProductPrice = ({
             </FormGroup>
 
             <FormGroup title="Kit Price" description="Kit Price information">
-                <div className="space-y-4 col-span-full">
+                <div className="col-span-full">
                     {formDataCreate.tab_price.kits.map((item: any, index: any) => (
                         <div key={index} className="flex items-center gap-2 mb-3 w-full">
                             <div className="w-full">

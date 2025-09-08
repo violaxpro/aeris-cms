@@ -107,9 +107,9 @@ const ProductForm: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                 description: formData.tab_basic_information.description,
                 meta_title: formData.tab_basic_information.metaTitle,
                 meta_description: formData.tab_basic_information.metaDescription,
-                tax_class_id: formData.tab_basic_information.taxClass,
+                tax_class_id: formData.tab_basic_information.taxClass || null,
                 manual_url: formData.tab_basic_information.manualUrl,
-                warranty_month: formData.tab_basic_information.warranty,
+                warranty_month: Number(formData.tab_basic_information.warranty),
                 status: formData.tab_basic_information.status,
                 sku: formData.tab_basic_information.sku,
                 sku2: formData.tab_basic_information.sku2,
@@ -127,17 +127,29 @@ const ProductForm: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                 additional_shipping_cost: Number(formData.tab_price.additional_shipping_cost),
                 tags: formData.tab_basic_information.tags,
                 images: formData.tab_basic_information.images,
-                suppliers: formData.tab_price.suppliers.map((supp: any) => ({
-                    supplier_id: supp.supplierName,
-                    price: supp.price
-                })) || [],
-                kits: formData.tab_price.kits.map((kit: any) => kit.productName) || [],
-                attributes: formData.tab_advanced.attributes.map((attr: any) => ({
-                    attribute_id: attr.name,
-                    price: attr.price
-                })) || [],
-                options: formData.tab_advanced.options.map((opt: any) => opt.name) || [],
-                relateds: formData.tab_advanced.relateds.map((rel: any) => rel.id) || [],
+                suppliers: formData.tab_price.suppliers
+                    .filter((supp: any) => supp?.supplierName && supp?.price)
+                    .map((supp: any) => ({
+                        supplier_id: supp.supplierName,
+                        price: supp.price
+                    })),
+                kits: formData.tab_price.kits
+                    .filter((kit: any) => kit?.productName)
+                    .map((kit: any) => kit.productName),
+                attributes: formData.tab_advanced.attributes
+                    .filter((attr: any) => attr?.name)
+                    .map((attr: any) => ({
+                        attribute_id: attr.name,
+                        price: attr.price
+                    })),
+
+                options: formData.tab_advanced.options
+                    .filter((opt: any) => opt?.name)
+                    .map((opt: any) => opt.name),
+
+                relateds: formData.tab_advanced.relateds
+                    .filter((rel: any) => rel?.id)
+                    .map((rel: any) => rel.id),
             }
             console.log(submitData)
 
