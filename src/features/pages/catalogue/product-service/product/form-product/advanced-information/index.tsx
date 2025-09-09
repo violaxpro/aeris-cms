@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import FormGroup from '@/components/form-group';
 import Button from '@/components/button'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
@@ -15,14 +15,15 @@ import { ChildFormProps } from '@/plugins/types/form-type'
 import { optionsType } from '@/plugins/utils/options';
 import TableProduct from "@/components/table"
 import type { TableColumnsType } from 'antd'
-import { productsData, ProductType, ProductDataType } from '@/data/products-data'
+import { ProductDataType } from '@/data/products-data'
 import { Rate } from 'antd';
-import { routes } from '@/config/routes'
-import Link from 'next/link'
 import SearchTable from '@/components/search/SearchTable'
 import { productAtom } from '@/store/ProductAtom'
 import { getProduct } from '@/services/products-service'
 import Modal from '@/components/modal'
+import dayjs from 'dayjs';
+import Pagination from '@/components/pagination';
+import StatusBadge from '@/components/badge/badge-status';
 
 const AdvancedInformation = ({
     onChange,
@@ -32,9 +33,12 @@ const AdvancedInformation = ({
     const [optionAttribute] = useAtom(attributeAtom)
     const [optionSet] = useAtom(optionSetAtom)
     const [data, setData] = useAtom(productAtom)
-    const [filteredData, setFilteredData] = useState<ProductDataType[]>([]);
     const [search, setSearch] = useState('')
     const [openModalProduct, setIsOpenModalProduct] = useState(false)
+    const [currentPage, setCurrentPage] = useState(1)
+    const [pageSize, setPageSize] = useState(10)
+    const [total, setTotal] = useState(0)
+    const [dataChoose, setDataChoose] = useState([])
 
     const columnProducts: TableColumnsType<ProductDataType> = [
         {
@@ -60,45 +64,85 @@ const AdvancedInformation = ({
             dataIndex: 'name',
         },
         {
-            title: 'Category',
-            dataIndex: 'category',
-        },
-        {
-            title: 'Qty',
-            dataIndex: 'stock',
-        },
-        {
             title: 'Price',
             dataIndex: 'price',
         },
         {
             title: 'Status',
             dataIndex: 'status',
+            sorter: (a: any, b: any) => {
+                return a?.status - b?.status
+            },
+            render: (value: any) => {
+                const status = value == true ? 'Enabled' : 'Disabled'
+                return <StatusBadge status={status} />;
+            }
         },
-        {
-            // Need to avoid this issue -> <td> elements in a large <table> do not have table headers.
-            title: 'Action',
-            dataIndex: 'action',
-            key: 'action',
-            width: 120,
-            render: (_: string, row: any) => (
+    ]
+
+    const actionColumnModal = {
+        title: 'Action',
+        dataIndex: 'action',
+        key: 'action',
+        width: 120,
+        render: (_: string, row: any) => {
+            const handleChoose = () => {
+                const updated = {
+                    ...formDataCreate.tab_advanced,
+                    relateds: [...(formDataCreate.tab_advanced.relateds || []), row.id],
+                }
+                setDataChoose((prev: any) => {
+                    if (prev.some((p: any) => p.id === row.id)) return prev; // no duplicate
+                    return [...prev, row];
+                });
+
+                onChange(updated)
+            }
+            return (
                 <div className="flex items-center justify-end gap-3 pe-4">
                     <Button
                         label='Choose'
                         shape='round'
                         hasHeight={false}
+                        onClick={handleChoose}
                     />
                 </div >
-            ),
+            )
         },
+    }
 
-    ]
+    const actionColumnForm = {
+        title: 'Action',
+        dataIndex: 'action',
+        key: 'action',
+        width: 120,
+        render: (_: string, row: any) => {
+            const handleRemove = () => {
+                const updated = {
+                    ...formDataCreate.tab_advanced,
+                    relateds: (formDataCreate.tab_advanced.relateds || []).filter(
+                        (id: any) => id !== row.id
+                    ),
+                };
 
-    const handleChange = (e: any) => {
-        const { id, value } = e.target;
-        const updated = { ...formDataCreate.tab_advanced, [id]: value }
-        onChange(updated)
-    };
+                // update state dataChoose juga biar table refresh
+                setDataChoose((prev: any) => prev.filter((p: any) => p.id !== row.id));
+
+                onChange(updated);
+            };
+            return (
+                <div className="flex gap-3 pe-4">
+                    <ButtonIcon
+                        color='danger'
+                        variant='filled'
+                        size="small"
+                        icon={TrashIconRed}
+                        onClick={handleRemove}
+                    />
+                </div >
+            )
+        },
+    }
 
     const handleChangeUpdateRow = (
         list_type: string,
@@ -179,68 +223,110 @@ const AdvancedInformation = ({
 
         onChange(updated);
     };
+
+    const fetchPage = async (page: number, perPage: number) => {
+        try {
+            const res = await getProduct({ page, perPage })
+            setData(res.data)
+            setTotal(res.count)
+            setCurrentPage(res.page)
+            setPageSize(res.perPage)
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    const filteredData = React.useMemo(() => {
+        if (!search) return data;
+        const keyword = search.toLowerCase();
+        return data.filter((item: any) => {
+            const formattedDate = dayjs(item?.created_at)
+                .format('DD/MM/YYYY')
+                .toLowerCase();
+            return (
+                item?.name.toLowerCase().includes(keyword) ||
+                item?.sku?.toLowerCase().includes(keyword) ||
+                formattedDate.includes(keyword)
+            );
+        });
+    }, [search, data]);
+
+    useEffect(() => {
+        fetchPage(currentPage, pageSize)
+    }, []);
+
+    useEffect(() => {
+        if (formDataCreate?.tab_advanced?.relateds?.length > 0) {
+            const relatedIds = formDataCreate.tab_advanced.relateds.map(
+                (rel: any) => rel.product_related_id
+            );
+            const relatedProducts: any = data.filter((item: any) =>
+                relatedIds.includes(item.id)
+            );
+            setDataChoose(relatedProducts);
+        }
+    }, [formDataCreate.tab_advanced.relateds, data]);
+
     return (
         <div>
             <FormGroup title="Attribute" description="Attribute information about the product.">
                 <div className="space-y-4 col-span-full">
                     {formDataCreate.tab_advanced.attributes.map((item: any, index: number) => (
-                        <>
-                            <div className='flex gap-3 items-center'>
-                                <div key={index} className="grid md:grid-cols-3 items-center gap-2 mb-3 w-full">
-                                    <SelectInput
-                                        id={`attribute-${index}`}
-                                        label="Attribute"
-                                        placeholder="Select Attribute (e.g. Size, Color, Material)"
-                                        onChange={(selectedOption) =>
-                                            handleChangeUpdateRow('attributes', index, 'name', selectedOption)
-                                        }
-                                        value={item.name || undefined}
-                                        options={optionAttribute}
-                                    />
-                                    <Input
-                                        id={`price-${index}`}
-                                        label="Price"
-                                        type='text'
-                                        placeholder="Enter price for this attribute"
-                                        onChange={(e: any) => handleChangeUpdateRow('attributes', index, 'price', e.target.value)}
-                                        value={item.price}
-                                    />
-                                    <SelectInput
-                                        id={`categories-${index}`}
-                                        label="Categories"
-                                        placeholder="Select categories related to this attribute (e.g. Accessories)"
-                                        modeType="multiple"
-                                        onChange={(selectedOptions) =>
-                                            handleChangeUpdateRow('attributes', index, 'categories', Array.isArray(selectedOptions)
-                                                ? selectedOptions.map((opt: any) => opt)
-                                                : [])
-                                        }
-                                        value={item.categories}
-                                    // options={options}
-                                    />
-                                </div>
-
-                                <div className="pt-3">
-                                    {
-                                        formDataCreate.tab_advanced.attributes.length <= 1 ? <ButtonIcon
-                                            icon={TrashIcon}
-                                            width={20}
-                                            height={20}
-                                            className='btn-trash-item !h-10 !w-15'
-                                        /> : <ButtonIcon
-                                            color='danger'
-                                            variant='filled'
-                                            size="small"
-                                            icon={TrashIconRed}
-                                            width={15}
-                                            height={15}
-                                            className='!h-10 !w-15'
-                                            onClick={() => removeItem('attributes', index)}
-                                        />
+                        <div className='flex gap-3 items-center' key={index}>
+                            <div className="grid md:grid-cols-3 items-center gap-2 mb-3 w-full">
+                                <SelectInput
+                                    id={`attribute-${index}`}
+                                    label="Attribute"
+                                    placeholder="Select Attribute (e.g. Size, Color, Material)"
+                                    onChange={(selectedOption) =>
+                                        handleChangeUpdateRow('attributes', index, 'name', selectedOption)
                                     }
-                                </div>
+                                    value={item.name || undefined}
+                                    options={optionAttribute}
+                                />
+                                <Input
+                                    id={`price-${index}`}
+                                    label="Price"
+                                    type='text'
+                                    placeholder="Enter price for this attribute"
+                                    onChange={(e: any) => handleChangeUpdateRow('attributes', index, 'price', e.target.value)}
+                                    value={item.price}
+                                />
+                                <SelectInput
+                                    id={`categories-${index}`}
+                                    label="Categories"
+                                    placeholder="Select categories related to this attribute (e.g. Accessories)"
+                                    modeType="multiple"
+                                    onChange={(selectedOptions) =>
+                                        handleChangeUpdateRow('attributes', index, 'categories', Array.isArray(selectedOptions)
+                                            ? selectedOptions.map((opt: any) => opt)
+                                            : [])
+                                    }
+                                    value={item.categories}
+                                // options={options}
+                                />
                             </div>
-                        </>
+
+                            <div className="pt-3">
+                                {
+                                    formDataCreate.tab_advanced.attributes.length <= 1 ? <ButtonIcon
+                                        icon={TrashIcon}
+                                        width={20}
+                                        height={20}
+                                        className='btn-trash-item !h-10 !w-15'
+                                    /> : <ButtonIcon
+                                        color='danger'
+                                        variant='filled'
+                                        size="small"
+                                        icon={TrashIconRed}
+                                        width={15}
+                                        height={15}
+                                        className='!h-10 !w-15'
+                                        onClick={() => removeItem('attributes', index)}
+                                    />
+                                }
+                            </div>
+                        </div>
                     ))}
                     <Divider />
                     <div className="flex justify-end mt-4">
@@ -380,10 +466,24 @@ const AdvancedInformation = ({
                     handleCancel={() => setIsOpenModalProduct(false)}
                     title='List Products'
                 >
+                    <div className='flex justify-end mb-2'>
+                        <SearchTable
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                        />
+                    </div>
                     <TableProduct
-                        columns={columnProducts}
+                        columns={[...columnProducts, actionColumnModal]}
                         dataSource={filteredData}
-                        withSelectableRows
+                    />
+                    <Pagination
+                        current={currentPage}
+                        total={total}
+                        pageSize={pageSize}
+                        onChange={(page) => {
+                            setCurrentPage(page);
+                            fetchPage(page, pageSize);
+                        }}
                     />
                 </Modal>
                 <FormGroup
@@ -396,15 +496,14 @@ const AdvancedInformation = ({
                                 label='View Products'
                                 onClick={() => setIsOpenModalProduct(true)}
                             />
-                            <SearchTable
+                            {/* <SearchTable
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
-                            />
+                            /> */}
                         </div>
                         <TableProduct
-                            columns={columnProducts}
-                            dataSource={filteredData}
-                            withSelectableRows
+                            columns={[...columnProducts, actionColumnForm]}
+                            dataSource={dataChoose}
                         />
                     </div>
                 </FormGroup>

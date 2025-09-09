@@ -307,7 +307,7 @@ const ProductPrice = ({
                     ))}
                     <Divider />
 
-                    <div className="flex justify-end">
+                    <div className="flex justify-end mt-4">
                         <Button
                             label='Add Kit Price Product'
                             icon={<Image src={PlusOutlineIcon} alt='add-icon' width={15} height={15} />}

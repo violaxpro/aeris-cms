@@ -34,10 +34,7 @@ const BasicInformationProduct = ({ dataById, onChange, formDataCreate }: ChildFo
         };
 
         if (id === 'productName') {
-            console.log('masuk', slugify(value))
             updated = { ...updated, slug: slugify(value) };
-
-            // formDataCreate.tab_basic_information.slug = slugify(value)
         }
         onChange(updated);
     };

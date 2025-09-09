@@ -294,7 +294,7 @@ const index = ({ products }: { products?: any }) => {
                     />
                     <Pagination
                         current={currentPage}
-                        total={filteredData.length}
+                        total={total}
                         pageSize={pageSize}
                         onChange={(page) => {
                             setCurrentPage(page);

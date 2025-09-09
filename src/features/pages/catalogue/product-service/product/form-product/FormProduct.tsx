@@ -24,17 +24,17 @@ const ProductForm: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         tab_basic_information: {
             productName: initialValues ? initialValues.name : '',
             shortDesc: initialValues ? initialValues.shotDesc : '',
-            brand: initialValues ? initialValues.brandId : '',
+            brand: initialValues ? initialValues.brand_id : '',
             slug: initialValues ? initialValues.slug : '',
-            categories: initialValues ? initialValues.categoriesId : '',
-            subCategoriesId: initialValues ? initialValues.subCategoriesId : '',
+            categories: initialValues ? initialValues.category_id : '',
+            subCategoriesId: initialValues ? initialValues.sub_category_id : '',
             description: initialValues ? initialValues.description : '',
             metaTitle: initialValues ? initialValues.meta_title : '',
             metaDescription: initialValues ? initialValues.meta_description : '',
             taxClass: initialValues ? initialValues.tax : '',
-            tags: initialValues ? initialValues.tags : [],
+            tags: initialValues ? initialValues.tags.map((tag: any) => tag.id) : [],
             manualUrl: initialValues ? initialValues.manual_url : '',
-            warranty: initialValues ? initialValues.warranty : '',
+            warranty: initialValues ? initialValues.warranty_month : '',
             status: initialValues ? initialValues.status : false,
             sku: initialValues ? initialValues.sku : '',
             sku2: initialValues ? initialValues.sku2 : '',
@@ -42,15 +42,15 @@ const ProductForm: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
             inventory_management: initialValues ? initialValues.inventory_management : '',
             qty: initialValues ? initialValues.qty : '',
             stock: initialValues ? initialValues.stock : '',
-            isBestSeller: initialValues ? initialValues.is_best_seller : false,
-            isBackOrder: initialValues ? initialValues.is_back_order : false,
+            isBestSeller: initialValues ? initialValues.best_seller : false,
+            isBackOrder: initialValues ? initialValues.back_order : false,
             images: initialValues ? initialValues.images : [],
             base_images: initialValues ? initialValues.images : '',
             additional_images: '',
         },
         tab_price: {
             buying_price: initialValues ? initialValues.price : '',
-            rrp: initialValues ? initialValues.rrp_price : '',
+            rrp: initialValues ? initialValues.recommended_retail_price : '',
             trade: initialValues ? initialValues.trade_price : '',
             silver: initialValues ? initialValues.silver_price : '',
             gold: initialValues ? initialValues.gold_price : '',
@@ -59,13 +59,32 @@ const ProductForm: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
             price_notes: initialValues ? initialValues.price_notes : '',
             additional_shipping_cost: initialValues ? initialValues.additional_shipping_cost : '',
             last_price: initialValues ? initialValues.last_price : '',
-            suppliers: initialValues ? initialValues.suppliers : [{ supplierName: '', buyPrice: 0 }],
-            kits: initialValues ? initialValues.kits : [{ productName: '' }],
+            suppliers: initialValues && initialValues.suppliers.length > 0
+                ? initialValues.suppliers.map((supp: any) => ({
+                    supplierName: supp.id,
+                    buyPrice: supp.price
+                }))
+                : [{ supplierName: '', buyPrice: 0 }],
+            kits: initialValues && initialValues.kits.length > 0
+                ? initialValues.kits.map((kit: any) => ({
+                    productName: kit.id
+                }))
+                : [{ productName: '' }],
+
         },
         tab_advanced: {
-            attributes: initialValues ? initialValues.attributes : [{ name: '', price: 0, categories: [] }],
-            options: initialValues ? initialValues.options : [{ name: '', type: '', required: false, values: [] }],
-            relateds: initialValues ? initialValues.relateds : [],
+            attributes: initialValues && initialValues.attributes.length > 0
+                ? initialValues.attributes.map((attr: any) => ({
+                    name: attr.attribute_id,
+                    price: attr.price
+                })) : [{ name: '', price: 0, categories: [] }],
+            options: initialValues && initialValues.options.length > 0
+                ? initialValues.options.map((opt: any) => ({
+                    name: opt.id
+                }))
+                : [{ name: '', type: '', required: false, values: [] }],
+            relateds: initialValues && initialValues.relateds.length > 0
+                ? initialValues.relateds.map((rel: any) => rel) : [],
         }
     })
     const tabs: Tab[] = [
@@ -74,7 +93,6 @@ const ProductForm: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         { key: 'advanced', label: 'Advanced Information' },
     ];
 
-    console.log('ini data form yaa', formData)
 
     const breadcrumb = [
         { title: 'Catalogue' },
@@ -98,6 +116,7 @@ const ProductForm: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
 
             }
             const submitData = {
+                id: mode == 'edit' ? slug : null,
                 brand_id: Number(formData.tab_basic_information.brand),
                 category_id: Number(formData.tab_basic_information.categories),
                 // subCategoriesId: Number(formData.tab_basic_information.subCategoriesId) || 1,
@@ -148,10 +167,9 @@ const ProductForm: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                     .map((opt: any) => opt.name),
 
                 relateds: formData.tab_advanced.relateds
-                    .filter((rel: any) => rel?.id)
-                    .map((rel: any) => rel.id),
+                    .filter((rel: any) => rel)
+                    .map((rel: any) => rel),
             }
-            console.log(submitData)
 
             let response
             if (mode == 'edit' && slug) {
