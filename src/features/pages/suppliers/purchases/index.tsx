@@ -144,7 +144,6 @@ const index = ({ purchasesData }: { purchasesData?: any }) => {
         {
             title: 'ETA / Promised Date',
             dataIndex: 'created',
-            defaultSortOrder: 'descend',
             sorter: (a: any, b: any) => {
                 return dayjs(a.created).valueOf() - dayjs(b.created).valueOf()
             },
@@ -164,7 +163,6 @@ const index = ({ purchasesData }: { purchasesData?: any }) => {
         {
             title: 'Order Date',
             dataIndex: 'created',
-            defaultSortOrder: 'descend',
             sorter: (a: any, b: any) => {
                 return dayjs(a.created).valueOf() - dayjs(b.created).valueOf()
             },

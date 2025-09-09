@@ -226,6 +226,7 @@ const ProductInput = ({
                                 onChange={handleNewProduct}
                                 className='mb-1'
                                 required
+                                placeholder='Choose a SKU'
                             />
                             <Input
                                 id='name'
@@ -235,6 +236,7 @@ const ProductInput = ({
                                 onChange={handleNewProduct}
                                 className='mb-1'
                                 required
+                                placeholder='Enter new product or service'
                             />
                         </div>
 
@@ -245,6 +247,7 @@ const ProductInput = ({
                             onChange={handleNewProduct}
                             className='mb-1'
                             required
+                            placeholder='Product or service description'
                         />
                         <div className={`grid ${modalType == 'product' ? 'md:grid-cols-4 grid-cols-2' : 'grid-cols-2'} gap-3`}>
                             <Input
@@ -339,7 +342,7 @@ const ProductInput = ({
                 <SelectInput
                     id='code'
                     label='SKU'
-                    value={productForm.code}
+                    value={productForm.code || undefined}
                     onChange={(val) => handleChangeSelect('code', val)}
                     options={[
                         ...items.map((item: any) => ({
@@ -351,7 +354,7 @@ const ProductInput = ({
                     popupRender={(options: any) => (
                         <>
                             {options}
-                            <div className='flex gap-1 pt-1'>
+                            <div className="flex flex-wrap gap-2 pt-2 w-full items-center justify-center">
                                 <Button
                                     label='Add Product'
                                     onClick={() => handleOpenModal('product')}
@@ -364,7 +367,7 @@ const ProductInput = ({
 
                         </>
                     )}
-                    placeholder='Search or select SKU'
+                    placeholder='Choose a product SKU'
                     required
                 />
 
@@ -376,6 +379,7 @@ const ProductInput = ({
                     onChange={handleProductChange}
                     className='mb-1'
                     required
+                    placeholder='Product or service description'
                 />
                 {/* <SelectInput
                     id='name'
@@ -396,6 +400,7 @@ const ProductInput = ({
                         value={productForm.price}
                         onChange={handleProductChange}
                         required
+                        placeholder='Input unit price'
                     />
 
                     {
@@ -433,26 +438,28 @@ const ProductInput = ({
                     onChange={handleProductChange}
                     className='mb-1'
                     required
+                    placeholder='Number of items'
                 />
                 <SelectInput
                     id="tax_id"
                     label="Tax Rate"
-                    placeholder="Select Tax Rate"
-                    value={taxType == 'NO-TAX' ? '' : productForm.tax_id}
+                    placeholder="Select applicable tax"
+                    value={taxType == 'NO-TAX' ? '' : productForm.tax_id || undefined}
                     onChange={(val) => handleChangeSelect("tax_id", val)}
                     options={optionsTax}
                     error={taxError}
                     disabled={taxType == 'NO-TAX'}
-                    required
+                // required
                 />
                 <Input
                     id='tax_amount'
                     type='text'
                     label='Tax Amount'
                     value={taxType == 'NO-TAX' ? 0 : productForm.tax_amount}
+                    placeholder='Calculated tax'
                     onChange={handleProductChange}
                     className='mb-1'
-                    disabled={taxType == 'NO-TAX'}
+                    disabled
                     required
                 />
                 <div className='flex flex-col items-start'>
@@ -464,6 +471,7 @@ const ProductInput = ({
                         onChange={handleProductChange}
                         className='mb-1'
                         required
+                        placeholder='Calculated total amount'
                     />
                     {
                         profitHidden ?

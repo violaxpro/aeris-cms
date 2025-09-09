@@ -301,7 +301,6 @@ const index = ({ orderData }: { orderData?: any }) => {
         {
             title: 'Created By',
             dataIndex: 'created_by',
-            defaultSortOrder: 'descend',
             sorter: (a: any, b: any) => {
                 return dayjs(a.created_by).valueOf() - dayjs(b.created_by).valueOf()
             },

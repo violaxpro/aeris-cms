@@ -32,7 +32,7 @@ const DatePickerInput: React.FC<DatePickerInputProps> = ({
     return (
         <div className="w-full">
             {
-                label && (<label htmlFor={id} className="flex justify-between items-center text-sm font-medium text-gray-700">
+                label && (<label htmlFor={id} className="mb-1 flex justify-between items-center text-sm font-medium text-gray-700">
                     <div>
                         {label}
                         {required && <span className="text-red-500 ml-1">*</span>}

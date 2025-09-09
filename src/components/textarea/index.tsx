@@ -34,7 +34,7 @@ const index = ({
     return (
         <>
             <div className={className}>
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="mb-1 block text-sm font-medium text-gray-700">
                     {label}
                     {required && <span className="text-red-500 ml-1">*</span>}
                 </label>

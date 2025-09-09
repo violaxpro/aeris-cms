@@ -496,7 +496,7 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 <SelectInput
                                     id='user_id'
                                     label='Customer Name'
-                                    placeholder='Select Customer Name'
+                                    placeholder='Choose Customer Here'
                                     onChange={(selected) => {
                                         handleChangeSelect('user_id', selected);
 
@@ -512,7 +512,7 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                             }));
                                         }
                                     }}
-                                    value={formData.user_id}
+                                    value={formData.user_id || undefined}
                                     options={optionsCustomer}
                                     popupRender={(options: any) => (
                                         <>
@@ -563,7 +563,7 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     id='order_reference'
                                     label='Order Reference'
                                     type='text'
-                                    placeholder='Input Order Reference'
+                                    placeholder='Enter reference number of order'
                                     onChange={handleChange}
                                     value={formData.order_reference}
                                     required
@@ -571,21 +571,23 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 <DatePickerInput
                                     id='issues_date'
                                     label='Issues Date'
+                                    placeholder='Pick an issue date'
                                     value={formData.issues_date ? dayjs(formData.issues_date) : null}
                                     onChange={(value: any, dateString: any) => handleDateChange('issues_date', value, dateString)}
                                 />
                                 <DatePickerInput
                                     id='due_date'
                                     label='Due Date'
+                                    placeholder='Pick an due date'
                                     value={formData.due_date ? dayjs(formData.due_date) : null}
                                     onChange={(value: any, dateString: any) => handleDateChange('due_date', value, dateString)}
                                 />
                                 <SelectInput
                                     id='tax_type'
                                     label='Tax'
-                                    placeholder='Select Tax'
+                                    placeholder='Choose how tax is calculated'
                                     onChange={(selected) => handleChangeSelect('tax_type', selected)}
-                                    value={formData.tax_type}
+                                    value={formData.tax_type || undefined}
                                     options={optionsTax}
                                     required
                                 />
@@ -594,9 +596,9 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 <SelectInput
                                     id='billing_address'
                                     label='Billing Address'
-                                    placeholder='Select Billing Address'
+                                    placeholder='Customer billing address'
                                     onChange={(selected) => handleChangeSelect('billing_address', selected)}
-                                    value={formData.billing_address}
+                                    value={formData.billing_address || undefined}
                                     options={[
                                         { label: 'Jl. Rambutan', value: 'Jl. Rambutan' }
                                     ]}
@@ -623,9 +625,9 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 <SelectInput
                                     id='shipping_address'
                                     label='Shipping Address'
-                                    placeholder='Select Shipping Address'
+                                    placeholder='Destination shipping address'
                                     onChange={(selected) => handleChangeSelect('shipping_address', selected)}
-                                    value={formData.shipping_address}
+                                    value={formData.shipping_address || undefined}
                                     options={[
                                         { label: 'Jl. Rambutan', value: 'Jl. Rambutan' }
                                     ]}
@@ -716,6 +718,7 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 id='coupon_code'
                                 label='Coupon Apply'
                                 type='text'
+                                placeholder='Apply or Type coupon code here'
                                 onChange={handleChange}
                                 value={formData.coupon_code}
                                 suffix={
@@ -731,6 +734,7 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 id='discount_value'
                                 label='Discount Type'
                                 type='number'
+                                placeholder='Enter discount in number'
                                 onChange={handleChange}
                                 value={formData.discount_value}
                                 suffix={
@@ -746,7 +750,7 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     />
                                 }
                                 segmented={
-                                    <div className='mb-2'>
+                                    <div className='mb-1.5'>
                                         <Segmented
                                             size='small'
                                             value={formData.discount_type}
@@ -768,9 +772,9 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                             <SelectInput
                                 id='shipping_method'
                                 label='Shipping Method'
-                                placeholder='Select Shipping Method'
+                                placeholder='Choose shipping method'
                                 onChange={(selected) => handleChangeSelect('shipping_method', selected)}
-                                value={formData.shipping_method}
+                                value={formData.shipping_method || undefined}
                                 options={[
                                     { label: 'Free Shipping', value: 1 },
                                     { label: 'Local Pickup', value: 2 },
@@ -790,6 +794,7 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     value={formData.delivery_notes}
                                     onChange={handleChange}
                                     textareaClassname='!h-20'
+                                    placeholder='Any delivery instructions'
                                 />
                                 <Textarea
                                     id='internal_notes'
@@ -797,6 +802,7 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     value={formData.internal_notes}
                                     onChange={handleChange}
                                     textareaClassname='!h-20'
+                                    placeholder='Notes for internal team'
                                 />
                             </div>
 

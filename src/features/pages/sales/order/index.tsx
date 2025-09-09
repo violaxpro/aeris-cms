@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import Table from "@/components/table"
-import type { TableColumnsType } from 'antd'
+import type { TableColumnsType, MenuProps } from 'antd'
 import { Dropdown, Menu } from 'antd'
 import { EditOutlined, PlusCircleOutlined, FilterOutlined, MoreOutlined } from '@ant-design/icons'
 import Popover from '@/components/popover'
@@ -16,6 +16,7 @@ import SelectInput from '@/components/select'
 import SearchInput from '@/components/search';
 import Modal from '@/components/modal'
 import { deleteSupplierList } from '@/services/supplier-list-service'
+import { deleteOrder, getOrder } from '@/services/order-service'
 import { useNotificationAntd } from '@/components/toast'
 import { useAtom } from 'jotai'
 import { orderAtom } from '@/store/SalesAtom'
@@ -44,15 +45,19 @@ import SearchTable from '@/components/search/SearchTable'
 import ShowPageSize from '@/components/pagination/ShowPageSize'
 import ConfirmModal from '@/components/modal/ConfirmModal'
 import { toCapitalize } from '@/plugins/utils/utils'
+import { notificationAtom } from '@/store/NotificationAtom'
 
 const index = ({ orderData }: { orderData?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
-    const [data, setData] = useAtom(orderAtom)
+    const [data, setData] = useState(orderData?.data || [])
+    const [currentPage, setCurrentPage] = useState(orderData?.page || 1)
+    const [pageSize, setPageSize] = useState(orderData?.perPage || 10)
+    const [total, setTotal] = useState(orderData?.count || 0)
+    const [notification, setNotification] = useAtom(notificationAtom);
     const [activeTab, setActiveTab] = useState<string>('all');
     const [isOpenModal, setIsOpenModal] = useState(false)
     const [isOpenModalPaid, setisOpenModalPaid] = useState(false)
     const [isOpenModalFilter, setisOpenModalFilter] = useState(false)
-    const [filteredData, setFilteredData] = useState<OrderType[]>([])
     const [valueStatus, setValueStatus] = useState('')
     const [filterStatus, setFilterStatus] = useState('')
     const [search, setSearch] = useState('')
@@ -62,8 +67,6 @@ const index = ({ orderData }: { orderData?: any }) => {
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
     const [date, setDate] = useState<any | null>(null);
     const [currentOrder, setCurrentOrder] = useState<any>(null)
-    const [currentPage, setCurrentPage] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
     const [openModalDelete, setOpenModalDelete] = useState(false)
     const [deletedData, setDeletedData] = useState<any>(null)
 
@@ -82,10 +85,6 @@ const index = ({ orderData }: { orderData?: any }) => {
         : data.filter((order: OrderType) => {
             return order.status.toLowerCase() === activeTab.toLowerCase();
         })
-    const finalData = (!search ? dataByStatus : filteredData).filter(item => {
-        if (!filterStatus || filterStatus === 'all') return true;
-        return item.status.toLowerCase() === filterStatus.toLowerCase();
-    });
 
     const tabs: Tab[] = [
         { key: 'all', label: 'All', count: data.length },
@@ -120,15 +119,19 @@ const index = ({ orderData }: { orderData?: any }) => {
 
     // console.log(orderData);
 
-    const handleDelete = async (id: any) => {
+    const handleDelete = async () => {
+        if (!deletedData) return
         try {
-            const res = await deleteSupplierList(id)
-            if (res.success == true) {
+            const res = await deleteOrder(deletedData)
+            if (res.success) {
                 notifySuccess(res.message)
-                setData(prev => prev.filter(item => item.id !== id))
+                //    fetchPage(currentPage, pageSize)
             }
         } catch (error) {
             console.error(error)
+        } finally {
+            setOpenModalDelete(false)
+            setDeletedData(null)
         }
     }
 
@@ -154,33 +157,20 @@ const index = ({ orderData }: { orderData?: any }) => {
     }
 
     const handleSavePaid = (id: number | string) => {
-        setData(prev =>
-            prev.map(order => {
-                if (order.id === id) {
-                    const newPaidAmount = Number(order.amount || 0) + Number(paid);
-                    return { ...order, paid_amount: newPaidAmount };
-                }
-                return order;
-            })
-        );
+        // setData(prev =>
+        //     prev.map(order => {
+        //         if (order.id === id) {
+        //             const newPaidAmount = Number(order.amount || 0) + Number(paid);
+        //             return { ...order, paid_amount: newPaidAmount };
+        //         }
+        //         return order;
+        //     })
+        // );
         notifySuccess('Balance is accepted')
         setTimeout(() => {
             setisOpenModalPaid(false)
         }, 2000);
     }
-
-    const handleApplyFilter = () => {
-        if (valueStatus === 'all') {
-            setFilteredData(data);
-        } else {
-            setFilterStatus(valueStatus)
-            const result = data.filter((item: any) => {
-                return item.status.toLowerCase() === valueStatus.toLowerCase();
-            });
-            setFilteredData(result);
-        }
-        setisOpenModalFilter(false);
-    };
 
     const handleMultiDelete = () => {
         console.log('Yang mau dihapus:', selectedRowKeys);
@@ -344,7 +334,6 @@ const index = ({ orderData }: { orderData?: any }) => {
         {
             title: 'Created By',
             dataIndex: 'created_by',
-            defaultSortOrder: 'descend',
             sorter: (a: any, b: any) => {
                 return dayjs(a?.created_by?.date).valueOf() - dayjs(b?.created_by?.date).valueOf()
             },
@@ -399,63 +388,50 @@ const index = ({ orderData }: { orderData?: any }) => {
                     'Delivered': () => handleStatusAction('Delivered', row.id),
                 }
                 const actionStatus = status[row.status] || ''
-                const menu = (
-                    <Menu>
-                        {/* <Menu.Item key="status" onClick={actionStatus}>
-                            {row?.status}
-                        </Menu.Item> */}
-                        <Menu.Item key="edit">
-                            <Link href={routes.eCommerce.editOrder(row.id)}>
-                                Edit
-                            </Link>
-                        </Menu.Item>
-                        <Menu.Item key="detail">
+                const items: MenuProps['items'] = [
+                    {
+                        key: 'edit',
+                        label: <Link href={routes.eCommerce.editOrder(row.id)}>
+                            Edit
+                        </Link>
+                    },
+                    {
+                        key: 'delete',
+                        label: <div className='cursor-pointer' onClick={() => handleOpenModalDelete(row.id)}>
+                            Delete
+                        </div>
+                    },
+                    {
+                        key: 'detail',
+                        label: <Link href={routes.eCommerce.detailOrder(row.id)}>
+                            Detail
+                        </Link>
+                    },
+                    row.status === 'Approved' && {
+                        key: 'tracking',
+                        label: (
                             <Link href={routes.eCommerce.detailOrder(row.invoice_number)}>
-                                Detail
+                                Tracking Number
                             </Link>
-                        </Menu.Item>
-                        {
-                            row.status == 'Approved' &&
-                            <Menu.Item key="tracking-number">
-                                <Link href={routes.eCommerce.detailOrder(row.invoice_number)}>
-                                    Tracking Number
-                                </Link>
-                            </Menu.Item>
-                        }
-                        <Menu.Item key="createPO">
-                            <Link href={routes.eCommerce.createPurchases}>
-                                Create PO
-                            </Link>
-                        </Menu.Item>
-                        <Menu.Item key="print">
-                            <Link href={routes.eCommerce.detailPackingSlip(row.invoice_number)}>
-                                Packing Slip
-                            </Link>
-                        </Menu.Item>
-                        {/* <Menu.Item key="serialNumber">
-                            <Link href={routes.eCommerce.createSerialNumber(row.id)}>
-                                Serial Number
-                            </Link>
-                        </Menu.Item> */}
-                        <Menu.Item key="reverse">
-                            <Link href={routes.eCommerce.editOrder(row.id)}>
-                                Reverse
-                            </Link>
-                        </Menu.Item>
-                        <Menu.Item key="delete">
-                            <Popover
-                                title='Delete Return Supplier'
-                                description='Are you sure to delete this data?'
-                                onDelete={() => handleDelete(row.id)}
-                                label='Delete'
-                            />
-                        </Menu.Item>
-                    </Menu>
-                );
+                        ),
+                    },
+                    {
+                        key: 'create-po',
+                        label: <Link href={routes.eCommerce.createPurchases}>
+                            Create PO
+                        </Link>
+                    },
+                    {
+                        key: 'packing-slip',
+                        label: <Link href={routes.eCommerce.detailPackingSlip(row.invoice_number)}>
+                            Packing Slip
+                        </Link>
+                    },
+                ].filter(Boolean) as MenuProps['items']
 
                 return (
                     <div className='flex items-center gap-2' onClick={(e) => e.stopPropagation()} >
-                        <Dropdown overlay={menu} trigger={['click']} >
+                        <Dropdown menu={{ items }} trigger={['click']} >
                             <ButtonIcon
                                 color='primary'
                                 variant='filled'
@@ -463,13 +439,6 @@ const index = ({ orderData }: { orderData?: any }) => {
                                 icon={MoreIcon}
                             />
                         </Dropdown >
-                        <ButtonIcon
-                            color='danger'
-                            variant='filled'
-                            size="small"
-                            icon={TrashIconRed}
-                            onClick={() => handleOpenModalDelete(row.id)}
-                        />
                     </div>
                 );
             }
@@ -502,23 +471,38 @@ const index = ({ orderData }: { orderData?: any }) => {
     //         ? [...baseColumns.slice(0, 5), paymentStatusColumn, ...baseColumns.slice(5)]
     //         : baseColumns;
 
-    const handleSearch = (value: string) => {
-        const search = value.toLowerCase()
-        setSearch(search)
-        const result = dataByStatus.filter((item: any) => {
-            const formattedDate = dayjs(item?.createdAt).format('DD MMMM, YYYY').toLowerCase();
-            return item?.po_number.toLowerCase().includes(search) ||
-                formattedDate.includes(search);
+    const filteredData = React.useMemo(() => {
+        if (!search) return data;
+        const keyword = search.toLowerCase();
+        return data.filter((item: any) => {
+            const formattedDate = dayjs(item?.created_at)
+                .format('DD/MM/YYYY')
+                .toLowerCase();
+            return (
+                item?.name.toLowerCase().includes(keyword) ||
+                formattedDate.includes(keyword)
+            );
         });
-        setFilteredData(result);
-    };
+    }, [search, data]);
+
+    // const fetchPage = async (page: number, perPage: number) => {
+    //     try {
+    //         const res = await getBrands({ page, perPage })
+    //         setData(res.data)
+    //         setTotal(res.count)
+    //         setCurrentPage(res.page)
+    //         setPageSize(res.perPage)
+    //     } catch (error) {
+    //         console.error(error)
+    //     }
+    // }
 
     useEffect(() => {
-        setData(orderData)
-        if (!search) {
-            setFilteredData(orderData)
+        if (notification) {
+            notifySuccess(notification);
+            setNotification(null);
         }
-    }, [orderData, search])
+    }, [notification]);
 
     console.log(currentOrder)
 
@@ -660,7 +644,7 @@ const index = ({ orderData }: { orderData?: any }) => {
                     </div>
                     <Table
                         columns={columns}
-                        dataSource={finalData}
+                        dataSource={orderData}
                         withSelectableRows
                         selectedRowKeys={selectedRowKeys}
                         onSelectChange={setSelectedRowKeys}
@@ -675,7 +659,7 @@ const index = ({ orderData }: { orderData?: any }) => {
                     />
                     <Pagination
                         current={currentPage}
-                        total={finalData.length}
+                        total={total}
                         pageSize={pageSize}
                         onChange={(page) => setCurrentPage(page)}
                     />
@@ -686,7 +670,6 @@ const index = ({ orderData }: { orderData?: any }) => {
                 open={isOpenModalFilter}
                 handleCancel={() => setisOpenModalFilter(false)}
                 isBtnSave={true}
-                handleSubmit={handleApplyFilter}
             >
                 <SelectInput
                     id='status'

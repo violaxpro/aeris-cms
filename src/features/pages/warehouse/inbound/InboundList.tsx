@@ -319,7 +319,7 @@ const InboundList = ({
                     </>
                 }
                 {
-                    onRemove && <div className='flex item-ends justify-center mt-4 '>
+                    onRemove && <div className='flex item-ends justify-center mt-6'>
                         {
                             length && length <= 1 ?
                                 <ButtonAction

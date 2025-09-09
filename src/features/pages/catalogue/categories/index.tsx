@@ -109,7 +109,7 @@ const CategoriesPage = ({ categories }: { categories?: any }) => {
     const [addForm, setAddForm] = useState(false)
     const [selectedParent, setSelectedParent] = useState<any>(null);
     const [parentId, setParentId] = useState<string | number | null>()
-    const [categoryData, setCategoryData] = useAtom(categoryDataFetch)
+    const [categoryData, setCategoryData] = useState([])
     // const [categoryData, setCategoryData] = useState<any[]>(categories);
     const { contextHolder, notifySuccess } = useNotificationAntd()
     const [checkedKeys, setCheckedKeys] = useState<React.Key[]>([]);
@@ -134,17 +134,17 @@ const CategoriesPage = ({ categories }: { categories?: any }) => {
         setAddForm(true);
     };
 
-    const handleDeleteCategory = async (node: TreeNode) => {
-        try {
-            const res = await deleteCategory(node.key)
-            if (res.success == true) {
-                notifySuccess(res.message)
-                setCategoryData(prev => prev.filter(item => item.id !== node.key))
-            }
-        } catch (error) {
-            console.error(error)
-        }
-    };
+    // const handleDeleteCategory = async (node: TreeNode) => {
+    //     try {
+    //         const res = await deleteCategory(node.key)
+    //         if (res.success == true) {
+    //             notifySuccess(res.message)
+    //             setCategoryData(prev => prev.filter(item => item.id !== node.key))
+    //         }
+    //     } catch (error) {
+    //         console.error(error)
+    //     }
+    // };
 
     const mapTreeData = (data: any[]): TreeNode[] => {
         return data.map((item) => {
@@ -330,8 +330,22 @@ const CategoriesPage = ({ categories }: { categories?: any }) => {
     }
 
     useEffect(() => {
-        setCategoryData(categories)
-    }, [categories])
+        if (categories) {
+            setCategoryData(categories);
+        }
+        const loadCategories = async () => {
+            try {
+                const res = await getCategories();
+                if (res?.data) {
+                    setCategoryData(res.data);
+                }
+            } catch (err) {
+                console.error("Failed to fetch categories:", err);
+            }
+        };
+
+        loadCategories(); // fetch saat pertama kali halaman load
+    }, []);
 
 
     // const handleDrop: TreeProps['onDrop'] = async (info) => {

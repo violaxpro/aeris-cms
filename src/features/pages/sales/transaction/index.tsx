@@ -84,10 +84,6 @@ const index = ({ transactionData }: { transactionData?: any }) => {
     ]
     const columns: TableColumnsType<TransactionType> = [
         {
-            title: 'Order ID',
-            dataIndex: 'order_id',
-        },
-        {
             title: 'Transaction ID',
             dataIndex: 'transaction_id',
             render: (_: any, row: any) => {
@@ -97,6 +93,10 @@ const index = ({ transactionData }: { transactionData?: any }) => {
                     </div>
                 </div>
             }
+        },
+        {
+            title: 'Order ID',
+            dataIndex: 'order_id',
         },
         {
             title: 'Payment Method',
@@ -112,7 +112,6 @@ const index = ({ transactionData }: { transactionData?: any }) => {
         {
             title: 'Created by',
             dataIndex: 'created',
-            defaultSortOrder: 'descend',
             sorter: (a: any, b: any) => {
                 return dayjs(a.created).valueOf() - dayjs(b.created).valueOf()
             },

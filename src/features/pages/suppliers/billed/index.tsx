@@ -128,7 +128,6 @@ const index = ({ billData }: { billData?: any }) => {
         {
             title: 'Created',
             dataIndex: 'created',
-            defaultSortOrder: 'descend',
             sorter: (a: any, b: any) => {
                 return dayjs(a.created).valueOf() - dayjs(b.created).valueOf()
             },

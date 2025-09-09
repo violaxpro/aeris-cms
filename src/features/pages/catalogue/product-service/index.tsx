@@ -7,11 +7,11 @@ import { Content } from 'antd/es/layout/layout'
 import Products from './product'
 import Services from './service'
 
-const index = ({ products, services }: { products?: any, services: any }) => {
-    const searchParams = useSearchParams();
+const index = ({ products, services, tab }: { products?: any, services: any, tab?: any }) => {
+    // const searchParams = useSearchParams();
     const router = useRouter();
-    const initialTab = searchParams.get("tab") || "products"
-    const [activeTab, setActiveTab] = useState<string>(initialTab)
+    // const initialTab = searchParams.get("tab") || "products"
+    const [activeTab, setActiveTab] = useState<string>(tab)
 
     const handleTabChange = (tab: string) => {
         setActiveTab(tab);

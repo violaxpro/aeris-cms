@@ -12,9 +12,10 @@ import { EditOutlined } from '@ant-design/icons';
 import Textarea from '@/components/textarea'
 import { addressData } from '@/plugins/types/settings-type';
 import { TrashIconRed, PencilIconBlue } from '@public/icon';
-import ButtonAction from '@/components/button/ButtonIcon';
+import ButtonIcon from '@/components/button/ButtonIcon';
 import ConfirmModal from '@/components/modal/ConfirmModal';
 import Button from '@/components/button'
+import ButtonAction from '@/components/button/ButtonAction';
 
 type ModalAddressProps = {
     isModalOpen: boolean
@@ -103,14 +104,14 @@ const ModalAddress = ({
             render: (_: string, row: any) => (
 
                 <div className="flex items-center justify-end gap-3 pe-4">
-                    <ButtonAction
+                    <ButtonIcon
                         color='primary'
                         variant='filled'
                         size="small"
                         icon={PencilIconBlue}
                         onClick={() => setOpenModalEdit(true)}
                     />
-                    <ButtonAction
+                    <ButtonIcon
                         color='danger'
                         variant='filled'
                         size="small"
@@ -203,17 +204,23 @@ const ModalAddress = ({
                             !openModalEdit ? <Button
                                 label='Submit'
                                 onClick={() => console.log('hi')}
-                                style={{ padding: '1.2rem 2rem' }}
-                            /> : <Button
-                                label='Edit'
-                                onClick={() => setOpenModalEdit(false)}
-                                style={{ padding: '1.2rem 2rem' }}
-                            />
+                            /> : <div className='flex gap-4'>
+                                <ButtonAction
+                                    label='Back'
+                                    onClick={() => {
+                                        setOpenModalEdit(false)
+                                    }}
+                                />
+                                <Button
+                                    label='Edit'
+                                    onClick={() => setOpenModalEdit(false)}
+                                />
+                            </div>
                         }
 
                     </div>
                     {
-                        !openModalEdit && <div className='col-span-full'>
+                        !openModalEdit && buttonType !== 'oneof' && <div className='col-span-full'>
                             <label className='text-2xl font-semibold'>Address List</label>
                             <Table
                                 columns={columns}

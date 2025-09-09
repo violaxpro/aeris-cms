@@ -66,19 +66,19 @@ const FormService = ({
         try {
 
             let errors: any = {}
-            if (!taxError.sku) {
+            if (!formData.sku) {
                 errors.sku = 'SKU is required'
             }
-            if (!taxError.name) {
+            if (!formData.name) {
                 errors.name = 'Name is required'
             }
-            if (!taxError.short_desc) {
+            if (!formData.short_desc) {
                 errors.short_desc = 'Short Description is required'
             }
-            if (!taxError.buy_price) {
+            if (!formData.buy_price) {
                 errors.buy_price = 'Buy Price is required'
             }
-            if (!taxError.sale_price) {
+            if (!formData.sale_price) {
                 errors.sale_price = 'Sale price is required'
             }
 

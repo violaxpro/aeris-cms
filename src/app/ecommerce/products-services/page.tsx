@@ -2,7 +2,14 @@ import ProductsServices from '@/features/pages/catalogue/product-service'
 import { getProduct } from '@/services/products-service'
 import { getServices } from '@/services/services-service';
 
-export default async function ProductPageRoute() {
+export default async function ProductPageRoute({
+  searchParams,
+}: {
+  searchParams: Promise<{ tab?: string }>;
+}
+) {
+  const { tab } = await searchParams;
+  const activeTab = tab ?? "products";
   let products = { data: [], page: 1, perPage: 10, count: 0 };
   let services = { data: [], page: 1, perPage: 10, count: 0 };
 
@@ -14,6 +21,6 @@ export default async function ProductPageRoute() {
   }
 
   return (
-    <ProductsServices products={products} services={services} />
+    <ProductsServices products={products} services={services} tab={activeTab} />
   );
 }
