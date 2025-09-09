@@ -222,7 +222,6 @@ const index = ({ products }: { products?: any }) => {
         }
     }, [notification]);
 
-    console.log('ini data products', products, data, filteredData)
 
     return (
         <>

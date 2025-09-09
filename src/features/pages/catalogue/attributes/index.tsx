@@ -71,8 +71,8 @@ const index = ({ attributesData }: { attributesData?: any }) => {
         {
             title: 'Attribute Set',
             dataIndex: 'attribute_set',
-            sorter: (a: any, b: any) => a?.attribute_set?.name.localeCompare(b?.attribute_set?.name),
-            render: (val: any) => val?.attribute_set?.name
+            sorter: (a: any, b: any) => a?.name.localeCompare(b?.name),
+            render: (val: any) => val?.name
         },
         {
             title: 'Filterable',
@@ -164,6 +164,8 @@ const index = ({ attributesData }: { attributesData?: any }) => {
             setNotification(null);
         }
     }, [notification]);
+
+    console.log(filteredData)
 
     return (
         <>
