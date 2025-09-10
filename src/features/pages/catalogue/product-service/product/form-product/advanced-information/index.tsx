@@ -24,6 +24,8 @@ import Modal from '@/components/modal'
 import dayjs from 'dayjs';
 import Pagination from '@/components/pagination';
 import StatusBadge from '@/components/badge/badge-status';
+import SelectTreeInput from '@/components/select/TreeSelect'
+import { categoriesAtom } from '@/store/DropdownItemStore';
 
 const AdvancedInformation = ({
     onChange,
@@ -32,6 +34,7 @@ const AdvancedInformation = ({
 }: ChildFormProps) => {
     const [optionAttribute] = useAtom(attributeAtom)
     const [optionSet] = useAtom(optionSetAtom)
+    const [optionCategories] = useAtom(categoriesAtom)
     const [data, setData] = useAtom(productAtom)
     const [search, setSearch] = useState('')
     const [openModalProduct, setIsOpenModalProduct] = useState(false)
@@ -292,18 +295,18 @@ const AdvancedInformation = ({
                                     onChange={(e: any) => handleChangeUpdateRow('attributes', index, 'price', e.target.value)}
                                     value={item.price}
                                 />
-                                <SelectInput
+                                <SelectTreeInput
                                     id={`categories-${index}`}
                                     label="Categories"
                                     placeholder="Select categories related to this attribute (e.g. Accessories)"
-                                    modeType="multiple"
                                     onChange={(selectedOptions) =>
                                         handleChangeUpdateRow('attributes', index, 'categories', Array.isArray(selectedOptions)
                                             ? selectedOptions.map((opt: any) => opt)
                                             : [])
                                     }
                                     value={item.categories}
-                                // options={options}
+                                    treeData={optionCategories}
+                                    multiple
                                 />
                             </div>
 

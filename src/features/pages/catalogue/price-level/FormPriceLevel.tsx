@@ -13,6 +13,7 @@ import { addPriceLevel, updatePriceLevel } from '@/services/price-level-service'
 import { useAtom, useSetAtom } from 'jotai';
 import { brandsAtom, categoriesAtom } from '@/store/DropdownItemStore';
 import { notificationAtom } from '@/store/NotificationAtom';
+import SelectTreeInput from '@/components/select/TreeSelect'
 
 const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const router = useRouter()
@@ -99,7 +100,7 @@ const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                         <FormGroup
                             title="Price"
                             description="Price information"
-                            childClassName='grid md:grid-cols-4 gap-4'
+                            childClassName='grid md:grid-cols-3 gap-4'
                         >
                             <Input
                                 id='name'
@@ -117,33 +118,16 @@ const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 onChange={(e) => handleChangeSelect('brand_id', e)}
                                 options={optionBrands}
                             />
-                            <SelectInput
+                            <SelectTreeInput
                                 id="category_id"
                                 label="Categories"
                                 placeholder="CCTV"
                                 value={formData.category_id || undefined}
                                 onChange={(val) => {
                                     handleChangeSelect("category_id", val);
-                                    const selectedCategory: any = optionsCategories.find((cat: any) => cat.value === val);
-                                    const optionsSubCategory = selectedCategory?.children.map((item: any) => {
-                                        return {
-                                            label: item.name,
-                                            value: item.id
-                                        }
-                                    })
-                                    setOptionSubCategories(optionsSubCategory || []);
                                 }}
-                                options={optionsCategories}
+                                treeData={optionsCategories}
                             />
-                            <SelectInput
-                                id="sub_category_id"
-                                label="Sub Categories"
-                                placeholder="Accessories"
-                                value={formData.sub_category_id || undefined}
-                                onChange={(val) => handleChangeSelect("sub_category_id", val)}
-                                options={optionSubCategories}
-                            />
-
                             <div className='col-span-full grid md:grid-cols-6 gap-4'>
                                 <Input
                                     id='rrp'

@@ -25,6 +25,7 @@ import {
     optionSetAtom
 } from '@/store/DropdownItemStore'
 import Item from 'antd/es/list/Item';
+import { mapCategoriesToOptions } from '@/plugins/utils/category';
 
 const { useBreakpoint } = Grid;
 
@@ -57,11 +58,13 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                 value: brand.id
             }))
 
-            const categoryOptions = categories.data.map((category: any) => ({
-                label: category.name,
-                value: category.id,
-                children: category.children
-            }))
+            // const categoryOptions = categories.data.map((category: any) => ({
+            //     label: category.name,
+            //     value: category.id,
+            //     children: category.children
+            // }))
+            const categoryOptions: any = mapCategoriesToOptions(categories.data)
+            console.log(categoryOptions)
 
             const attributeSetOption = attributeSet.data.map((attr: any) => ({
                 label: attr.name,

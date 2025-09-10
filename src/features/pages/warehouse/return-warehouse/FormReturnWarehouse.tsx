@@ -45,7 +45,7 @@ const FormReturnWarehouse: React.FC<FormProps> = ({ mode, initialValues, slug })
     const [editIndex, setEditIndex] = useState<number | null>(null)
     const [formData, setFormData] = useState({
         supplier: initialValues ? initialValues.supplier : '',
-        customer: initialValues ? initialValues.customer : '',
+        order_id: initialValues ? initialValues.order_id : '',
         email: initialValues ? initialValues.email : '',
         phone: initialValues ? initialValues.phone : '',
         items: [{
@@ -277,13 +277,13 @@ const FormReturnWarehouse: React.FC<FormProps> = ({ mode, initialValues, slug })
                     <div className='flex flex-col gap-5'>
                         <div className={`grid gap-3 ${showContactDetails ? 'md:grid-cols-3' : 'grid-cols-1'}`}>
                             <SelectInput
-                                id='customer'
-                                label='Customer'
-                                placeholder='Select Customer'
-                                onChange={(val) => handleChangeSelect('customer', val)}
-                                value={formData.customer}
+                                id='order_id'
+                                label='Order ID'
+                                placeholder='Select Order ID'
+                                onChange={(val) => handleChangeSelect('order_id', val)}
+                                value={formData.order_id}
                                 options={[
-                                    { label: 'Cust A', value: 1 }
+                                    { label: 'INV-15653 - John', value: 1 }
                                 ]}
                             />
                             {

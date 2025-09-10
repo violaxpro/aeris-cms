@@ -17,6 +17,7 @@ import {
 import { ChildFormProps } from '@/plugins/types/form-type'
 import { uploadImages } from '@/services/upload-images'
 import { slugify } from '@/plugins/validators/common-rules'
+import SelectTreeInput from '@/components/select/TreeSelect'
 
 const QuillInput = dynamic(() => import('@/components/quill-input'), { ssr: false, loading: () => <p>Loading editor...</p>, });
 
@@ -154,19 +155,17 @@ const BasicInformationProduct = ({ dataById, onChange, formDataCreate }: ChildFo
                         id="brand"
                         label="Brand"
                         placeholder="Select brand (e.g. Panasonic)"
-                        // value={formData.brand}
                         value={formDataCreate.tab_basic_information.brand || undefined}
                         onChange={(val) => handleChangeSelect("brand", val)}
                         options={optionBrands}
                     />
-                    <Select
+                    <SelectTreeInput
                         id="categories"
                         label="Categories"
                         placeholder="Select category (e.g. Electronics)"
-                        // value={formData.categories}
                         value={formDataCreate.tab_basic_information.categories || undefined}
-                        onChange={(val) => handleChangeSelect("categories", val)}
-                        options={optionCategories}
+                        onChange={(val: any) => handleChangeSelect("categories", val)}
+                        treeData={optionCategories}
                     />
                 </div>
 
@@ -184,8 +183,6 @@ const BasicInformationProduct = ({ dataById, onChange, formDataCreate }: ChildFo
                     <TextArea
                         id='metaTitle'
                         label='Meta Title'
-                        // onChange={handleChange}
-                        // value={formData.metaTitle}
                         onChange={handleChange}
                         value={formDataCreate.tab_basic_information.metaTitle}
                         notes={

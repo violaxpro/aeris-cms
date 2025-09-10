@@ -10,6 +10,7 @@ import { useAtom } from 'jotai'
 import { categoriesAtom, attributeSetAtom } from '@/store/DropdownItemStore'
 import { addAttributeSet, getAttributeSet } from '@/services/attribute-set-service'
 import { ChildFormProps } from '@/plugins/types/form-type'
+import SelectTreeInput from '@/components/select/TreeSelect'
 
 const GeneralForm = ({ dataById, onChange, formDataCreate }: ChildFormProps) => {
     const [isModalOpen, setIsModalOpen] = useState(false)
@@ -105,14 +106,14 @@ const GeneralForm = ({ dataById, onChange, formDataCreate }: ChildFormProps) => 
                         </>
                     )}
                 />
-                <SelectInput
+                <SelectTreeInput
                     id="categories"
-                    modeType='multiple'
                     label="Categories"
                     placeholder="CCTV"
                     value={formDataCreate.general.categories || undefined}
                     onChange={(val) => handleChangeSelect("categories", val)}
-                    options={optionCategories}
+                    treeData={optionCategories}
+                    multiple
                 />
                 <Checkbox
                     label='Filterable'
