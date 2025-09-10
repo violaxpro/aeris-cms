@@ -10,7 +10,7 @@ import { Content } from 'antd/es/layout/layout'
 import Button from "@/components/button"
 import Link from 'next/link'
 import { useNotificationAntd } from '@/components/toast'
-import { deletePriceLevel, getPriceLevel } from '@/services/price-level-service'
+import { useGetPriceLevel, useDeletePriceLevel } from '@/core/hooks/use-price-levels'
 import { useAtom } from 'jotai'
 import Image from 'next/image'
 import { AddIcon, TrashIconRed, MoreIcon } from '@public/icon'
@@ -23,27 +23,25 @@ import ConfirmModal from '@/components/modal/ConfirmModal'
 import { notificationAtom } from '@/store/NotificationAtom'
 import dayjs from 'dayjs'
 
-const index = ({ priceData }: { priceData?: any }) => {
+const index = () => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
-    const [data, setData] = useState(priceData?.data || [])
-    const [currentPage, setCurrentPage] = useState(priceData?.page || 1)
-    const [pageSize, setPageSize] = useState(priceData?.perPage || 10)
-    const [total, setTotal] = useState(priceData?.count || 0)
+    const [currentPage, setCurrentPage] = useState(1)
+    const [pageSize, setPageSize] = useState(10)
+    const [total, setTotal] = useState(0)
+    const { data, isLoading, refetch } = useGetPriceLevel(currentPage, pageSize)
     const [notification, setNotification] = useAtom(notificationAtom);
     const [search, setSearch] = useState('')
     const [isOpenModalFilter, setisOpenModalFilter] = useState(false)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
     const [openModalDelete, setOpenModalDelete] = useState(false)
     const [deletedData, setDeletedData] = useState<any>(null)
+    const { mutate: deletePriceLevelMutate } = useDeletePriceLevel()
 
     const handleDelete = async (id?: any) => {
         if (!deletedData) return;
         try {
-            const res = await deletePriceLevel(deletedData);
-            if (res.success) {
-                notifySuccess(res.message);
-                fetchPage(currentPage, pageSize)
-            }
+            deletePriceLevelMutate(deletedData)
+            refetch()
         } catch (error) {
             console.error(error);
         } finally {
@@ -131,9 +129,9 @@ const index = ({ priceData }: { priceData?: any }) => {
     ]
 
     const filteredData = React.useMemo(() => {
-        if (!search) return data;
+        if (!search) return data?.data || [];
         const keyword = search.toLowerCase();
-        return data.filter((item: any) => {
+        return data?.data.filter((item: any) => {
             const formattedDate = dayjs(item?.created_at)
                 .format('DD/MM/YYYY')
                 .toLowerCase();
@@ -144,17 +142,15 @@ const index = ({ priceData }: { priceData?: any }) => {
         });
     }, [search, data]);
 
-    const fetchPage = async (page: number, perPage: number) => {
-        try {
-            const res = await getPriceLevel({ page, perPage })
-            setData(res.data)
-            setTotal(res.count)
-            setCurrentPage(res.page)
-            setPageSize(res.perPage)
-        } catch (error) {
-            console.error(error)
+
+    useEffect(() => {
+        if (data) {
+            setTotal(data.count)
+            setCurrentPage(data.page)
+            setPageSize(data.perPage)
         }
-    }
+    }, [data])
+
     useEffect(() => {
         if (notification) {
             notifySuccess(notification);
@@ -206,7 +202,6 @@ const index = ({ priceData }: { priceData?: any }) => {
                                 onChange={(newPageSize) => {
                                     setPageSize(newPageSize);
                                     setCurrentPage(1);
-                                    fetchPage(1, newPageSize);
                                 }}
                             />
                             <SearchTable
@@ -242,7 +237,7 @@ const index = ({ priceData }: { priceData?: any }) => {
                         pageSize={pageSize}
                         onChange={(page) => {
                             setCurrentPage(page);
-                            fetchPage(page, pageSize);
+                            refetch()
                         }}
                     />
 

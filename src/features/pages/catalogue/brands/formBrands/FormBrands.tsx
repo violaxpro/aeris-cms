@@ -1,6 +1,5 @@
 'use client'
 import React, { useState } from 'react'
-import { useRouter } from 'next/navigation';
 import Breadcrumb from "@/components/breadcrumb";
 import { FormProps } from '@/plugins/types/form-type';
 import { Content } from 'antd/es/layout/layout';
@@ -10,13 +9,13 @@ import Input from "@/components/input"
 import Checkbox from "@/components/checkbox"
 import FormGroup from '@/components/form-group'
 import Textarea from '@/components/textarea'
-import { addBrand, updateBrand } from '@/services/brands-service';
-import { useSetAtom } from 'jotai';
-import { notificationAtom } from '@/store/NotificationAtom';
+import { useCreateBrand, useUpdateBrand } from '@/core/hooks/use-brands';
+import { useNotificationAntd } from '@/components/toast';
 
 const FormBrands: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
-    const setNotification = useSetAtom(notificationAtom);
-    const router = useRouter()
+    const { contextHolder } = useNotificationAntd()
+    const { mutate: createBrandMutate } = useCreateBrand()
+    const { mutate: updateBrandMutate } = useUpdateBrand(slug ?? '')
 
     const breadcrumb = [
         { title: 'Catalogue' },
@@ -54,59 +53,49 @@ const FormBrands: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         }));
     };
 
-    const handleSubmit = async () => {
-        try {
-            let errors: any = {}
-            if (!formData.name) {
-                errors.name = 'Name is required'
-            }
-            if (!formData.urlLogo) {
-                errors.urlLogo = 'Url Logo is required'
-            }
+    const handleSubmit = () => {
+        let errors: any = {}
+        if (!formData.name) {
+            errors.name = 'Name is required'
+        }
+        // if (!formData.urlLogo) {
+        //     errors.urlLogo = 'Url Logo is required'
+        // }
 
-            if (titleLength < 55 || titleLength > 65) {
-                return;
-            }
-
-            if (descLength < 145 || descLength > 165) {
-                return;
-            }
-
-            setFormErrors(errors)
-
-            if (Object.keys(errors).length > 0) {
-                return;
-            }
-
-            const data = {
-                name: formData.name,
-                discount_percent: Number(formData.discountPercent) ?? 0,
-                status: formData.status,
-                meta_title: formData.metaTitle,
-                meta_description: formData.metaDescription,
-                url_banner: formData.urlBanner,
-                url_logo: formData.urlLogo
-            }
-
-            let response;
-            if (mode == 'edit' && slug) {
-                response = await updateBrand(slug, data)
-            } else {
-                response = await addBrand(data)
-            }
-
-            if (response.success == true) {
-                setNotification(response.message);
-                router.push(routes.eCommerce.brands)
-            }
-        } catch (error) {
-            console.error(error)
+        if (titleLength < 55 || titleLength > 65) {
+            return;
         }
 
+        if (descLength < 145 || descLength > 165) {
+            return;
+        }
+
+        setFormErrors(errors)
+
+        if (Object.keys(errors).length > 0) {
+            return;
+        }
+
+        const data = {
+            name: formData.name,
+            discount_percent: Number(formData.discountPercent) ?? 0,
+            status: formData.status,
+            meta_title: formData.metaTitle,
+            meta_description: formData.metaDescription,
+            url_banner: formData.urlBanner,
+            url_logo: formData.urlLogo
+        }
+
+        if (mode == 'edit' && slug) {
+            updateBrandMutate(data)
+        } else {
+            createBrandMutate(data)
+        }
     }
 
     return (
         <div>
+            {contextHolder}
             <div className="mt-6 mx-6 mb-0">
                 <h1 className="text-2xl font-bold mb-4">{mode === 'create' ? 'Create Brand' : 'Edit Brand'}</h1>
                 <Breadcrumb items={breadcrumb} />

@@ -1,6 +1,5 @@
 'use client'
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Breadcrumb from "@/components/breadcrumb";
 import { Content } from 'antd/es/layout/layout';
 import Button from '@/components/button'
@@ -9,18 +8,16 @@ import FormGroup from '@/components/form-group';
 import Input from "@/components/input"
 import SelectInput from '@/components/select';
 import { routes } from '@/config/routes';
-import { addPriceLevel, updatePriceLevel } from '@/services/price-level-service';
-import { useAtom, useSetAtom } from 'jotai';
+import { useCreatePriceLevel, useUpdatePriceLevel } from '@/core/hooks/use-price-levels';
+import { useAtom } from 'jotai';
 import { brandsAtom, categoriesAtom } from '@/store/DropdownItemStore';
-import { notificationAtom } from '@/store/NotificationAtom';
 import SelectTreeInput from '@/components/select/TreeSelect'
+import { useNotificationAntd } from '@/components/toast';
 
 const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
-    const router = useRouter()
-    const setNotification = useSetAtom(notificationAtom);
+    const { contextHolder } = useNotificationAntd()
     const [optionsCategories] = useAtom(categoriesAtom)
     const [optionBrands] = useAtom(brandsAtom)
-    const [optionSubCategories, setOptionSubCategories] = useState([])
     const [formData, setFormData] = useState({
         name: initialValues ? initialValues.name : '',
         brand_id: initialValues ? initialValues.brand_id : '',
@@ -33,6 +30,14 @@ const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         platinum: initialValues ? initialValues.platinum_percentage : '',
         diamond: initialValues ? initialValues.diamond_percentage : '',
     });
+    const { mutate: createPriceLevelMutate } = useCreatePriceLevel()
+    const { mutate: updatePriceLevelMutate } = useUpdatePriceLevel(slug ?? '')
+    const [formErrors, setFormErrors] = useState({
+        name: '',
+        brand_id: '',
+        category_id: '',
+    })
+
 
     const breadcrumb = [
         { title: 'Catalogue' },
@@ -55,40 +60,45 @@ const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         }));
     };
 
-    const handleSubmit = async () => {
-        try {
-            const submitData = {
-                name: formData.name,
-                brand_id: formData.brand_id,
-                category_id: formData.category_id,
-                sub_category_id: formData.sub_category_id,
-                recommended_retail_price_percentage: Number(formData.rrp),
-                trade_percentage: Number(formData.trade),
-                silver_percentage: Number(formData.silver),
-                gold_percentage: Number(formData.gold),
-                platinum_percentage: Number(formData.platinum),
-                diamond_percentage: Number(formData.diamond)
-            }
+    const handleSubmit = () => {
+        let errors: any = {}
+        if (!formData.name) {
+            errors.name = 'Name is required'
+        }
+        if (!formData.brand_id) {
+            errors.brand_id = 'Brand is required'
+        }
+        if (!formData.category_id) {
+            errors.category_id = 'Category is required'
+        }
+        setFormErrors(errors)
 
-            let response;
-            if (mode == 'edit' && slug) {
-                response = await updatePriceLevel(slug, submitData)
-            } else {
-                response = await addPriceLevel(submitData)
-            }
-
-            if (response.success == true) {
-                setNotification(response.message);
-                router.push(routes.eCommerce.priceLevel)
-            }
-        } catch (error) {
-            console.error(error)
+        if (Object.keys(errors).length > 0) {
+            return;
+        }
+        const submitData = {
+            name: formData.name,
+            brand_id: formData.brand_id,
+            category_id: formData.category_id,
+            sub_category_id: formData.category_id,
+            recommended_retail_price_percentage: Number(formData.rrp),
+            trade_percentage: Number(formData.trade),
+            silver_percentage: Number(formData.silver),
+            gold_percentage: Number(formData.gold),
+            platinum_percentage: Number(formData.platinum),
+            diamond_percentage: Number(formData.diamond)
         }
 
+        if (mode == 'edit' && slug) {
+            updatePriceLevelMutate(submitData)
+        } else {
+            createPriceLevelMutate(submitData)
+        }
     }
 
     return (
         <>
+            {contextHolder}
             <div className="mt-6 mx-6 mb-0">
                 <h1 className="text-2xl font-bold mb-4">{mode === 'create' ? 'Create Price Level' : 'Edit Price Level'}</h1>
                 <Breadcrumb items={breadcrumb} />
@@ -109,6 +119,7 @@ const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 placeholder='Distributor Price'
                                 onChange={handleChange}
                                 value={formData.name}
+                                errorMessage={formErrors.name}
                             />
                             <SelectInput
                                 id='brand_id'
@@ -117,6 +128,7 @@ const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                 value={formData.brand_id || undefined}
                                 onChange={(e) => handleChangeSelect('brand_id', e)}
                                 options={optionBrands}
+                                error={formErrors.brand_id}
                             />
                             <SelectTreeInput
                                 id="category_id"
@@ -127,6 +139,7 @@ const FormPriceLevel: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     handleChangeSelect("category_id", val);
                                 }}
                                 treeData={optionsCategories}
+                                error={formErrors.category_id}
                             />
                             <div className='col-span-full grid md:grid-cols-6 gap-4'>
                                 <Input
