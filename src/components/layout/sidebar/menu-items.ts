@@ -459,7 +459,7 @@ export const menuItems = [
                     {
                         key: 'push-notifications',
                         label: 'Push Notifications',
-                        href: '#'
+                        href: routes.eCommerce.pushNotifications
                     },
                     {
                         key: 'social-media-campaigns',

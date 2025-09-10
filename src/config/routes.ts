@@ -214,6 +214,11 @@ export const routes = {
     editWhatsappCampaigns: (slug: string) => `/ecommerce/whatsapp-campaigns/${slug}/edit`,
     detailWhatsappCampaigns: (slug: string) => `/ecommerce/whatsapp-campaigns/${slug}/detail`,
 
+    pushNotifications: '/ecommerce/push-notifications',
+    createPushNotifications: '/ecommerce/push-notifications/create',
+    editPushNotifications: (slug: string) => `/ecommerce/push-notifications/${slug}/edit`,
+    detailPushNotifications: (slug: string) => `/ecommerce/push-notifications/${slug}/detail`,
+
     coupon: '/ecommerce/coupon',
     createCoupon: '/ecommerce/coupon/create',
     editCoupon: (slug: string) => `/ecommerce/coupon/${slug}/edit`,
