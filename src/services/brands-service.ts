@@ -72,5 +72,3 @@ export async function deleteBrand(id: string | number) {
 
 
 
-
-

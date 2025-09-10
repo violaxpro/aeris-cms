@@ -5,7 +5,7 @@ type Props = {
     current: number;
     total: number;
     pageSize: number;
-    onChange: (page: number) => void;
+    onChange: (page: number, pageSize?: number) => void;
 };
 
 const Pagination: React.FC<Props> = ({ current, total, pageSize, onChange }) => {
@@ -26,7 +26,7 @@ const Pagination: React.FC<Props> = ({ current, total, pageSize, onChange }) => 
         <div className="flex justify-center items-center gap-2 mt-4">
             {totalPages > 1 && (
                 <button
-                    onClick={() => onChange(current - 1)}
+                    onClick={() => onChange(current - 1, pageSize)}
                     disabled={current <= 1}
                     className="w-9 h-9 rounded-md border bg-white text-gray-800 disabled:opacity-40"
                 >
@@ -36,7 +36,7 @@ const Pagination: React.FC<Props> = ({ current, total, pageSize, onChange }) => 
             {generatePageNumbers().map((page) => (
                 <button
                     key={page}
-                    onClick={() => onChange(page)}
+                    onClick={() => onChange(page, pageSize)}
                     className={`w-9 h-9 rounded-md border text-sm ${page === current
                         ? 'bg-[#0B2C4D] text-white'
                         : 'bg-white text-gray-800 hover:border-[#0B2C4D]'
@@ -50,7 +50,7 @@ const Pagination: React.FC<Props> = ({ current, total, pageSize, onChange }) => 
                 <>
                     {/* <span className="text-gray-500 px-1">...</span> */}
                     <button
-                        onClick={() => onChange(current + 1)}
+                        onClick={() => onChange(current + 1, pageSize)}
                         disabled={current >= totalPages}
                         className="w-9 h-9 rounded-md border bg-white text-gray-800 disabled:opacity-40"
                     >

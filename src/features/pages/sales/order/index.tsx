@@ -17,10 +17,11 @@ import SearchInput from '@/components/search';
 import Modal from '@/components/modal'
 import { deleteSupplierList } from '@/services/supplier-list-service'
 import { deleteOrder, getOrder } from '@/services/order-service'
+import { useGetOrder } from '@/core/hooks/use-orders'
 import { useNotificationAntd } from '@/components/toast'
 import { useAtom } from 'jotai'
 import { orderAtom } from '@/store/SalesAtom'
-import { OrderType } from '@/plugins/types/sales-type'
+import { OrderType, orderDummyData } from '@/plugins/types/sales-type'
 import dayjs from 'dayjs';
 import DatePickerInput from '@/components/date-picker';
 import StatusTag from '@/components/tag'
@@ -49,10 +50,11 @@ import { notificationAtom } from '@/store/NotificationAtom'
 
 const index = ({ orderData }: { orderData?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
-    const [data, setData] = useState(orderData?.data || [])
+    // const [data, setData] = useState(orderData?.data || [])
     const [currentPage, setCurrentPage] = useState(orderData?.page || 1)
     const [pageSize, setPageSize] = useState(orderData?.perPage || 10)
     const [total, setTotal] = useState(orderData?.count || 0)
+    const { data, isLoading, refetch } = useGetOrder(currentPage, pageSize)
     const [notification, setNotification] = useAtom(notificationAtom);
     const [activeTab, setActiveTab] = useState<string>('all');
     const [isOpenModal, setIsOpenModal] = useState(false)
@@ -87,7 +89,7 @@ const index = ({ orderData }: { orderData?: any }) => {
         })
 
     const tabs: Tab[] = [
-        { key: 'all', label: 'All', count: data.length },
+        // { key: 'all', label: 'All', count: data.length },
         // { key: 'draft', label: 'Draft', count: data.filter(o => o.status === 'Draft').length },
         // { key: 'approved', label: 'Approved', count: data.filter(o => o.status === 'Approved').length },
         // { key: 'processing', label: 'Processing', count: data.filter(o => o.status === 'Processing').length },
@@ -117,7 +119,7 @@ const index = ({ orderData }: { orderData?: any }) => {
     // const products = dataFromLocalStorage ? JSON.parse(localStorage.getItem('products') || '{}') : [];
     // orderData.push(products)
 
-    // console.log(orderData);
+    console.log('data woi', data);
 
     const handleDelete = async () => {
         if (!deletedData) return
@@ -274,7 +276,7 @@ const index = ({ orderData }: { orderData?: any }) => {
             },
             render: (val: any) => {
                 const status = toCapitalize(val)
-                console.log(status)
+                // console.log(status)
                 return (
                     <StatusTag status={status} />
                 );
@@ -503,10 +505,6 @@ const index = ({ orderData }: { orderData?: any }) => {
             setNotification(null);
         }
     }, [notification]);
-
-    console.log(currentOrder)
-
-    console.log(!search ? dataByStatus : filteredData, filteredData, valueStatus)
     return (
         <>
             {contextHolder}
@@ -644,7 +642,7 @@ const index = ({ orderData }: { orderData?: any }) => {
                     </div>
                     <Table
                         columns={columns}
-                        dataSource={orderData}
+                        dataSource={data?.data || []}
                         withSelectableRows
                         selectedRowKeys={selectedRowKeys}
                         onSelectChange={setSelectedRowKeys}

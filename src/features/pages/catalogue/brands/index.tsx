@@ -11,7 +11,7 @@ import Breadcrumb from "@/components/breadcrumb"
 import { Content } from 'antd/es/layout/layout'
 import Button from "@/components/button"
 import dayjs from 'dayjs'
-import { deleteBrand, getBrands } from '@/services/brands-service'
+import { useGetBrand, useDeleteBrand } from '@/core/hooks/use-brands'
 import { useNotificationAntd } from '@/components/toast'
 import { useAtom } from 'jotai'
 import StatusBadge from '@/components/badge/badge-status'
@@ -23,28 +23,27 @@ import SearchTable from '@/components/search/SearchTable'
 import ShowPageSize from '@/components/pagination/ShowPageSize'
 import ConfirmModal from '@/components/modal/ConfirmModal'
 import { notificationAtom } from '@/store/NotificationAtom'
+import Spinner from '@/components/spin'
 
-const index = ({ brandsData }: { brandsData?: any }) => {
+const index = () => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
-    const [data, setData] = useState(brandsData?.data || [])
-    const [currentPage, setCurrentPage] = useState(brandsData?.page || 1)
-    const [pageSize, setPageSize] = useState(brandsData?.perPage || 10)
-    const [total, setTotal] = useState(brandsData?.count || 0)
+    const [currentPage, setCurrentPage] = useState(1)
+    const [pageSize, setPageSize] = useState(10)
+    const [total, setTotal] = useState(0)
+    const { data, isLoading, refetch } = useGetBrand(currentPage, pageSize)
     const [notification, setNotification] = useAtom(notificationAtom);
     const [search, setSearch] = useState('')
     const [isOpenModalFilter, setisOpenModalFilter] = useState(false)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
     const [openModalDelete, setOpenModalDelete] = useState(false)
     const [deletedData, setDeletedData] = useState<any>(null)
+    const { mutate: deleteBrandMutate } = useDeleteBrand()
 
     const handleDelete = async () => {
         if (!deletedData) return
         try {
-            const res = await deleteBrand(deletedData)
-            if (res.success) {
-                notifySuccess(res.message)
-                fetchPage(currentPage, pageSize)
-            }
+            deleteBrandMutate(deletedData)
+            refetch()
         } catch (error) {
             console.error(error)
         } finally {
@@ -147,9 +146,9 @@ const index = ({ brandsData }: { brandsData?: any }) => {
     }
 
     const filteredData = React.useMemo(() => {
-        if (!search) return data;
+        if (!search) return data?.data || [];
         const keyword = search.toLowerCase();
-        return data.filter((item: any) => {
+        return data?.data.filter((item: any) => {
             const formattedDate = dayjs(item?.created_at)
                 .format('DD/MM/YYYY')
                 .toLowerCase();
@@ -158,19 +157,15 @@ const index = ({ brandsData }: { brandsData?: any }) => {
                 formattedDate.includes(keyword)
             );
         });
-    }, [search, data]);
+    }, [search, data && data?.data]);
 
-    const fetchPage = async (page: number, perPage: number) => {
-        try {
-            const res = await getBrands({ page, perPage })
-            setData(res.data)
-            setTotal(res.count)
-            setCurrentPage(res.page)
-            setPageSize(res.perPage)
-        } catch (error) {
-            console.error(error)
+    useEffect(() => {
+        if (data) {
+            setTotal(data.count)
+            setCurrentPage(data.page)
+            setPageSize(data.perPage)
         }
-    }
+    }, [data])
 
     useEffect(() => {
         if (notification) {
@@ -223,7 +218,6 @@ const index = ({ brandsData }: { brandsData?: any }) => {
                                 onChange={(newPageSize) => {
                                     setPageSize(newPageSize);
                                     setCurrentPage(1);
-                                    fetchPage(1, newPageSize);
                                 }}
                             />
                             <SearchTable
@@ -248,23 +242,27 @@ const index = ({ brandsData }: { brandsData?: any }) => {
 
 
                     </div>
-                    <Table
-                        columns={columns}
-                        dataSource={filteredData}
-                        withSelectableRows
-                        selectedRowKeys={selectedRowKeys}
-                        onSelectChange={setSelectedRowKeys}
-                    />
-                    <Pagination
-                        current={currentPage}
-                        total={total}
-                        pageSize={pageSize}
-                        onChange={(page) => {
-                            setCurrentPage(page);
-                            fetchPage(page, pageSize);
-                        }}
-                    />
-
+                    {
+                        isLoading ? <Spinner />
+                            : <div className='flex flex-col'>
+                                <Table
+                                    columns={columns}
+                                    dataSource={filteredData}
+                                    withSelectableRows
+                                    selectedRowKeys={selectedRowKeys}
+                                    onSelectChange={setSelectedRowKeys}
+                                />
+                                <Pagination
+                                    current={currentPage}
+                                    total={total}
+                                    pageSize={pageSize}
+                                    onChange={(page) => {
+                                        setCurrentPage(page);
+                                        refetch()
+                                    }}
+                                />
+                            </div>
+                    }
                 </div>
             </Content>
         </>

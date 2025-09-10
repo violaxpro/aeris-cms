@@ -26,10 +26,12 @@ import dayjs from 'dayjs'
 import ModalAddress from './ModalAddress';
 import ModalCustomer from './ModalCustomer';
 import { addOrder, updateOrder } from '@/services/order-service';
+import { useCreateOrder } from '@/core/hooks/use-orders';
 
 const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     const router = useRouter()
     const { contextHolder, notifySuccess } = useNotificationAntd();
+    const { mutate: createOrder } = useCreateOrder()
     const [showAddProduct, setShowAddProduct] = useState(false)
     const [productList, setProductList] = useState<any[]>([]);
     const [productForm, setProductForm] = useState([{
@@ -54,7 +56,7 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         buy_price: 0,
         price: 0,
         qty: 0,
-        tax_id: '',
+        tax_id: null,
         tax_value: 0,
         tax_amount: 0,
         total_amount: 0,
@@ -292,7 +294,7 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                 coupon_discount_value: formData.coupon_discount_value,
                 coupon_discount_amount: formData.coupon_discount_amount,
                 discount_type: formData.discount_type,
-                discount_value: formData.discount_value,
+                discount_value: Number(formData.discount_value),
                 discount_amount: formData.discount_amount,
                 shipping_method_id: formData.shipping_method,
                 shipping_fee: formData.shipping_fee,
@@ -302,26 +304,20 @@ const FormOrder: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                 internal_notes: formData.internal_notes,
                 payment_method_id: formData.payment_method,
                 status: 'DRAFT',
-                payment_status: 'Not Yet Issued',
+                payment_status: 'UNPAID',
                 items: formData.items,
 
             }
 
             console.log(submitData)
-            let response;
+            // let response;
             if (mode == 'edit') {
-                response = await updateOrder(slug, submitData)
+                updateOrder(slug, submitData)
 
             } else {
-                response = await addOrder(submitData)
+                createOrder(submitData)
             }
 
-            if (response.success == true) {
-                notifySuccess(response.message)
-                setTimeout(() => {
-                    router.push(routes.eCommerce.order)
-                }, 2000);
-            }
         } catch (error) {
             console.error(error)
         }

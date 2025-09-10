@@ -6,6 +6,7 @@ import { siteConfig } from '@/config/site.config';
 import { inter, lexendDeca } from './fonts';
 import cn from '@/core/utils/class-names';
 import { ThemeProvider } from '@/context/ThemeContext';
+import { Providers } from './provider';
 // import NextProgress from '@/core/components/next-progress';
 
 // styles
@@ -37,10 +38,11 @@ export default async function RootLayout({
                 className={cn(inter.variable, lexendDeca.variable, 'font-inter')}
             >
                 {/* <AuthProvider session={session}> */}
-                <ThemeProvider>
+                {/* <ThemeProvider>
                     {children}
-                </ThemeProvider>
+                </ThemeProvider> */}
                 {/* </AuthProvider> */}
+                <Providers>{children}</Providers>
             </body>
         </html >
     );
