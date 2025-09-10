@@ -15,6 +15,7 @@ import { Content } from 'antd/es/layout/layout'
 import Breadcrumb from '@/components/breadcrumb'
 import { FormProps } from '@/plugins/types/form-type'
 import { addOptions, updateOptions } from '@/services/options-service'
+import { useCreateOption, useUpdateOption } from '@/core/hooks/use-options'
 import { useAtom, useSetAtom } from 'jotai';
 import { notificationAtom } from '@/store/NotificationAtom';
 import { productSetAtom } from '@/store/DropdownItemStore'
@@ -54,6 +55,8 @@ const FormOptions = ({ mode = 'create', initialValues, slug }: FormProps) => {
             price5: '',
         }] as any[]
     })
+    const { mutate: createOptionMutate } = useCreateOption()
+    const { mutate: updateOptionMutate } = useUpdateOption(slug ?? '')
     const [formErrors, setFormErrors] = useState({
         name: '',
         type: '',
@@ -144,17 +147,10 @@ const FormOptions = ({ mode = 'create', initialValues, slug }: FormProps) => {
                 required: formData.is_required,
                 values: formData.values,
             }
-
-            let response;
             if (mode == 'edit' && slug) {
-                response = await updateOptions(slug, data)
+                updateOptionMutate(data)
             } else {
-                response = await addOptions(data)
-            }
-
-            if (response.success == true) {
-                setNotification(response.message);
-                router.push(routes.eCommerce.options)
+                createOptionMutate(data)
             }
         } catch (error) {
             console.error(error)

@@ -7,7 +7,7 @@ import { Content } from 'antd/es/layout/layout'
 import Products from './product'
 import Services from './service'
 
-const index = ({ products, services, tab }: { products?: any, services: any, tab?: any }) => {
+const index = ({ tab }: { tab?: any }) => {
     // const searchParams = useSearchParams();
     const router = useRouter();
     // const initialTab = searchParams.get("tab") || "products"
@@ -53,8 +53,8 @@ const index = ({ products, services, tab }: { products?: any, services: any, tab
                 setActiveTab={handleTabChange}
                 borderClass='w-full'
             />
-            {activeTab == 'products' && <Products products={products} />}
-            {activeTab == 'services' && <Services services={services} />}
+            {activeTab == 'products' && <Products />}
+            {activeTab == 'services' && <Services />}
         </>
     )
 }

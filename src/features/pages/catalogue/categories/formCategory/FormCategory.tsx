@@ -5,6 +5,7 @@ import GeneralForm from './GeneralForm';
 import SEOForm from './SEOForm';
 import { formCategoryProps } from '@/plugins/types/treeTypes';
 import { addCategory, updateCategory } from '@/services/category-service';
+import { useCreateCategory, useUpdateCategory } from '@/core/hooks/use-category';
 import { useNotificationAntd } from '@/components/toast';
 
 const FormCategory = ({ parentId, data, mode, onSaved }: formCategoryProps) => {
@@ -37,6 +38,12 @@ const FormCategory = ({ parentId, data, mode, onSaved }: formCategoryProps) => {
             pageDesc: data ? data.page_description : '',
         }
     })
+    const { mutate: createCategoryMutate } = useCreateCategory()
+    const { mutate: updateCategoryMutate } = useUpdateCategory(idEdit ?? '')
+    const [formErrors, setFormErrors] = useState({
+        name: '',
+        url_slug: ''
+    })
 
     console.log(parentId, data, idEdit)
 
@@ -50,51 +57,54 @@ const FormCategory = ({ parentId, data, mode, onSaved }: formCategoryProps) => {
         }));
     };
 
-    const handleSubmit = async () => {
-        try {
-            console.log(formData.general.name === '')
-            if (!formData.general.name || !formData.general.slug) {
-                notifyError('General form is empty, please filled the form')
-                return
-            }
-            if (!formData.seo.url_logo || !formData.seo.metaTitle || !formData.seo.metaDescription || !formData.seo.url_banner) {
-                notifyError('Seo form is empty, please filled the form')
-                return
-            }
+    const handleSubmit = () => {
+        let errors: any = {}
+        if (!formData.general.name) {
+            errors.name = 'Name is required'
+        }
+        if (!formData.general.slug) {
+            errors.url_slug = 'URL Slug is required'
+        }
 
-            const data = {
-                name: formData.general.name,
-                url_slug: formData.general.slug,
-                show_in_search: formData.general.isSearch,
-                show_in_page: formData.general.isShow,
-                status: formData.general.isStatus,
-                url_logo: formData.seo.url_logo,
-                url_banner: formData.seo.url_banner,
-                meta_title: formData.seo.metaTitle,
-                meta_description: formData.seo.metaDescription,
-                page_description: formData.seo.pageDesc,
-                parent_id: parentId ?? null
-            }
+        setFormErrors(errors)
 
-            let response;
-            if (idEdit) {
-                response = await updateCategory(idEdit, data)
-            } else {
-                response = await addCategory(data)
-            }
+        if (Object.keys(errors).length > 0) {
+            return;
+        }
+        if (!formData.general.name || !formData.general.slug) {
+            notifyError('General form is empty, please filled the form')
+            return
+        }
+        // if (!formData.seo.url_logo || !formData.seo.metaTitle || !formData.seo.metaDescription || !formData.seo.url_banner) {
+        //     notifyError('Seo form is empty, please filled the form')
+        //     return
+        // }
 
-            console.log(response)
-            if (response.success == true) {
-                notifySuccess(response.message)
-                if (onSaved) {
-                    setTimeout(() => {
-                        onSaved()
-                    }, 2000);
-                }
-            }
+        const data = {
+            name: formData.general.name,
+            url_slug: formData.general.slug,
+            show_in_search: formData.general.isSearch,
+            show_in_page: formData.general.isShow,
+            status: formData.general.isStatus,
+            url_logo: formData.seo.url_logo,
+            url_banner: formData.seo.url_banner,
+            meta_title: formData.seo.metaTitle,
+            meta_description: formData.seo.metaDescription,
+            page_description: formData.seo.pageDesc,
+            parent_id: parentId ?? null
+        }
 
-        } catch (error) {
-            console.error(error)
+        if (idEdit) {
+            updateCategoryMutate(data)
+        } else {
+            createCategoryMutate(data)
+        }
+
+
+        if (onSaved) {
+            setTimeout(() => {
+                onSaved()
+            }, 2000);
         }
     }
 
@@ -171,6 +181,7 @@ const FormCategory = ({ parentId, data, mode, onSaved }: formCategoryProps) => {
                                         parentId={parentId}
                                         onChange={(data) => handleChange('general', data)}
                                         formDataCreate={formData}
+                                        errors={formErrors}
                                     />
                                 </div>
                             )}

@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import Modal from '@/components/modal'
 import Input from '@/components/input'
-import { addTags, updateTags } from '@/services/tags-service'
+import { useCreateTag, useUpdateTag } from '@/core/hooks/use-tag'
 import { useNotificationAntd } from '@/components/toast'
 
 type ModalTagsType = {
@@ -21,6 +21,11 @@ const ModalTags = ({
     onSuccess,
     databyId
 }: ModalTagsType) => {
+    const { mutate: createTagMutate } = useCreateTag()
+    const { mutate: updateTagMutate } = useUpdateTag(databyId?.id ?? '')
+    const [formErrors, setFormErrors] = useState({
+        name: '',
+    })
     const [formData, setFormData] = useState({
         name: '',
     })
@@ -32,28 +37,29 @@ const ModalTags = ({
             [field]: value
         }))
     }
-    const handleSubmit = async () => {
-        try {
-            const data = {
-                name: formData.name,
-            }
-
-            let response;
-            if (databyId?.id) {
-                response = await updateTags(databyId?.id, data)
-            } else {
-                response = await addTags(data)
-            }
-
-            if (response.success == true) {
-                notifySuccess(response.message)
-                onSuccess?.()
-                setOpenModalOpen(false)
-            }
-
-        } catch (error) {
-            console.error(error)
+    const handleSubmit = () => {
+        let errors: any = {}
+        if (!formData.name) {
+            errors.name = 'Name is required'
         }
+        setFormErrors(errors)
+
+        if (Object.keys(errors).length > 0) {
+            return;
+        }
+        const data = {
+            name: formData.name,
+        }
+
+        if (databyId?.id) {
+            updateTagMutate(data)
+        } else {
+            createTagMutate(data)
+        }
+        onSuccess?.()
+        setFormData({ name: '' })
+        setOpenModalOpen(false)
+
     };
 
     useEffect(() => {
@@ -91,6 +97,7 @@ const ModalTags = ({
                         value={formData.name || undefined}
                         onChange={(e) => handleChange('name', e.target.value)}
                         placeholder='e.g. Smartphone, 4K TV, Gaming Laptop, Wireless, Apple, Samsung'
+                        errorMessage={formErrors.name}
                     />
                 </div>
 

@@ -47,7 +47,6 @@ const index = ({ label,
     onClick,
     inputClassname
 }: inputProps) => {
-
     return (
         <div className={divClassName}>
             {

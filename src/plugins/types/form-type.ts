@@ -11,4 +11,5 @@ export type ChildFormProps = {
     onChange: (params: any) => void
     dataById: any
     parentId?: string | number | null
+    errors?: any
 }

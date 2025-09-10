@@ -10,8 +10,9 @@ export type CategoriesForm = {
     parentId?: string | number | null
     onChange: (params: any) => void
     formDataCreate?: any
+    errors?: any
 }
-const GeneralForm = ({ data, parentId, onChange, formDataCreate }: CategoriesForm) => {
+const GeneralForm = ({ data, parentId, onChange, formDataCreate, errors }: CategoriesForm) => {
     // const [formData, setFormData] = useState({
     //     name: '',
     //     slug: '',
@@ -63,6 +64,7 @@ const GeneralForm = ({ data, parentId, onChange, formDataCreate }: CategoriesFor
                 value={formDataCreate.general.name}
                 onChange={handleChange}
                 placeholder='Access Control'
+                errorMessage={errors.name}
             />
             <Input
                 id='slug'
@@ -71,6 +73,7 @@ const GeneralForm = ({ data, parentId, onChange, formDataCreate }: CategoriesFor
                 value={formDataCreate.general.slug}
                 onChange={handleChange}
                 placeholder='access-control'
+                errorMessage={errors.url_slug}
             />
             <Checkbox
                 label='Searchable'

@@ -10,16 +10,14 @@ import GeneralForm from './GeneralForm';
 import ValuesForm from './ValuesForm';
 import { routes } from '@/config/routes';
 import { useNotificationAntd } from '@/components/toast';
-import { addAttribute, updateAttribute } from '@/services/attributes-service';
+import { useCreateAttribute, useUpdateAttribute } from '@/core/hooks/use-attributes';
 import { useSetAtom } from 'jotai';
 import { notificationAtom } from '@/store/NotificationAtom';
 
 const FormAttributes: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     console.log(initialValues)
     const [activeTab, setActiveTab] = useState<string>('general');
-    const setNotification = useSetAtom(notificationAtom);
-    const router = useRouter()
-    const { contextHolder, notifySuccess, notifyError } = useNotificationAntd()
+    const { contextHolder, notifyError } = useNotificationAntd()
     const [formData, setFormData] = useState({
         general: {
             name: initialValues ? initialValues.name : '',
@@ -31,6 +29,12 @@ const FormAttributes: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
             return { value: val }
         }) : [{ value: '' }]
     })
+    const { mutate: createAttributeMutate } = useCreateAttribute()
+    const { mutate: updateAttributeMutate } = useUpdateAttribute(slug ?? '')
+    const [formErrors, setFormErrors] = useState({
+        name: '',
+    })
+
     const tabs: Tab[] = [
         { key: 'general', label: 'General Information' },
         { key: 'values', label: 'Values' },
@@ -64,48 +68,47 @@ const FormAttributes: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
     };
 
 
-    const handleSubmit = async () => {
-        try {
-            if (Object.keys(formData.general).length == 0) {
-                notifyError('General form is empty, please filled the form')
-                return
-            }
-            if (formData.values.length == 0) {
-                notifyError('Values form is empty, please filled the form')
-                return
-            }
+    const handleSubmit = () => {
+        let errors: any = {}
+        if (!formData.general.name) {
+            errors.name = 'Name is required'
+        }
+        setFormErrors(errors)
 
-            const data = {
-                name: formData.general.name,
-                attribute_set_id: formData.general.attributeSet,
-                attribute_categories: formData.general.categories,
-                values: mode == 'edit' && typeof formData.values == 'string'
-                    ? JSON.parse(formData.values).map((v: any) => v)
-                    : formData.values.map((item: any) => {
-                        if (typeof item === 'object') {
-                            return item.value
-                        }
-                        if (typeof item === 'string') {
-                            return item
-                        }
-                    }),
-                filterable: formData.general.filterable
-            }
+        if (Object.keys(errors).length > 0) {
+            return;
+        }
+        if (Object.keys(formData.general).length == 0) {
+            notifyError('General form is empty, please filled the form')
+            return
+        }
+        if (formData.values.length == 0) {
+            notifyError('Values form is empty, please filled the form')
+            return
+        }
 
-            let response;
-            if (mode == 'edit' && slug) {
-                response = await updateAttribute(slug, data)
-            } else {
-                response = await addAttribute(data)
-            }
+        const data = {
+            name: formData.general.name,
+            attribute_set_id: formData.general.attributeSet,
+            attribute_categories: formData.general.categories,
+            values: mode == 'edit' && typeof formData.values == 'string'
+                ? JSON.parse(formData.values).map((v: any) => v)
+                : formData.values.map((item: any) => {
+                    if (typeof item === 'object') {
+                        return item.value
+                    }
+                    if (typeof item === 'string') {
+                        return item
+                    }
+                }),
+            filterable: formData.general.filterable
+        }
 
-            if (response.success == true) {
-                setNotification(response.message)
-                router.push(routes.eCommerce.attributes)
-            }
 
-        } catch (error) {
-            console.error(error)
+        if (mode == 'edit' && slug) {
+            updateAttributeMutate(data)
+        } else {
+            createAttributeMutate(data)
         }
     }
 
@@ -134,6 +137,7 @@ const FormAttributes: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     dataById={formData.general}
                                     onChange={(data) => handleChange('general', data)}
                                     formDataCreate={formData}
+                                    errors={formErrors}
                                 />
                             </div>
                         )}

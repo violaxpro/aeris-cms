@@ -8,7 +8,7 @@ import { tagsType } from '@/plugins/types/tags-type'
 import Breadcrumb from "@/components/breadcrumb"
 import { Content } from 'antd/es/layout/layout'
 import Button from "@/components/button"
-import { getTags, deleteTags } from '@/services/tags-service'
+import { useGetTag, useDeleteTag } from '@/core/hooks/use-tag'
 import { AddIcon, TrashIconRed, MoreIcon } from '@public/icon'
 import ButtonDelete from '@/components/button/ButtonAction'
 import Pagination from '@/components/pagination'
@@ -22,32 +22,29 @@ import dayjs from 'dayjs'
 import ModalTags from './ModalTags'
 import { useAtom } from 'jotai'
 import { notificationAtom } from '@/store/NotificationAtom'
+import Spinner from '@/components/spin'
 
-const index = ({ tagDatas }: { tagDatas: any }) => {
-    const router = useRouter()
+const index = () => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
-    const [data, setData] = useState(tagDatas?.data || [])
-    const [currentPage, setCurrentPage] = useState(tagDatas?.page || 1)
-    const [pageSize, setPageSize] = useState(tagDatas?.perPage || 10)
-    const [total, setTotal] = useState(tagDatas?.count || 0)
+    const [currentPage, setCurrentPage] = useState(1)
+    const [pageSize, setPageSize] = useState(10)
+    const [total, setTotal] = useState(0)
+    const { data, isLoading, refetch } = useGetTag(currentPage, pageSize)
     const [notification, setNotification] = useAtom(notificationAtom);
     const [search, setSearch] = useState('')
-    const [isOpenModalFilter, setisOpenModalFilter] = useState(false)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
     const [openModalDelete, setOpenModalDelete] = useState(false)
     const [deletedData, setDeletedData] = useState<any>(null)
     const [openModalTag, setOpenModalTag] = useState(false)
     const [actionType, setActionType] = useState('')
     const [detailData, setDetailData] = useState(null)
+    const { mutate: deleteTagMutate } = useDeleteTag()
 
     const handleDelete = async (id: any) => {
         if (!deletedData) return;
         try {
-            const res = await deleteTags(deletedData)
-            if (res.success) {
-                notifySuccess(res.message);
-                fetchPage(currentPage, pageSize)
-            }
+            deleteTagMutate(deletedData)
+            refetch()
         } catch (error) {
             console.error(error)
         } finally {
@@ -126,9 +123,9 @@ const index = ({ tagDatas }: { tagDatas: any }) => {
     }
 
     const filteredData = React.useMemo(() => {
-        if (!search) return data;
+        if (!search) return data?.data || [];
         const keyword = search.toLowerCase();
-        return data.filter((item: any) => {
+        return data?.data?.filter((item: any) => {
             const formattedDate = dayjs(item?.created_at)
                 .format('DD/MM/YYYY')
                 .toLowerCase();
@@ -139,17 +136,13 @@ const index = ({ tagDatas }: { tagDatas: any }) => {
         });
     }, [search, data]);
 
-    const fetchPage = async (page: number, perPage: number) => {
-        try {
-            const res = await getTags({ page, perPage })
-            setData(res.data)
-            setTotal(res.count)
-            setCurrentPage(res.page)
-            setPageSize(res.perPage)
-        } catch (error) {
-            console.error(error)
+    useEffect(() => {
+        if (data) {
+            setTotal(data.count)
+            setCurrentPage(data.page)
+            setPageSize(data.perPage)
         }
-    }
+    }, [data])
 
     useEffect(() => {
         if (notification) {
@@ -172,7 +165,7 @@ const index = ({ tagDatas }: { tagDatas: any }) => {
                 setOpenModalOpen={setOpenModalTag}
                 handleCancel={() => setOpenModalTag(false)}
                 actionType={actionType}
-                onSuccess={() => fetchPage(currentPage, pageSize)}
+                onSuccess={() => refetch()}
                 databyId={detailData}
             />
             {contextHolder}
@@ -205,12 +198,14 @@ const index = ({ tagDatas }: { tagDatas: any }) => {
                         <div className='flex items-center gap-2'>
                             <ShowPageSize
                                 pageSize={pageSize}
-                                onChange={setPageSize}
+                                onChange={(newPageSize) => {
+                                    setPageSize(newPageSize);
+                                    setCurrentPage(1);
+                                }}
                             />
                             <SearchTable
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
-                                onSearch={() => console.log('Searching for:', search)}
                             />
                         </div>
                         {
@@ -222,29 +217,33 @@ const index = ({ tagDatas }: { tagDatas: any }) => {
                                     width={10}
                                     height={10}
                                 />}
-                                onClick={() => setisOpenModalFilter(true)}
                                 position='start'
                                 btnClassname='btn-delete-all'
                             />
                         }
                     </div>
 
-                    <Table
-                        columns={columns}
-                        dataSource={filteredData}
-                        withSelectableRows
-                        selectedRowKeys={selectedRowKeys}
-                        onSelectChange={setSelectedRowKeys}
-                    />
-                    <Pagination
-                        current={currentPage}
-                        total={total}
-                        pageSize={pageSize}
-                        onChange={(page) => {
-                            setCurrentPage(page);
-                            fetchPage(page, pageSize);
-                        }}
-                    />
+                    {
+                        isLoading ? <Spinner />
+                            : <div>
+                                <Table
+                                    columns={columns}
+                                    dataSource={filteredData}
+                                    withSelectableRows
+                                    selectedRowKeys={selectedRowKeys}
+                                    onSelectChange={setSelectedRowKeys}
+                                />
+                                <Pagination
+                                    current={currentPage}
+                                    total={total}
+                                    pageSize={pageSize}
+                                    onChange={(page) => {
+                                        setCurrentPage(page);
+                                        refetch()
+                                    }}
+                                />
+                            </div>
+                    }
                 </div>
             </Content>
         </>

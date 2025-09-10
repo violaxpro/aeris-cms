@@ -20,12 +20,14 @@ import { Rate } from 'antd';
 import SearchTable from '@/components/search/SearchTable'
 import { productAtom } from '@/store/ProductAtom'
 import { getProduct } from '@/services/products-service'
+import { useGetProduct } from '@/core/hooks/use-product';
 import Modal from '@/components/modal'
 import dayjs from 'dayjs';
 import Pagination from '@/components/pagination';
 import StatusBadge from '@/components/badge/badge-status';
 import SelectTreeInput from '@/components/select/TreeSelect'
 import { categoriesAtom } from '@/store/DropdownItemStore';
+import page from '@/app/ecommerce/page';
 
 const AdvancedInformation = ({
     onChange,
@@ -35,12 +37,14 @@ const AdvancedInformation = ({
     const [optionAttribute] = useAtom(attributeAtom)
     const [optionSet] = useAtom(optionSetAtom)
     const [optionCategories] = useAtom(categoriesAtom)
-    const [data, setData] = useAtom(productAtom)
-    const [search, setSearch] = useState('')
-    const [openModalProduct, setIsOpenModalProduct] = useState(false)
+    // const [data, setData] = useAtom(productAtom)
     const [currentPage, setCurrentPage] = useState(1)
     const [pageSize, setPageSize] = useState(10)
     const [total, setTotal] = useState(0)
+    const { data, isLoading, refetch } = useGetProduct(currentPage, pageSize)
+    const [search, setSearch] = useState('')
+    const [openModalProduct, setIsOpenModalProduct] = useState(false)
+
     const [dataChoose, setDataChoose] = useState([])
 
     const columnProducts: TableColumnsType<ProductDataType> = [
@@ -52,7 +56,7 @@ const AdvancedInformation = ({
             title: 'Image',
             dataIndex: 'image',
             render: (_: any, row: any) => {
-                const url = row && row.images.length > 0 ? row?.images[0]?.url : null
+                const url = row && row.images.length > 0 ? row?.images[0]?.url : ''
                 return <Image
                     src={url}
                     alt="product-img"
@@ -227,22 +231,11 @@ const AdvancedInformation = ({
         onChange(updated);
     };
 
-    const fetchPage = async (page: number, perPage: number) => {
-        try {
-            const res = await getProduct({ page, perPage })
-            setData(res.data)
-            setTotal(res.count)
-            setCurrentPage(res.page)
-            setPageSize(res.perPage)
-        } catch (error) {
-            console.error(error)
-        }
-    }
 
     const filteredData = React.useMemo(() => {
-        if (!search) return data;
+        if (!search) return data?.data || [];
         const keyword = search.toLowerCase();
-        return data.filter((item: any) => {
+        return data?.data?.filter((item: any) => {
             const formattedDate = dayjs(item?.created_at)
                 .format('DD/MM/YYYY')
                 .toLowerCase();
@@ -255,20 +248,16 @@ const AdvancedInformation = ({
     }, [search, data]);
 
     useEffect(() => {
-        fetchPage(currentPage, pageSize)
-    }, []);
-
-    useEffect(() => {
-        if (formDataCreate?.tab_advanced?.relateds?.length > 0) {
-            const relatedIds = formDataCreate.tab_advanced.relateds.map(
+        if (dataById?.relateds?.length > 0) {
+            const relatedIds = dataById.relateds.map(
                 (rel: any) => rel.product_related_id
             );
-            const relatedProducts: any = data.filter((item: any) =>
+            const relatedProducts = data?.data?.filter((item: any) =>
                 relatedIds.includes(item.id)
             );
             setDataChoose(relatedProducts);
         }
-    }, [formDataCreate.tab_advanced.relateds, data]);
+    }, [dataById, data]);
 
     return (
         <div>
@@ -485,7 +474,7 @@ const AdvancedInformation = ({
                         pageSize={pageSize}
                         onChange={(page) => {
                             setCurrentPage(page);
-                            fetchPage(page, pageSize);
+                            refetch()
                         }}
                     />
                 </Modal>

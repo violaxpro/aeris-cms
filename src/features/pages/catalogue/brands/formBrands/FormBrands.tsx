@@ -62,17 +62,18 @@ const FormBrands: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         //     errors.urlLogo = 'Url Logo is required'
         // }
 
+
+        setFormErrors(errors)
+
+        if (Object.keys(errors).length > 0) {
+            return;
+        }
+
         if (titleLength < 55 || titleLength > 65) {
             return;
         }
 
         if (descLength < 145 || descLength > 165) {
-            return;
-        }
-
-        setFormErrors(errors)
-
-        if (Object.keys(errors).length > 0) {
             return;
         }
 

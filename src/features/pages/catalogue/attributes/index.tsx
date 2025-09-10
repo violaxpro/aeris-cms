@@ -11,7 +11,7 @@ import { Content } from 'antd/es/layout/layout'
 import Button from "@/components/button"
 import dayjs from 'dayjs'
 import { useAtom } from 'jotai'
-import { getAttributes, deleteAttribute } from '@/services/attributes-service'
+import { useGetAttribute, useDeleteAttribute } from '@/core/hooks/use-attributes'
 import { useNotificationAntd } from '@/components/toast'
 import { AddIcon, TrashIconRed, MoreIcon } from '@public/icon'
 import ButtonDelete from '@/components/button/ButtonAction'
@@ -23,29 +23,28 @@ import ConfirmModal from '@/components/modal/ConfirmModal'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { notificationAtom } from '@/store/NotificationAtom'
+import Spinner from '@/components/spin'
 
-const index = ({ attributesData }: { attributesData?: any }) => {
+const index = () => {
     const router = useRouter()
     const { contextHolder, notifySuccess } = useNotificationAntd()
-    const [data, setData] = useState(attributesData?.data || [])
-    const [currentPage, setCurrentPage] = useState(attributesData?.page || 1)
-    const [pageSize, setPageSize] = useState(attributesData?.perPage || 10)
-    const [total, setTotal] = useState(attributesData?.count || 0)
+    const [currentPage, setCurrentPage] = useState(1)
+    const [pageSize, setPageSize] = useState(10)
+    const [total, setTotal] = useState(0)
+    const { data, isLoading, refetch } = useGetAttribute(currentPage, pageSize)
     const [notification, setNotification] = useAtom(notificationAtom);
     const [search, setSearch] = useState('')
     const [isOpenModalFilter, setisOpenModalFilter] = useState(false)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
     const [openModalDelete, setOpenModalDelete] = useState(false)
     const [deletedData, setDeletedData] = useState<any>(null)
+    const { mutate: deleteAttributeMutate } = useDeleteAttribute()
 
     const handleDelete = async (id: any) => {
         if (!deletedData) return;
         try {
-            const res = await deleteAttribute(deletedData)
-            if (res.success) {
-                notifySuccess(res.message);
-                fetchPage(currentPage, pageSize)
-            }
+            deleteAttributeMutate(deletedData)
+            refetch()
         } catch (error) {
             console.error(error)
         } finally {
@@ -134,9 +133,9 @@ const index = ({ attributesData }: { attributesData?: any }) => {
     }
 
     const filteredData = React.useMemo(() => {
-        if (!search) return data;
+        if (!search) return data?.data || [];
         const keyword = search.toLowerCase();
-        return data.filter((item: any) => {
+        return data?.data?.filter((item: any) => {
             const formattedDate = dayjs(item?.created_at)
                 .format('DD/MM/YYYY')
                 .toLowerCase();
@@ -147,17 +146,14 @@ const index = ({ attributesData }: { attributesData?: any }) => {
         });
     }, [search, data]);
 
-    const fetchPage = async (page: number, perPage: number) => {
-        try {
-            const res = await getAttributes({ page, perPage })
-            setData(res.data)
-            setTotal(res.count)
-            setCurrentPage(res.page)
-            setPageSize(res.perPage)
-        } catch (error) {
-            console.error(error)
+    useEffect(() => {
+        if (data) {
+            setTotal(data.count)
+            setCurrentPage(data.page)
+            setPageSize(data.perPage)
         }
-    }
+    }, [data])
+
     useEffect(() => {
         if (notification) {
             notifySuccess(notification);
@@ -209,7 +205,6 @@ const index = ({ attributesData }: { attributesData?: any }) => {
                                 onChange={(newPageSize) => {
                                     setPageSize(newPageSize)
                                     setCurrentPage(1)
-                                    fetchPage(1, newPageSize)
                                 }}
                             />
                             <SearchTable
@@ -233,22 +228,27 @@ const index = ({ attributesData }: { attributesData?: any }) => {
                         }
                     </div>
 
-                    <Table
-                        columns={columns}
-                        dataSource={filteredData}
-                        withSelectableRows
-                        selectedRowKeys={selectedRowKeys}
-                        onSelectChange={setSelectedRowKeys}
-                    />
-                    <Pagination
-                        current={currentPage}
-                        total={total}
-                        pageSize={pageSize}
-                        onChange={(page) => {
-                            setCurrentPage(page);
-                            fetchPage(page, pageSize);
-                        }}
-                    />
+                    {
+                        isLoading ? <Spinner />
+                            : <div>
+                                <Table
+                                    columns={columns}
+                                    dataSource={filteredData}
+                                    withSelectableRows
+                                    selectedRowKeys={selectedRowKeys}
+                                    onSelectChange={setSelectedRowKeys}
+                                />
+                                <Pagination
+                                    current={currentPage}
+                                    total={total}
+                                    pageSize={pageSize}
+                                    onChange={(page) => {
+                                        setCurrentPage(page);
+                                        refetch()
+                                    }}
+                                />
+                            </div>
+                    }
                 </div>
             </Content>
         </>

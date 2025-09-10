@@ -2,26 +2,19 @@
 import React, { useState, useEffect } from 'react'
 import Table from "@/components/table"
 import type { TableColumnsType, MenuProps } from 'antd'
-import { Dropdown, Menu } from 'antd'
+import { Dropdown } from 'antd'
 import { ProductDataType } from '@/data/products-data'
-import { EditOutlined, PlusCircleOutlined, InfoCircleOutlined, MoreOutlined } from '@ant-design/icons'
 import { routes } from '@/config/routes'
 import Link from 'next/link'
-import Breadcrumb from "@/components/breadcrumb"
 import { Content } from 'antd/es/layout/layout'
 import Button from "@/components/button"
-import SearchInput from '@/components/search';
 import StatusBadge from '@/components/badge/badge-status'
-import Popover from '@/components/popover'
-import { getProduct, deleteProduct } from '@/services/products-service'
+import { useGetProduct, useDeleteProduct } from '@/core/hooks/use-product'
 import { useNotificationAntd } from '@/components/toast'
 import { useAtom } from 'jotai'
-import { productAtom } from '@/store/ProductAtom'
 import dayjs from 'dayjs'
 import Image from 'next/image'
-import { TrashIconRed, FilterIcon, AddIcon, MoreIcon } from '@public/icon'
-import StatusTag from '@/components/tag'
-import ButtonFilter from '@/components/button/ButtonAction'
+import { TrashIconRed, AddIcon, MoreIcon } from '@public/icon'
 import ButtonDelete from '@/components/button/ButtonAction'
 import Pagination from '@/components/pagination'
 import ButtonAction from '@/components/button/ButtonIcon'
@@ -29,28 +22,27 @@ import SearchTable from '@/components/search/SearchTable'
 import ShowPageSize from '@/components/pagination/ShowPageSize'
 import ConfirmModal from '@/components/modal/ConfirmModal'
 import { notificationAtom } from '@/store/NotificationAtom'
+import Spinner from '@/components/spin'
 
-const index = ({ products }: { products?: any }) => {
+const index = () => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
-    const [data, setData] = useState(products?.data || [])
-    const [currentPage, setCurrentPage] = useState(products?.page || 1)
-    const [pageSize, setPageSize] = useState(products?.perPage || 10)
-    const [total, setTotal] = useState(products?.count || 0)
+    const [currentPage, setCurrentPage] = useState(1)
+    const [pageSize, setPageSize] = useState(10)
+    const [total, setTotal] = useState(0)
+    const { data, isLoading, refetch } = useGetProduct(currentPage, pageSize)
     const [notification, setNotification] = useAtom(notificationAtom);
     const [search, setSearch] = useState('')
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
     const [isOpenModalFilter, setisOpenModalFilter] = useState(false)
     const [openModalDelete, setOpenModalDelete] = useState(false)
     const [deletedData, setDeletedData] = useState<any>(null)
+    const { mutate: deleteProductMutate } = useDeleteProduct()
 
     const handleDelete = async (id?: any) => {
         if (!deletedData) return;
         try {
-            const res = await deleteProduct(deletedData);
-            if (res.success) {
-                notifySuccess(res.message);
-                fetchPage(currentPage, pageSize)
-            }
+            deleteProductMutate(deletedData)
+            refetch()
         } catch (error) {
             console.error(error);
         } finally {
@@ -190,9 +182,9 @@ const index = ({ products }: { products?: any }) => {
     ]
 
     const filteredData = React.useMemo(() => {
-        if (!search) return data;
+        if (!search) return data?.data || [];
         const keyword = search.toLowerCase();
-        return data.filter((item: any) => {
+        return data?.data?.filter((item: any) => {
             const formattedDate = dayjs(item?.created_at)
                 .format('DD/MM/YYYY')
                 .toLowerCase();
@@ -204,17 +196,14 @@ const index = ({ products }: { products?: any }) => {
         });
     }, [search, data]);
 
-    const fetchPage = async (page: number, perPage: number) => {
-        try {
-            const res = await getProduct({ page, perPage })
-            setData(res.data)
-            setTotal(res.count)
-            setCurrentPage(res.page)
-            setPageSize(res.perPage)
-        } catch (error) {
-            console.error(error)
+    useEffect(() => {
+        if (data) {
+            setTotal(data.count)
+            setCurrentPage(data.page)
+            setPageSize(data.perPage)
         }
-    }
+    }, [data])
+
     useEffect(() => {
         if (notification) {
             notifySuccess(notification);
@@ -261,7 +250,6 @@ const index = ({ products }: { products?: any }) => {
                                 onChange={(newPageSize) => {
                                     setPageSize(newPageSize);
                                     setCurrentPage(1);
-                                    fetchPage(1, newPageSize);
                                 }}
                             />
                             <SearchTable
@@ -284,22 +272,27 @@ const index = ({ products }: { products?: any }) => {
                             />
                         }
                     </div>
-                    <Table
-                        columns={columnProducts}
-                        dataSource={filteredData}
-                        withSelectableRows
-                        selectedRowKeys={selectedRowKeys}
-                        onSelectChange={setSelectedRowKeys}
-                    />
-                    <Pagination
-                        current={currentPage}
-                        total={total}
-                        pageSize={pageSize}
-                        onChange={(page) => {
-                            setCurrentPage(page);
-                            fetchPage(page, pageSize);
-                        }}
-                    />
+                    {
+                        isLoading ? <Spinner />
+                            : <div>
+                                <Table
+                                    columns={columnProducts}
+                                    dataSource={filteredData}
+                                    withSelectableRows
+                                    selectedRowKeys={selectedRowKeys}
+                                    onSelectChange={setSelectedRowKeys}
+                                />
+                                <Pagination
+                                    current={currentPage}
+                                    total={total}
+                                    pageSize={pageSize}
+                                    onChange={(page) => {
+                                        setCurrentPage(page);
+                                        refetch()
+                                    }}
+                                />
+                            </div>
+                    }
                 </div>
             </Content>
         </>

@@ -18,6 +18,14 @@ export function useGetPriceLevel(page: number, perPage: number) {
     });
 }
 
+export function useGetPriceLevelById(slug: string) {
+    return useQuery({
+        queryKey: ['price-levels', slug],
+        queryFn: async () => getPriceLevelById(slug),
+        enabled: !!slug,
+    });
+}
+
 export function useCreatePriceLevel() {
     const { router, queryClient, setNotification } = useMutationBase();
     return useMutation({
@@ -30,14 +38,6 @@ export function useCreatePriceLevel() {
         onError: (error: any) => {
             setNotification(error?.response?.data?.message)
         }
-    });
-}
-
-export function useGetPriceLevelById(slug: string) {
-    return useQuery({
-        queryKey: ['price-levels', slug],
-        queryFn: async () => getPriceLevelById(slug),
-        enabled: !!slug,
     });
 }
 

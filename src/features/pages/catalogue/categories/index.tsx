@@ -12,11 +12,13 @@ import FormCategory from './formCategory/FormCategory';
 import { RenderMenu } from './formCategory/RenderMenu';
 import { TreeNode } from '@/plugins/types/treeTypes';
 import { getCategories } from '@/services/category-service';
+import { useGetCategory, useDeleteCategory } from '@/core/hooks/use-category';
 import { useAtom } from 'jotai';
 import { categoryDataFetch } from '@/store/CategoriesAtom';
 import { deleteCategory, updateCategory, getCategorybyId } from '@/services/category-service';
 import { useNotificationAntd } from '@/components/toast';
 import { useRouter } from 'next/navigation';
+import { notificationAtom } from '@/store/NotificationAtom';
 
 const { Search } = Input
 // const { DirectoryTree } = Tree;
@@ -101,7 +103,12 @@ const breadcrumb = [
     { title: 'Categories' }
 ];
 
-const CategoriesPage = ({ categories }: { categories?: any }) => {
+const CategoriesPage = () => {
+    const [notification, setNotification] = useAtom(notificationAtom);
+    const [currentPage, setCurrentPage] = useState(1)
+    const [pageSize, setPageSize] = useState(10)
+    const [total, setTotal] = useState(0)
+    const { data, isLoading, refetch } = useGetCategory(currentPage, pageSize)
     const [search, setSearch] = useState('')
     const [searchValue, setSearchValue] = useState('')
     const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([])
@@ -109,8 +116,7 @@ const CategoriesPage = ({ categories }: { categories?: any }) => {
     const [addForm, setAddForm] = useState(false)
     const [selectedParent, setSelectedParent] = useState<any>(null);
     const [parentId, setParentId] = useState<string | number | null>()
-    const [categoryData, setCategoryData] = useState([])
-    // const [categoryData, setCategoryData] = useState<any[]>(categories);
+    const categoryData = data?.data || []
     const { contextHolder, notifySuccess } = useNotificationAntd()
     const [checkedKeys, setCheckedKeys] = useState<React.Key[]>([]);
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
@@ -305,7 +311,7 @@ const CategoriesPage = ({ categories }: { categories?: any }) => {
         }
     };
 
-    console.log(selectedKeys, selectedParent)
+    console.log(selectedKeys, selectedParent, data)
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchValue(e.target.value)
@@ -328,25 +334,6 @@ const CategoriesPage = ({ categories }: { categories?: any }) => {
         setParentId(null);
         setAddForm(true);
     }
-
-    useEffect(() => {
-        if (categories) {
-            setCategoryData(categories);
-        }
-        const loadCategories = async () => {
-            try {
-                const res = await getCategories();
-                if (res?.data) {
-                    setCategoryData(res.data);
-                }
-            } catch (err) {
-                console.error("Failed to fetch categories:", err);
-            }
-        };
-
-        loadCategories(); // fetch saat pertama kali halaman load
-    }, []);
-
 
     // const handleDrop: TreeProps['onDrop'] = async (info) => {
     //     const dragKey = info.dragNode.key as number;
@@ -377,7 +364,12 @@ const CategoriesPage = ({ categories }: { categories?: any }) => {
 
 
     // console.log('data woi', filteredTreeData)
-
+    useEffect(() => {
+        if (notification) {
+            notifySuccess(notification);
+            setNotification(null);
+        }
+    }, [notification]);
     return (
         <>
             {contextHolder}
@@ -429,10 +421,7 @@ const CategoriesPage = ({ categories }: { categories?: any }) => {
                                     data={formMode === "edit" ? selectedParent : undefined}
                                     mode={formMode}
                                     onSaved={async () => {
-                                        const refreshed = await getCategories()
-                                        if (refreshed.data) {
-                                            setCategoryData(refreshed.data)
-                                        }
+                                        refetch()
                                         setAddForm(false)
                                     }}
                                 />

@@ -9,13 +9,16 @@ import Modal from '@/components/modal'
 import { useAtom } from 'jotai'
 import { categoriesAtom, attributeSetAtom } from '@/store/DropdownItemStore'
 import { addAttributeSet, getAttributeSet } from '@/services/attribute-set-service'
+import { useGetAttributeSet, useCreateAttributeSet } from '@/core/hooks/use-attribute-set'
 import { ChildFormProps } from '@/plugins/types/form-type'
 import SelectTreeInput from '@/components/select/TreeSelect'
 
-const GeneralForm = ({ dataById, onChange, formDataCreate }: ChildFormProps) => {
+const GeneralForm = ({ dataById, onChange, formDataCreate, errors }: ChildFormProps) => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [optionAttributeSet, setOptionAttributeSet] = useAtom(attributeSetAtom)
     const [optionCategories] = useAtom(categoriesAtom)
+    const { mutate: createAttributeMutateSet } = useCreateAttributeSet()
+    const { data, isLoading, refetch } = useGetAttributeSet()
     const [attributeSet, setAttributeSet] = useState({
         name: ''
     })
@@ -54,20 +57,38 @@ const GeneralForm = ({ dataById, onChange, formDataCreate }: ChildFormProps) => 
 
     const handleSubmitAttributeSet = async () => {
         try {
-            await addAttributeSet({ name: attributeSet.name });
-            const updatedAttributeSets = await getAttributeSet();
-            const option = updatedAttributeSets.data.map((opt: any) => ({
-                label: opt.name,
-                value: opt.id
-            }))
-            setOptionAttributeSet(option);
-            setAttributeSet({ name: '' })
-            setIsModalOpen(false)
-
+            // await addAttributeSet({ name: attributeSet.name });
+            // const updatedAttributeSets = await getAttributeSet();
+            // const option = updatedAttributeSets.data.map((opt: any) => ({
+            //     label: opt.name,
+            //     value: opt.id
+            // }))
+            // setOptionAttributeSet(option);
+            // setAttributeSet({ name: '' })
+            // setIsModalOpen(false)
+            createAttributeMutateSet(
+                { name: attributeSet.name },
+                {
+                    onSuccess: () => {
+                        setAttributeSet({ name: '' });
+                        setIsModalOpen(false);
+                    }
+                }
+            );
         } catch (error) {
             console.error(error)
         }
     }
+
+    useEffect(() => {
+        if (data?.data) {
+            const option = data.data.map((opt: any) => ({
+                label: opt.name,
+                value: opt.id
+            }));
+            setOptionAttributeSet(option);
+        }
+    }, [data, setOptionAttributeSet]);
 
     console.log(optionAttributeSet)
 
@@ -85,6 +106,7 @@ const GeneralForm = ({ dataById, onChange, formDataCreate }: ChildFormProps) => 
                     value={formDataCreate.general.name}
                     onChange={handleChange}
                     placeholder='Lens Size'
+                    errorMessage={errors.name}
                 />
                 <SelectInput
                     id='attributeSet'

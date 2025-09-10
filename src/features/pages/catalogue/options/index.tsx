@@ -3,16 +3,13 @@ import React, { useState, useEffect } from 'react'
 import { useAtom } from 'jotai'
 import Table from "@/components/table"
 import type { TableColumnsType, MenuProps } from 'antd'
-import { Dropdown, Menu } from 'antd'
-import { optionsData, OptionsType } from '@/data/options-data'
-import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons'
-import DeletePopover from '@/components/popover'
+import { Dropdown } from 'antd'
+import { OptionsType } from '@/data/options-data'
 import { routes } from '@/config/routes'
 import Link from 'next/link'
 import Breadcrumb from "@/components/breadcrumb"
 import { Content } from 'antd/es/layout/layout'
 import Button from "@/components/button"
-import SearchInput from '@/components/search';
 import dayjs from 'dayjs'
 import { AddIcon, TrashIconRed, MoreIcon } from '@public/icon'
 import ButtonDelete from '@/components/button/ButtonAction'
@@ -24,31 +21,30 @@ import ConfirmModal from '@/components/modal/ConfirmModal'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { useNotificationAntd } from '@/components/toast'
-import { getOptions, deleteOptions } from '@/services/options-service'
+import { useGetOption, useDeleteOption } from '@/core/hooks/use-options'
 import { notificationAtom } from '@/store/NotificationAtom'
+import Spinner from '@/components/spin'
 
 const index = ({ optionsData }: { optionsData?: any }) => {
     const router = useRouter()
     const { contextHolder, notifySuccess } = useNotificationAntd()
-    const [data, setData] = useState(optionsData?.data || [])
-    const [currentPage, setCurrentPage] = useState(optionsData?.page || 1)
-    const [pageSize, setPageSize] = useState(optionsData?.perPage || 10)
-    const [total, setTotal] = useState(optionsData?.count || 0)
+    const [currentPage, setCurrentPage] = useState(1)
+    const [pageSize, setPageSize] = useState(10)
+    const [total, setTotal] = useState(0)
+    const { data, isLoading, refetch } = useGetOption(currentPage, pageSize)
     const [notification, setNotification] = useAtom(notificationAtom);
     const [search, setSearch] = useState('')
     const [isOpenModalFilter, setisOpenModalFilter] = useState(false)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
     const [openModalDelete, setOpenModalDelete] = useState(false)
     const [deletedData, setDeletedData] = useState<any>(null)
+    const { mutate: deleteOptionMutate } = useDeleteOption()
 
     const handleDelete = async (id: any) => {
         if (!deletedData) return;
         try {
-            const res = await deleteOptions(deletedData)
-            if (res.success) {
-                notifySuccess(res.message);
-                fetchPage(currentPage, pageSize)
-            }
+            deleteOptionMutate(deletedData)
+            refetch()
         } catch (error) {
             console.error(error)
         } finally {
@@ -132,9 +128,9 @@ const index = ({ optionsData }: { optionsData?: any }) => {
     ]
 
     const filteredData = React.useMemo(() => {
-        if (!search) return data;
+        if (!search) return data?.data || [];
         const keyword = search.toLowerCase();
-        return data.filter((item: any) => {
+        return data?.data?.filter((item: any) => {
             const formattedDate = dayjs(item?.created_at)
                 .format('DD/MM/YYYY')
                 .toLowerCase();
@@ -145,17 +141,14 @@ const index = ({ optionsData }: { optionsData?: any }) => {
         });
     }, [search, data]);
 
-    const fetchPage = async (page: number, perPage: number) => {
-        try {
-            const res = await getOptions({ page, perPage })
-            setData(res.data)
-            setTotal(res.count)
-            setCurrentPage(res.page)
-            setPageSize(res.perPage)
-        } catch (error) {
-            console.error(error)
+    useEffect(() => {
+        if (data) {
+            setTotal(data.count)
+            setCurrentPage(data.page)
+            setPageSize(data.perPage)
         }
-    }
+    }, [data])
+
     useEffect(() => {
         if (notification) {
             notifySuccess(notification);
@@ -206,7 +199,6 @@ const index = ({ optionsData }: { optionsData?: any }) => {
                                 onChange={(newPageSize) => {
                                     setPageSize(newPageSize)
                                     setCurrentPage(1)
-                                    fetchPage(1, newPageSize)
                                 }}
                             />
                             <SearchTable
@@ -230,22 +222,27 @@ const index = ({ optionsData }: { optionsData?: any }) => {
                         }
                     </div>
 
-                    <Table
-                        columns={columns}
-                        dataSource={filteredData}
-                        withSelectableRows
-                        selectedRowKeys={selectedRowKeys}
-                        onSelectChange={setSelectedRowKeys}
-                    />
-                    <Pagination
-                        current={currentPage}
-                        total={total}
-                        pageSize={pageSize}
-                        onChange={(page) => {
-                            setCurrentPage(page);
-                            fetchPage(page, pageSize);
-                        }}
-                    />
+                    {
+                        isLoading ? <Spinner />
+                            : <div>
+                                <Table
+                                    columns={columns}
+                                    dataSource={filteredData}
+                                    withSelectableRows
+                                    selectedRowKeys={selectedRowKeys}
+                                    onSelectChange={setSelectedRowKeys}
+                                />
+                                <Pagination
+                                    current={currentPage}
+                                    total={total}
+                                    pageSize={pageSize}
+                                    onChange={(page) => {
+                                        setCurrentPage(page);
+                                        refetch()
+                                    }}
+                                />
+                            </div>
+                    }
                 </div>
             </Content>
         </>

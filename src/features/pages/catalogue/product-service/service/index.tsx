@@ -13,6 +13,7 @@ import StatusBadge from '@/components/badge/badge-status'
 import Popover from '@/components/popover'
 import { deleteProduct } from '@/services/products-service'
 import { getServices, deleteService } from '@/services/services-service'
+import { useGetService, useDeleteService } from '@/core/hooks/use-service'
 import { useNotificationAntd } from '@/components/toast'
 import { useAtom } from 'jotai'
 import { productAtom } from '@/store/ProductAtom'
@@ -29,15 +30,16 @@ import ShowPageSize from '@/components/pagination/ShowPageSize'
 import ConfirmModal from '@/components/modal/ConfirmModal'
 import FormService from './FormService'
 import { notificationAtom } from '@/store/NotificationAtom'
+import Spinner from '@/components/spin'
 
 const index = ({ services }: { services?: any }) => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
-    const [data, setData] = useState(services?.data || [])
+    const [currentPage, setCurrentPage] = useState(1)
+    const [pageSize, setPageSize] = useState(10)
+    const [total, setTotal] = useState(0)
+    const { data, isLoading, refetch } = useGetService(currentPage, pageSize)
     const [search, setSearch] = useState('')
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-    const [currentPage, setCurrentPage] = useState(services?.page || 1)
-    const [pageSize, setPageSize] = useState(services?.perPage || 10)
-    const [total, setTotal] = useState(services?.count || 0)
     const [notification, setNotification] = useAtom(notificationAtom);
     const [isOpenModalFilter, setisOpenModalFilter] = useState(false)
     const [openModalDelete, setOpenModalDelete] = useState(false)
@@ -45,17 +47,15 @@ const index = ({ services }: { services?: any }) => {
     const [deletedData, setDeletedData] = useState<any>(null)
     const [modalType, setModalType] = useState('create')
     const [currentService, setCurrentService] = useState<any>(null)
+    const { mutate: deleteServiceMutate } = useDeleteService()
 
     console.log(services)
 
     const handleDelete = async (id?: any) => {
         if (!deletedData) return;
         try {
-            const res = await deleteService(deletedData);
-            if (res.success) {
-                notifySuccess(res.message);
-                fetchPage(currentPage, pageSize)
-            }
+            deleteServiceMutate(deletedData)
+            refetch()
         } catch (error) {
             console.error(error);
         } finally {
@@ -187,9 +187,9 @@ const index = ({ services }: { services?: any }) => {
     }
 
     const filteredData = React.useMemo(() => {
-        if (!search) return data;
+        if (!search) return data?.data || [];
         const keyword = search.toLowerCase();
-        return data.filter((item: any) => {
+        return data?.data?.filter((item: any) => {
             const formattedDate = dayjs(item?.created_at)
                 .format('DD/MM/YYYY')
                 .toLowerCase();
@@ -201,17 +201,15 @@ const index = ({ services }: { services?: any }) => {
         });
     }, [search, data]);
 
-    const fetchPage = async (page: number, perPage: number) => {
-        try {
-            const res = await getServices({ page, perPage })
-            setData(res.data)
-            setTotal(res.count)
-            setCurrentPage(res.page)
-            setPageSize(res.perPage)
-        } catch (error) {
-            console.error(error)
+    useEffect(() => {
+        if (data) {
+            setTotal(data.count)
+            setCurrentPage(data.page)
+            setPageSize(data.perPage)
         }
-    }
+    }, [data])
+
+
     useEffect(() => {
         if (notification) {
             notifySuccess(notification);
@@ -239,8 +237,7 @@ const index = ({ services }: { services?: any }) => {
                     notifySuccess(msg);
                     setCurrentService(null)
                     setOpenModalForm(false);
-
-                    fetchPage(currentPage, pageSize)
+                    refetch()
                 }}
             />
             <div className="mt-6 mx-6 mb-0">
@@ -271,7 +268,6 @@ const index = ({ services }: { services?: any }) => {
                                 onChange={(newPageSize) => {
                                     setPageSize(newPageSize);
                                     setCurrentPage(1);
-                                    fetchPage(1, newPageSize);
                                 }}
                             />
                             <SearchTable
@@ -294,22 +290,27 @@ const index = ({ services }: { services?: any }) => {
                             />
                         }
                     </div>
-                    <Table
-                        columns={columns}
-                        dataSource={filteredData}
-                        withSelectableRows
-                        selectedRowKeys={selectedRowKeys}
-                        onSelectChange={setSelectedRowKeys}
-                    />
-                    <Pagination
-                        current={currentPage}
-                        total={total}
-                        pageSize={pageSize}
-                        onChange={(page) => {
-                            setCurrentPage(page);
-                            fetchPage(page, pageSize);
-                        }}
-                    />
+                    {
+                        isLoading ? <Spinner />
+                            : <div>
+                                <Table
+                                    columns={columns}
+                                    dataSource={filteredData}
+                                    withSelectableRows
+                                    selectedRowKeys={selectedRowKeys}
+                                    onSelectChange={setSelectedRowKeys}
+                                />
+                                <Pagination
+                                    current={currentPage}
+                                    total={total}
+                                    pageSize={pageSize}
+                                    onChange={(page) => {
+                                        setCurrentPage(page);
+                                        refetch
+                                    }}
+                                />
+                            </div>
+                    }
                 </div>
             </Content>
         </>

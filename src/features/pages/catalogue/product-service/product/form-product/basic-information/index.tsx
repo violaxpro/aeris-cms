@@ -21,7 +21,7 @@ import SelectTreeInput from '@/components/select/TreeSelect'
 
 const QuillInput = dynamic(() => import('@/components/quill-input'), { ssr: false, loading: () => <p>Loading editor...</p>, });
 
-const BasicInformationProduct = ({ dataById, onChange, formDataCreate }: ChildFormProps) => {
+const BasicInformationProduct = ({ dataById, onChange, formDataCreate, errors }: ChildFormProps) => {
     const [optionBrands] = useAtom(brandsAtom)
     const [optionCategories] = useAtom(categoriesAtom)
     const [optionTaxs] = useAtom(taxSetAtom)
@@ -141,6 +141,7 @@ const BasicInformationProduct = ({ dataById, onChange, formDataCreate }: ChildFo
                         placeholder='Enter product name (e.g. Battery 12V X 7.0 AMP)'
                         onChange={handleChange}
                         value={formDataCreate.tab_basic_information.productName}
+                        errorMessage={errors.name}
 
                     />
                     <Input
@@ -177,6 +178,7 @@ const BasicInformationProduct = ({ dataById, onChange, formDataCreate }: ChildFo
                         label="Description"
                         className="col-span-full [&_.ql-editor]:min-h-[100px]"
                         labelClassName="font-medium text-gray-700 dark:text-gray-600 mb-1.5"
+                        error={errors.description}
                     />
                 </div>
                 <div className='grid md:grid-cols-2 gap-4'>
@@ -271,6 +273,7 @@ const BasicInformationProduct = ({ dataById, onChange, formDataCreate }: ChildFo
                     placeholder='Enter unique SKU (e.g. BAT-12V-7000)'
                     onChange={handleChange}
                     value={formDataCreate.tab_basic_information.sku}
+                    errorMessage={errors.sku}
                 />
                 <Input
                     id='sku2'
@@ -330,6 +333,7 @@ const BasicInformationProduct = ({ dataById, onChange, formDataCreate }: ChildFo
                                 url: img.url
                             }
                         })}
+                        errorMessage={errors.images}
                     />
                     {/* <FileUploader
                         label='Base Images'

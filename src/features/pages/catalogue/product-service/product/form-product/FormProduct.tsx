@@ -9,6 +9,7 @@ import Button from '@/components/button'
 import Tabs, { Tab } from '@/components/tab'
 import { routes } from '@/config/routes';
 import { addProduct, updateProduct } from '@/services/products-service';
+import { useCreateProduct, useUpdateProduct } from '@/core/hooks/use-product';
 import { useNotificationAntd } from '@/components/toast';
 import { useRouter } from 'next/navigation';
 import { FormProps } from '@/plugins/types/form-type';
@@ -87,6 +88,20 @@ const ProductForm: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                 ? initialValues.relateds.map((rel: any) => rel) : [],
         }
     })
+    const { mutate: createProductMutate } = useCreateProduct()
+    const { mutate: updateProductMutate } = useUpdateProduct(slug ?? '')
+    const [formErrors, setFormErrors] = useState({
+        name: '',
+        sku: '',
+        images: [],
+        description: ''
+    })
+    const metaTitle = formData.tab_basic_information.metaTitle;
+    const titleLength = metaTitle.length;
+    const isTitleInvalid = titleLength !== 0 && (titleLength < 55 || titleLength > 65)
+    const metaDescription = formData.tab_basic_information.metaDescription;
+    const descLength = metaDescription.length;
+    const isDescInvalid = descLength !== 0 && (descLength < 155 || descLength > 165)
     const tabs: Tab[] = [
         { key: 'basic', label: 'Basic Information' },
         { key: 'price', label: 'Price' },
@@ -110,85 +125,92 @@ const ProductForm: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
         }));
     };
 
-    const handleSubmit = async () => {
-        try {
-            if (formData.tab_basic_information.metaTitle) {
-
-            }
-            const submitData = {
-                id: mode == 'edit' ? slug : null,
-                brand_id: Number(formData.tab_basic_information.brand),
-                category_id: Number(formData.tab_basic_information.categories),
-                // subCategoriesId: Number(formData.tab_basic_information.subCategoriesId) || 1,
-                name: formData.tab_basic_information.productName,
-                // short_description: formData.tab_basic_information.shortDesc || 'short-desc',
-                slug: formData.tab_basic_information.slug,
-                description: formData.tab_basic_information.description,
-                meta_title: formData.tab_basic_information.metaTitle,
-                meta_description: formData.tab_basic_information.metaDescription,
-                tax_class_id: formData.tab_basic_information.taxClass || null,
-                manual_url: formData.tab_basic_information.manualUrl,
-                warranty_month: Number(formData.tab_basic_information.warranty),
-                status: formData.tab_basic_information.status,
-                sku: formData.tab_basic_information.sku,
-                sku2: formData.tab_basic_information.sku2,
-                mpn: formData.tab_basic_information.mpn,
-                best_seller: formData.tab_basic_information.isBestSeller,
-                back_order: formData.tab_basic_information.isBackOrder,
-                buy_price: Number(formData.tab_price.buying_price),
-                recommended_retail_price: Number(formData.tab_price.rrp),
-                trade_price: Number(formData.tab_price.trade),
-                silver_price: Number(formData.tab_price.silver),
-                gold_price: Number(formData.tab_price.gold),
-                platinum_price: Number(formData.tab_price.platinum),
-                diamond_price: Number(formData.tab_price.diamond),
-                last_price: Number(formData.tab_price.last_price),
-                additional_shipping_cost: Number(formData.tab_price.additional_shipping_cost),
-                tags: formData.tab_basic_information.tags,
-                images: formData.tab_basic_information.images,
-                suppliers: formData.tab_price.suppliers
-                    .filter((supp: any) => supp?.supplierName && supp?.price)
-                    .map((supp: any) => ({
-                        supplier_id: supp.supplierName,
-                        price: supp.price
-                    })),
-                kits: formData.tab_price.kits
-                    .filter((kit: any) => kit?.productName)
-                    .map((kit: any) => kit.productName),
-                attributes: formData.tab_advanced.attributes
-                    .filter((attr: any) => attr?.name)
-                    .map((attr: any) => ({
-                        attribute_id: attr.name,
-                        price: attr.price
-                    })),
-
-                options: formData.tab_advanced.options
-                    .filter((opt: any) => opt?.name)
-                    .map((opt: any) => opt.name),
-
-                relateds: formData.tab_advanced.relateds
-                    .filter((rel: any) => rel)
-                    .map((rel: any) => rel),
-            }
-
-            let response
-            if (mode == 'edit' && slug) {
-                response = await updateProduct(slug, submitData)
-            } else {
-                response = await addProduct(submitData)
-            }
-
-
-            if (response.success == true) {
-                setNotification(response.message);
-                router.push(routes.eCommerce.products)
-            }
-
-        } catch (error) {
-            console.error(error)
+    const handleSubmit = () => {
+        let errors: any = {}
+        if (!formData.tab_basic_information.productName) {
+            errors.name = 'Product Name is required'
         }
-    }
+        if (!formData.tab_basic_information.sku) {
+            errors.sku = 'SKU is required'
+        }
+        if (!formData.tab_basic_information.description) {
+            errors.description = 'Description is required'
+        }
+        if (formData.tab_basic_information.images.length == 0) {
+            errors.images = 'Images is required'
+        }
 
+        setFormErrors(errors)
+
+        if (Object.keys(errors).length > 0) {
+            return;
+        }
+        if (isTitleInvalid || isDescInvalid) {
+            return;
+        }
+        const submitData = {
+            id: mode == 'edit' ? slug : null,
+            brand_id: Number(formData.tab_basic_information.brand),
+            category_id: Number(formData.tab_basic_information.categories),
+            // subCategoriesId: Number(formData.tab_basic_information.subCategoriesId) || 1,
+            name: formData.tab_basic_information.productName,
+            // short_description: formData.tab_basic_information.shortDesc || 'short-desc',
+            slug: formData.tab_basic_information.slug,
+            description: formData.tab_basic_information.description,
+            meta_title: formData.tab_basic_information.metaTitle,
+            meta_description: formData.tab_basic_information.metaDescription,
+            tax_class_id: formData.tab_basic_information.taxClass || null,
+            manual_url: formData.tab_basic_information.manualUrl,
+            warranty_month: Number(formData.tab_basic_information.warranty),
+            status: formData.tab_basic_information.status,
+            sku: formData.tab_basic_information.sku,
+            sku2: formData.tab_basic_information.sku2,
+            mpn: formData.tab_basic_information.mpn,
+            best_seller: formData.tab_basic_information.isBestSeller,
+            back_order: formData.tab_basic_information.isBackOrder,
+            buy_price: Number(formData.tab_price.buying_price),
+            recommended_retail_price: Number(formData.tab_price.rrp),
+            trade_price: Number(formData.tab_price.trade),
+            silver_price: Number(formData.tab_price.silver),
+            gold_price: Number(formData.tab_price.gold),
+            platinum_price: Number(formData.tab_price.platinum),
+            diamond_price: Number(formData.tab_price.diamond),
+            last_price: Number(formData.tab_price.last_price),
+            additional_shipping_cost: Number(formData.tab_price.additional_shipping_cost),
+            tags: formData.tab_basic_information.tags,
+            images: formData.tab_basic_information.images,
+            suppliers: formData.tab_price.suppliers
+                .filter((supp: any) => supp?.supplierName && supp?.price)
+                .map((supp: any) => ({
+                    supplier_id: supp.supplierName,
+                    price: supp.price
+                })),
+            kits: formData.tab_price.kits
+                .filter((kit: any) => kit?.productName)
+                .map((kit: any) => kit.productName),
+            attributes: formData.tab_advanced.attributes
+                .filter((attr: any) => attr?.name)
+                .map((attr: any) => ({
+                    attribute_id: attr.name,
+                    price: attr.price
+                })),
+
+            options: formData.tab_advanced.options
+                .filter((opt: any) => opt?.name)
+                .map((opt: any) => opt.name),
+
+            relateds: formData.tab_advanced.relateds
+                .filter((rel: any) => rel)
+                .map((rel: any) => rel),
+        }
+
+        if (mode == 'edit' && slug) {
+            updateProductMutate(submitData)
+        } else {
+            createProductMutate(submitData)
+        }
+
+    }
 
     console.log('ini dari form product', formData)
 
@@ -216,6 +238,7 @@ const ProductForm: React.FC<FormProps> = ({ mode, initialValues, slug }) => {
                                     onChange={(data) => handleChange('tab_basic_information', data)}
                                     dataById={initialValues}
                                     formDataCreate={formData}
+                                    errors={formErrors}
                                 />
                             </div>
                         )}

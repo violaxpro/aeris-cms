@@ -22,6 +22,7 @@ import ShowPageSize from '@/components/pagination/ShowPageSize'
 import ConfirmModal from '@/components/modal/ConfirmModal'
 import { notificationAtom } from '@/store/NotificationAtom'
 import dayjs from 'dayjs'
+import Spinner from '@/components/spin'
 
 const index = () => {
     const { contextHolder, notifySuccess } = useNotificationAntd()
@@ -224,22 +225,28 @@ const index = () => {
                             />
                         }
                     </div>
-                    <Table
-                        columns={columns}
-                        dataSource={filteredData}
-                        withSelectableRows
-                        selectedRowKeys={selectedRowKeys}
-                        onSelectChange={setSelectedRowKeys}
-                    />
-                    <Pagination
-                        current={currentPage}
-                        total={total}
-                        pageSize={pageSize}
-                        onChange={(page) => {
-                            setCurrentPage(page);
-                            refetch()
-                        }}
-                    />
+                    {
+                        isLoading ? <Spinner /> :
+                            <div>
+                                <Table
+                                    columns={columns}
+                                    dataSource={filteredData}
+                                    withSelectableRows
+                                    selectedRowKeys={selectedRowKeys}
+                                    onSelectChange={setSelectedRowKeys}
+                                />
+                                <Pagination
+                                    current={currentPage}
+                                    total={total}
+                                    pageSize={pageSize}
+                                    onChange={(page) => {
+                                        setCurrentPage(page);
+                                        refetch()
+                                    }}
+                                />
+                            </div>
+                    }
+
 
                 </div>
             </Content>

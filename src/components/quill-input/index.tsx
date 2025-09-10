@@ -115,6 +115,9 @@ export default function QuillEditor({
 
             {notes && <div className='text-xs mt-1'>{notes}</div>}
             {/* {error && <FieldError size="md" error={error} className={errorClassName} />} */}
+            {error && (
+                <p className="text-red-500 text-xs mt-1">{error}</p>
+            )}
         </div>
     );
 }
